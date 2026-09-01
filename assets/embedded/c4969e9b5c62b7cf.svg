@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1f3044"/>
+      <stop offset="100%" stop-color="#0f1722"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f7d774"/>
+      <stop offset="100%" stop-color="#d6a93a"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect x="18" y="18" width="476" height="476" rx="96" fill="url(#bg)" stroke="#f7d774" stroke-width="16" filter="url(#shadow)"/>
+  <g transform="translate(256 170)">
+    <circle r="86" fill="#f6f8fb" stroke="#0f1722" stroke-width="16"/>
+    <path d="M-86 0A86 86 0 0 1 86 0Z" fill="#e64b4b"/>
+    <path d="M-86 0A86 86 0 0 0 86 0" fill="none" stroke="#0f1722" stroke-width="16"/>
+    <circle r="26" fill="#f6f8fb" stroke="#0f1722" stroke-width="16"/>
+    <path d="M-110 0H110" stroke="#0f1722" stroke-width="16" stroke-linecap="round"/>
+  </g>
+  <text x="256" y="325" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="900" fill="url(#gold)">PokéSenda</text>
+  <text x="256" y="376" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#d9e7f5" letter-spacing="3">LOGRO DESBLOQUEADO</text>
+</svg>

@@ -2534,7 +2534,7 @@ body{letter-spacing:.08px}
 </style>
 
 <style id="pkPlayersV364064Style">
-/* V36.40.64 · Comunidad de Entrenadores */
+/* V36.40.66 · Comunidad de Entrenadores · fix puente de Perfil */
 .pk-players-box{width:min(1120px,96vw)!important;max-height:92vh!important;overflow:auto!important;background:linear-gradient(180deg,#102b58,#091a36)!important;border:2px solid #587dbb!important}
 .pk-players-owner{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:10px 0;padding:11px 12px;border:1px solid #3d5d8e;border-radius:12px;background:#0a1931}
 .pk-players-owner>div:first-child{display:grid;gap:3px}.pk-players-owner b{font-size:11px}.pk-players-owner small{font-size:8px;line-height:1.45;color:#9fb2cc}.pk-owner-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
@@ -9815,13 +9815,8 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   gymUpdateCounters();
   updateMenuInfo();
 
-    })();
-  }catch(gymModuleError){
-    console.error("PokéSenda Gym/Profile module disabled safely:",gymModuleError);
-  }
-
-  // V36.40.65 · Puente seguro de solo lectura para Comunidad de Entrenadores.
-  // El módulo social vive fuera del IIFE principal y nunca recibe el save ni claves privadas.
+  // V36.40.66 · Puente seguro de solo lectura para Comunidad de Entrenadores.
+  // Vive dentro del módulo Perfil/Gimnasios para poder leer el snapshot público real, pero solo expone datos de solo lectura.
   window.PokeSendaPublicProfileBridge={
     snapshot(){
       if(!state?.trainerAvatar)return null;
@@ -9877,6 +9872,12 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
       try{return GYM_ORDER.map(id=>({id,leader:GYM_DEFS[id]?.leader||id,badge:GYM_DEFS[id]?.badge||'',badgeUrl:gymBadgeUrl(id)}));}catch(_){return [];}
     }
   };
+
+    })();
+  }catch(gymModuleError){
+    console.error("PokéSenda Gym/Profile module disabled safely:",gymModuleError);
+  }
+
 
   const pkHudV=1; // marca de versión
 
@@ -10781,7 +10782,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.40.64',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.40.66',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -12702,7 +12703,7 @@ module.exports = QRCode;
   function renderOwner(){
     const host=$('pkPlayersOwner');if(!host)return;
     const link=readCloud(),cfg=readCfg(),snap=profileSnapshot();
-    if(!snap){host.innerHTML='<div><b>⏳ Cargando tu Perfil de Entrenador</b><small>Si ya elegiste nombre y avatar, cierra y vuelve a abrir esta ventana en un instante.</small></div>';setTimeout(()=>{try{if(profileSnapshot())renderOwner();}catch(_){}},350);return;}
+    if(!snap){host.innerHTML='<div><b>⏳ Cargando tu Perfil de Entrenador</b><small>PokéSenda está preparando tus datos públicos…</small></div>';const tries=Number(host.dataset.profileRetry||0);if(tries<8){host.dataset.profileRetry=String(tries+1);setTimeout(()=>{try{renderOwner();}catch(_){}},300);}else{host.innerHTML='<div><b>⚠️ No se pudo leer el Perfil</b><small>Actualiza la página con Ctrl + F5. Si continúa, abre Perfil y vuelve a Jugadores.</small></div>';}return;}host.dataset.profileRetry='0';
     if(!link){host.innerHTML='<div><b>☁️ Activa Cloud Save para aparecer</b><small>La identidad Cloud permite que solo tú puedas actualizar u ocultar tu perfil público.</small></div><button id="pkPlayersGoCloud" class="btn" type="button">Abrir Cloud Save</button>'; $('pkPlayersGoCloud')?.addEventListener('click',()=>{closePlayers(false);try{window.PKCloud?.open?.();}catch(_){}});return;}
     host.innerHTML=cfg.enabled?`<div><b>🟢 Tu perfil está publicado</b><small>Se actualiza automáticamente mientras juegas. Solo se comparte tu resumen público, nunca el save ni la clave Cloud.</small></div><div class="pk-owner-actions"><button id="pkPlayersPublish" class="btn" type="button">↻ Actualizar ahora</button><button id="pkPlayersUnpublish" class="btn danger" type="button">Ocultar perfil</button></div>`:`<div><b>👥 Comunidad de Entrenadores</b><small>Publica tu progreso para que tus amigos puedan compararlo. No se comparte Pokédólares, inventario, Cloud Secret ni partida completa.</small></div><button id="pkPlayersPublish" class="btn primary" type="button">Publicar mi perfil</button>`;
     $('pkPlayersPublish')?.addEventListener('click',()=>publishProfile(true));

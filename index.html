@@ -5062,7 +5062,7 @@ body{letter-spacing:.08px}
     if(index<3)return `${index+1} · ${POSITION_BUFFS?.[index]?.name||BENCH_ROLE_NAMES[index]||"Combate"}`;
     const role=index-3;return `${index+1} · ${BENCH_ROLE_NAMES[role]||"Reserva"}`;
   }
-  function battleIds(){
+  function battleAssignments(){
     const formation=Array.isArray(state?.formation)?state.formation:[],used=new Set(),chosen=[];
     const available=id=>!!(id&&state.progress?.[id]&&!used.has(id)&&(!run||run.team?.[id]?.alive));
     const benches=formation.slice(3,6);
@@ -5073,10 +5073,11 @@ body{letter-spacing:.08px}
         if(available(preferred))id=preferred;
         else id=benches.find(candidate=>available(candidate))||null;
       }
-      if(available(id)){used.add(id);chosen.push(id);}
+      if(available(id)){used.add(id);chosen.push({id,role});}
     }
     return chosen;
   }
+  function battleIds(){return battleAssignments().map(entry=>entry.id);}
   function reserveIds(){const b=new Set(battleIds());return activeIds().filter(id=>!b.has(id));}
   const TYPE_SYNERGY_BONUS=.05;
   function currentTypeSynergy(){
@@ -5275,7 +5276,7 @@ body{letter-spacing:.08px}
     1:{name:"Asalto",className:"striker",offense:1.12,crit:.03,desc:"+12% ATQ/AT. ESP. · +3% crítico"},
     2:{name:"Apoyo",className:"supportpos",speed:1.15,support:1.20,desc:"+15% velocidad · +20% Support"}
   };
-  function currentBattlePosition(id){const ids=battleIds();return ids.indexOf(id);}
+  function currentBattlePosition(id){const entry=battleAssignments().find(x=>x.id===id);return entry?entry.role:-1;}
   function positionBuff(id){
     const i=currentBattlePosition(id);if(i<0||i>2)return null;const p={...POSITION_BUFFS[i]};
     if(i===0){const r=skillRank("a10");p.def=(p.def||1)+.01*r;p.reduction=(p.reduction||0)+.0015*r;p.desc=`+${Math.round((p.def-1)*100)}% DEF/DEF. ESP. · ${(p.reduction*100).toFixed(1).replace(".0","")}% reducción de daño`;}
@@ -5570,9 +5571,9 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
   }
 
   function renderTeamWorld(){
-    const line=$("teamLine");line.innerHTML="";const ids=battleIds();
-    [...ids].reverse().forEach(id=>{
-      const p=state.progress[id],st=combatStage(id),wrap=document.createElement("div"),flying=(st.types||[]).some(t=>t==="flying"||t==="ghost");wrap.className=`mon-wrap${flying?" pk-hover":""}`;
+    const line=$("teamLine");line.innerHTML="";const assignments=battleAssignments(),ids=assignments.map(entry=>entry.id);
+    [...assignments].reverse().forEach(({id,role})=>{
+      const p=state.progress[id],st=combatStage(id),wrap=document.createElement("div"),flying=(st.types||[]).some(t=>t==="flying"||t==="ghost");wrap.className=`mon-wrap${flying?" pk-hover":""}`;wrap.dataset.battleRole=String(role);
       const held=p.heldItem&&ITEMS[p.heldItem]?ITEMS[p.heldItem]:null,tf=run?.team?.[id]?.transformData,transformed=id==="ditto"&&tf?.active;
       const pos=positionBuff(id),synergy=currentTypeSynergy();wrap.title=[pos?`${pos.name}: ${pos.desc}`:"",synergy&&synergy.ids.includes(id)?`🔗 ${typeSynergyText(synergy)}`:""].filter(Boolean).join(" · ");const visualSrc=transformed&&tf.shiny?shinySpriteUrl(st.dex):isOwnedShinyEquipped(id)?shinySpriteUrl(st.dex):spriteUrl(st.dex);wrap.innerHTML=`<div id="avatar-${id}" class="mon">${held?`<div class="held-badge ally-held-badge" title="Lleva ${held.name}">${itemIconHTML(held,"small")}</div>`:""}<div class="battle-hp ally-world-hp"><div id="allyHpFill-${id}" class="battle-hp-fill hp-green"></div></div><span class="posbadge">Nv.${p.level}</span><img src="${visualSrc}" alt="${st.name}"></div><div class="field-stars stars">${starHTML(p.stars||1)}</div><div class="status-badges">${statusBadgeHTML(run?.team[id])}</div><div class="mon-name">${transformed?`🧬 Ditto → ${st.name}`:st.name}</div>`;
       wrap.addEventListener("click",()=>openPokemonDetail(id));line.appendChild(wrap);
@@ -9920,9 +9921,13 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function updateTeamCountLayout(){
     const line=document.getElementById("teamLine");if(!line)return;
     line.classList.remove("pk-team-one","pk-team-two","pk-team-three");
-    const mons=[...line.querySelectorAll(":scope > .mon-wrap")],n=mons.length;
-    line.classList.add(n<=1?"pk-team-one":n===2?"pk-team-two":"pk-team-three");
-    mons.forEach((mon,i)=>{mon.style.setProperty("grid-row","1","important");mon.style.setProperty("grid-column",String(i+1),"important");mon.style.setProperty("transform","none","important");});
+    const mons=[...line.querySelectorAll(":scope > .mon-wrap")];
+    mons.forEach((mon,i)=>{
+      const role=Number(mon.dataset.battleRole),column=Number.isInteger(role)&&role>=0&&role<3?role+1:i+1;
+      mon.style.setProperty("grid-row","1","important");
+      mon.style.setProperty("grid-column",String(column),"important");
+      mon.style.setProperty("transform","none","important");
+    });
   }
   const line=document.getElementById("teamLine");
   updateTeamCountLayout();
@@ -10702,7 +10707,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.40.61',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.40.62',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -12387,7 +12392,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.40.61';
+  const VERSION='V36.40.62';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};

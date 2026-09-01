@@ -7895,7 +7895,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   // Escape closes the new UX surfaces before falling through to the game.
   document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;if(!$("uxCompareOverlay")?.classList.contains("hidden")){e.preventDefault();uxCloseCompare(true);return;}if(!$("uxWhyOverlay")?.classList.contains("hidden")){e.preventDefault();uxCloseWhy();return;}if(!$("uxContextPanel")?.classList.contains("hidden")){e.preventDefault();uxCloseContext();return;}});
 
-  uxRefreshAll();setTimeout(uxAutoShowWhatsNew,700);
+  uxRefreshAll();/* V36.40.63 · Novedades solo se abren manualmente desde el menú. */
 
   /* ============================================================
      POKÉSENDA VISUAL · Ventana de Formación minimizable
@@ -9918,12 +9918,13 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
 </style>
 <script id="pkVisualFixes3510Script">
 (function(){
+  /* V36.40.63 · Campo: Apoyo izquierda, Asalto centro, Guardia derecha. */
   function updateTeamCountLayout(){
     const line=document.getElementById("teamLine");if(!line)return;
     line.classList.remove("pk-team-one","pk-team-two","pk-team-three");
     const mons=[...line.querySelectorAll(":scope > .mon-wrap")];
     mons.forEach((mon,i)=>{
-      const role=Number(mon.dataset.battleRole),column=Number.isInteger(role)&&role>=0&&role<3?role+1:i+1;
+      const role=Number(mon.dataset.battleRole),column=Number.isInteger(role)&&role>=0&&role<3?({0:3,1:2,2:1}[role]):i+1;
       mon.style.setProperty("grid-row","1","important");
       mon.style.setProperty("grid-column",String(column),"important");
       mon.style.setProperty("transform","none","important");

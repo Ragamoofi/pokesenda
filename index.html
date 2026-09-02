@@ -1450,8 +1450,8 @@ body{
 /* V34.9 · accesos superiores minimalistas */
 /* V34.10 · música exclusiva del menú principal */
 .title-with-menu{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
-.hud-gear-btn{width:27px;height:27px;border-radius:50%;border:1px solid #7189bd;background:linear-gradient(180deg,#254b91,#173365);color:#f7fbff;display:inline-flex;align-items:center;justify-content:center;padding:0;font-size:15px;font-weight:900;line-height:1;box-shadow:0 2px 7px rgba(0,0,0,.28);cursor:pointer;transition:transform .12s ease,filter .12s ease}
-.hud-gear-btn:hover{filter:brightness(1.16);transform:rotate(18deg)}
+.hud-gear-btn{width:auto;height:auto;min-width:0;border:none;background:transparent;color:#e7f0ff;display:inline-flex;align-items:center;justify-content:center;padding:0 1px;font-size:17px;font-weight:900;line-height:1;box-shadow:none;cursor:pointer;transition:transform .12s ease,filter .12s ease,opacity .12s ease;text-shadow:0 1px 2px rgba(0,0,0,.38);opacity:.92}
+.hud-gear-btn:hover{filter:brightness(1.16);transform:rotate(18deg) scale(1.08);opacity:1}
 .hud-gear-btn:focus-visible{outline:2px solid var(--pk-yellow,#ffd64a);outline-offset:2px}
 .loot-icon-btn{width:48px!important;height:42px!important;min-width:48px!important;padding:3px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;position:relative!important;border-radius:12px!important;background:linear-gradient(180deg,#263f70,#172e59)!important;border:1px solid #617eb7!important;box-shadow:inset 0 1px rgba(255,255,255,.08),0 2px 6px rgba(0,0,0,.25)}
 .loot-icon-btn:hover{filter:brightness(1.12)}
@@ -10873,7 +10873,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   .top-meta::-webkit-scrollbar,.top-auto::-webkit-scrollbar{display:none}
   .top-meta>*{flex:0 0 auto!important}
   .title{font-size:12px!important;line-height:36px!important;white-space:nowrap!important}
-  .title .hud-gear-btn{width:35px!important;height:35px!important;min-width:35px!important;margin-left:4px!important}
+  .title .hud-gear-btn{width:auto!important;height:auto!important;min-width:0!important;margin-left:4px!important;padding:0 1px!important;font-size:18px!important;line-height:1!important}
   .route-select{min-height:36px!important;max-width:190px!important;padding:6px 8px!important;font-size:11px!important}
   .top .pill{min-height:36px!important;display:inline-flex!important;align-items:center!important;padding:5px 8px!important;font-size:9px!important;white-space:nowrap!important}
   .top-run{grid-area:run!important;display:flex!important;width:100%!important;gap:5px!important;align-items:stretch!important;justify-content:stretch!important;flex-wrap:nowrap!important}

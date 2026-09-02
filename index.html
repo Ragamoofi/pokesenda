@@ -3404,8 +3404,8 @@ body{letter-spacing:.08px}
           </div>
         </button>
       </div>
-      <div id="regionComingMessage" class="region-coming-message"><strong>🔒 Johto · En desarrollo.</strong> Requisito de lanzamiento: <b id="regionJohtoBadgeProgress">0/8 medallas de Kanto</b>. Aunque completes el requisito, seguirá oculto hasta que terminemos la expansión.</div>
-      <div class="region-footer-note">V36.41.0 ya guarda Kanto y Johto como campañas independientes. Para jugadores normales Johto permanece cerrado; el contenido se construirá y probará por debajo antes de liberarlo.</div>
+      <div id="regionComingMessage" class="region-coming-message"><strong>🔒 Johto · Próximamente.</strong> Requisito para viajar: <b id="regionJohtoBadgeProgress">0/8 medallas de Kanto</b>.</div>
+      <div class="region-footer-note">Nuevas regiones aparecerán aquí cuando estén listas. Tu progreso de Kanto se conservará al viajar entre regiones.</div>
     </div>
   </div>
 
@@ -3413,7 +3413,7 @@ body{letter-spacing:.08px}
 
 <div id="pkJohtoDevShell" class="overlay hidden pk-johto-dev-shell" role="dialog" aria-modal="true" aria-labelledby="pkJohtoDevTitle">
   <div class="modal-box pk-johto-dev-box" onclick="event.stopPropagation()">
-    <div class="pk-johto-dev-kicker">🧪 DESARROLLO PRIVADO · V36.41.0</div>
+    <div class="pk-johto-dev-kicker">🧪 DESARROLLO PRIVADO · V36.41.1</div>
     <h2 id="pkJohtoDevTitle">Región de Johto</h2>
     <p>La arquitectura multirregión ya está funcionando. Esta campaña tiene un estado regional separado de Kanto, pero todavía no contiene Pokémon Gen II, rutas ni Gimnasios jugables.</p>
     <div class="pk-johto-dev-warning"><b>No es el lanzamiento de Johto.</b> Este espacio existe para que podamos construir la expansión sin exponer contenido incompleto a los jugadores.</div>
@@ -12043,7 +12043,7 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.41.0.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.41.1.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12182,7 +12182,7 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.41.0',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.41.1',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -13867,7 +13867,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.41.0';
+  const VERSION='V36.41.1';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -14191,14 +14191,20 @@ module.exports = QRCode;
   function core(){return window.PokeSendaRegionCore;}
   function toastSafe(msg){try{if(typeof toast==="function")toast(msg);else console.log(msg);}catch(_){console.log(msg);}}
   function formatMoney(n){return `₽${Math.max(0,Math.floor(Number(n)||0)).toLocaleString("es-CL")}`;}
-  function openRegions(){
+  let returnToJohtoShellAfterSelector=false;
+  function openRegions({fromDevShell=false}={}){
     updateRegionUI();
+    returnToJohtoShellAfterSelector=!!fromDevShell&&core()?.active?.()==='johto';
+    if(returnToJohtoShellAfterSelector)$('pkJohtoDevShell')?.classList.add('hidden');
     $('regionSelectOverlay')?.classList.remove('hidden');
     $('regionSwitchBtn')?.setAttribute('aria-expanded','true');
   }
-  function closeRegions(){
+  function closeRegions({restoreDevShell=true}={}){
     $('regionSelectOverlay')?.classList.add('hidden');
     $('regionSwitchBtn')?.setAttribute('aria-expanded','false');
+    const shouldRestore=restoreDevShell&&returnToJohtoShellAfterSelector&&core()?.active?.()==='johto';
+    returnToJohtoShellAfterSelector=false;
+    if(shouldRestore)showJohtoShell();
   }
   function devStats(){
     const s=core()?.summary?.();const host=$('pkJohtoDevStats');if(!host||!s)return;
@@ -14229,7 +14235,7 @@ module.exports = QRCode;
     const c=core();if(!c)return;
     const out=c.switchRegion(regionId,{dev:true});
     if(!out?.ok){toastSafe(out?.reason||'No se pudo cambiar de región');return false;}
-    if(regionId==='johto'){closeRegions();showJohtoShell();}
+    if(regionId==='johto'){closeRegions({restoreDevShell:false});showJohtoShell();}
     else{hideJohtoShell();postSwitchRender();}
     return true;
   }
@@ -14237,8 +14243,8 @@ module.exports = QRCode;
     const badges=core()?.kantoBadges?.()||0,msg=$('regionComingMessage');
     const met=badges>=8;
     const copy=met
-      ?'<strong>✅ Requisito cumplido: 8/8 medallas de Kanto.</strong> Johto ya podría desbloquearse por progreso, pero la expansión sigue en desarrollo privado y todavía no está publicada.'
-      :`<strong>🔒 Johto · Próximamente.</strong> Para viajar cuando se publique necesitarás las 8 medallas de Kanto. Progreso actual: <b>${badges}/8</b>.`;
+      ?'<strong>✅ Requisito cumplido: 8/8 medallas de Kanto.</strong> Johto estará disponible cuando llegue oficialmente a PokéSenda.'
+      :`<strong>🔒 Johto · Próximamente.</strong> Para viajar necesitarás las 8 medallas de Kanto. Progreso actual: <b>${badges}/8</b>.`;
     lastPublicMessage=copy;
     if(msg){msg.innerHTML=copy;msg.classList.remove('flash');void msg.offsetWidth;msg.classList.add('flash');setTimeout(()=>msg.classList.remove('flash'),650);}
   }
@@ -14264,8 +14270,8 @@ module.exports = QRCode;
     if(!lastPublicMessage){
       const msg=$('regionComingMessage');
       if(msg)msg.innerHTML=met
-        ?'<strong>✅ Ya tienes las 8 medallas de Kanto.</strong> El requisito futuro de Johto está cumplido; la región seguirá cerrada hasta terminar el desarrollo.'
-        :`<strong>🔒 Johto · En desarrollo.</strong> Requisito de lanzamiento: <b>${badges}/8 medallas de Kanto</b>. Aunque completes el requisito, seguirá oculto hasta que terminemos la expansión.`;
+        ?'<strong>✅ Ya tienes las 8 medallas de Kanto.</strong> El requisito para viajar a Johto está cumplido. Próximamente.'
+        :`<strong>🔒 Johto · Próximamente.</strong> Requisito para viajar: <b>${badges}/8 medallas de Kanto</b>.`;
     }
     document.body.classList.toggle('pk-region-johto-dev',active==='johto');
   }
@@ -14275,10 +14281,10 @@ module.exports = QRCode;
 
     $('regionSwitchBtn')?.addEventListener('click',openRegions);
     $('regionSelectCloseBtn')?.addEventListener('click',closeRegions);
-    $('regionJohtoCard')?.addEventListener('click',()=>{if(core()?.active?.()==='johto')showJohtoShell();else johtoPublicClick();});
+    $('regionJohtoCard')?.addEventListener('click',()=>{if(core()?.active?.()==='johto'){closeRegions({restoreDevShell:false});showJohtoShell();}else johtoPublicClick();});
     $('regionKantoCard')?.addEventListener('click',()=>{if(core()?.active?.()==='johto')switchDev('kanto');});
     $('pkJohtoDevBackKanto')?.addEventListener('click',()=>switchDev('kanto'));
-    $('pkJohtoDevRegionInfo')?.addEventListener('click',()=>{devStats();openRegions();});
+    $('pkJohtoDevRegionInfo')?.addEventListener('click',()=>{devStats();openRegions({fromDevShell:true});});
     $('regionSelectOverlay')?.addEventListener('click',e=>{if(e.target===$('regionSelectOverlay'))closeRegions();});
     $('pkJohtoDevShell')?.addEventListener('click',e=>{if(e.target===$('pkJohtoDevShell'))e.stopPropagation();});
 

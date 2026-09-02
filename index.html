@@ -3413,7 +3413,7 @@ body{letter-spacing:.08px}
 
 <div id="pkJohtoDevShell" class="overlay hidden pk-johto-dev-shell" role="dialog" aria-modal="true" aria-labelledby="pkJohtoDevTitle">
   <div class="modal-box pk-johto-dev-box" onclick="event.stopPropagation()">
-    <div class="pk-johto-dev-kicker">🧪 DESARROLLO PRIVADO · V36.42.1</div>
+    <div class="pk-johto-dev-kicker">🧪 DESARROLLO PRIVADO · V36.43.0</div>
     <h2 id="pkJohtoDevTitle">Región de Johto</h2>
     <p>La arquitectura multirregión ya está funcionando. Esta campaña tiene un estado regional separado de Kanto, pero todavía no contiene Pokémon Gen II, rutas ni Gimnasios jugables.</p>
     <div class="pk-johto-dev-warning"><b>No es el lanzamiento de Johto.</b> Este espacio existe para que podamos construir la expansión sin exponer contenido incompleto a los jugadores.</div>
@@ -3423,13 +3423,14 @@ body{letter-spacing:.08px}
       <span>✓ Migración Kanto segura</span>
       <span>✓ Pokédex / Shiny globales</span>
       <span>✓ Infinita global preservada</span>
-      <span>✓ Gen II · GIF front/back + familias</span>
+      <span>✓ Gen II · GIF + familias + evoluciones</span>
       <span>○ Rutas / Gimnasios / lobby / música</span>
     </div>
     <div class="pk-johto-dev-actions pk-johto-dev-actions-three">
       <button id="pkJohtoDevBackKanto" class="btn primary" type="button">← Volver a Kanto</button>
       <button id="pkJohtoGen2CatalogBtn" class="btn" type="button">🧬 Catálogo Gen II</button>
       <button id="pkJohtoFamiliesBtn" class="btn" type="button">🌿 Familias Johto</button>
+      <button id="pkJohtoEvolutionLabBtn" class="btn" type="button">⚗️ Evoluciones</button>
       <button id="pkJohtoDevRegionInfo" class="btn" type="button">🌐 Ver selector</button>
     </div>
     <small class="pk-johto-dev-shortcut">Acceso privado de pruebas: Ctrl + Alt + J.</small>
@@ -3461,7 +3462,7 @@ body{letter-spacing:.08px}
   <div class="modal-box pk-gen2-catalog-box pk-johto-family-box" onclick="event.stopPropagation()">
     <div class="pk-gen2-catalog-head">
       <div><div class="pk-johto-dev-kicker">🌿 JOHTO DEV · MODELO DE FAMILIAS</div><h2 id="pkJohtoFamiliesTitle">68 familias regionales</h2>
-      <small>Plano interno de Johto: 100 especies Gen II + los miembros de Kanto necesarios para conservar familias evolutivas completas. Soporta ramas reales sin modificar todavía Kanto.</small></div>
+      <small>Plano interno de Johto: 100 especies Gen II + los miembros de Kanto necesarios para conservar familias evolutivas completas. Las 131 especies quedan marcadas como elegibles para los futuros Gachapones regionales; las 3 rutas decidirán después dónde aparece cada una.</small></div>
       <button id="pkJohtoFamiliesClose" class="btn" type="button">Cerrar</button>
     </div>
     <div id="pkJohtoFamilyAudit" class="pk-gen2-catalog-audit"></div>
@@ -3479,6 +3480,43 @@ body{letter-spacing:.08px}
     </div>
     <div id="pkJohtoFamilyCount" class="pk-gen2-catalog-count"></div>
     <div id="pkJohtoFamilyGrid" class="pk-johto-family-grid"></div>
+  </div>
+</div>
+
+
+<div id="pkJohtoEvolutionLabOverlay" class="overlay hidden pk-gen2-catalog-overlay" role="dialog" aria-modal="true" aria-labelledby="pkJohtoEvolutionLabTitle">
+  <div class="modal-box pk-gen2-catalog-box pk-johto-evo-lab-box" onclick="event.stopPropagation()">
+    <div class="pk-gen2-catalog-head">
+      <div>
+        <div class="pk-johto-dev-kicker">⚗️ JOHTO DEV · MOTOR EVOLUTIVO</div>
+        <h2 id="pkJohtoEvolutionLabTitle">Laboratorio de evoluciones</h2>
+        <small>Simula las reglas nuevas antes de conectarlas al gameplay. No modifica tu colección ni consume objetos reales.</small>
+      </div>
+      <button id="pkJohtoEvolutionLabClose" class="btn" type="button">Cerrar</button>
+    </div>
+    <div id="pkJohtoEvolutionAudit" class="pk-gen2-catalog-audit"></div>
+
+    <div class="pk-johto-evo-controls">
+      <label>Familia<select id="pkJohtoEvoFamily"></select></label>
+      <label>Forma actual<select id="pkJohtoEvoSpecies"></select></label>
+      <label>Nivel<input id="pkJohtoEvoLevel" type="number" min="1" max="100" value="30"></label>
+      <label>Amistad<input id="pkJohtoEvoFriendship" type="number" min="0" max="255" value="220"></label>
+      <label>ATQ<input id="pkJohtoEvoAtk" type="number" min="1" max="999" value="100"></label>
+      <label>DEF<input id="pkJohtoEvoDef" type="number" min="1" max="999" value="100"></label>
+      <label>Hora<select id="pkJohtoEvoTime"><option value="auto">Hora real</option><option value="day">☀️ Día</option><option value="night">🌙 Noche</option></select></label>
+    </div>
+
+    <div class="pk-johto-evo-material-title">Materiales simulados</div>
+    <div id="pkJohtoEvoMaterials" class="pk-johto-evo-materials"></div>
+
+    <div class="pk-johto-gacha-confirm">
+      <b>🎰 Pool regional futuro de Johto</b>
+      <span><strong id="pkJohtoGachaSpeciesCount">131</strong> especies potenciales · <strong>100</strong> Gen II + <strong>31</strong> Pokémon de Kanto que comparten familias de Johto.</span>
+      <small>La distribución por Ruta 1 / Ruta 2 / Ruta 3 se hará después según temática, rareza y balance.</small>
+    </div>
+
+    <div id="pkJohtoEvoCurrent" class="pk-johto-evo-current"></div>
+    <div id="pkJohtoEvoResults" class="pk-johto-evo-results"></div>
   </div>
 </div>
 
@@ -4267,6 +4305,130 @@ body{letter-spacing:.08px}
   window.PokeSendaGen2.families=JOHTO_FAMILY_BLUEPRINTS;
   window.PokeSendaGen2.familyAudit=johtoFamilyAudit;
   window.PokeSendaGen2.gif=johtoGifUrl;
+  /* V36.43.0 · Johto regional Gachapon blueprint.
+     Cada familia regional completa es elegible para los futuros pools de Johto.
+     Esto incluye explícitamente miembros de Kanto que comparten familia con Gen II. */
+  const JOHTO_GACHA_FAMILY_IDS=Object.keys(JOHTO_FAMILY_BLUEPRINTS);
+  const JOHTO_GACHA_SPECIES_BLUEPRINT=[...new Set(Object.values(JOHTO_FAMILY_BLUEPRINTS).flatMap(f=>f.members||[]))].sort((a,b)=>a-b);
+  const JOHTO_GACHA_KANTO_SPECIES=JOHTO_GACHA_SPECIES_BLUEPRINT.filter(d=>d<=151);
+  const JOHTO_GACHA_GEN2_SPECIES=JOHTO_GACHA_SPECIES_BLUEPRINT.filter(d=>d>=152&&d<=251);
+
+  /* Objetos evolutivos que Johto necesitará.
+     Siguen privados: aún no entran al inventario/drop real de Kanto. */
+  const JOHTO_EVOLUTION_ITEM_BLUEPRINTS={
+    sun_stone:{name:"Piedra Solar",icon:"☀️",rarity:"epic",sprite:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sun-stone.png",kind:"stone",consumed:1,desc:"Evoluciona determinadas especies de Johto. Se consume al evolucionar."},
+    kings_rock:{name:"Roca del Rey",icon:"👑",rarity:"epic",sprite:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/kings-rock.png",kind:"trade_item",consumed:1,requiresLinkCable:true,desc:"En Johto funcionará además como catalizador de evolución junto al Cable de Intercambio."},
+    metal_coat:{name:"Revestimiento Metálico",icon:"⚙️",rarity:"epic",sprite:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/metal-coat.png",kind:"trade_item",consumed:1,requiresLinkCable:true,boostType:"steel",power:.12,desc:"Catalizador de evolución para Steelix/Scizor junto al Cable; también podrá potenciar Acero."},
+    dragon_scale:{name:"Escama Dragón",icon:"🐉",rarity:"epic",sprite:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dragon-scale.png",kind:"trade_item",consumed:1,requiresLinkCable:true,desc:"Catalizador de evolución para Kingdra junto al Cable de Intercambio."},
+    up_grade:{name:"Mejora",icon:"💾",rarity:"epic",sprite:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/up-grade.png",kind:"trade_item",consumed:1,requiresLinkCable:true,desc:"Catalizador de evolución para Porygon2 junto al Cable de Intercambio."},
+    link_cable:{name:"Cable de Intercambio",icon:"🔗",rarity:"epic",sprite:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dubious-disc.png",kind:"trade_key",consumed:1,desc:"Adaptación PokéSenda del intercambio. Las evoluciones Gen II con objeto consumirán Cable + catalizador."},
+    water_stone:{name:"Piedra Agua",icon:"🔵",kind:"stone",consumed:1},
+    thunder_stone:{name:"Piedra Trueno",icon:"🟡",kind:"stone",consumed:1},
+    fire_stone:{name:"Piedra Fuego",icon:"🔴",kind:"stone",consumed:1},
+    leaf_stone:{name:"Piedra Hoja",icon:"🟢",kind:"stone",consumed:1},
+    moon_stone:{name:"Piedra Lunar",icon:"🌙",kind:"stone",consumed:1}
+  };
+  const JOHTO_FRIENDSHIP_EVOLUTION_THRESHOLD=220;
+  function johtoTimeBand(hour=new Date().getHours()){
+    hour=Math.max(0,Math.min(23,Number(hour)||0));
+    return hour>=6&&hour<18?"day":"night";
+  }
+  function johtoFamilyForDex(dex){
+    dex=Number(dex);
+    return Object.values(JOHTO_FAMILY_BLUEPRINTS).find(f=>(f.members||[]).includes(dex))||null;
+  }
+  function johtoEvolutionEdgesFromDex(dex){
+    const f=johtoFamilyForDex(dex);if(!f)return[];
+    return (f.evolutions||[]).filter(e=>Number(e.from)===Number(dex));
+  }
+  function johtoInventoryHas(inventory,id,qty=1){
+    return Math.max(0,Number(inventory?.[id]||0))>=Math.max(1,Number(qty)||1);
+  }
+  function johtoStatConditionMet(edge,atk,def){
+    atk=Number(atk)||0;def=Number(def)||0;
+    if(edge.condition==="atk_gt_def")return atk>def;
+    if(edge.condition==="def_gt_atk")return def>atk;
+    if(edge.condition==="atk_eq_def")return atk===def;
+    return false;
+  }
+  function johtoEvolutionCheck(edge,ctx={}){
+    const level=Math.max(1,Number(ctx.level||1));
+    const friendship=Math.max(0,Math.min(255,Number(ctx.friendship||0)));
+    const band=ctx.timeBand==="day"||ctx.timeBand==="night"?ctx.timeBand:johtoTimeBand(ctx.hour);
+    const inventory=ctx.inventory||{};
+    let ready=false,requirements=[],consume=[];
+    switch(edge?.method){
+      case "level":
+        ready=level>=Number(edge.level||1);
+        requirements.push(`Nv.${edge.level}`);
+        break;
+      case "stone":
+        ready=johtoInventoryHas(inventory,edge.item,1);
+        requirements.push(JOHTO_EVOLUTION_ITEM_BLUEPRINTS[edge.item]?.name||edge.item);
+        consume.push({id:edge.item,qty:1});
+        break;
+      case "friendship":
+        ready=friendship>=JOHTO_FRIENDSHIP_EVOLUTION_THRESHOLD;
+        requirements.push(`Amistad ${JOHTO_FRIENDSHIP_EVOLUTION_THRESHOLD}+`);
+        break;
+      case "friendship_day":
+        ready=friendship>=JOHTO_FRIENDSHIP_EVOLUTION_THRESHOLD&&band==="day";
+        requirements.push(`Amistad ${JOHTO_FRIENDSHIP_EVOLUTION_THRESHOLD}+`,`Día`);
+        break;
+      case "friendship_night":
+        ready=friendship>=JOHTO_FRIENDSHIP_EVOLUTION_THRESHOLD&&band==="night";
+        requirements.push(`Amistad ${JOHTO_FRIENDSHIP_EVOLUTION_THRESHOLD}+`,`Noche`);
+        break;
+      case "trade_item":{
+        const hasItem=johtoInventoryHas(inventory,edge.item,1),hasCable=johtoInventoryHas(inventory,"link_cable",1);
+        ready=hasItem&&hasCable;
+        requirements.push(JOHTO_EVOLUTION_ITEM_BLUEPRINTS[edge.item]?.name||edge.item,"Cable de Intercambio");
+        consume.push({id:edge.item,qty:1},{id:"link_cable",qty:1});
+        break;
+      }
+      case "stat_branch":
+        ready=level>=Number(edge.level||20)&&johtoStatConditionMet(edge,ctx.atk,ctx.def);
+        requirements.push(`Nv.${edge.level||20}`,edge.condition==="atk_gt_def"?"ATQ > DEF":edge.condition==="def_gt_atk"?"DEF > ATQ":"ATQ = DEF");
+        break;
+      default:
+        requirements.push(edge?.method||"Método pendiente");
+    }
+    return {edge,ready,requirements,consume,timeBand:band,level,friendship,atk:Number(ctx.atk||0),def:Number(ctx.def||0)};
+  }
+  function johtoEvolutionOptions(dex,ctx={}){
+    return johtoEvolutionEdgesFromDex(dex).map(edge=>johtoEvolutionCheck(edge,ctx));
+  }
+  function johtoEvolutionEngineAudit(){
+    const families=Object.values(JOHTO_FAMILY_BLUEPRINTS),edges=families.flatMap(f=>f.evolutions||[]);
+    const methods=[...new Set(edges.map(e=>e.method))].sort();
+    const itemRefs=[...new Set(edges.map(e=>e.item).filter(Boolean))];
+    const missingItems=itemRefs.filter(id=>!JOHTO_EVOLUTION_ITEM_BLUEPRINTS[id]);
+    const destinationDex=new Set(edges.map(e=>Number(e.to)));
+    const sourceDex=new Set(edges.map(e=>Number(e.from)));
+    return {
+      families:families.length,edges:edges.length,methods,itemRefs,missingItems,
+      friendshipEdges:edges.filter(e=>String(e.method).startsWith("friendship")).length,
+      tradeItemEdges:edges.filter(e=>e.method==="trade_item").length,
+      stoneEdges:edges.filter(e=>e.method==="stone").length,
+      statBranchEdges:edges.filter(e=>e.method==="stat_branch").length,
+      gachaFamilies:JOHTO_GACHA_FAMILY_IDS.length,
+      gachaSpecies:JOHTO_GACHA_SPECIES_BLUEPRINT.length,
+      gachaGen2:JOHTO_GACHA_GEN2_SPECIES.length,
+      gachaKanto:JOHTO_GACHA_KANTO_SPECIES.length,
+      destinationDex:destinationDex.size,sourceDex:sourceDex.size
+    };
+  }
+  window.PokeSendaGen2.gacha={
+    familyIds:JOHTO_GACHA_FAMILY_IDS,species:JOHTO_GACHA_SPECIES_BLUEPRINT,
+    gen2:JOHTO_GACHA_GEN2_SPECIES,kantoFamilyMembers:JOHTO_GACHA_KANTO_SPECIES
+  };
+  window.PokeSendaGen2.evolutionItems=JOHTO_EVOLUTION_ITEM_BLUEPRINTS;
+  window.PokeSendaGen2.evolution={
+    threshold:JOHTO_FRIENDSHIP_EVOLUTION_THRESHOLD,timeBand:johtoTimeBand,
+    familyForDex:johtoFamilyForDex,edgesFromDex:johtoEvolutionEdgesFromDex,
+    check:johtoEvolutionCheck,options:johtoEvolutionOptions,audit:johtoEvolutionEngineAudit
+  };
+
 
 
 
@@ -12015,6 +12177,34 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
 @media(max-width:900px){.pk-johto-family-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pk-gen2-catalog-tools{grid-template-columns:1fr 1fr!important}.pk-gen2-shiny-toggle,.pk-gen2-validate-btn{grid-column:auto!important}}
 @media(max-width:620px){.pk-johto-dev-actions-three{grid-template-columns:1fr!important}.pk-johto-family-grid{grid-template-columns:1fr;max-height:calc(100svh - 250px)}.pk-family-tools{grid-template-columns:1fr!important}.pk-gen2-catalog-tools{grid-template-columns:1fr 1fr!important}.pk-gen2-shiny-toggle,.pk-gen2-validate-btn{grid-column:1/-1!important;justify-content:center}}
 
+
+.pk-johto-dev-actions-three{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+.pk-johto-evo-lab-box{width:min(1120px,96vw)!important}
+.pk-johto-evo-controls{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin:10px 0}
+.pk-johto-evo-controls label{display:grid;gap:4px;color:#86a49e;font-size:6.5px;font-weight:900}
+.pk-johto-evo-controls select,.pk-johto-evo-controls input{width:100%;min-width:0;background:#09191d;color:#edf6f2;border:1px solid #42645f;border-radius:8px;padding:7px 6px;font:inherit;font-size:7px;outline:none}
+.pk-johto-evo-material-title{font-size:7px;color:#9fbcb5;font-weight:1000;margin:8px 0 5px}
+.pk-johto-evo-materials{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
+.pk-johto-evo-material{display:flex;align-items:center;gap:5px;border:1px solid #3c5c57;border-radius:9px;background:#0c1e21;padding:5px 7px;color:#aec6c0;font-size:6.5px;cursor:pointer}
+.pk-johto-evo-material input{margin:0}.pk-johto-evo-material img{width:22px;height:22px;image-rendering:pixelated;object-fit:contain}
+.pk-johto-evo-material.on{border-color:#9a7f3d;background:#241f13;color:#f3d98b}
+.pk-johto-gacha-confirm{display:grid;gap:3px;border:1px solid #786239;border-radius:10px;background:linear-gradient(90deg,rgba(84,62,23,.30),rgba(10,28,31,.75));padding:8px 10px;margin:8px 0}
+.pk-johto-gacha-confirm b{font-size:8px;color:#f0d77e}.pk-johto-gacha-confirm span{font-size:7px;color:#d9e6df}.pk-johto-gacha-confirm strong{color:#fff0ac}.pk-johto-gacha-confirm small{font-size:6px;color:#849e98}
+.pk-johto-evo-current{display:flex;align-items:center;gap:10px;border:1px solid #355653;border-radius:10px;background:#0c1d21;padding:8px 10px;margin:8px 0}
+.pk-johto-evo-current img{width:74px;height:74px;object-fit:contain;image-rendering:pixelated}.pk-johto-evo-current b{display:block;color:#f2e2aa;font-size:13px}.pk-johto-evo-current small{display:block;color:#87a39d;font-size:6.5px;line-height:1.45;margin-top:3px}
+.pk-johto-evo-results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;max-height:320px;overflow:auto;padding-bottom:4px}
+.pk-johto-evo-result{display:grid;grid-template-columns:62px 1fr;gap:7px;align-items:center;border:1px solid #4d5750;border-radius:10px;background:#101d20;padding:7px}
+.pk-johto-evo-result.ready{border-color:#4e9365;background:linear-gradient(145deg,#10281d,#101e21);box-shadow:inset 0 0 12px rgba(86,213,124,.06)}
+.pk-johto-evo-result.blocked{opacity:.76}
+.pk-johto-evo-result img{width:58px;height:58px;object-fit:contain;image-rendering:pixelated}
+.pk-johto-evo-result .state{display:inline-block;border-radius:999px;padding:2px 5px;font-size:5.5px;font-weight:1000;margin-bottom:3px;background:#513b20;color:#edcf7b}
+.pk-johto-evo-result.ready .state{background:#205f3a;color:#aaf0bf}
+.pk-johto-evo-result b{display:block;color:#eff6ef;font-size:8px}.pk-johto-evo-result small{display:block;color:#8da8a2;font-size:6px;line-height:1.4;margin-top:2px}
+.pk-johto-evo-result .consume{color:#d8bc70;margin-top:4px}
+.pk-johto-evo-empty{grid-column:1/-1;border:1px dashed #415a57;border-radius:10px;padding:14px;text-align:center;color:#7d9a94;font-size:7px}
+@media(max-width:950px){.pk-johto-evo-controls{grid-template-columns:repeat(4,minmax(0,1fr))}.pk-johto-evo-results{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.pk-johto-dev-actions-three{grid-template-columns:1fr!important}.pk-johto-evo-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.pk-johto-evo-results{grid-template-columns:1fr;max-height:calc(100svh - 520px)}.pk-johto-evo-current img{width:58px;height:58px}}
+
 </style>
 
 <style id="pkMobileV3640131Audit">
@@ -12179,7 +12369,7 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.42.1.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.43.0.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12318,7 +12508,7 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.42.1',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.43.0',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -14003,7 +14193,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.42.1';
+  const VERSION='V36.43.0';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -14446,6 +14636,74 @@ module.exports = QRCode;
     if(btn)btn.disabled=false;gen2GifAuditRunning=false;
   }
 
+
+  const JOHTO_EVO_MATERIAL_IDS=["sun_stone","kings_rock","metal_coat","dragon_scale","up_grade","link_cable","water_stone","thunder_stone","fire_stone","leaf_stone","moon_stone"];
+  function johtoDevDexName(dex){
+    const j=window.PokeSendaGen2?.byDex?.[Number(dex)];if(j)return j.name;
+    try{for(const f of Object.values(FAMILIES||{})){const s=f.stages?.find(x=>Number(x.dex)===Number(dex));if(s)return s.name;}}catch(_){}
+    return `#${dex}`;
+  }
+  function johtoEvoFamilyOptions(){
+    const sel=$('pkJohtoEvoFamily');if(!sel)return;
+    const fams=Object.values(window.PokeSendaGen2?.families||{}).sort((a,b)=>a.name.localeCompare(b.name,'es'));
+    const previous=sel.value;
+    sel.innerHTML=fams.map(f=>`<option value="${f.id}">${f.name}${f.tags?.includes('cross_kanto')?' · Kanto↔Johto':''}</option>`).join('');
+    if(fams.some(f=>f.id===previous))sel.value=previous;
+    else if(window.PokeSendaGen2?.families?.j_eevee)sel.value='j_eevee';
+    johtoEvoSpeciesOptions();
+  }
+  function johtoEvoSpeciesOptions(){
+    const family=window.PokeSendaGen2?.families?.[$('pkJohtoEvoFamily')?.value],sel=$('pkJohtoEvoSpecies');if(!family||!sel)return;
+    const prev=Number(sel.value);
+    sel.innerHTML=(family.members||[]).map(d=>`<option value="${d}">#${d} · ${johtoDevDexName(d)}${d<=151?' · Kanto':''}</option>`).join('');
+    if((family.members||[]).includes(prev))sel.value=String(prev);else sel.value=String(family.members?.[0]||152);
+    renderJohtoEvolutionLab();
+  }
+  function johtoEvoInventory(){
+    const inv={};document.querySelectorAll('[data-johto-evo-material]').forEach(el=>{if(el.checked)inv[el.dataset.johtoEvoMaterial]=1;});return inv;
+  }
+  function renderJohtoEvoMaterials(){
+    const host=$('pkJohtoEvoMaterials');if(!host)return;
+    host.innerHTML=JOHTO_EVO_MATERIAL_IDS.map(id=>{
+      const it=window.PokeSendaGen2?.evolutionItems?.[id]||{},src=it.sprite||ITEMS?.[id]?.sprite||'';
+      const checked=['sun_stone','kings_rock','metal_coat','dragon_scale','up_grade','link_cable'].includes(id);
+      return `<label class="pk-johto-evo-material ${checked?'on':''}"><input type="checkbox" data-johto-evo-material="${id}" ${checked?'checked':''}>${src?`<img src="${src}" alt="">`:''}<span>${it.name||ITEMS?.[id]?.name||id}</span></label>`;
+    }).join('');
+    host.querySelectorAll('[data-johto-evo-material]').forEach(el=>el.addEventListener('change',()=>{el.closest('.pk-johto-evo-material')?.classList.toggle('on',el.checked);renderJohtoEvolutionLab();}));
+  }
+  function renderJohtoEvolutionAudit(){
+    const host=$('pkJohtoEvolutionAudit'),a=window.PokeSendaGen2?.evolution?.audit?.();if(!host||!a)return;
+    host.innerHTML=[
+      [a.families,'Familias'],[a.edges,'Evoluciones definidas'],[a.methods.length,'Métodos soportados'],
+      [a.friendshipEdges,'Por amistad/día/noche'],[a.tradeItemEdges,'Intercambio + objeto'],[a.gachaSpecies,`Pool regional · ${a.gachaKanto} de Kanto`]
+    ].map(x=>`<div class="pk-gen2-audit-chip"><b>${x[0]}</b><small>${x[1]}</small></div>`).join('');
+  }
+  function renderJohtoEvolutionLab(){
+    const dex=Number($('pkJohtoEvoSpecies')?.value||0);if(!dex)return;
+    const timeValue=$('pkJohtoEvoTime')?.value||'auto',ctx={
+      level:Number($('pkJohtoEvoLevel')?.value||1),
+      friendship:Number($('pkJohtoEvoFriendship')?.value||0),
+      atk:Number($('pkJohtoEvoAtk')?.value||1),def:Number($('pkJohtoEvoDef')?.value||1),
+      timeBand:timeValue==='auto'?undefined:timeValue,inventory:johtoEvoInventory()
+    };
+    const family=window.PokeSendaGen2?.evolution?.familyForDex?.(dex),options=window.PokeSendaGen2?.evolution?.options?.(dex,ctx)||[];
+    const current=$('pkJohtoEvoCurrent'),results=$('pkJohtoEvoResults');
+    if($('pkJohtoGachaSpeciesCount'))$('pkJohtoGachaSpeciesCount').textContent=String(window.PokeSendaGen2?.gacha?.species?.length||131);
+    if(current)current.innerHTML=`<img src="${window.PokeSendaGen2.gif(dex,{back:false,shiny:false})}" alt=""><div><b>#${dex} · ${johtoDevDexName(dex)}</b><small>Familia regional: ${family?.name||'—'} · ${dex<=151?'Pokémon originario de Kanto incluido en la familia de Johto.':'Pokémon de Generación II.'}<br>Nv.${ctx.level} · Amistad ${ctx.friendship}/255 · ATQ ${ctx.atk} · DEF ${ctx.def} · ${window.PokeSendaGen2.evolution.timeBand()==='day'?'☀️ hora real de día':'🌙 hora real de noche'}${timeValue!=='auto'?` · simulando ${timeValue==='day'?'día':'noche'}`:''}</small></div>`;
+    if(!results)return;
+    if(!options.length){results.innerHTML='<div class="pk-johto-evo-empty">Esta forma no tiene una evolución posterior dentro del modelo de Johto.</div>';return;}
+    results.innerHTML=options.map(o=>{
+      const e=o.edge,to=Number(e.to),consume=(o.consume||[]).map(c=>`${window.PokeSendaGen2?.evolutionItems?.[c.id]?.name||ITEMS?.[c.id]?.name||c.id} ×${c.qty}`).join(' + ');
+      return `<div class="pk-johto-evo-result ${o.ready?'ready':'blocked'}"><img src="${window.PokeSendaGen2.gif(to,{back:false,shiny:false})}" alt=""><div><span class="state">${o.ready?'✓ EVOLUCIÓN LISTA':'REQUISITO PENDIENTE'}</span><b>→ #${to} · ${johtoDevDexName(to)}</b><small>${o.requirements.join(' · ')}</small>${consume?`<small class="consume">Consumirá: ${consume}</small>`:''}</div></div>`;
+    }).join('');
+  }
+  function openJohtoEvolutionLab(){
+    if(core()?.active?.()!=='johto')return;
+    $('pkJohtoDevShell')?.classList.add('hidden');$('pkJohtoEvolutionLabOverlay')?.classList.remove('hidden');
+    renderJohtoEvolutionAudit();johtoEvoFamilyOptions();renderJohtoEvoMaterials();renderJohtoEvolutionLab();
+  }
+  function closeJohtoEvolutionLab(){$('pkJohtoEvolutionLabOverlay')?.classList.add('hidden');if(core()?.active?.()==='johto')showJohtoShell();}
+
   function devStats(){
     const s=core()?.summary?.();const host=$('pkJohtoDevStats');if(!host||!s)return;
     host.innerHTML=[
@@ -14526,6 +14784,13 @@ module.exports = QRCode;
     $('pkJohtoDevBackKanto')?.addEventListener('click',()=>switchDev('kanto'));
     $('pkJohtoGen2CatalogBtn')?.addEventListener('click',openGen2Catalog);
     $('pkJohtoFamiliesBtn')?.addEventListener('click',openJohtoFamilies);
+    $('pkJohtoEvolutionLabBtn')?.addEventListener('click',openJohtoEvolutionLab);
+    $('pkJohtoEvolutionLabClose')?.addEventListener('click',closeJohtoEvolutionLab);
+    $('pkJohtoEvolutionLabOverlay')?.addEventListener('click',e=>{if(e.target===$('pkJohtoEvolutionLabOverlay'))closeJohtoEvolutionLab();});
+    $('pkJohtoEvoFamily')?.addEventListener('change',johtoEvoSpeciesOptions);
+    $('pkJohtoEvoSpecies')?.addEventListener('change',renderJohtoEvolutionLab);
+    ['pkJohtoEvoLevel','pkJohtoEvoFriendship','pkJohtoEvoAtk','pkJohtoEvoDef'].forEach(id=>$(id)?.addEventListener('input',renderJohtoEvolutionLab));
+    $('pkJohtoEvoTime')?.addEventListener('change',renderJohtoEvolutionLab);
     $('pkJohtoFamiliesClose')?.addEventListener('click',closeJohtoFamilies);
     $('pkJohtoFamiliesOverlay')?.addEventListener('click',e=>{if(e.target===$('pkJohtoFamiliesOverlay'))closeJohtoFamilies();});
     $('pkJohtoFamilySearch')?.addEventListener('input',renderJohtoFamilies);
@@ -14547,6 +14812,7 @@ module.exports = QRCode;
         e.preventDefault();
         if(core()?.active?.()==='johto')switchDev('kanto');else switchDev('johto');
       }
+      if(e.key==='Escape'&&!$('pkJohtoEvolutionLabOverlay')?.classList.contains('hidden')){e.preventDefault();closeJohtoEvolutionLab();return;}
       if(e.key==='Escape'&&!$('pkJohtoFamiliesOverlay')?.classList.contains('hidden')){e.preventDefault();closeJohtoFamilies();return;}
       if(e.key==='Escape'&&!$('pkGen2CatalogOverlay')?.classList.contains('hidden')){e.preventDefault();closeGen2Catalog();return;}
       if(e.key==='Escape'&&!$('regionSelectOverlay')?.classList.contains('hidden'))closeRegions();

@@ -3413,7 +3413,7 @@ body{letter-spacing:.08px}
 
 <div id="pkJohtoDevShell" class="overlay hidden pk-johto-dev-shell" role="dialog" aria-modal="true" aria-labelledby="pkJohtoDevTitle">
   <div class="modal-box pk-johto-dev-box" onclick="event.stopPropagation()">
-    <div class="pk-johto-dev-kicker">🧪 DESARROLLO PRIVADO · V36.45.0</div>
+    <div class="pk-johto-dev-kicker">🧪 DESARROLLO PRIVADO · V36.46.0</div>
     <h2 id="pkJohtoDevTitle">Región de Johto</h2>
     <p>La arquitectura multirregión ya está funcionando. Esta campaña tiene un estado regional separado de Kanto, pero todavía no contiene Pokémon Gen II, rutas ni Gimnasios jugables.</p>
     <div class="pk-johto-dev-warning"><b>No es el lanzamiento de Johto.</b> Este espacio existe para que podamos construir la expansión sin exponer contenido incompleto a los jugadores.</div>
@@ -3424,7 +3424,7 @@ body{letter-spacing:.08px}
       <span>✓ Pokédex / Shiny globales</span>
       <span>✓ Infinita global preservada</span>
       <span>✓ Gen II · GIF + familias + evoluciones + contenido</span>
-      <span>◐ 3 rutas diseñadas · faltan fondos/gameplay</span>
+      <span>◐ Inicio + lobby Johto funcional · combate pendiente</span>
     </div>
     <div class="pk-johto-dev-actions pk-johto-dev-actions-three">
       <button id="pkJohtoDevBackKanto" class="btn primary" type="button">← Volver a Kanto</button>
@@ -3565,12 +3565,38 @@ body{letter-spacing:.08px}
     </div>
     <div id="pkJohtoRoutesAudit" class="pk-gen2-catalog-audit"></div>
     <div id="pkJohtoNatureStrip" class="pk-johto-nature-strip"></div>
+    <div id="pkJohtoStarterDistribution" class="pk-starter-distribution-dev"></div>
     <div id="pkJohtoRoutesGrid" class="pk-johto-routes-grid"></div>
     <div class="pk-drop-philosophy">
       <b>🎒 Filosofía de objetos de Johto</b>
       <span>La probabilidad de objeto general se mantiene prácticamente igual en las 3 rutas. Lo que mejora al avanzar es <strong>la calidad</strong>, no la cantidad.</span>
       <small>Comparación base: Kanto usa 0,90% objeto general / 0,90% evolutivo / 4% objeto equipado. Johto parte provisionalmente en 0,45% / 0,25% / 1,8%. Las pociones bajan menos porque son consumibles.</small>
     </div>
+  </div>
+</div>
+
+
+<div id="pkJohtoStarterOverlay" class="overlay hidden pk-johto-campaign-overlay" role="dialog" aria-modal="true">
+  <div class="modal-box pk-johto-starter-box" onclick="event.stopPropagation()">
+    <div class="pk-johto-campaign-kicker">🌐 NUEVA AVENTURA · JOHTO DEV</div>
+    <h2>Elige tu primer compañero</h2>
+    <p>Johto comienza desde cero. Todo lo conseguido en Kanto queda guardado en Kanto.</p>
+    <div class="pk-johto-starter-grid">
+      <button class="pk-johto-starter-option" type="button" data-johto-starter="j_cyndaquil"><span>#155</span><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/155.gif" alt="Cyndaquil"><b>Cyndaquil</b><small>🔥 Fuego · ofensivo y rápido</small></button>
+      <button class="pk-johto-starter-option featured" type="button" data-johto-starter="j_totodile"><span>#158</span><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/158.gif" alt="Totodile"><b>Totodile</b><small>💧 Agua · resistente y físico</small></button>
+      <button class="pk-johto-starter-option" type="button" data-johto-starter="j_chikorita"><span>#152</span><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/152.gif" alt="Chikorita"><b>Chikorita</b><small>🌿 Planta · equilibrada y soporte</small></button>
+    </div>
+    <div class="pk-johto-starter-note">El que elijas será el inicial raro de Ruta 1. Los otros dos aparecerán en Ruta 2 y Ruta 3 según la misma lógica de Kanto.</div>
+    <button id="pkJohtoStarterBackKanto" class="btn" type="button">← Volver a Kanto sin elegir</button>
+  </div>
+</div>
+
+<div id="pkJohtoLobbyOverlay" class="overlay hidden pk-johto-campaign-overlay" role="dialog" aria-modal="true">
+  <div class="modal-box pk-johto-lobby-box" onclick="event.stopPropagation()">
+    <div class="pk-johto-lobby-top"><div><div class="pk-johto-campaign-kicker">🍂 REGIÓN ACTIVA · JOHTO DEV</div><h2>Región de Johto</h2><p>Lobby provisional de desarrollo. El fondo ilustrado definitivo de Johto lo diseñaremos antes del lanzamiento.</p></div><div class="pk-johto-lobby-actions"><button id="pkJohtoLobbyTools" class="btn" type="button">🧪 Herramientas DEV</button><button id="pkJohtoLobbyBackKanto" class="btn primary" type="button">🌐 Volver a Kanto</button></div></div>
+    <div class="pk-johto-lobby-hero"><div class="pk-johto-lobby-sign"><small>POKÉSENDA</small><b>Región de Johto</b><span>Una nueva aventura comienza desde cero.</span></div><div id="pkJohtoLobbyStarter" class="pk-johto-lobby-starter"></div><div class="pk-johto-lobby-stats"><div><b id="pkJohtoLobbyMoney">₽0</b><small>Pokédolares Johto</small></div><div><b id="pkJohtoLobbyDex">1</b><small>Especies obtenidas</small></div><div><b id="pkJohtoLobbyBadges">0/8</b><small>Medallas Johto</small></div></div></div>
+    <div class="pk-johto-lobby-section-title">Rutas de Johto</div><div id="pkJohtoLobbyRoutes" class="pk-johto-lobby-routes"></div>
+    <div class="pk-johto-lobby-footer"><span>🔒 Campaña privada accesible solo con Ctrl + Alt + J.</span><button id="pkJohtoResetStarterBtn" class="btn danger" type="button">Reiniciar Johto DEV</button></div>
   </div>
 </div>
 
@@ -4530,25 +4556,59 @@ body{letter-spacing:.08px}
      Todo sigue en DEV. Las rutas aún NO reemplazan ROUTES ni aparecen al jugador. */
   const JOHTO_NATURE_POLICY={"count":25,"firstCapture":"random","duplicateCapture":"keep_existing","evolution":"inherit","regionalIsolation":true,"enemyNatures":false,"mintInventory":"regional","mintSource":"vendor_events_rewards","mintNormalCombatDrop":false,"masterMintChance":0.02,"notes":"El mismo motor de 25 naturalezas de Kanto se reutiliza. Un Pokémon de Johto tiene su propia naturaleza porque progress es regional."};
   const JOHTO_DROP_PROFILES={"route1":{"generalDropChance":0.0045,"heldItemDropChance":0.018,"evolutionDropChance":0.0025,"potionDropChance":0.055,"rarityWeights":{"common":70,"uncommon":23,"rare":6,"epic":0.9,"legendary":0.1},"evolutionWeights":{"fire_stone":18,"water_stone":18,"thunder_stone":18,"leaf_stone":18,"moon_stone":9,"sun_stone":7,"link_cable":5,"kings_rock":2,"metal_coat":1,"dragon_scale":0.5,"up_grade":0.5}},"route2":{"generalDropChance":0.0045,"heldItemDropChance":0.018,"evolutionDropChance":0.0025,"potionDropChance":0.055,"rarityWeights":{"common":56,"uncommon":30,"rare":11,"epic":2.7,"legendary":0.3},"evolutionWeights":{"fire_stone":10,"water_stone":10,"thunder_stone":10,"leaf_stone":10,"moon_stone":7,"sun_stone":10,"link_cable":12,"kings_rock":10,"metal_coat":9,"dragon_scale":6,"up_grade":6}},"route3":{"generalDropChance":0.0045,"heldItemDropChance":0.018,"evolutionDropChance":0.0025,"potionDropChance":0.055,"rarityWeights":{"common":44,"uncommon":34,"rare":16,"epic":5.3,"legendary":0.7},"evolutionWeights":{"fire_stone":5,"water_stone":5,"thunder_stone":5,"leaf_stone":5,"moon_stone":5,"sun_stone":7,"link_cable":16,"kings_rock":12,"metal_coat":13,"dragon_scale":12,"up_grade":10}}};
-  const JOHTO_ROUTE_BLUEPRINTS={"johto_route1":{"id":"johto_route1","name":"Pradera Ámbar","status":"provisional","description":"Campos dorados, caminos rurales y bosque templado. Entrada amable a Johto con fauna pequeña, familias bebé y los primeros Pokémon característicos de la región.","theme":"dorado + verde natural","levelBase":1,"recommended":"Nv.1–20","finalBossLevel":25,"sectors":["Campos Dorados","Bosque de Encinas","Camino de Campanas"],"gachaByRarity":{"common":["j_sentret","j_hoothoot","j_ledyba","j_spinarak","j_hoppip","j_sunkern","j_wooper"],"uncommon":["j_mareep","j_oddish","j_marill","j_poliwag","j_aipom","j_yanma","j_snubbull"],"rare":["j_chikorita","j_cyndaquil","j_totodile","j_pichu","j_cleffa","j_igglybuff"],"epic":["j_togepi","j_sudowoodo","j_miltank"],"legendary":["j_raikou","j_entei"]},"bosses":["j_sentret","j_spinarak","j_mareep","j_sudowoodo","j_yanma","j_miltank","j_togepi","j_chikorita","j_raikou","j_entei"],"legendaryFamilies":["j_raikou","j_entei"],"finalBoss":"j_entei","dropProfile":"route1"},"johto_route2":{"id":"johto_route2","name":"Bosque Ancestral","status":"provisional","description":"Bosques antiguos, ruinas, senderos nocturnos y santuarios envueltos en niebla. Aquí empieza el Johto más místico y extraño.","theme":"verde azulado + violeta + oro viejo","levelBase":20,"recommended":"Nv.20–38","finalBossLevel":42,"sectors":["Bosque Umbrío","Ruinas Antiguas","Santuario de Niebla"],"gachaByRarity":{"common":["j_zubat","j_slowpoke","j_pineco","j_dunsparce","j_teddiursa"],"uncommon":["j_natu","j_murkrow","j_girafarig","j_gligar","j_onix","j_shuckle","j_stantler"],"rare":["j_eevee","j_misdreavus","j_wobbuffet","j_heracross","j_smeargle","j_tyrogue"],"epic":["j_unown","j_scyther","j_chansey"],"legendary":["j_suicune","j_celebi"]},"bosses":["j_zubat","j_natu","j_slowpoke","j_girafarig","j_onix","j_heracross","j_misdreavus","j_scyther","j_celebi","j_suicune"],"legendaryFamilies":["j_suicune","j_celebi"],"finalBoss":"j_suicune","dropProfile":"route2"},"johto_route3":{"id":"johto_route3","name":"Senda Plateada","status":"provisional","description":"Una ruta final que comienza junto al mar, cruza una zona helada y termina ascendiendo hacia un santuario en las alturas. Es la zona más dura de Johto.","theme":"azul profundo + plata + rojo sagrado","levelBase":39,"recommended":"Nv.40–60","finalBossLevel":60,"sectors":["Costa Tormentosa","Paso Nevado","Cumbre Sagrada"],"gachaByRarity":{"common":["j_chinchou","j_qwilfish","j_slugma","j_swinub","j_remoraid","j_phanpy"],"uncommon":["j_corsola","j_delibird","j_mantine","j_houndour","j_horsea"],"rare":["j_sneasel","j_smoochum","j_elekid","j_magby"],"epic":["j_skarmory","j_porygon","j_larvitar"],"legendary":["j_lugia","j_hooh"]},"bosses":["j_chinchou","j_sneasel","j_swinub","j_mantine","j_skarmory","j_houndour","j_elekid","j_larvitar","j_lugia","j_hooh"],"legendaryFamilies":["j_lugia","j_hooh"],"finalBoss":"j_hooh","dropProfile":"route3"}};
+  const JOHTO_ROUTE_BLUEPRINTS={"johto_route1":{"id":"johto_route1","name":"Pradera Ámbar","status":"provisional","description":"Campos dorados, caminos rurales y bosque templado. Entrada amable a Johto con fauna pequeña, familias bebé y los primeros Pokémon característicos de la región.","theme":"dorado + verde natural","levelBase":1,"recommended":"Nv.1–20","finalBossLevel":25,"sectors":["Campos Dorados","Bosque de Encinas","Camino de Campanas"],"gachaByRarity":{"common":["j_sentret","j_hoothoot","j_ledyba","j_spinarak","j_hoppip","j_sunkern","j_wooper"],"uncommon":["j_mareep","j_oddish","j_marill","j_poliwag","j_aipom","j_yanma","j_snubbull"],"rare":["j_pichu","j_cleffa","j_igglybuff"],"epic":["j_togepi","j_sudowoodo","j_miltank"],"legendary":["j_raikou","j_suicune"]},"bosses":["j_sentret","j_spinarak","j_mareep","j_sudowoodo","j_yanma","j_miltank","j_togepi","j_chikorita","j_raikou","j_raikou","j_suicune"],"legendaryFamilies":["j_raikou","j_suicune"],"finalBoss":"j_suicune","dropProfile":"route1","starterSlot":true},"johto_route2":{"id":"johto_route2","name":"Bosque Ancestral","status":"provisional","description":"Bosques antiguos, ruinas, senderos nocturnos y santuarios envueltos en niebla. Aquí empieza el Johto más místico y extraño.","theme":"verde azulado + violeta + oro viejo","levelBase":20,"recommended":"Nv.20–38","finalBossLevel":42,"sectors":["Bosque Umbrío","Ruinas Antiguas","Santuario de Niebla"],"gachaByRarity":{"common":["j_zubat","j_slowpoke","j_pineco","j_dunsparce","j_teddiursa"],"uncommon":["j_natu","j_murkrow","j_girafarig","j_gligar","j_onix","j_shuckle","j_stantler"],"rare":["j_eevee","j_misdreavus","j_wobbuffet","j_heracross","j_smeargle","j_tyrogue"],"epic":["j_unown","j_scyther","j_chansey"],"legendary":["j_entei","j_celebi"]},"bosses":["j_zubat","j_natu","j_slowpoke","j_girafarig","j_onix","j_heracross","j_misdreavus","j_scyther","j_celebi","j_celebi","j_entei"],"legendaryFamilies":["j_entei","j_celebi"],"finalBoss":"j_entei","dropProfile":"route2","starterSlot":true},"johto_route3":{"id":"johto_route3","name":"Senda Plateada","status":"provisional","description":"Una ruta final que comienza junto al mar, cruza una zona helada y termina ascendiendo hacia un santuario en las alturas. Es la zona más dura de Johto.","theme":"azul profundo + plata + rojo sagrado","levelBase":39,"recommended":"Nv.40–60","finalBossLevel":60,"sectors":["Costa Tormentosa","Paso Nevado","Cumbre Sagrada"],"gachaByRarity":{"common":["j_chinchou","j_qwilfish","j_slugma","j_swinub","j_remoraid","j_phanpy"],"uncommon":["j_corsola","j_delibird","j_mantine","j_houndour","j_horsea"],"rare":["j_sneasel","j_smoochum","j_elekid","j_magby"],"epic":["j_skarmory","j_porygon","j_larvitar"],"legendary":["j_lugia","j_hooh"]},"bosses":["j_chinchou","j_sneasel","j_swinub","j_mantine","j_skarmory","j_houndour","j_elekid","j_larvitar","j_lugia","j_hooh"],"legendaryFamilies":["j_lugia","j_hooh"],"finalBoss":"j_hooh","dropProfile":"route3","starterSlot":true}};
   const JOHTO_ROUTE_ORDER=["johto_route1","johto_route2","johto_route3"];
-  function johtoRouteFamilyIds(routeId){
-    const r=JOHTO_ROUTE_BLUEPRINTS[routeId];if(!r)return[];
-    return [...new Set(Object.values(r.gachaByRarity||{}).flat())];
+
+  const JOHTO_STARTER_FAMILIES=["j_chikorita","j_cyndaquil","j_totodile"];
+  const JOHTO_STARTER_ROUTE_WEAK={
+    j_chikorita:"j_totodile",
+    j_cyndaquil:"j_chikorita",
+    j_totodile:"j_cyndaquil"
+  };
+  const JOHTO_STARTER_ROUTE_STRONG={
+    j_chikorita:"j_cyndaquil",
+    j_cyndaquil:"j_totodile",
+    j_totodile:"j_chikorita"
+  };
+  function johtoStarterFamilyForRoute(chosenStarter,routeId){
+    if(!JOHTO_STARTER_FAMILIES.includes(chosenStarter))return null;
+    if(routeId==="johto_route1")return chosenStarter;
+    if(routeId==="johto_route2")return JOHTO_STARTER_ROUTE_WEAK[chosenStarter]||null;
+    if(routeId==="johto_route3")return JOHTO_STARTER_ROUTE_STRONG[chosenStarter]||null;
+    return null;
   }
-  function johtoRouteSpeciesDexes(routeId){
-    return [...new Set(johtoRouteFamilyIds(routeId).flatMap(id=>JOHTO_FAMILY_BLUEPRINTS[id]?.members||[]))].sort((a,b)=>a-b);
+  function johtoStarterDistribution(chosenStarter){
+    return Object.fromEntries(JOHTO_ROUTE_ORDER.map(id=>[id,johtoStarterFamilyForRoute(chosenStarter,id)]));
+  }
+
+  function johtoRouteFamilyIds(routeId,chosenStarter="j_chikorita"){
+    const r=JOHTO_ROUTE_BLUEPRINTS[routeId];if(!r)return[];
+    const ids=Object.values(r.gachaByRarity||{}).flat();
+    const starter=r.starterSlot?johtoStarterFamilyForRoute(chosenStarter,routeId):null;
+    if(starter)ids.push(starter);
+    return [...new Set(ids)];
+  }
+  function johtoRouteSpeciesDexes(routeId,chosenStarter="j_chikorita"){
+    return [...new Set(johtoRouteFamilyIds(routeId,chosenStarter).flatMap(id=>JOHTO_FAMILY_BLUEPRINTS[id]?.members||[]))].sort((a,b)=>a-b);
   }
   function johtoRouteBlueprintAudit(){
-    const allFamilies=JOHTO_ROUTE_ORDER.flatMap(johtoRouteFamilyIds);
-    const allSpecies=[...new Set(JOHTO_ROUTE_ORDER.flatMap(johtoRouteSpeciesDexes))];
-    const legends=JOHTO_ROUTE_ORDER.flatMap(id=>JOHTO_ROUTE_BLUEPRINTS[id]?.legendaryFamilies||[]);
+    const starterAudits=JOHTO_STARTER_FAMILIES.map(chosen=>{
+      const allFamilies=JOHTO_ROUTE_ORDER.flatMap(id=>johtoRouteFamilyIds(id,chosen));
+      const allSpecies=[...new Set(JOHTO_ROUTE_ORDER.flatMap(id=>johtoRouteSpeciesDexes(id,chosen)))];
+      return {
+        chosen,allFamilies,allSpecies,uniqueFamilies:new Set(allFamilies).size,
+        missingFamilies:Object.keys(JOHTO_FAMILY_BLUEPRINTS).filter(id=>!allFamilies.includes(id)),
+        duplicateFamilies:allFamilies.filter((x,i,a)=>a.indexOf(x)!==i)
+      };
+    });
+    const base=starterAudits[0],legends=JOHTO_ROUTE_ORDER.flatMap(id=>JOHTO_ROUTE_BLUEPRINTS[id]?.legendaryFamilies||[]);
     return {
-      routes:JOHTO_ROUTE_ORDER.length,families:allFamilies.length,uniqueFamilies:new Set(allFamilies).size,
-      regionalSpecies:allSpecies.length,gen2Species:allSpecies.filter(d=>d>=152&&d<=251).length,
-      kantoFamilySpecies:allSpecies.filter(d=>d<=151).length,legendaryFamilies:legends.length,
-      duplicateFamilies:allFamilies.filter((x,i,a)=>a.indexOf(x)!==i),
-      missingFamilies:Object.keys(JOHTO_FAMILY_BLUEPRINTS).filter(id=>!allFamilies.includes(id)),
+      routes:JOHTO_ROUTE_ORDER.length,families:base.allFamilies.length,uniqueFamilies:base.uniqueFamilies,
+      regionalSpecies:base.allSpecies.length,gen2Species:base.allSpecies.filter(d=>d>=152&&d<=251).length,
+      kantoFamilySpecies:base.allSpecies.filter(d=>d<=151).length,legendaryFamilies:legends.length,
+      duplicateFamilies:base.duplicateFamilies,missingFamilies:base.missingFamilies,
+      allStarterChoicesValid:starterAudits.every(x=>x.uniqueFamilies===68&&!x.missingFamilies.length&&!x.duplicateFamilies.length),
+      starterAudits:starterAudits.map(x=>({chosen:x.chosen,uniqueFamilies:x.uniqueFamilies,missing:x.missingFamilies.length,duplicates:x.duplicateFamilies.length})),
       sameGeneralDrop:JOHTO_ROUTE_ORDER.every(id=>JOHTO_DROP_PROFILES[JOHTO_ROUTE_BLUEPRINTS[id].dropProfile]?.generalDropChance===JOHTO_DROP_PROFILES.route1.generalDropChance)
     };
   }
@@ -4563,7 +4623,12 @@ body{letter-spacing:.08px}
   }
   window.PokeSendaGen2.natures={policy:JOHTO_NATURE_POLICY,audit:johtoNatureAudit};
   window.PokeSendaGen2.drops=JOHTO_DROP_PROFILES;
-  window.PokeSendaGen2.routes={order:JOHTO_ROUTE_ORDER,blueprints:JOHTO_ROUTE_BLUEPRINTS,audit:johtoRouteBlueprintAudit,families:johtoRouteFamilyIds,species:johtoRouteSpeciesDexes};
+  window.PokeSendaGen2.routes={
+    order:JOHTO_ROUTE_ORDER,blueprints:JOHTO_ROUTE_BLUEPRINTS,audit:johtoRouteBlueprintAudit,
+    families:johtoRouteFamilyIds,species:johtoRouteSpeciesDexes,
+    starterForRoute:johtoStarterFamilyForRoute,starterDistribution:johtoStarterDistribution,
+    starterFamilies:JOHTO_STARTER_FAMILIES
+  };
 
 
 
@@ -5893,7 +5958,8 @@ body{letter-spacing:.08px}
     "starter","owned","progress","formation","currentRoute","unlockedRoutes","routes",
     "totalChests","totalRewards","items","itemSeen","itemUnread","mints","masterMints",
     "pokedollars","skillTree","tms","mtGacha","expeditionHistory","eeveeReserves",
-    "eeveeCandies","achievements","timedGacha","gyms","casino","regionDexOwnedHistory"
+    "eeveeCandies","achievements","timedGacha","gyms","casino","regionDexOwnedHistory",
+    "johtoStarterChoice","johtoIntroSeen","johtoLobbyVisits"
   ];
 
   function pkRegionClone(value){
@@ -5910,12 +5976,16 @@ body{letter-spacing:.08px}
       if(key==="gyms"){out.gyms=pkFreshGymRegionState();continue;}
       if(key==="casino"){out.casino={};continue;}
       if(key==="regionDexOwnedHistory"){out.regionDexOwnedHistory=[];continue;}
+      if(key==="johtoStarterChoice"){out.johtoStarterChoice=null;continue;}
+      if(key==="johtoIntroSeen"){out.johtoIntroSeen=false;continue;}
+      if(key==="johtoLobbyVisits"){out.johtoLobbyVisits=0;continue;}
       out[key]=pkRegionClone(base[key]);
     }
     // Johto todavía no tiene datos Gen II cargados. Dejamos una campaña limpia
     // reutilizando únicamente la forma técnica mínima que el motor actual entiende.
     if(regionId==="johto"){
       out.starter=null;
+      out.johtoStarterChoice=null;out.johtoIntroSeen=false;out.johtoLobbyVisits=0;
       out.owned=[];
       out.progress={};
       out.formation=[null,null,null,null,null,null];
@@ -6055,7 +6125,7 @@ body{letter-spacing:.08px}
         badges:[...new Set(Array.isArray(r.gyms?.badges)?r.gyms.badges:[])].length,
         regionalDex:[...new Set(Array.isArray(r.regionDexOwnedHistory)?r.regionDexOwnedHistory:[])].length,
         routeCompletions:Object.values(r.routes||{}).reduce((n,x)=>n+Math.max(0,Number(x?.completions||0)),0),
-        started:!!r.starter
+        started:!!r.starter||!!r.johtoStarterChoice
       };
     }catch(_){return {id:regionId,label:regionId,money:0,owned:0,badges:0,routeCompletions:0,started:false};}
   }
@@ -12421,6 +12491,20 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
 @media(max-width:950px){.pk-johto-routes-grid{grid-template-columns:1fr}.pk-johto-nature-strip{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:620px){.pk-johto-dev-actions-three{grid-template-columns:1fr!important}.pk-johto-nature-strip{grid-template-columns:1fr}.pk-johto-routes-grid{max-height:calc(100svh - 390px)}}
 
+
+.pk-starter-distribution-dev{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:0 0 10px}
+.pk-starter-map{border:1px solid #53645a;border-radius:9px;background:#101f20;padding:7px 8px}.pk-starter-map b{display:block;color:#efd67d;font-size:7.5px;margin-bottom:4px}.pk-starter-map small{display:block;color:#9bb0aa;font-size:5.8px;line-height:1.55}
+.pk-route-sector-label{font-size:5.2px;color:#7f9b94;margin:5px 0 2px;font-weight:1000;text-transform:uppercase;letter-spacing:.4px}
+@media(max-width:620px){.pk-starter-distribution-dev{grid-template-columns:1fr}}
+
+
+.pk-johto-campaign-overlay{z-index:275!important;background:radial-gradient(circle at 46% 14%,rgba(43,97,89,.97),rgba(6,23,28,.985) 54%,rgba(24,18,8,.995) 100%)!important;backdrop-filter:blur(7px)}
+.pk-johto-starter-box,.pk-johto-lobby-box{border:1px solid #ae8c3a!important;background:linear-gradient(155deg,#10272a,#112326 60%,#302513)!important;box-shadow:0 35px 110px rgba(0,0,0,.68)!important}.pk-johto-starter-box{width:min(940px,95vw)!important}.pk-johto-lobby-box{width:min(1180px,96vw)!important;max-height:94svh!important;overflow:auto!important}
+.pk-johto-campaign-kicker{color:#e8c861;font-size:7px;font-weight:1000;letter-spacing:1px}.pk-johto-starter-box h2,.pk-johto-lobby-box h2{color:#f5e1a2;font-size:24px;margin:4px 0}.pk-johto-starter-box>p,.pk-johto-lobby-top p{font-size:8px;color:#99b5ae;line-height:1.55}
+.pk-johto-starter-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:15px 0 10px}.pk-johto-starter-option{display:grid;justify-items:center;gap:5px;border:1px solid #456864;border-radius:14px;background:#102428;padding:12px 9px;color:#edf4ec;cursor:pointer}.pk-johto-starter-option:hover{border-color:#c4a24b;transform:translateY(-2px)}.pk-johto-starter-option.featured{border-color:#99793b;background:linear-gradient(155deg,#17282a,#292313)}.pk-johto-starter-option img{width:112px;height:112px;object-fit:contain;image-rendering:pixelated}.pk-johto-starter-option>b{font-size:12px;color:#fff0bc}.pk-johto-starter-option>small{font-size:6.5px;color:#9fb8b2}.pk-johto-starter-option>span{font-size:5.5px;color:#87a8a2}.pk-johto-starter-note{border:1px solid #67572f;border-radius:9px;background:#211d13;padding:8px 10px;color:#cfc58d;font-size:6.5px;margin-bottom:9px}
+.pk-johto-lobby-top{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;border-bottom:1px solid #3d5650;padding-bottom:9px}.pk-johto-lobby-actions{display:flex;gap:6px}.pk-johto-lobby-hero{display:grid;grid-template-columns:1.4fr .8fr 1fr;gap:9px;margin:11px 0}.pk-johto-lobby-sign{display:grid;align-content:center;min-height:150px;border:1px solid #796435;border-radius:13px;padding:16px;background:linear-gradient(145deg,#183432,#192b25 58%,#352b16)}.pk-johto-lobby-sign small{color:#c5aa5e;font-size:6px}.pk-johto-lobby-sign b{color:#fff0b9;font-size:26px;margin:5px 0}.pk-johto-lobby-sign span{color:#9db7af;font-size:7px}.pk-johto-lobby-starter{display:grid;place-items:center;border:1px solid #4b6964;border-radius:13px;background:#0c2023;min-height:150px;text-align:center}.pk-johto-lobby-starter img{width:116px;height:116px;object-fit:contain;image-rendering:pixelated}.pk-johto-lobby-starter b{display:block;color:#f2dc96;font-size:10px}.pk-johto-lobby-starter small{display:block;color:#849f99;font-size:5.8px}.pk-johto-lobby-stats{display:grid;gap:6px}.pk-johto-lobby-stats>div{display:grid;align-content:center;border:1px solid #3e5b56;border-radius:10px;background:#0d2022;padding:8px 10px}.pk-johto-lobby-stats b{font-size:13px;color:#f0d67f}.pk-johto-lobby-stats small{font-size:5.7px;color:#829e98}.pk-johto-lobby-section-title{font-size:8px;font-weight:1000;color:#b9c9c3;margin:4px 0 6px}.pk-johto-lobby-routes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.pk-johto-lobby-route{border:1px solid #425d58;border-radius:12px;background:#102123;padding:10px;min-height:142px}.pk-johto-lobby-route.unlocked{border-color:#94773a;background:linear-gradient(155deg,#292612,#102523)}.pk-johto-lobby-route.locked{opacity:.62}.pk-johto-lobby-route .state{font-size:5px;color:#9db5af}.pk-johto-lobby-route h3{font-size:11px;color:#f1e0a9;margin:6px 0 3px}.pk-johto-lobby-route p,.pk-johto-lobby-route small{font-size:5.8px;color:#91aaa4;line-height:1.4}.pk-johto-lobby-route .btn{width:100%;margin-top:6px;font-size:6px!important}.pk-johto-lobby-footer{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:10px;border-top:1px solid #354d48;padding-top:8px}.pk-johto-lobby-footer span{font-size:5.7px;color:#758f89}
+@media(max-width:760px){.pk-johto-starter-grid,.pk-johto-lobby-routes{grid-template-columns:1fr}.pk-johto-lobby-hero{grid-template-columns:1fr}.pk-johto-lobby-top{grid-template-columns:1fr}.pk-johto-lobby-actions{display:grid;grid-template-columns:1fr 1fr}.pk-johto-lobby-footer{flex-direction:column;align-items:stretch}}
+
 </style>
 
 <style id="pkMobileV3640131Audit">
@@ -12585,7 +12669,7 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.45.0.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.46.0.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12724,7 +12808,7 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.45.0',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.46.0',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -14409,7 +14493,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.45.0';
+  const VERSION='V36.46.0';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -14746,7 +14830,7 @@ module.exports = QRCode;
     $('regionSwitchBtn')?.setAttribute('aria-expanded','false');
     const shouldRestore=restoreDevShell&&returnToJohtoShellAfterSelector&&core()?.active?.()==='johto';
     returnToJohtoShellAfterSelector=false;
-    if(shouldRestore)showJohtoShell();
+    if(shouldRestore)showJohtoShell(true);
   }
 
   function gen2TypeLabel(t){try{return TYPE_NAMES?.[t]||t;}catch(_){return t;}}
@@ -14771,7 +14855,7 @@ module.exports = QRCode;
     grid.innerHTML=list.map(p=>{const special=gen2SpecialLabel(p),bst=(p.baseStats||[]).reduce((a,b)=>a+b,0),src=window.PokeSendaGen2.gif(p.dex,{back,shiny});return `<article class="pk-gen2-card ${p.bridge?'bridge':''} ${p.legendary?'legendary':''} ${p.mythical?'mythical':''}"><div class="pk-gen2-card-badges"><span class="pk-gen2-dex">#${p.dex}</span>${special?`<span class="pk-gen2-special">${special}</span>`:''}</div><div class="pk-gen2-sprite-wrap"><img loading="lazy" decoding="async" src="${src}" alt="${p.name}${shiny?' Shiny':''}" onerror="this.style.opacity='.18';this.title='Sprite no cargado'"></div><div class="pk-gen2-card-name">${p.name}</div><div class="pk-gen2-types">${p.types.map(t=>`<span class="pk-gen2-type">${gen2TypeLabel(t)}</span>`).join('')}</div><div class="pk-gen2-stats">BST ${bst} · PS ${p.baseStats[0]} · Vel ${p.baseStats[5]}</div><div class="pk-gen2-bridge">${p.bridge||''}</div></article>`;}).join('');
   }
   function openGen2Catalog(){if(core()?.active?.()!=='johto'){toastSafe('El catálogo Gen II solo está disponible dentro de Johto DEV.');return;}$('pkJohtoDevShell')?.classList.add('hidden');$('pkGen2CatalogOverlay')?.classList.remove('hidden');renderGen2Catalog();}
-  function closeGen2Catalog(){$('pkGen2CatalogOverlay')?.classList.add('hidden');if(core()?.active?.()==='johto')showJohtoShell();}
+  function closeGen2Catalog(){$('pkGen2CatalogOverlay')?.classList.add('hidden');if(core()?.active?.()==='johto')showJohtoShell(true);}
 
 
   const gen2NameByDex=dex=>{
@@ -14826,7 +14910,7 @@ module.exports = QRCode;
     }).join('');
   }
   function openJohtoFamilies(){if(core()?.active?.()!=='johto')return;$('pkJohtoDevShell')?.classList.add('hidden');$('pkJohtoFamiliesOverlay')?.classList.remove('hidden');renderJohtoFamilies();}
-  function closeJohtoFamilies(){$('pkJohtoFamiliesOverlay')?.classList.add('hidden');if(core()?.active?.()==='johto')showJohtoShell();}
+  function closeJohtoFamilies(){$('pkJohtoFamiliesOverlay')?.classList.add('hidden');if(core()?.active?.()==='johto')showJohtoShell(true);}
 
   let gen2GifAuditRunning=false;
   async function validateGen2Gifs(){
@@ -14926,7 +15010,7 @@ module.exports = QRCode;
     $('pkJohtoDevShell')?.classList.add('hidden');$('pkJohtoEvolutionLabOverlay')?.classList.remove('hidden');
     renderJohtoEvolutionAudit();johtoEvoFamilyOptions();renderJohtoEvoMaterials();renderJohtoEvolutionLab();
   }
-  function closeJohtoEvolutionLab(){$('pkJohtoEvolutionLabOverlay')?.classList.add('hidden');if(core()?.active?.()==='johto')showJohtoShell();}
+  function closeJohtoEvolutionLab(){$('pkJohtoEvolutionLabOverlay')?.classList.add('hidden');if(core()?.active?.()==='johto')showJohtoShell(true);}
 
 
   let johtoContentTab='moves';
@@ -15032,7 +15116,7 @@ module.exports = QRCode;
     $('pkJohtoDevShell')?.classList.add('hidden');$('pkJohtoContentLabOverlay')?.classList.remove('hidden');
     renderJohtoContentAudit();renderJohtoContentBody();
   }
-  function closeJohtoContentLab(){$('pkJohtoContentLabOverlay')?.classList.add('hidden');if(core()?.active?.()==='johto')showJohtoShell();}
+  function closeJohtoContentLab(){$('pkJohtoContentLabOverlay')?.classList.add('hidden');if(core()?.active?.()==='johto')showJohtoShell(true);}
 
 
   function johtoFamilyName(id){return window.PokeSendaGen2?.families?.[id]?.name||id;}
@@ -15040,8 +15124,8 @@ module.exports = QRCode;
     const auditHost=$('pkJohtoRoutesAudit'),nature=$('pkJohtoNatureStrip'),grid=$('pkJohtoRoutesGrid');
     const a=window.PokeSendaGen2?.routes?.audit?.(),na=window.PokeSendaGen2?.natures?.audit?.();
     if(auditHost&&a)auditHost.innerHTML=[
-      [a.routes,'Rutas diseñadas'],[a.uniqueFamilies,'68 familias repartidas'],[a.regionalSpecies,'Especies regionales'],
-      [a.gen2Species,'Pokémon Gen II'],[a.kantoFamilySpecies,'Kanto por familia'],[a.legendaryFamilies,'Legendarios/mítico · 2 por ruta']
+      [a.routes,'Rutas diseñadas'],[a.uniqueFamilies,'68 familias por campaña'],[a.regionalSpecies,'Especies regionales'],
+      [a.gen2Species,'Pokémon Gen II'],[a.kantoFamilySpecies,'Kanto por familia'],[a.allStarterChoicesValid?'3/3':'REVISAR','Distribuciones de inicial válidas']
     ].map(x=>`<div class="pk-gen2-audit-chip"><b>${x[0]}</b><small>${x[1]}</small></div>`).join('');
     if(nature){
       nature.innerHTML=[
@@ -15051,20 +15135,47 @@ module.exports = QRCode;
         ['🌱 Mentas regionales','Mentas y Menta Maestra tienen cantidades propias en Johto y no caerán como drop normal.']
       ].map(x=>`<div class="pk-nature-dev-card"><b>${x[0]}</b><small>${x[1]}</small></div>`).join('');
     }
+    const starterHost=$('pkJohtoStarterDistribution');
+    if(starterHost){
+      const starters=window.PokeSendaGen2?.routes?.starterFamilies||[];
+      starterHost.innerHTML=starters.map(chosen=>{
+        const d=window.PokeSendaGen2.routes.starterDistribution(chosen);
+        return `<div class="pk-starter-map"><b>Si eliges ${johtoFamilyName(chosen)}</b><small>Ruta 1: ${johtoFamilyName(d.johto_route1)} · Ruta 2: ${johtoFamilyName(d.johto_route2)} · Ruta 3: ${johtoFamilyName(d.johto_route3)}</small></div>`;
+      }).join('');
+    }
     if(!grid)return;
     const order=window.PokeSendaGen2?.routes?.order||[];
     const labels={common:'Común',uncommon:'Poco común',rare:'Raro',epic:'Épico',legendary:'Legendario'};
+    // Para el panel DEV usamos Chikorita solo como ejemplo visual; la campaña real será dinámica.
+    const devChosen='j_chikorita';
     grid.innerHTML=order.map((id,index)=>{
       const r=window.PokeSendaGen2.routes.blueprints[id],dp=window.PokeSendaGen2.drops?.[r.dropProfile]||{};
-      const pools=Object.entries(r.gachaByRarity||{}).map(([rarity,ids])=>`<span>${labels[rarity]||rarity} · ${ids.length}</span><div class="pk-route-family-list">${ids.map(johtoFamilyName).join(' · ')}</div>`).join('');
-      return `<article class="pk-route-dev-card r${index+1}"><div class="pk-route-kicker">RUTA ${index+1} · NOMBRE PROVISIONAL</div><h3>${r.name}</h3><p>${r.description}</p><div class="pk-route-sectors">${(r.sectors||[]).map(s=>`<span>${s}</span>`).join('')}</div><div class="pk-route-level"><span>${r.recommended}</span><b>Jefe final Nv.${r.finalBossLevel}</b></div><div class="pk-route-rarity">${pools}</div><div class="pk-route-legends">✨ ${r.legendaryFamilies.map(johtoFamilyName).join(' + ')} · jefe final: ${johtoFamilyName(r.finalBoss)}</div><div class="pk-route-drop"><b>Drop total deliberadamente bajo:</b> objeto ${(dp.generalDropChance*100).toFixed(2)}% · evolutivo ${(dp.evolutionDropChance*100).toFixed(2)}% · objeto equipado ${(dp.heldItemDropChance*100).toFixed(1)}% · poción ${(dp.potionDropChance*100).toFixed(1)}%.<br>Calidad del objeto: Común ${dp.rarityWeights?.common}% · Poco común ${dp.rarityWeights?.uncommon}% · Raro ${dp.rarityWeights?.rare}% · Épico ${dp.rarityWeights?.epic}% · Legendario ${dp.rarityWeights?.legendary}%.</div></article>`;
+      const dynStarter=window.PokeSendaGen2.routes.starterForRoute(devChosen,id);
+      const pools=Object.entries(r.gachaByRarity||{}).map(([rarity,ids])=>{
+        const extra=rarity==='rare'&&r.starterSlot?` · + inicial dinámico (${johtoFamilyName(dynStarter)} en el ejemplo Chikorita)`:``;
+        return `<span>${labels[rarity]||rarity} · ${ids.length}${rarity==='rare'&&r.starterSlot?'+1':''}</span><div class="pk-route-family-list">${ids.map(johtoFamilyName).join(' · ')}${extra}</div>`;
+      }).join('');
+      return `<article class="pk-route-dev-card r${index+1}"><div class="pk-route-kicker">RUTA ${index+1} · NOMBRE PROVISIONAL</div><h3>${r.name}</h3><p>${r.description}</p><div class="pk-route-sector-label">Tramos visuales propuestos · no son rutas separadas</div><div class="pk-route-sectors">${(r.sectors||[]).map(s=>`<span>${s}</span>`).join('')}</div><div class="pk-route-level"><span>${r.recommended}</span><b>Jefe final Nv.${r.finalBossLevel}</b></div><div class="pk-route-rarity">${pools}</div><div class="pk-route-legends">✨ ${r.legendaryFamilies.map(johtoFamilyName).join(' + ')} · jefe final: ${johtoFamilyName(r.finalBoss)}</div><div class="pk-route-drop"><b>Drop total deliberadamente bajo:</b> objeto ${(dp.generalDropChance*100).toFixed(2)}% · evolutivo ${(dp.evolutionDropChance*100).toFixed(2)}% · objeto equipado ${(dp.heldItemDropChance*100).toFixed(1)}% · poción ${(dp.potionDropChance*100).toFixed(1)}%.<br>Calidad del objeto: Común ${dp.rarityWeights?.common}% · Poco común ${dp.rarityWeights?.uncommon}% · Raro ${dp.rarityWeights?.rare}% · Épico ${dp.rarityWeights?.epic}% · Legendario ${dp.rarityWeights?.legendary}%.</div></article>`;
     }).join('');
   }
   function openJohtoRoutesLab(){
     if(core()?.active?.()!=='johto')return;
     $('pkJohtoDevShell')?.classList.add('hidden');$('pkJohtoRoutesLabOverlay')?.classList.remove('hidden');renderJohtoRoutesLab();
   }
-  function closeJohtoRoutesLab(){$('pkJohtoRoutesLabOverlay')?.classList.add('hidden');if(core()?.active?.()==='johto')showJohtoShell();}
+  function closeJohtoRoutesLab(){$('pkJohtoRoutesLabOverlay')?.classList.add('hidden');if(core()?.active?.()==='johto')showJohtoShell(true);}
+
+
+  const JOHTO_STARTER_DEX={j_chikorita:152,j_cyndaquil:155,j_totodile:158};
+  const JOHTO_STARTER_NAME={j_chikorita:"Chikorita",j_cyndaquil:"Cyndaquil",j_totodile:"Totodile"};
+  const JOHTO_STARTER_TYPE={j_chikorita:"🌿 Planta",j_cyndaquil:"🔥 Fuego",j_totodile:"💧 Agua"};
+  function closeJohtoCampaignViews(){$('pkJohtoStarterOverlay')?.classList.add('hidden');$('pkJohtoLobbyOverlay')?.classList.add('hidden');}
+  function johtoStarterSelected(){const id=String(state?.johtoStarterChoice||'');return JOHTO_STARTER_FAMILIES.includes(id)?id:null;}
+  function chooseJohtoStarter(id){if(core()?.active?.()!=='johto'||!JOHTO_STARTER_FAMILIES.includes(id))return;state.johtoStarterChoice=id;state.johtoIntroSeen=true;try{core()?.registerRegionalDex?.(JOHTO_STARTER_DEX[id],'johto');pkSyncActiveRegionSnapshot(state);localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(_){}$('pkJohtoStarterOverlay')?.classList.add('hidden');showJohtoLobby();}
+  function renderJohtoLobby(){const chosen=johtoStarterSelected();if(!chosen)return;const dex=JOHTO_STARTER_DEX[chosen],name=JOHTO_STARTER_NAME[chosen],starterHost=$('pkJohtoLobbyStarter');if(starterHost)starterHost.innerHTML=`<div><img src="${window.PokeSendaGen2.gif(dex,{back:false,shiny:false})}" alt="${name}"><b>${name}</b><small>${JOHTO_STARTER_TYPE[chosen]} · tu inicial de Johto</small></div>`;if($('pkJohtoLobbyMoney'))$('pkJohtoLobbyMoney').textContent=`₽${Math.max(0,Math.floor(Number(state.pokedollars||0))).toLocaleString('es-CL')}`;if($('pkJohtoLobbyDex'))$('pkJohtoLobbyDex').textContent=String(core()?.regionalDex?.('johto')?.length||1);if($('pkJohtoLobbyBadges'))$('pkJohtoLobbyBadges').textContent=`${Math.min(8,Math.max(0,Number(state.gyms?.badges?.length||0)))}/8`;const host=$('pkJohtoLobbyRoutes');if(!host)return;const order=window.PokeSendaGen2?.routes?.order||[],dist=window.PokeSendaGen2?.routes?.starterDistribution?.(chosen)||{};host.innerHTML=order.map((id,index)=>{const r=window.PokeSendaGen2.routes.blueprints[id],unlocked=index===0,starterName=JOHTO_STARTER_NAME[dist[id]]||johtoFamilyName(dist[id]);return `<article class="pk-johto-lobby-route ${unlocked?'unlocked':'locked'}"><span class="state">${unlocked?'DISPONIBLE EN DEV':'🔒 BLOQUEADA'}</span><h3>${r.name}</h3><p>${r.description}</p><small>${r.recommended} · inicial raro: ${starterName}</small><small>✨ ${r.legendaryFamilies.map(johtoFamilyName).join(' + ')} · jefe: ${johtoFamilyName(r.finalBoss)}</small><button class="btn ${unlocked?'warn':''}" type="button" data-johto-lobby-route="${id}" ${unlocked?'':'disabled'}>${unlocked?'🧭 Preparar Pradera Ámbar':'Completa la ruta anterior'}</button></article>`;}).join('');}
+  function showJohtoStarter(){closeJohtoCampaignViews();$('pkJohtoDevShell')?.classList.add('hidden');$('pkJohtoStarterOverlay')?.classList.remove('hidden');}
+  function showJohtoLobby(){if(!johtoStarterSelected()){showJohtoStarter();return;}closeJohtoCampaignViews();$('pkJohtoDevShell')?.classList.add('hidden');state.johtoLobbyVisits=Math.max(0,Number(state.johtoLobbyVisits||0))+1;try{pkSyncActiveRegionSnapshot(state);localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(_){}renderJohtoLobby();$('pkJohtoLobbyOverlay')?.classList.remove('hidden');}
+  function openJohtoRouteFromLobby(id){if(id!=='johto_route1')return;$('pkJohtoLobbyOverlay')?.classList.add('hidden');openJohtoRoutesLab();setTimeout(()=>{document.querySelector('.pk-route-dev-card.r1')?.scrollIntoView({behavior:'smooth',block:'center'});toastSafe('🧭 Pradera Ámbar seleccionada · combate DEV es la siguiente capa');},80);}
+  async function resetJohtoDevCampaign(){let ok=false;try{ok=window.confirm('¿Reiniciar solamente la campaña DEV de Johto? Kanto no se tocará.');}catch(_){}if(!ok)return;try{pkSyncActiveRegionSnapshot(state);state.regions.johto=pkFreshRegionalState('johto');state.activeRegion='johto';pkApplyRegionalSnapshot(state,state.regions.johto,'johto');pkSyncActiveRegionSnapshot(state);localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(e){console.error(e);return;}showJohtoStarter();}
 
   function devStats(){
     const s=core()?.summary?.();const host=$('pkJohtoDevStats');if(!host||!s)return;
@@ -15074,10 +15185,13 @@ module.exports = QRCode;
       `<div class="pk-johto-dev-stat"><b>${typeof formatMeters==='function'?formatMeters(s.infiniteBestDistance||0):Math.round((s.infiniteBestDistance||0)/1000)+' km'}</b><small>Récord de Expedición Infinita · progreso global</small></div>`
     ].join('');
   }
-  function showJohtoShell(){
+  function showJohtoShell(forceTools=false){
     document.body.classList.add('pk-region-johto-dev');
-    $('pkJohtoDevShell')?.classList.remove('hidden');
-    devStats();updateRegionUI();
+    closeJohtoCampaignViews();
+    if(forceTools){$('pkJohtoDevShell')?.classList.remove('hidden');devStats();updateRegionUI();return;}
+    $('pkJohtoDevShell')?.classList.add('hidden');
+    if(!johtoStarterSelected())showJohtoStarter();else showJohtoLobby();
+    updateRegionUI();
   }
   function hideJohtoShell(){
     document.body.classList.remove('pk-region-johto-dev');
@@ -15137,13 +15251,19 @@ module.exports = QRCode;
   }
   function boot(){
     updateRegionUI();
-    if(core()?.active?.()==='johto')showJohtoShell();else hideJohtoShell();
+    if(core()?.active?.()==='johto')showJohtoShell(false);else hideJohtoShell();
 
     $('regionSwitchBtn')?.addEventListener('click',openRegions);
     $('regionSelectCloseBtn')?.addEventListener('click',closeRegions);
-    $('regionJohtoCard')?.addEventListener('click',()=>{if(core()?.active?.()==='johto'){closeRegions({restoreDevShell:false});showJohtoShell();}else johtoPublicClick();});
+    $('regionJohtoCard')?.addEventListener('click',()=>{if(core()?.active?.()==='johto'){closeRegions({restoreDevShell:false});showJohtoShell(false);}else johtoPublicClick();});
     $('regionKantoCard')?.addEventListener('click',()=>{if(core()?.active?.()==='johto')switchDev('kanto');});
     $('pkJohtoDevBackKanto')?.addEventListener('click',()=>switchDev('kanto'));
+    document.querySelectorAll('[data-johto-starter]').forEach(btn=>btn.addEventListener('click',()=>chooseJohtoStarter(btn.dataset.johtoStarter)));
+    $('pkJohtoStarterBackKanto')?.addEventListener('click',()=>switchDev('kanto'));
+    $('pkJohtoLobbyBackKanto')?.addEventListener('click',()=>switchDev('kanto'));
+    $('pkJohtoLobbyTools')?.addEventListener('click',()=>showJohtoShell(true));
+    $('pkJohtoResetStarterBtn')?.addEventListener('click',resetJohtoDevCampaign);
+    $('pkJohtoLobbyRoutes')?.addEventListener('click',e=>{const b=e.target.closest?.('[data-johto-lobby-route]');if(b&&!b.disabled)openJohtoRouteFromLobby(b.dataset.johtoLobbyRoute);});
     $('pkJohtoGen2CatalogBtn')?.addEventListener('click',openGen2Catalog);
     $('pkJohtoFamiliesBtn')?.addEventListener('click',openJohtoFamilies);
     $('pkJohtoEvolutionLabBtn')?.addEventListener('click',openJohtoEvolutionLab);
@@ -15188,6 +15308,8 @@ module.exports = QRCode;
         e.preventDefault();
         if(core()?.active?.()==='johto')switchDev('kanto');else switchDev('johto');
       }
+      if(e.key==='Escape'&&!$('pkJohtoStarterOverlay')?.classList.contains('hidden')){e.preventDefault();return;}
+      if(e.key==='Escape'&&!$('pkJohtoLobbyOverlay')?.classList.contains('hidden')){e.preventDefault();showJohtoShell(true);return;}
       if(e.key==='Escape'&&!$('pkJohtoRoutesLabOverlay')?.classList.contains('hidden')){e.preventDefault();closeJohtoRoutesLab();return;}
       if(e.key==='Escape'&&!$('pkJohtoContentLabOverlay')?.classList.contains('hidden')){e.preventDefault();closeJohtoContentLab();return;}
       if(e.key==='Escape'&&!$('pkJohtoEvolutionLabOverlay')?.classList.contains('hidden')){e.preventDefault();closeJohtoEvolutionLab();return;}

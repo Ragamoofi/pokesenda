@@ -3413,7 +3413,7 @@ body{letter-spacing:.08px}
 
 <div id="pkJohtoDevShell" class="overlay hidden pk-johto-dev-shell" role="dialog" aria-modal="true" aria-labelledby="pkJohtoDevTitle">
   <div class="modal-box pk-johto-dev-box" onclick="event.stopPropagation()">
-    <div class="pk-johto-dev-kicker">🧪 DESARROLLO PRIVADO · V36.41.1</div>
+    <div class="pk-johto-dev-kicker">🧪 DESARROLLO PRIVADO · V36.42.0</div>
     <h2 id="pkJohtoDevTitle">Región de Johto</h2>
     <p>La arquitectura multirregión ya está funcionando. Esta campaña tiene un estado regional separado de Kanto, pero todavía no contiene Pokémon Gen II, rutas ni Gimnasios jugables.</p>
     <div class="pk-johto-dev-warning"><b>No es el lanzamiento de Johto.</b> Este espacio existe para que podamos construir la expansión sin exponer contenido incompleto a los jugadores.</div>
@@ -3423,14 +3423,33 @@ body{letter-spacing:.08px}
       <span>✓ Migración Kanto segura</span>
       <span>✓ Pokédex / Shiny globales</span>
       <span>✓ Infinita global preservada</span>
-      <span>○ Gen II / familias</span>
+      <span>✓ Catálogo Gen II · 100/100</span>
       <span>○ Rutas / Gimnasios / lobby / música</span>
     </div>
-    <div class="pk-johto-dev-actions">
+    <div class="pk-johto-dev-actions pk-johto-dev-actions-three">
       <button id="pkJohtoDevBackKanto" class="btn primary" type="button">← Volver a Kanto</button>
+      <button id="pkJohtoGen2CatalogBtn" class="btn" type="button">🧬 Catálogo Gen II</button>
       <button id="pkJohtoDevRegionInfo" class="btn" type="button">🌐 Ver selector</button>
     </div>
     <small class="pk-johto-dev-shortcut">Acceso privado de pruebas: Ctrl + Alt + J.</small>
+  </div>
+</div>
+
+<div id="pkGen2CatalogOverlay" class="overlay hidden pk-gen2-catalog-overlay" role="dialog" aria-modal="true" aria-labelledby="pkGen2CatalogTitle">
+  <div class="modal-box pk-gen2-catalog-box" onclick="event.stopPropagation()">
+    <div class="pk-gen2-catalog-head">
+      <div><div class="pk-johto-dev-kicker">🧬 JOHTO DEV · CATÁLOGO INTERNO</div><h2 id="pkGen2CatalogTitle">Generación II · #152–251</h2>
+      <small>Catálogo privado para validar especies, tipos, estadísticas y sprites antes de conectarlos a las rutas de Johto.</small></div>
+      <button id="pkGen2CatalogClose" class="btn" type="button">Cerrar</button>
+    </div>
+    <div id="pkGen2CatalogAudit" class="pk-gen2-catalog-audit"></div>
+    <div class="pk-gen2-catalog-tools">
+      <input id="pkGen2CatalogSearch" type="search" placeholder="Buscar Pokémon, tipo o #..." autocomplete="off">
+      <select id="pkGen2CatalogFilter"><option value="all">Todos · 100</option><option value="bridge">Familias conectadas con Kanto</option><option value="steel">Tipo Acero</option><option value="dark">Tipo Siniestro</option><option value="baby">Pokémon bebé</option><option value="legendary">Legendarios / mítico</option></select>
+      <label class="pk-gen2-shiny-toggle"><input id="pkGen2CatalogShiny" type="checkbox"> ✨ Ver Shiny</label>
+    </div>
+    <div id="pkGen2CatalogCount" class="pk-gen2-catalog-count"></div>
+    <div id="pkGen2CatalogGrid" class="pk-gen2-catalog-grid"></div>
   </div>
 </div>
 
@@ -4174,6 +4193,25 @@ body{letter-spacing:.08px}
 
   const TYPE_NAMES = {normal:"Normal",fire:"Fuego",water:"Agua",electric:"Eléctrico",grass:"Planta",ice:"Hielo",fighting:"Lucha",poison:"Veneno",ground:"Tierra",flying:"Volador",psychic:"Psíquico",bug:"Bicho",rock:"Roca",ghost:"Fantasma",dragon:"Dragón",fairy:"Hada",steel:"Acero",dark:"Siniestro",support:"Support"};
   const TYPE_FX = {normal:"✦",fire:"🔥",water:"💧",electric:"⚡",grass:"🌿",ice:"❄",fighting:"✦",poison:"☠",ground:"◆",flying:"💨",psychic:"✧",bug:"✳",rock:"🪨",ghost:"◈",dragon:"✦",fairy:"✧",steel:"⚙",dark:"◐"};
+
+  /* V36.42.0 · Catálogo Gen II privado. NO entra aún a rutas, Gachapon ni Pokédex pública. */
+  const JOHTO_SPECIES_DATA=[{"dex":152,"name":"Chikorita","types":["grass"],"fromDex":null,"baseStats":[45,49,65,49,65,45],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":153,"name":"Bayleef","types":["grass"],"fromDex":152,"baseStats":[60,62,80,63,80,60],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":154,"name":"Meganium","types":["grass"],"fromDex":153,"baseStats":[80,82,100,83,100,80],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":155,"name":"Cyndaquil","types":["fire"],"fromDex":null,"baseStats":[39,52,43,60,50,65],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":156,"name":"Quilava","types":["fire"],"fromDex":155,"baseStats":[58,64,58,80,65,80],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":157,"name":"Typhlosion","types":["fire"],"fromDex":156,"baseStats":[78,84,78,109,85,100],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":158,"name":"Totodile","types":["water"],"fromDex":null,"baseStats":[50,65,64,44,48,43],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":159,"name":"Croconaw","types":["water"],"fromDex":158,"baseStats":[65,80,80,59,63,58],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":160,"name":"Feraligatr","types":["water"],"fromDex":159,"baseStats":[85,105,100,79,83,78],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":161,"name":"Sentret","types":["normal"],"fromDex":null,"baseStats":[35,46,34,35,45,20],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":162,"name":"Furret","types":["normal"],"fromDex":161,"baseStats":[85,76,64,45,55,90],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":163,"name":"Hoothoot","types":["normal","flying"],"fromDex":null,"baseStats":[60,30,30,36,56,50],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":164,"name":"Noctowl","types":["normal","flying"],"fromDex":163,"baseStats":[100,50,50,86,96,70],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":165,"name":"Ledyba","types":["bug","flying"],"fromDex":null,"baseStats":[40,20,30,40,80,55],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":166,"name":"Ledian","types":["bug","flying"],"fromDex":165,"baseStats":[55,35,50,55,110,85],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":167,"name":"Spinarak","types":["bug","poison"],"fromDex":null,"baseStats":[40,60,40,40,40,30],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":168,"name":"Ariados","types":["bug","poison"],"fromDex":167,"baseStats":[70,90,70,60,70,40],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":169,"name":"Crobat","types":["poison","flying"],"fromDex":42,"baseStats":[85,90,80,70,80,130],"baby":false,"legendary":false,"mythical":false,"bridge":"Zubat → Golbat → Crobat"},{"dex":170,"name":"Chinchou","types":["water","electric"],"fromDex":null,"baseStats":[75,38,38,56,56,67],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":171,"name":"Lanturn","types":["water","electric"],"fromDex":170,"baseStats":[125,58,58,76,76,67],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":172,"name":"Pichu","types":["electric"],"fromDex":null,"baseStats":[20,40,15,35,35,60],"baby":true,"legendary":false,"mythical":false,"bridge":"Pichu → Pikachu → Raichu"},{"dex":173,"name":"Cleffa","types":["fairy"],"fromDex":null,"baseStats":[50,25,28,45,55,15],"baby":true,"legendary":false,"mythical":false,"bridge":"Cleffa → Clefairy → Clefable"},{"dex":174,"name":"Igglybuff","types":["normal","fairy"],"fromDex":null,"baseStats":[90,30,15,40,20,15],"baby":true,"legendary":false,"mythical":false,"bridge":"Igglybuff → Jigglypuff → Wigglytuff"},{"dex":175,"name":"Togepi","types":["fairy"],"fromDex":null,"baseStats":[35,20,65,40,65,20],"baby":true,"legendary":false,"mythical":false,"bridge":null},{"dex":176,"name":"Togetic","types":["fairy","flying"],"fromDex":175,"baseStats":[55,40,85,80,105,40],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":177,"name":"Natu","types":["psychic","flying"],"fromDex":null,"baseStats":[40,50,45,70,45,70],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":178,"name":"Xatu","types":["psychic","flying"],"fromDex":177,"baseStats":[65,75,70,95,70,95],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":179,"name":"Mareep","types":["electric"],"fromDex":null,"baseStats":[55,40,40,65,45,35],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":180,"name":"Flaaffy","types":["electric"],"fromDex":179,"baseStats":[70,55,55,80,60,45],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":181,"name":"Ampharos","types":["electric"],"fromDex":180,"baseStats":[90,75,85,115,90,55],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":182,"name":"Bellossom","types":["grass"],"fromDex":44,"baseStats":[75,80,95,90,100,50],"baby":false,"legendary":false,"mythical":false,"bridge":"Oddish → Gloom → Bellossom"},{"dex":183,"name":"Marill","types":["water","fairy"],"fromDex":null,"baseStats":[70,20,50,20,50,40],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":184,"name":"Azumarill","types":["water","fairy"],"fromDex":183,"baseStats":[100,50,80,60,80,50],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":185,"name":"Sudowoodo","types":["rock"],"fromDex":null,"baseStats":[70,100,115,30,65,30],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":186,"name":"Politoed","types":["water"],"fromDex":61,"baseStats":[90,75,75,90,100,70],"baby":false,"legendary":false,"mythical":false,"bridge":"Poliwag → Poliwhirl → Politoed"},{"dex":187,"name":"Hoppip","types":["grass","flying"],"fromDex":null,"baseStats":[35,35,40,35,55,50],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":188,"name":"Skiploom","types":["grass","flying"],"fromDex":187,"baseStats":[55,45,50,45,65,80],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":189,"name":"Jumpluff","types":["grass","flying"],"fromDex":188,"baseStats":[75,55,70,55,95,110],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":190,"name":"Aipom","types":["normal"],"fromDex":null,"baseStats":[55,70,55,40,55,85],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":191,"name":"Sunkern","types":["grass"],"fromDex":null,"baseStats":[30,30,30,30,30,30],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":192,"name":"Sunflora","types":["grass"],"fromDex":191,"baseStats":[75,75,55,105,85,30],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":193,"name":"Yanma","types":["bug","flying"],"fromDex":null,"baseStats":[65,65,45,75,45,95],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":194,"name":"Wooper","types":["water","ground"],"fromDex":null,"baseStats":[55,45,45,25,25,15],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":195,"name":"Quagsire","types":["water","ground"],"fromDex":194,"baseStats":[95,85,85,65,65,35],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":196,"name":"Espeon","types":["psychic"],"fromDex":133,"baseStats":[65,65,60,130,95,110],"baby":false,"legendary":false,"mythical":false,"bridge":"Eevee → Espeon"},{"dex":197,"name":"Umbreon","types":["dark"],"fromDex":133,"baseStats":[95,65,110,60,130,65],"baby":false,"legendary":false,"mythical":false,"bridge":"Eevee → Umbreon"},{"dex":198,"name":"Murkrow","types":["dark","flying"],"fromDex":null,"baseStats":[60,85,42,85,42,91],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":199,"name":"Slowking","types":["water","psychic"],"fromDex":79,"baseStats":[95,75,80,100,110,30],"baby":false,"legendary":false,"mythical":false,"bridge":"Slowpoke → Slowking"},{"dex":200,"name":"Misdreavus","types":["ghost"],"fromDex":null,"baseStats":[60,60,60,85,85,85],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":201,"name":"Unown","types":["psychic"],"fromDex":null,"baseStats":[48,72,48,72,48,48],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":202,"name":"Wobbuffet","types":["psychic"],"fromDex":null,"baseStats":[190,33,58,33,58,33],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":203,"name":"Girafarig","types":["normal","psychic"],"fromDex":null,"baseStats":[70,80,65,90,65,85],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":204,"name":"Pineco","types":["bug"],"fromDex":null,"baseStats":[50,65,90,35,35,15],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":205,"name":"Forretress","types":["bug","steel"],"fromDex":204,"baseStats":[75,90,140,60,60,40],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":206,"name":"Dunsparce","types":["normal"],"fromDex":null,"baseStats":[100,70,70,65,65,45],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":207,"name":"Gligar","types":["ground","flying"],"fromDex":null,"baseStats":[65,75,105,35,65,85],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":208,"name":"Steelix","types":["steel","ground"],"fromDex":95,"baseStats":[75,85,200,55,65,30],"baby":false,"legendary":false,"mythical":false,"bridge":"Onix → Steelix"},{"dex":209,"name":"Snubbull","types":["fairy"],"fromDex":null,"baseStats":[60,80,50,40,40,30],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":210,"name":"Granbull","types":["fairy"],"fromDex":209,"baseStats":[90,120,75,60,60,45],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":211,"name":"Qwilfish","types":["water","poison"],"fromDex":null,"baseStats":[65,95,85,55,55,85],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":212,"name":"Scizor","types":["bug","steel"],"fromDex":123,"baseStats":[70,130,100,55,80,65],"baby":false,"legendary":false,"mythical":false,"bridge":"Scyther → Scizor"},{"dex":213,"name":"Shuckle","types":["bug","rock"],"fromDex":null,"baseStats":[20,10,230,10,230,5],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":214,"name":"Heracross","types":["bug","fighting"],"fromDex":null,"baseStats":[80,125,75,40,95,85],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":215,"name":"Sneasel","types":["dark","ice"],"fromDex":null,"baseStats":[55,95,55,35,75,115],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":216,"name":"Teddiursa","types":["normal"],"fromDex":null,"baseStats":[60,80,50,50,50,40],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":217,"name":"Ursaring","types":["normal"],"fromDex":216,"baseStats":[90,130,75,75,75,55],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":218,"name":"Slugma","types":["fire"],"fromDex":null,"baseStats":[40,40,40,70,40,20],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":219,"name":"Magcargo","types":["fire","rock"],"fromDex":218,"baseStats":[60,50,120,90,80,30],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":220,"name":"Swinub","types":["ice","ground"],"fromDex":null,"baseStats":[50,50,40,30,30,50],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":221,"name":"Piloswine","types":["ice","ground"],"fromDex":220,"baseStats":[100,100,80,60,60,50],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":222,"name":"Corsola","types":["water","rock"],"fromDex":null,"baseStats":[65,55,95,65,95,35],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":223,"name":"Remoraid","types":["water"],"fromDex":null,"baseStats":[35,65,35,65,35,65],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":224,"name":"Octillery","types":["water"],"fromDex":223,"baseStats":[75,105,75,105,75,45],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":225,"name":"Delibird","types":["ice","flying"],"fromDex":null,"baseStats":[45,55,45,65,45,75],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":226,"name":"Mantine","types":["water","flying"],"fromDex":null,"baseStats":[85,40,70,80,140,70],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":227,"name":"Skarmory","types":["steel","flying"],"fromDex":null,"baseStats":[65,80,140,40,70,70],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":228,"name":"Houndour","types":["dark","fire"],"fromDex":null,"baseStats":[45,60,30,80,50,65],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":229,"name":"Houndoom","types":["dark","fire"],"fromDex":228,"baseStats":[75,90,50,110,80,95],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":230,"name":"Kingdra","types":["water","dragon"],"fromDex":117,"baseStats":[75,95,95,95,95,85],"baby":false,"legendary":false,"mythical":false,"bridge":"Horsea → Seadra → Kingdra"},{"dex":231,"name":"Phanpy","types":["ground"],"fromDex":null,"baseStats":[90,60,60,40,40,40],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":232,"name":"Donphan","types":["ground"],"fromDex":231,"baseStats":[90,120,120,60,60,50],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":233,"name":"Porygon2","types":["normal"],"fromDex":137,"baseStats":[85,80,90,105,95,60],"baby":false,"legendary":false,"mythical":false,"bridge":"Porygon → Porygon2"},{"dex":234,"name":"Stantler","types":["normal"],"fromDex":null,"baseStats":[73,95,62,85,65,85],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":235,"name":"Smeargle","types":["normal"],"fromDex":null,"baseStats":[55,20,35,20,45,75],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":236,"name":"Tyrogue","types":["fighting"],"fromDex":null,"baseStats":[35,35,35,35,35,35],"baby":true,"legendary":false,"mythical":false,"bridge":"Tyrogue → Hitmonlee / Hitmonchan / Hitmontop"},{"dex":237,"name":"Hitmontop","types":["fighting"],"fromDex":236,"baseStats":[50,95,95,35,110,70],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":238,"name":"Smoochum","types":["ice","psychic"],"fromDex":null,"baseStats":[45,30,15,85,65,65],"baby":true,"legendary":false,"mythical":false,"bridge":"Smoochum → Jynx"},{"dex":239,"name":"Elekid","types":["electric"],"fromDex":null,"baseStats":[45,63,37,65,55,95],"baby":true,"legendary":false,"mythical":false,"bridge":"Elekid → Electabuzz"},{"dex":240,"name":"Magby","types":["fire"],"fromDex":null,"baseStats":[45,75,37,70,55,83],"baby":true,"legendary":false,"mythical":false,"bridge":"Magby → Magmar"},{"dex":241,"name":"Miltank","types":["normal"],"fromDex":null,"baseStats":[95,80,105,40,70,100],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":242,"name":"Blissey","types":["normal"],"fromDex":113,"baseStats":[255,10,10,75,135,55],"baby":false,"legendary":false,"mythical":false,"bridge":"Chansey → Blissey"},{"dex":243,"name":"Raikou","types":["electric"],"fromDex":null,"baseStats":[90,85,75,115,100,115],"baby":false,"legendary":true,"mythical":false,"bridge":null},{"dex":244,"name":"Entei","types":["fire"],"fromDex":null,"baseStats":[115,115,85,90,75,100],"baby":false,"legendary":true,"mythical":false,"bridge":null},{"dex":245,"name":"Suicune","types":["water"],"fromDex":null,"baseStats":[100,75,115,90,115,85],"baby":false,"legendary":true,"mythical":false,"bridge":null},{"dex":246,"name":"Larvitar","types":["rock","ground"],"fromDex":null,"baseStats":[50,64,50,45,50,41],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":247,"name":"Pupitar","types":["rock","ground"],"fromDex":246,"baseStats":[70,84,70,65,70,51],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":248,"name":"Tyranitar","types":["rock","dark"],"fromDex":247,"baseStats":[100,134,110,95,100,61],"baby":false,"legendary":false,"mythical":false,"bridge":null},{"dex":249,"name":"Lugia","types":["psychic","flying"],"fromDex":null,"baseStats":[106,90,130,90,154,110],"baby":false,"legendary":true,"mythical":false,"bridge":null},{"dex":250,"name":"Ho-Oh","types":["fire","flying"],"fromDex":null,"baseStats":[106,130,90,110,154,90],"baby":false,"legendary":true,"mythical":false,"bridge":null},{"dex":251,"name":"Celebi","types":["psychic","grass"],"fromDex":null,"baseStats":[100,100,100,100,100,100],"baby":false,"legendary":false,"mythical":true,"bridge":null}];
+  const JOHTO_SPECIES_BY_DEX=Object.fromEntries(JOHTO_SPECIES_DATA.map(x=>[x.dex,x]));
+  const JOHTO_KANTO_FAMILY_BRIDGES=Object.fromEntries(JOHTO_SPECIES_DATA.filter(x=>x.bridge).map(x=>[x.dex,x.bridge]));
+  function johtoSpeciesSprite(dex,shiny=false){return shiny?shinySpriteUrl(dex):spriteUrl(dex);}
+  function johtoCatalogAudit(){
+    const dexes=JOHTO_SPECIES_DATA.map(x=>x.dex),unique=new Set(dexes),missing=[];
+    for(let d=152;d<=251;d++)if(!unique.has(d))missing.push(d);
+    return {count:JOHTO_SPECIES_DATA.length,uniqueDex:unique.size,minDex:Math.min(...dexes),maxDex:Math.max(...dexes),missing,
+      steel:JOHTO_SPECIES_DATA.filter(x=>x.types.includes("steel")).length,
+      dark:JOHTO_SPECIES_DATA.filter(x=>x.types.includes("dark")).length,
+      babies:JOHTO_SPECIES_DATA.filter(x=>x.baby).length,
+      legendary:JOHTO_SPECIES_DATA.filter(x=>x.legendary).length,
+      mythical:JOHTO_SPECIES_DATA.filter(x=>x.mythical).length,
+      bridges:Object.keys(JOHTO_KANTO_FAMILY_BRIDGES).length};
+  }
+  window.PokeSendaGen2={species:JOHTO_SPECIES_DATA,byDex:JOHTO_SPECIES_BY_DEX,audit:johtoCatalogAudit,sprite:johtoSpeciesSprite};
+
 
   const RARITIES = {
     common:{name:"Común",className:"common",candies:10},
@@ -11879,6 +11917,28 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
   .pk-johto-dev-stats,.pk-johto-roadmap-mini{grid-template-columns:1fr}
   .pk-johto-dev-actions{flex-direction:column}
 }
+
+.pk-johto-dev-actions-three{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.pk-gen2-catalog-overlay{z-index:285!important;background:rgba(4,16,20,.94)!important;backdrop-filter:blur(8px)}
+.pk-gen2-catalog-box{width:min(1180px,96vw)!important;max-height:94svh!important;overflow:hidden!important;padding:14px!important;border:1px solid #ae9149!important;background:linear-gradient(155deg,#10282b,#102128 58%,#292113)!important}
+.pk-gen2-catalog-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding-bottom:10px;border-bottom:1px solid #405953}
+.pk-gen2-catalog-head h2{margin:2px 0 4px;color:#f4dda0;font-size:22px}.pk-gen2-catalog-head small{display:block;color:#94aaa7;font-size:8px;line-height:1.45;max-width:820px}
+.pk-gen2-catalog-audit{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin:10px 0}
+.pk-gen2-audit-chip{border:1px solid #3a5d5a;border-radius:9px;background:#0e2024;padding:7px;text-align:center}.pk-gen2-audit-chip b{display:block;color:#f0d98e;font-size:11px}.pk-gen2-audit-chip small{display:block;color:#84a19d;font-size:6.5px;margin-top:2px}
+.pk-gen2-catalog-tools{display:grid;grid-template-columns:minmax(180px,1fr) 230px auto;gap:7px;align-items:center;margin-bottom:6px}
+.pk-gen2-catalog-tools input,.pk-gen2-catalog-tools select{width:100%;background:#09191d;color:#edf6f2;border:1px solid #42645f;border-radius:9px;padding:8px 9px;font:inherit;font-size:8px;outline:none}
+.pk-gen2-shiny-toggle{display:flex;align-items:center;gap:6px;white-space:nowrap;border:1px solid #6d5941;border-radius:9px;background:#241e15;padding:7px 9px;color:#f2d98e;font-size:8px}
+.pk-gen2-catalog-count{font-size:7px;color:#789793;margin:3px 0 7px}
+.pk-gen2-catalog-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;max-height:calc(94svh - 235px);overflow:auto;padding:2px 3px 9px 1px;scrollbar-width:thin}
+.pk-gen2-card{position:relative;min-width:0;border:1px solid #304c4c;border-radius:10px;background:linear-gradient(160deg,#0e2023,#121c22);padding:6px;overflow:hidden}
+.pk-gen2-card.bridge{border-color:#8f7740}.pk-gen2-card.legendary{border-color:#a97c32;background:linear-gradient(160deg,#2a2212,#151e22)}.pk-gen2-card.mythical{border-color:#8a659c;background:linear-gradient(160deg,#25172a,#131e22)}
+.pk-gen2-card-badges{position:absolute;left:5px;top:5px;right:5px;display:flex;justify-content:space-between;gap:3px;z-index:2}.pk-gen2-dex{border-radius:999px;background:#071215dd;border:1px solid #365753;color:#9bc2bc;padding:2px 4px;font-size:5.5px;font-weight:1000}.pk-gen2-special{border-radius:999px;background:#3b2d15e8;border:1px solid #876829;color:#f3d37b;padding:2px 4px;font-size:5px;font-weight:1000;white-space:nowrap}
+.pk-gen2-sprite-wrap{height:86px;display:flex;align-items:center;justify-content:center;margin-top:5px}.pk-gen2-sprite-wrap img{width:82px;height:82px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 4px 4px rgba(0,0,0,.48))}
+.pk-gen2-card-name{font-size:7.5px;font-weight:1000;color:#edf5ee;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pk-gen2-types{display:flex;justify-content:center;gap:3px;flex-wrap:wrap;margin-top:4px}.pk-gen2-type{border-radius:999px;padding:2px 4px;font-size:5px;font-weight:1000;border:1px solid rgba(255,255,255,.18);background:#23363a;color:#dfeceb}
+.pk-gen2-stats{font-size:5px;color:#6f908b;text-align:center;margin-top:4px;white-space:nowrap}.pk-gen2-bridge{font-size:5px;line-height:1.25;color:#d4bb72;text-align:center;margin-top:4px;min-height:13px}
+@media(max-width:900px){.pk-gen2-catalog-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.pk-gen2-catalog-audit{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:620px){.pk-johto-dev-actions-three{grid-template-columns:1fr!important}.pk-gen2-catalog-box{width:100vw!important;height:100svh!important;max-height:100svh!important;border-radius:0!important;border:0!important}.pk-gen2-catalog-head h2{font-size:16px}.pk-gen2-catalog-tools{grid-template-columns:1fr 1fr!important}.pk-gen2-shiny-toggle{grid-column:1/-1;justify-content:center}.pk-gen2-catalog-grid{grid-template-columns:repeat(3,minmax(0,1fr));max-height:calc(100svh - 285px)}.pk-gen2-sprite-wrap{height:72px}.pk-gen2-sprite-wrap img{width:70px;height:70px}}
+
 </style>
 
 <style id="pkMobileV3640131Audit">
@@ -12043,7 +12103,7 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.41.1.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.42.0.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12182,7 +12242,7 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.41.1',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.42.0',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -13867,7 +13927,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.41.1';
+  const VERSION='V36.42.0';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -14206,6 +14266,31 @@ module.exports = QRCode;
     returnToJohtoShellAfterSelector=false;
     if(shouldRestore)showJohtoShell();
   }
+
+  function gen2TypeLabel(t){try{return TYPE_NAMES?.[t]||t;}catch(_){return t;}}
+  function gen2SpecialLabel(p){if(p.mythical)return 'MÍTICO';if(p.legendary)return 'LEGENDARIO';if(p.baby)return 'BEBÉ';if(p.bridge)return 'FAMILIA KANTO';return '';}
+  function gen2CatalogFiltered(){
+    const q=String($('pkGen2CatalogSearch')?.value||'').trim().toLowerCase(),filter=$('pkGen2CatalogFilter')?.value||'all';
+    return (window.PokeSendaGen2?.species||[]).filter(p=>{
+      const ok=!q||p.name.toLowerCase().includes(q)||String(p.dex).includes(q)||p.types.some(t=>gen2TypeLabel(t).toLowerCase().includes(q));if(!ok)return false;
+      if(filter==='bridge')return !!p.bridge;if(filter==='steel')return p.types.includes('steel');if(filter==='dark')return p.types.includes('dark');if(filter==='baby')return !!p.baby;if(filter==='legendary')return !!p.legendary||!!p.mythical;return true;
+    });
+  }
+  function renderGen2Catalog(){
+    const grid=$('pkGen2CatalogGrid'),count=$('pkGen2CatalogCount'),auditHost=$('pkGen2CatalogAudit');if(!grid)return;
+    const audit=window.PokeSendaGen2?.audit?.(),shiny=!!$('pkGen2CatalogShiny')?.checked,list=gen2CatalogFiltered();
+    if(auditHost&&audit)auditHost.innerHTML=[
+      ['100/100',audit.count===100&&audit.uniqueDex===100?'Pokémon cargados':'REVISAR CATÁLOGO'],
+      [`#${audit.minDex}–${audit.maxDex}`,audit.missing.length?`Faltan: ${audit.missing.join(', ')}`:'Sin huecos'],
+      [audit.bridges,'Conexiones con Kanto'],[audit.steel,'Especies con Acero'],[audit.dark,'Especies con Siniestro'],
+      [`${audit.legendary}+${audit.mythical}`,`Legendarios + mítico · ${audit.babies} bebé`]
+    ].map(x=>`<div class="pk-gen2-audit-chip"><b>${x[0]}</b><small>${x[1]}</small></div>`).join('');
+    if(count)count.textContent=`Mostrando ${list.length} de 100 · ${shiny?'✨ sprites Shiny':'sprites normales'} · datos privados`;
+    grid.innerHTML=list.map(p=>{const special=gen2SpecialLabel(p),bst=(p.baseStats||[]).reduce((a,b)=>a+b,0),src=window.PokeSendaGen2.sprite(p.dex,shiny);return `<article class="pk-gen2-card ${p.bridge?'bridge':''} ${p.legendary?'legendary':''} ${p.mythical?'mythical':''}"><div class="pk-gen2-card-badges"><span class="pk-gen2-dex">#${p.dex}</span>${special?`<span class="pk-gen2-special">${special}</span>`:''}</div><div class="pk-gen2-sprite-wrap"><img loading="lazy" decoding="async" src="${src}" alt="${p.name}${shiny?' Shiny':''}" onerror="this.style.opacity='.18';this.title='Sprite no cargado'"></div><div class="pk-gen2-card-name">${p.name}</div><div class="pk-gen2-types">${p.types.map(t=>`<span class="pk-gen2-type">${gen2TypeLabel(t)}</span>`).join('')}</div><div class="pk-gen2-stats">BST ${bst} · PS ${p.baseStats[0]} · Vel ${p.baseStats[5]}</div><div class="pk-gen2-bridge">${p.bridge||''}</div></article>`;}).join('');
+  }
+  function openGen2Catalog(){if(core()?.active?.()!=='johto'){toastSafe('El catálogo Gen II solo está disponible dentro de Johto DEV.');return;}$('pkJohtoDevShell')?.classList.add('hidden');$('pkGen2CatalogOverlay')?.classList.remove('hidden');renderGen2Catalog();}
+  function closeGen2Catalog(){$('pkGen2CatalogOverlay')?.classList.add('hidden');if(core()?.active?.()==='johto')showJohtoShell();}
+
   function devStats(){
     const s=core()?.summary?.();const host=$('pkJohtoDevStats');if(!host||!s)return;
     host.innerHTML=[
@@ -14284,6 +14369,12 @@ module.exports = QRCode;
     $('regionJohtoCard')?.addEventListener('click',()=>{if(core()?.active?.()==='johto'){closeRegions({restoreDevShell:false});showJohtoShell();}else johtoPublicClick();});
     $('regionKantoCard')?.addEventListener('click',()=>{if(core()?.active?.()==='johto')switchDev('kanto');});
     $('pkJohtoDevBackKanto')?.addEventListener('click',()=>switchDev('kanto'));
+    $('pkJohtoGen2CatalogBtn')?.addEventListener('click',openGen2Catalog);
+    $('pkGen2CatalogClose')?.addEventListener('click',closeGen2Catalog);
+    $('pkGen2CatalogOverlay')?.addEventListener('click',e=>{if(e.target===$('pkGen2CatalogOverlay'))closeGen2Catalog();});
+    $('pkGen2CatalogSearch')?.addEventListener('input',renderGen2Catalog);
+    $('pkGen2CatalogFilter')?.addEventListener('change',renderGen2Catalog);
+    $('pkGen2CatalogShiny')?.addEventListener('change',renderGen2Catalog);
     $('pkJohtoDevRegionInfo')?.addEventListener('click',()=>{devStats();openRegions({fromDevShell:true});});
     $('regionSelectOverlay')?.addEventListener('click',e=>{if(e.target===$('regionSelectOverlay'))closeRegions();});
     $('pkJohtoDevShell')?.addEventListener('click',e=>{if(e.target===$('pkJohtoDevShell'))e.stopPropagation();});
@@ -14294,6 +14385,7 @@ module.exports = QRCode;
         e.preventDefault();
         if(core()?.active?.()==='johto')switchDev('kanto');else switchDev('johto');
       }
+      if(e.key==='Escape'&&!$('pkGen2CatalogOverlay')?.classList.contains('hidden')){e.preventDefault();closeGen2Catalog();return;}
       if(e.key==='Escape'&&!$('regionSelectOverlay')?.classList.contains('hidden'))closeRegions();
     });
   }

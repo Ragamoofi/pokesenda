@@ -3413,7 +3413,7 @@ body{letter-spacing:.08px}
 
 <div id="pkJohtoDevShell" class="overlay hidden pk-johto-dev-shell" role="dialog" aria-modal="true" aria-labelledby="pkJohtoDevTitle">
   <div class="modal-box pk-johto-dev-box" onclick="event.stopPropagation()">
-    <div class="pk-johto-dev-kicker">🧪 DESARROLLO PRIVADO · V36.46.1</div>
+    <div class="pk-johto-dev-kicker">🧪 DESARROLLO PRIVADO · V36.46.2</div>
     <h2 id="pkJohtoDevTitle">Región de Johto</h2>
     <p>La arquitectura multirregión ya está funcionando. Esta campaña tiene un estado regional separado de Kanto, pero todavía no contiene Pokémon Gen II, rutas ni Gimnasios jugables.</p>
     <div class="pk-johto-dev-warning"><b>No es el lanzamiento de Johto.</b> Este espacio existe para que podamos construir la expansión sin exponer contenido incompleto a los jugadores.</div>
@@ -3428,6 +3428,7 @@ body{letter-spacing:.08px}
     </div>
     <div class="pk-johto-dev-actions pk-johto-dev-actions-three">
       <button id="pkJohtoDevBackKanto" class="btn primary" type="button">← Volver a Kanto</button>
+      <button id="pkRecoverKantoBtn" class="btn warn" type="button">🛡️ Recuperar Kanto</button>
       <button id="pkJohtoGen2CatalogBtn" class="btn" type="button">🧬 Catálogo Gen II</button>
       <button id="pkJohtoFamiliesBtn" class="btn" type="button">🌿 Familias Johto</button>
       <button id="pkJohtoEvolutionLabBtn" class="btn" type="button">⚗️ Evoluciones</button>
@@ -5951,7 +5952,7 @@ body{letter-spacing:.08px}
      - Pokédex/Shiny, Entrenador, Opciones, Cloud Save e Infinita
        permanecen globales y NO se copian entre campañas.
      ============================================================ */
-  const PK_REGION_SYSTEM_VERSION=1;
+  const PK_REGION_SYSTEM_VERSION=2;
   const PK_REGION_IDS=["kanto","johto"];
   const PK_REGION_LABELS={kanto:"Kanto",johto:"Johto"};
   const PK_REGIONAL_STATE_KEYS=[
@@ -6022,6 +6023,9 @@ body{letter-spacing:.08px}
     }
     return s;
   }
+  const PK_KANTO_VAULT_KEY="pokesenda_kanto_region_vault_v2";
+  const PK_REGION_RECOVERY_NOTICE="pokesenda_kanto_recovered_v36462";
+
   function pkPreRegionMigrationBackup(){
     try{
       const mark="pokesenda_region_migration_backup_v36410";
@@ -6035,48 +6039,145 @@ body{letter-spacing:.08px}
       localStorage.setItem(mark,"1");
     }catch(_){}
   }
+  function pkSnapshotFromPlainObject(obj){
+    const out={};
+    for(const key of PK_REGIONAL_STATE_KEYS){
+      if(key==="gyms")out.gyms=pkRegionClone(obj?.gyms||pkFreshGymRegionState());
+      else if(key==="casino")out.casino=pkRegionClone(obj?.casino||{});
+      else out[key]=pkRegionClone(obj?.[key]);
+    }
+    return out;
+  }
+  function pkSnapshotQuality(snapshot){
+    if(!snapshot||typeof snapshot!=="object")return -1;
+    const owned=Array.isArray(snapshot.owned)?snapshot.owned.length:0;
+    const progress=Object.keys(snapshot.progress||{}).length;
+    const badges=[...new Set(Array.isArray(snapshot.gyms?.badges)?snapshot.gyms.badges:[])].length;
+    const completions=Object.values(snapshot.routes||{}).reduce((n,r)=>n+Math.max(0,Number(r?.completions||0)),0);
+    const best=Object.values(snapshot.routes||{}).reduce((n,r)=>n+Math.max(0,Number(r?.bestDistance||r?.checkpoint||0)),0);
+    const money=Math.max(0,Number(snapshot.pokedollars||0));
+    const starter=snapshot.starter?1:0;
+    // La cantidad de Pokémon/progreso pesa mucho más que dinero para distinguir
+    // una partida real de un starter accidental recién creado.
+    return starter*1e12 + Math.max(owned,progress)*1e10 + badges*1e8 + completions*1e7 + best*10 + Math.min(money,9_999_999);
+  }
+  function pkIsUsefulKantoSnapshot(snapshot){
+    return !!snapshot?.starter && (Array.isArray(snapshot.owned)?snapshot.owned.length:0)>=1;
+  }
+  function pkReadKantoVault(){
+    try{
+      const raw=localStorage.getItem(PK_KANTO_VAULT_KEY);if(!raw)return null;
+      const parsed=JSON.parse(raw);return parsed?.snapshot||parsed||null;
+    }catch(_){return null;}
+  }
+  function pkWriteKantoVault(snapshot,reason="Guardado Kanto"){
+    if(!pkIsUsefulKantoSnapshot(snapshot))return false;
+    try{
+      const payload={savedAt:new Date().toISOString(),reason,quality:pkSnapshotQuality(snapshot),snapshot:pkRegionClone(snapshot)};
+      localStorage.setItem(PK_KANTO_VAULT_KEY,JSON.stringify(payload));return true;
+    }catch(_){return false;}
+  }
+  function pkBackupKantoCandidates(){
+    const candidates=[];
+    try{
+      const list=JSON.parse(localStorage.getItem("pokesenda_beta1_backups_v1")||"[]");
+      if(Array.isArray(list))for(const b of list){
+        try{
+          const raw=JSON.parse(b?.raw||"{}");
+          if(raw?.regions?.kanto)candidates.push({source:`Respaldo · ${b.reason||"local"}`,snapshot:raw.regions.kanto,createdAt:b.createdAt||""});
+          // Saves anteriores al sistema multirregión: todo el top-level era Kanto.
+          if(!raw?.regions&&raw?.starter)candidates.push({source:`Respaldo Kanto clásico · ${b.reason||"local"}`,snapshot:pkSnapshotFromPlainObject(raw),createdAt:b.createdAt||""});
+          // Builds intermedias pueden conservar Kanto top-level además del envelope.
+          if(raw?.activeRegion==="kanto"&&raw?.starter)candidates.push({source:`Respaldo top-level Kanto · ${b.reason||"local"}`,snapshot:pkSnapshotFromPlainObject(raw),createdAt:b.createdAt||""});
+        }catch(_){}
+      }
+    }catch(_){}
+    return candidates;
+  }
+  function pkBestKantoSafetySnapshot(s=state){
+    const candidates=[];
+    if(s?.regions?.kanto)candidates.push({source:"Save actual · regions.kanto",snapshot:s.regions.kanto});
+    const vault=pkReadKantoVault();if(vault)candidates.push({source:"Bóveda Kanto",snapshot:vault});
+    if(s?.activeRegion==="kanto"&&s?.starter)candidates.push({source:"Kanto activo",snapshot:pkSnapshotFromPlainObject(s)});
+    candidates.push(...pkBackupKantoCandidates());
+    const usable=candidates.filter(x=>pkIsUsefulKantoSnapshot(x.snapshot)).map(x=>({...x,quality:pkSnapshotQuality(x.snapshot)}));
+    usable.sort((a,b)=>b.quality-a.quality);
+    return usable[0]||null;
+  }
+  function pkPreserveCurrentRawBeforeRecovery(reason){
+    try{
+      const raw=localStorage.getItem(SAVE_KEY);if(!raw)return;
+      let list=[];try{const a=JSON.parse(localStorage.getItem("pokesenda_beta1_backups_v1")||"[]");if(Array.isArray(a))list=a;}catch(_){}
+      if(list[0]?.raw===raw)return;
+      list.unshift({createdAt:new Date().toISOString(),reason,gameVersion:"V36.46.2",raw});
+      localStorage.setItem("pokesenda_beta1_backups_v1",JSON.stringify(list.slice(0,3)));
+    }catch(_){}
+  }
+
+  // Estructural solamente. IMPORTANTE: esta función NUNCA sincroniza top-level
+  // sobre una región. Consultar perfil/medallas/selector no puede modificar saves.
   function pkEnsureRegionEnvelope(s=state){
     if(!s||typeof s!=="object")return false;
-    const hadSystem=Number(s.regionSystemVersion||0)>=PK_REGION_SYSTEM_VERSION&&s.regions&&typeof s.regions==="object";
+    const hadSystem=Number(s.regionSystemVersion||0)>=1&&s.regions&&typeof s.regions==="object"&&!Array.isArray(s.regions);
     if(!hadSystem)pkPreRegionMigrationBackup();
     if(!s.regions||typeof s.regions!=="object"||Array.isArray(s.regions))s.regions={};
-    if(!PK_REGION_IDS.includes(s.activeRegion))s.activeRegion="kanto";
 
-    // En la migración inicial el top-level actual ES Kanto y debe ser la fuente de verdad.
     if(!hadSystem){
+      // El save que llega desde Kanto clásico se captura ANTES de tocar activeRegion.
+      const originalKanto=pkSnapshotFromPlainObject(s);
+      s.regions.kanto=pkRegionClone(originalKanto);
+      s.regions.johto=pkFreshRegionalState("johto");
       s.activeRegion="kanto";
       s.regionDexOwnedHistory=[...new Set((Array.isArray(s.dexOwnedHistory)?s.dexOwnedHistory:[]).map(Number).filter(d=>d>=1&&d<=151))].sort((a,b)=>a-b);
-      s.regions.kanto=pkRegionalSnapshotFromState(s);
-      s.regions.johto=pkFreshRegionalState("johto");
-      s.regionSystemVersion=PK_REGION_SYSTEM_VERSION;
+      s.regions.kanto.regionDexOwnedHistory=pkRegionClone(s.regionDexOwnedHistory);
       s.regionMeta={
         kanto:{unlocked:true,firstEnteredAt:null},
         johto:{unlocked:false,unlockRule:"kanto_8_badges",firstEnteredAt:null}
       };
       s.migrations=s.migrations||{};
       s.migrations.multiregionV36410=true;
-      try{localStorage.setItem(SAVE_KEY,JSON.stringify(s));}catch(_){}
-      return true;
     }
 
-    // En saves ya convertidos el top-level representa la región activa más reciente.
-    // V36.44 añade historial Pokédex regional sin tocar la Pokédex Nacional.
     if(!s.regions.kanto)s.regions.kanto=pkFreshRegionalState("kanto");
     if(!s.regions.johto)s.regions.johto=pkFreshRegionalState("johto");
     if(!Array.isArray(s.regions.kanto.regionDexOwnedHistory))
       s.regions.kanto.regionDexOwnedHistory=[...new Set((Array.isArray(s.dexOwnedHistory)?s.dexOwnedHistory:[]).map(Number).filter(d=>d>=1&&d<=151))].sort((a,b)=>a-b);
     if(!Array.isArray(s.regions.johto.regionDexOwnedHistory))s.regions.johto.regionDexOwnedHistory=[];
-    if(!Array.isArray(s.regionDexOwnedHistory))
-      s.regionDexOwnedHistory=pkRegionClone(s.regions[s.activeRegion]?.regionDexOwnedHistory||[]);
-    s.regions[s.activeRegion]=pkRegionalSnapshotFromState(s);
+    if(!PK_REGION_IDS.includes(s.activeRegion))s.activeRegion="kanto";
+
     s.regionSystemVersion=PK_REGION_SYSTEM_VERSION;
     s.regionMeta=s.regionMeta&&typeof s.regionMeta==="object"?s.regionMeta:{};
     s.regionMeta.kanto={unlocked:true,...(s.regionMeta.kanto||{})};
     s.regionMeta.johto={unlocked:false,unlockRule:"kanto_8_badges",...(s.regionMeta.johto||{})};
-    return false;
+    return !hadSystem;
   }
-  function pkSyncActiveRegionSnapshot(s=state){
-    if(!s)return;
+
+  function pkRecoverKantoFromSafetySources(s=state,{force=false}={}){
+    pkEnsureRegionEnvelope(s);
+    const current=s.regions.kanto;
+    const best=pkBestKantoSafetySnapshot(s);
+    if(!best)return {recovered:false,reason:"No se encontró un Kanto utilizable en los respaldos locales."};
+    const currentQuality=pkSnapshotQuality(current),bestQuality=best.quality;
+    if(!force&&bestQuality<=currentQuality){
+      if(pkIsUsefulKantoSnapshot(current))pkWriteKantoVault(current,"Kanto verificado al iniciar");
+      return {recovered:false,reason:"El Kanto actual ya es la copia más completa.",source:best.source};
+    }
+    pkPreserveCurrentRawBeforeRecovery("Antes de recuperación automática de Kanto V36.46.2");
+    s.regions.kanto=pkRegionClone(best.snapshot);
+    pkWriteKantoVault(s.regions.kanto,`Recuperado desde ${best.source}`);
+    try{
+      sessionStorage.setItem(PK_REGION_RECOVERY_NOTICE,JSON.stringify({source:best.source,quality:bestQuality}));
+    }catch(_){}
+    return {recovered:true,source:best.source,quality:bestQuality};
+  }
+
+  function pkRegionReadSnapshot(regionId){
+    pkEnsureRegionEnvelope(state);
+    if(regionId===state.activeRegion)return pkRegionalSnapshotFromState(state);
+    return pkRegionClone(state.regions?.[regionId]||pkFreshRegionalState(regionId));
+  }
+  function pkSyncActiveRegionSnapshot(s=state,{reason="save"}={}){
+    if(!s)return false;
     pkEnsureRegionEnvelope(s);
     const id=PK_REGION_IDS.includes(s.activeRegion)?s.activeRegion:"kanto";
     if(!Array.isArray(s.regionDexOwnedHistory))s.regionDexOwnedHistory=[];
@@ -6084,23 +6185,26 @@ body{letter-spacing:.08px}
       const nat=(Array.isArray(s.dexOwnedHistory)?s.dexOwnedHistory:[]).map(Number).filter(d=>d>=1&&d<=151);
       s.regionDexOwnedHistory=[...new Set([...s.regionDexOwnedHistory,...nat])].sort((a,b)=>a-b);
     }
-    s.regions[id]=pkRegionalSnapshotFromState(s);
+    const snap=pkRegionalSnapshotFromState(s);
+    s.regions[id]=pkRegionClone(snap);
+    if(id==="kanto")pkWriteKantoVault(snap,reason);
+    return true;
   }
   function pkRegionalDexHistory(regionId=state?.activeRegion||"kanto"){
     try{
-      pkSyncActiveRegionSnapshot(state);
-      return [...new Set((state.regions?.[regionId]?.regionDexOwnedHistory||[]).map(Number).filter(d=>d>0))].sort((a,b)=>a-b);
+      const r=pkRegionReadSnapshot(regionId);
+      return [...new Set((r?.regionDexOwnedHistory||[]).map(Number).filter(d=>d>0))].sort((a,b)=>a-b);
     }catch(_){return[];}
   }
   function pkRegisterRegionalDex(dex,regionId=state?.activeRegion||"kanto"){
     dex=Number(dex);if(!dex||!PK_REGION_IDS.includes(regionId))return false;
-    pkSyncActiveRegionSnapshot(state);
-    const region=state.regions[regionId]||(state.regions[regionId]=pkFreshRegionalState(regionId));
+    pkEnsureRegionEnvelope(state);
+    const region=regionId===state.activeRegion?pkRegionalSnapshotFromState(state):pkRegionClone(state.regions[regionId]||pkFreshRegionalState(regionId));
     region.regionDexOwnedHistory=Array.isArray(region.regionDexOwnedHistory)?region.regionDexOwnedHistory:[];
     if(!region.regionDexOwnedHistory.includes(dex))region.regionDexOwnedHistory.push(dex);
     region.regionDexOwnedHistory=[...new Set(region.regionDexOwnedHistory.map(Number))].sort((a,b)=>a-b);
+    state.regions[regionId]=pkRegionClone(region);
     if(regionId===state.activeRegion)state.regionDexOwnedHistory=pkRegionClone(region.regionDexOwnedHistory);
-    // La Pokédex Nacional sí registra la especie, independientemente de dónde se obtuvo.
     state.dexOwnedHistory=Array.isArray(state.dexOwnedHistory)?state.dexOwnedHistory:[];
     if(!state.dexOwnedHistory.includes(dex))state.dexOwnedHistory.push(dex);
     state.dexOwnedHistory=[...new Set(state.dexOwnedHistory.map(Number))].sort((a,b)=>a-b);
@@ -6108,16 +6212,14 @@ body{letter-spacing:.08px}
   }
   function pkRegionBadgeCount(regionId="kanto"){
     try{
-      pkSyncActiveRegionSnapshot(state);
-      const badges=state.regions?.[regionId]?.gyms?.badges;
-      return [...new Set(Array.isArray(badges)?badges:[])].length;
+      const r=pkRegionReadSnapshot(regionId);
+      return [...new Set(Array.isArray(r?.gyms?.badges)?r.gyms.badges:[])].length;
     }catch(_){return 0;}
   }
   function pkJohtoUnlockRequirementMet(){return pkRegionBadgeCount("kanto")>=8;}
   function pkRegionSummary(regionId){
     try{
-      pkSyncActiveRegionSnapshot(state);
-      const r=state.regions?.[regionId]||pkFreshRegionalState(regionId);
+      const r=pkRegionReadSnapshot(regionId);
       return {
         id:regionId,label:PK_REGION_LABELS[regionId]||regionId,
         money:Math.max(0,Number(r.pokedollars||0)),
@@ -6142,19 +6244,20 @@ body{letter-spacing:.08px}
     const allowed=pkCanSwitchRegion();if(!allowed.ok)return allowed;
     if(regionId==="johto"&&!dev)return {ok:false,reason:pkJohtoUnlockRequirementMet()?"Johto cumple el requisito, pero sigue en desarrollo y todavía no está publicado.":"Johto requerirá las 8 medallas de Kanto."};
 
-    pkSyncActiveRegionSnapshot(state);
+    // TRANSACCIÓN: 1) guardar región origen, 2) cambiar ID, 3) aplicar región destino.
+    // Ninguna función de lectura participa en esta operación.
+    pkSyncActiveRegionSnapshot(state,{reason:`Antes de viajar a ${regionId}`});
     const previous=state.activeRegion;
+    const target=pkRegionClone(state.regions[regionId]||pkFreshRegionalState(regionId));
     state.activeRegion=regionId;
-    pkApplyRegionalSnapshot(state,state.regions[regionId],regionId);
+    pkApplyRegionalSnapshot(state,target,regionId);
     state.regionMeta=state.regionMeta||{};
     state.regionMeta[regionId]={...(state.regionMeta[regionId]||{}),firstEnteredAt:state.regionMeta[regionId]?.firstEnteredAt||new Date().toISOString()};
-    pkSyncActiveRegionSnapshot(state);
     try{localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(_){}
     return {ok:true,previous,regionId,dev};
   }
   function pkRegionGlobalSummary(){
     try{
-      pkSyncActiveRegionSnapshot(state);
       return {
         activeRegion:state.activeRegion||"kanto",
         kanto:pkRegionSummary("kanto"),
@@ -6166,7 +6269,12 @@ body{letter-spacing:.08px}
     }catch(_){return null;}
   }
 
+  // Inicialización segura:
+  // 1) estructura; 2) recuperar Kanto más completo; 3) aplicar snapshot de la región activa.
   pkEnsureRegionEnvelope(state);
+  const pkStartupRecovery=pkRecoverKantoFromSafetySources(state);
+  pkApplyRegionalSnapshot(state,state.regions[state.activeRegion]||pkFreshRegionalState(state.activeRegion),state.activeRegion);
+  try{localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(_){}
 
   // V36.46.1 · Guard de arranque regional.
   // El motor Kanto usa state.starter===null para abrir Bulbasaur/Charmander/Squirtle.
@@ -6193,13 +6301,25 @@ body{letter-spacing:.08px}
     return true;
   }
   window.PokeSendaRegionBoot={isJohto:pkIsJohtoRuntime,hideKantoEntryFlows:pkHideKantoEntryFlows,routeToJohto:pkRouteToJohtoCampaign};
+  // Captura antes de los listeners legacy, aunque hayan sido registrados antes.
+  document.addEventListener("click",e=>{
+    if(!pkIsJohtoRuntime()&&!document.body.classList.contains("pk-region-johto-dev"))return;
+    const starter=e.target?.closest?.("[data-starter]");
+    const play=e.target?.closest?.("#menuPlayBtn");
+    if(!starter&&!play)return;
+    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+    pkHideKantoEntryFlows();pkRouteToJohtoCampaign();
+  },true);
+
   if(pkIsJohtoRuntime())pkRouteToJohtoCampaign();
 
   window.PokeSendaRegionCore={
     version:PK_REGION_SYSTEM_VERSION,
     ids:[...PK_REGION_IDS],
     active:()=>state?.activeRegion||"kanto",
-    sync:()=>pkSyncActiveRegionSnapshot(state),
+    sync:()=>pkSyncActiveRegionSnapshot(state,{reason:"API sync"}),
+    recoverKanto:(force=false)=>pkRecoverKantoFromSafetySources(state,{force}),
+    kantoVault:()=>pkReadKantoVault(),
     summary:pkRegionGlobalSummary,
     regionSummary:pkRegionSummary,
     regionalDex:pkRegionalDexHistory,
@@ -6278,7 +6398,7 @@ body{letter-spacing:.08px}
     }
     updateAchievementAlert();return newIds;
   }
-  function save(){checkAchievements({silent:false});try{pkSyncActiveRegionSnapshot(state);}catch(_){}localStorage.setItem(SAVE_KEY,JSON.stringify(state));updateMenuInfo();updateAchievementAlert();}
+  function save(){checkAchievements({silent:false});try{pkSyncActiveRegionSnapshot(state,{reason:"save()"});}catch(_){}localStorage.setItem(SAVE_KEY,JSON.stringify(state));updateMenuInfo();updateAchievementAlert();}
   function markDexUnread(dex){dex=Number(dex);state.dexUnread=Array.isArray(state.dexUnread)?state.dexUnread:[];state.dexSeen=Array.isArray(state.dexSeen)?state.dexSeen:[];state.dexOwnedHistory=Array.isArray(state.dexOwnedHistory)?state.dexOwnedHistory:[];if(dex>=1&&dex<=151){const isNew=!state.dexOwnedHistory.includes(dex);if(!state.dexSeen.includes(dex))state.dexSeen.push(dex);if(isNew)state.dexOwnedHistory.push(dex);if(isNew&&!state.dexUnread.includes(dex))state.dexUnread.push(dex);state.dexSeen=[...new Set(state.dexSeen)].sort((a,b)=>a-b);state.dexOwnedHistory=[...new Set(state.dexOwnedHistory)].sort((a,b)=>a-b);}updateDexAlert();}
   function clearDexUnread(dex){state.dexUnread=Array.isArray(state.dexUnread)?state.dexUnread:[];const i=state.dexUnread.indexOf(Number(dex));if(i>=0){state.dexUnread.splice(i,1);save();}updateDexAlert();}
   function updateDexAlert(){const n=(state.dexUnread||[]).length;const el=$("pokedexAlert");if(el){el.classList.toggle("hidden",!n);el.textContent=n>9?"9+":"!";el.title=n?`${n} entrada${n===1?"":"s"} nueva${n===1?"":"s"} en la Pokédex`:"";} }
@@ -6607,13 +6727,33 @@ body{letter-spacing:.08px}
   }
 
   function chooseStarter(id){
-    if(state?.activeRegion==="johto"){
+    // Doble seguro: mientras Johto esté activo los starters de Kanto son inertes.
+    if(state?.activeRegion==="johto"||document.body.classList.contains("pk-region-johto-dev")){
       $("starterOverlay")?.classList.add("hidden");
       window.PokeSendaRegionBoot?.routeToJohto?.();
       return;
     }
+    pkEnsureRegionEnvelope(state);
+    // Si existe un Kanto real guardado, JAMÁS permitir que un overlay accidental lo reemplace.
+    const protectedKanto=pkBestKantoSafetySnapshot(state);
+    if(protectedKanto&&pkSnapshotQuality(protectedKanto.snapshot)>pkSnapshotQuality(pkFreshRegionalState("kanto"))&&
+       (protectedKanto.snapshot?.owned?.length||0)>1){
+      state.regions.kanto=pkRegionClone(protectedKanto.snapshot);
+      state.activeRegion="kanto";
+      pkApplyRegionalSnapshot(state,state.regions.kanto,"kanto");
+      pkWriteKantoVault(state.regions.kanto,"Protección al interceptar selector inicial Kanto");
+      try{localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(_){}
+      $("starterOverlay")?.classList.add("hidden");$("mainMenu")?.classList.add("hidden");
+      renderEverything();updateMenuInfo();return;
+    }
+
+    // Partida Kanto realmente nueva: reiniciar SOLO la campaña regional, no todo el state/global.
     const keepMusicVolume=currentMusicVolume(),keepMusicTrack=$("bgMusic")?.dataset.trackKey||state.options?.musicTrack||"classic_menu",keepSfxVolume=Math.max(0,Math.min(1,Number(state.options?.sfxVolume??.60)));
-    state=freshState();state.options.musicVolume=keepMusicVolume;state.options.musicTrack=MUSIC_TRACKS[keepMusicTrack]?keepMusicTrack:"classic_menu";state.options.musicPlaylist=true;state.options.sfxVolume=keepSfxVolume;state.starter=id;startMusic();state.owned=[id];state.progress[id]=freshPokemonProgress(1,"rare");state.progress[id].moveRanks=baseMovesFor(id).map(m=>(m.kind==="support"||(m.unlockStage||0)<=0)?1:0);state.formation=[id,null,null,null,null,null];state.dexSeen=Array.isArray(state.dexSeen)?state.dexSeen:[];if(!state.dexSeen.includes(FAMILIES[id].stages[0].dex))state.dexSeen.push(FAMILIES[id].stages[0].dex);markDexUnread(FAMILIES[id].stages[0].dex);
+    const freshKanto=pkFreshRegionalState("kanto");
+    state.regions.kanto=pkRegionClone(freshKanto);state.activeRegion="kanto";pkApplyRegionalSnapshot(state,freshKanto,"kanto");
+    state.options.musicVolume=keepMusicVolume;state.options.musicTrack=MUSIC_TRACKS[keepMusicTrack]?keepMusicTrack:"classic_menu";state.options.musicPlaylist=true;state.options.sfxVolume=keepSfxVolume;
+    state.starter=id;startMusic();state.owned=[id];state.progress[id]=freshPokemonProgress(1,"rare");state.progress[id].moveRanks=baseMovesFor(id).map(m=>(m.kind==="support"||(m.unlockStage||0)<=0)?1:0);state.formation=[id,null,null,null,null,null];
+    state.dexSeen=Array.isArray(state.dexSeen)?state.dexSeen:[];if(!state.dexSeen.includes(FAMILIES[id].stages[0].dex))state.dexSeen.push(FAMILIES[id].stages[0].dex);markDexUnread(FAMILIES[id].stages[0].dex);
     save();$("starterOverlay").classList.add("hidden");$("mainMenu").classList.add("hidden");
     logs=[];addLog(`${ownedStage(id).name} será tu primer compañero.`);renderEverything();
   }
@@ -12723,7 +12863,7 @@ body.pk-region-johto-dev #starterOverlay,body.pk-region-johto-dev #pkFirstWelcom
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.46.1.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.46.2.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12862,7 +13002,7 @@ body.pk-region-johto-dev #starterOverlay,body.pk-region-johto-dev #pkFirstWelcom
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.46.1',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.46.2',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -14547,7 +14687,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.46.1';
+  const VERSION='V36.46.2';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -15251,6 +15391,9 @@ module.exports = QRCode;
   function hideJohtoShell(){
     document.body.classList.remove('pk-region-johto-dev');
     $('pkJohtoDevShell')?.classList.add('hidden');
+    closeJohtoCampaignViews();
+    $('starterOverlay')?.classList.add('hidden');
+    $('pkFirstWelcomeOverlay')?.classList.add('hidden');
   }
   function postSwitchRender(){
     try{normalizeAllPokemonTMProgress?.();}catch(_){}
@@ -15311,6 +15454,10 @@ module.exports = QRCode;
   }
   function boot(){
     updateRegionUI();
+    try{
+      const info=JSON.parse(sessionStorage.getItem(PK_REGION_RECOVERY_NOTICE)||'null');
+      if(info){sessionStorage.removeItem(PK_REGION_RECOVERY_NOTICE);setTimeout(()=>toastSafe(`🛡️ Partida de Kanto recuperada automáticamente desde ${info.source||'respaldo local'}`),900);}
+    }catch(_){}
     const legacyGuard=new MutationObserver(()=>{
       if(core()?.active?.()!=='johto')return;
       window.PokeSendaRegionBoot?.hideKantoEntryFlows?.();
@@ -15323,6 +15470,13 @@ module.exports = QRCode;
     $('regionJohtoCard')?.addEventListener('click',()=>{if(core()?.active?.()==='johto'){closeRegions({restoreDevShell:false});showJohtoShell(false);}else johtoPublicClick();});
     $('regionKantoCard')?.addEventListener('click',()=>{if(core()?.active?.()==='johto')switchDev('kanto');});
     $('pkJohtoDevBackKanto')?.addEventListener('click',()=>switchDev('kanto'));
+    $('pkRecoverKantoBtn')?.addEventListener('click',()=>{
+      const r=core()?.recoverKanto?.(true);
+      if(!r?.recovered){toastSafe(r?.reason||'No se encontró un respaldo mejor de Kanto');return;}
+      try{localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(_){}
+      toastSafe(`🛡️ Kanto recuperado desde ${r.source||'respaldo local'}`);
+      switchDev('kanto');
+    });
     document.querySelectorAll('[data-johto-starter]').forEach(btn=>btn.addEventListener('click',()=>chooseJohtoStarter(btn.dataset.johtoStarter)));
     $('pkJohtoStarterBackKanto')?.addEventListener('click',()=>switchDev('kanto'));
     $('pkJohtoLobbyBackKanto')?.addEventListener('click',()=>switchDev('kanto'));

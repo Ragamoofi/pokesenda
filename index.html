@@ -3413,7 +3413,7 @@ body{letter-spacing:.08px}
 
 <div id="pkJohtoDevShell" class="overlay hidden pk-johto-dev-shell" role="dialog" aria-modal="true" aria-labelledby="pkJohtoDevTitle">
   <div class="modal-box pk-johto-dev-box" onclick="event.stopPropagation()">
-    <div class="pk-johto-dev-kicker">🧪 DESARROLLO PRIVADO · V36.42.0</div>
+    <div class="pk-johto-dev-kicker">🧪 DESARROLLO PRIVADO · V36.42.1</div>
     <h2 id="pkJohtoDevTitle">Región de Johto</h2>
     <p>La arquitectura multirregión ya está funcionando. Esta campaña tiene un estado regional separado de Kanto, pero todavía no contiene Pokémon Gen II, rutas ni Gimnasios jugables.</p>
     <div class="pk-johto-dev-warning"><b>No es el lanzamiento de Johto.</b> Este espacio existe para que podamos construir la expansión sin exponer contenido incompleto a los jugadores.</div>
@@ -3423,12 +3423,13 @@ body{letter-spacing:.08px}
       <span>✓ Migración Kanto segura</span>
       <span>✓ Pokédex / Shiny globales</span>
       <span>✓ Infinita global preservada</span>
-      <span>✓ Catálogo Gen II · 100/100</span>
+      <span>✓ Gen II · GIF front/back + familias</span>
       <span>○ Rutas / Gimnasios / lobby / música</span>
     </div>
     <div class="pk-johto-dev-actions pk-johto-dev-actions-three">
       <button id="pkJohtoDevBackKanto" class="btn primary" type="button">← Volver a Kanto</button>
       <button id="pkJohtoGen2CatalogBtn" class="btn" type="button">🧬 Catálogo Gen II</button>
+      <button id="pkJohtoFamiliesBtn" class="btn" type="button">🌿 Familias Johto</button>
       <button id="pkJohtoDevRegionInfo" class="btn" type="button">🌐 Ver selector</button>
     </div>
     <small class="pk-johto-dev-shortcut">Acceso privado de pruebas: Ctrl + Alt + J.</small>
@@ -3446,10 +3447,38 @@ body{letter-spacing:.08px}
     <div class="pk-gen2-catalog-tools">
       <input id="pkGen2CatalogSearch" type="search" placeholder="Buscar Pokémon, tipo o #..." autocomplete="off">
       <select id="pkGen2CatalogFilter"><option value="all">Todos · 100</option><option value="bridge">Familias conectadas con Kanto</option><option value="steel">Tipo Acero</option><option value="dark">Tipo Siniestro</option><option value="baby">Pokémon bebé</option><option value="legendary">Legendarios / mítico</option></select>
+      <select id="pkGen2CatalogFacing"><option value="front">👁 Frente</option><option value="back">↩ Espalda</option></select>
       <label class="pk-gen2-shiny-toggle"><input id="pkGen2CatalogShiny" type="checkbox"> ✨ Ver Shiny</label>
+      <button id="pkGen2ValidateGifsBtn" class="btn pk-gen2-validate-btn" type="button">🧪 Validar 400 GIFs</button>
     </div>
     <div id="pkGen2CatalogCount" class="pk-gen2-catalog-count"></div>
+    <div id="pkGen2GifAuditStatus" class="pk-gen2-gif-audit-status"></div>
     <div id="pkGen2CatalogGrid" class="pk-gen2-catalog-grid"></div>
+  </div>
+</div>
+
+<div id="pkJohtoFamiliesOverlay" class="overlay hidden pk-gen2-catalog-overlay" role="dialog" aria-modal="true" aria-labelledby="pkJohtoFamiliesTitle">
+  <div class="modal-box pk-gen2-catalog-box pk-johto-family-box" onclick="event.stopPropagation()">
+    <div class="pk-gen2-catalog-head">
+      <div><div class="pk-johto-dev-kicker">🌿 JOHTO DEV · MODELO DE FAMILIAS</div><h2 id="pkJohtoFamiliesTitle">68 familias regionales</h2>
+      <small>Plano interno de Johto: 100 especies Gen II + los miembros de Kanto necesarios para conservar familias evolutivas completas. Soporta ramas reales sin modificar todavía Kanto.</small></div>
+      <button id="pkJohtoFamiliesClose" class="btn" type="button">Cerrar</button>
+    </div>
+    <div id="pkJohtoFamilyAudit" class="pk-gen2-catalog-audit"></div>
+    <div class="pk-gen2-catalog-tools pk-family-tools">
+      <input id="pkJohtoFamilySearch" type="search" placeholder="Buscar familia o Pokémon..." autocomplete="off">
+      <select id="pkJohtoFamilyFilter">
+        <option value="all">Todas las familias</option>
+        <option value="cross">Con miembros de Kanto</option>
+        <option value="branch">Evolución ramificada</option>
+        <option value="friendship">Usan amistad</option>
+        <option value="trade">Intercambio + objeto</option>
+        <option value="starter">Iniciales</option>
+        <option value="legendary">Legendarios / mítico</option>
+      </select>
+    </div>
+    <div id="pkJohtoFamilyCount" class="pk-gen2-catalog-count"></div>
+    <div id="pkJohtoFamilyGrid" class="pk-johto-family-grid"></div>
   </div>
 </div>
 
@@ -4211,6 +4240,34 @@ body{letter-spacing:.08px}
       bridges:Object.keys(JOHTO_KANTO_FAMILY_BRIDGES).length};
   }
   window.PokeSendaGen2={species:JOHTO_SPECIES_DATA,byDex:JOHTO_SPECIES_BY_DEX,audit:johtoCatalogAudit,sprite:johtoSpeciesSprite};
+
+  /* V36.42.1 · Familias regionales Johto.
+     68 familias / 131 especies regionales: 100 Gen II + 31 miembros de Kanto
+     que comparten líneas evolutivas. Aún no se registran en FAMILIES ni aparecen
+     en pools normales; son el plano de construcción de la campaña Johto. */
+  const JOHTO_FAMILY_BLUEPRINTS={"j_chikorita":{"id":"j_chikorita","name":"Chikorita","members":[152,153,154],"evolutions":[{"from":152,"to":153,"method":"level","level":16},{"from":153,"to":154,"method":"level","level":32}],"tags":["starter"]},"j_cyndaquil":{"id":"j_cyndaquil","name":"Cyndaquil","members":[155,156,157],"evolutions":[{"from":155,"to":156,"method":"level","level":14},{"from":156,"to":157,"method":"level","level":36}],"tags":["starter"]},"j_totodile":{"id":"j_totodile","name":"Totodile","members":[158,159,160],"evolutions":[{"from":158,"to":159,"method":"level","level":18},{"from":159,"to":160,"method":"level","level":30}],"tags":["starter"]},"j_sentret":{"id":"j_sentret","name":"Sentret","members":[161,162],"evolutions":[{"from":161,"to":162,"method":"level","level":15}],"tags":[]},"j_hoothoot":{"id":"j_hoothoot","name":"Hoothoot","members":[163,164],"evolutions":[{"from":163,"to":164,"method":"level","level":20}],"tags":[]},"j_ledyba":{"id":"j_ledyba","name":"Ledyba","members":[165,166],"evolutions":[{"from":165,"to":166,"method":"level","level":18}],"tags":[]},"j_spinarak":{"id":"j_spinarak","name":"Spinarak","members":[167,168],"evolutions":[{"from":167,"to":168,"method":"level","level":22}],"tags":[]},"j_zubat":{"id":"j_zubat","name":"Zubat","members":[41,42,169],"evolutions":[{"from":41,"to":42,"method":"level","level":22},{"from":42,"to":169,"method":"friendship"}],"tags":["cross_kanto"]},"j_chinchou":{"id":"j_chinchou","name":"Chinchou","members":[170,171],"evolutions":[{"from":170,"to":171,"method":"level","level":27}],"tags":[]},"j_pichu":{"id":"j_pichu","name":"Pichu","members":[172,25,26],"evolutions":[{"from":172,"to":25,"method":"friendship"},{"from":25,"to":26,"method":"stone","item":"thunder_stone"}],"tags":["cross_kanto","baby"]},"j_cleffa":{"id":"j_cleffa","name":"Cleffa","members":[173,35,36],"evolutions":[{"from":173,"to":35,"method":"friendship"},{"from":35,"to":36,"method":"stone","item":"moon_stone"}],"tags":["cross_kanto","baby"]},"j_igglybuff":{"id":"j_igglybuff","name":"Igglybuff","members":[174,39,40],"evolutions":[{"from":174,"to":39,"method":"friendship"},{"from":39,"to":40,"method":"stone","item":"moon_stone"}],"tags":["cross_kanto","baby"]},"j_togepi":{"id":"j_togepi","name":"Togepi","members":[175,176],"evolutions":[{"from":175,"to":176,"method":"friendship"}],"tags":["baby"]},"j_natu":{"id":"j_natu","name":"Natu","members":[177,178],"evolutions":[{"from":177,"to":178,"method":"level","level":25}],"tags":[]},"j_mareep":{"id":"j_mareep","name":"Mareep","members":[179,180,181],"evolutions":[{"from":179,"to":180,"method":"level","level":15},{"from":180,"to":181,"method":"level","level":30}],"tags":[]},"j_oddish":{"id":"j_oddish","name":"Oddish","members":[43,44,45,182],"evolutions":[{"from":43,"to":44,"method":"level","level":21},{"from":44,"to":45,"method":"stone","item":"leaf_stone"},{"from":44,"to":182,"method":"stone","item":"sun_stone"}],"tags":["cross_kanto","branch"]},"j_marill":{"id":"j_marill","name":"Marill","members":[183,184],"evolutions":[{"from":183,"to":184,"method":"level","level":18}],"tags":[]},"j_sudowoodo":{"id":"j_sudowoodo","name":"Sudowoodo","members":[185],"evolutions":[],"tags":[]},"j_poliwag":{"id":"j_poliwag","name":"Poliwag","members":[60,61,62,186],"evolutions":[{"from":60,"to":61,"method":"level","level":25},{"from":61,"to":62,"method":"stone","item":"water_stone"},{"from":61,"to":186,"method":"trade_item","item":"kings_rock"}],"tags":["cross_kanto","branch"]},"j_hoppip":{"id":"j_hoppip","name":"Hoppip","members":[187,188,189],"evolutions":[{"from":187,"to":188,"method":"level","level":18},{"from":188,"to":189,"method":"level","level":27}],"tags":[]},"j_aipom":{"id":"j_aipom","name":"Aipom","members":[190],"evolutions":[],"tags":[]},"j_sunkern":{"id":"j_sunkern","name":"Sunkern","members":[191,192],"evolutions":[{"from":191,"to":192,"method":"stone","item":"sun_stone"}],"tags":[]},"j_yanma":{"id":"j_yanma","name":"Yanma","members":[193],"evolutions":[],"tags":[]},"j_wooper":{"id":"j_wooper","name":"Wooper","members":[194,195],"evolutions":[{"from":194,"to":195,"method":"level","level":20}],"tags":[]},"j_eevee":{"id":"j_eevee","name":"Eevee","members":[133,134,135,136,196,197],"evolutions":[{"from":133,"to":134,"method":"stone","item":"water_stone"},{"from":133,"to":135,"method":"stone","item":"thunder_stone"},{"from":133,"to":136,"method":"stone","item":"fire_stone"},{"from":133,"to":196,"method":"friendship_day"},{"from":133,"to":197,"method":"friendship_night"}],"tags":["cross_kanto","branch"]},"j_murkrow":{"id":"j_murkrow","name":"Murkrow","members":[198],"evolutions":[],"tags":[]},"j_slowpoke":{"id":"j_slowpoke","name":"Slowpoke","members":[79,80,199],"evolutions":[{"from":79,"to":80,"method":"level","level":37},{"from":79,"to":199,"method":"trade_item","item":"kings_rock"}],"tags":["cross_kanto","branch"]},"j_misdreavus":{"id":"j_misdreavus","name":"Misdreavus","members":[200],"evolutions":[],"tags":[]},"j_unown":{"id":"j_unown","name":"Unown","members":[201],"evolutions":[],"tags":[]},"j_wobbuffet":{"id":"j_wobbuffet","name":"Wobbuffet","members":[202],"evolutions":[],"tags":[]},"j_girafarig":{"id":"j_girafarig","name":"Girafarig","members":[203],"evolutions":[],"tags":[]},"j_pineco":{"id":"j_pineco","name":"Pineco","members":[204,205],"evolutions":[{"from":204,"to":205,"method":"level","level":31}],"tags":[]},"j_dunsparce":{"id":"j_dunsparce","name":"Dunsparce","members":[206],"evolutions":[],"tags":[]},"j_gligar":{"id":"j_gligar","name":"Gligar","members":[207],"evolutions":[],"tags":[]},"j_onix":{"id":"j_onix","name":"Onix","members":[95,208],"evolutions":[{"from":95,"to":208,"method":"trade_item","item":"metal_coat"}],"tags":["cross_kanto"]},"j_snubbull":{"id":"j_snubbull","name":"Snubbull","members":[209,210],"evolutions":[{"from":209,"to":210,"method":"level","level":23}],"tags":[]},"j_qwilfish":{"id":"j_qwilfish","name":"Qwilfish","members":[211],"evolutions":[],"tags":[]},"j_scyther":{"id":"j_scyther","name":"Scyther","members":[123,212],"evolutions":[{"from":123,"to":212,"method":"trade_item","item":"metal_coat"}],"tags":["cross_kanto"]},"j_shuckle":{"id":"j_shuckle","name":"Shuckle","members":[213],"evolutions":[],"tags":[]},"j_heracross":{"id":"j_heracross","name":"Heracross","members":[214],"evolutions":[],"tags":[]},"j_sneasel":{"id":"j_sneasel","name":"Sneasel","members":[215],"evolutions":[],"tags":[]},"j_teddiursa":{"id":"j_teddiursa","name":"Teddiursa","members":[216,217],"evolutions":[{"from":216,"to":217,"method":"level","level":30}],"tags":[]},"j_slugma":{"id":"j_slugma","name":"Slugma","members":[218,219],"evolutions":[{"from":218,"to":219,"method":"level","level":38}],"tags":[]},"j_swinub":{"id":"j_swinub","name":"Swinub","members":[220,221],"evolutions":[{"from":220,"to":221,"method":"level","level":33}],"tags":[]},"j_corsola":{"id":"j_corsola","name":"Corsola","members":[222],"evolutions":[],"tags":[]},"j_remoraid":{"id":"j_remoraid","name":"Remoraid","members":[223,224],"evolutions":[{"from":223,"to":224,"method":"level","level":25}],"tags":[]},"j_delibird":{"id":"j_delibird","name":"Delibird","members":[225],"evolutions":[],"tags":[]},"j_mantine":{"id":"j_mantine","name":"Mantine","members":[226],"evolutions":[],"tags":[]},"j_skarmory":{"id":"j_skarmory","name":"Skarmory","members":[227],"evolutions":[],"tags":[]},"j_houndour":{"id":"j_houndour","name":"Houndour","members":[228,229],"evolutions":[{"from":228,"to":229,"method":"level","level":24}],"tags":[]},"j_horsea":{"id":"j_horsea","name":"Horsea","members":[116,117,230],"evolutions":[{"from":116,"to":117,"method":"level","level":32},{"from":117,"to":230,"method":"trade_item","item":"dragon_scale"}],"tags":["cross_kanto"]},"j_phanpy":{"id":"j_phanpy","name":"Phanpy","members":[231,232],"evolutions":[{"from":231,"to":232,"method":"level","level":25}],"tags":[]},"j_porygon":{"id":"j_porygon","name":"Porygon","members":[137,233],"evolutions":[{"from":137,"to":233,"method":"trade_item","item":"up_grade"}],"tags":["cross_kanto"]},"j_stantler":{"id":"j_stantler","name":"Stantler","members":[234],"evolutions":[],"tags":[]},"j_smeargle":{"id":"j_smeargle","name":"Smeargle","members":[235],"evolutions":[],"tags":[]},"j_tyrogue":{"id":"j_tyrogue","name":"Tyrogue","members":[236,106,107,237],"evolutions":[{"from":236,"to":106,"method":"stat_branch","level":20,"condition":"atk_gt_def"},{"from":236,"to":107,"method":"stat_branch","level":20,"condition":"def_gt_atk"},{"from":236,"to":237,"method":"stat_branch","level":20,"condition":"atk_eq_def"}],"tags":["cross_kanto","branch","baby"]},"j_smoochum":{"id":"j_smoochum","name":"Smoochum","members":[238,124],"evolutions":[{"from":238,"to":124,"method":"level","level":30}],"tags":["cross_kanto","baby"]},"j_elekid":{"id":"j_elekid","name":"Elekid","members":[239,125],"evolutions":[{"from":239,"to":125,"method":"level","level":30}],"tags":["cross_kanto","baby"]},"j_magby":{"id":"j_magby","name":"Magby","members":[240,126],"evolutions":[{"from":240,"to":126,"method":"level","level":30}],"tags":["cross_kanto","baby"]},"j_miltank":{"id":"j_miltank","name":"Miltank","members":[241],"evolutions":[],"tags":[]},"j_chansey":{"id":"j_chansey","name":"Chansey","members":[113,242],"evolutions":[{"from":113,"to":242,"method":"friendship"}],"tags":["cross_kanto"]},"j_raikou":{"id":"j_raikou","name":"Raikou","members":[243],"evolutions":[],"tags":["legendary"]},"j_entei":{"id":"j_entei","name":"Entei","members":[244],"evolutions":[],"tags":["legendary"]},"j_suicune":{"id":"j_suicune","name":"Suicune","members":[245],"evolutions":[],"tags":["legendary"]},"j_larvitar":{"id":"j_larvitar","name":"Larvitar","members":[246,247,248],"evolutions":[{"from":246,"to":247,"method":"level","level":30},{"from":247,"to":248,"method":"level","level":55}],"tags":[]},"j_lugia":{"id":"j_lugia","name":"Lugia","members":[249],"evolutions":[],"tags":["legendary"]},"j_hooh":{"id":"j_hooh","name":"Ho-Oh","members":[250],"evolutions":[],"tags":["legendary"]},"j_celebi":{"id":"j_celebi","name":"Celebi","members":[251],"evolutions":[],"tags":["mythical"]}};
+  const JOHTO_REQUIRED_EVOLUTION_ITEMS=["sun_stone","kings_rock","metal_coat","dragon_scale","up_grade"];
+  const JOHTO_ANIM_BASE="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/";
+  function johtoGifUrl(dex,{back=false,shiny=false}={}){
+    return JOHTO_ANIM_BASE+(back?(shiny?"back/shiny/":"back/"):(shiny?"shiny/":""))+Number(dex)+".gif";
+  }
+  function johtoFamilyAudit(){
+    const fams=Object.values(JOHTO_FAMILY_BLUEPRINTS),members=fams.flatMap(f=>f.members||[]);
+    const gen2=[...new Set(members.filter(d=>d>=152&&d<=251))];
+    const kanto=[...new Set(members.filter(d=>d<=151))];
+    return {
+      families:fams.length,totalRegionalSpecies:new Set(members).size,gen2Species:gen2.length,kantoBridgeSpecies:kanto.length,
+      crossFamilies:fams.filter(f=>f.tags?.includes("cross_kanto")).length,
+      branchFamilies:fams.filter(f=>f.tags?.includes("branch")).length,
+      friendshipEdges:fams.flatMap(f=>f.evolutions||[]).filter(e=>String(e.method).startsWith("friendship")).length,
+      tradeItemEdges:fams.flatMap(f=>f.evolutions||[]).filter(e=>e.method==="trade_item").length,
+      requiredItems:[...JOHTO_REQUIRED_EVOLUTION_ITEMS]
+    };
+  }
+  window.PokeSendaGen2.families=JOHTO_FAMILY_BLUEPRINTS;
+  window.PokeSendaGen2.familyAudit=johtoFamilyAudit;
+  window.PokeSendaGen2.gif=johtoGifUrl;
+
 
 
   const RARITIES = {
@@ -11939,6 +11996,25 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
 @media(max-width:900px){.pk-gen2-catalog-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.pk-gen2-catalog-audit{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:620px){.pk-johto-dev-actions-three{grid-template-columns:1fr!important}.pk-gen2-catalog-box{width:100vw!important;height:100svh!important;max-height:100svh!important;border-radius:0!important;border:0!important}.pk-gen2-catalog-head h2{font-size:16px}.pk-gen2-catalog-tools{grid-template-columns:1fr 1fr!important}.pk-gen2-shiny-toggle{grid-column:1/-1;justify-content:center}.pk-gen2-catalog-grid{grid-template-columns:repeat(3,minmax(0,1fr));max-height:calc(100svh - 285px)}.pk-gen2-sprite-wrap{height:72px}.pk-gen2-sprite-wrap img{width:70px;height:70px}}
 
+
+.pk-johto-dev-actions-three{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.pk-gen2-catalog-tools{grid-template-columns:minmax(170px,1fr) 205px 120px auto auto!important}
+.pk-gen2-catalog-tools #pkGen2CatalogFacing{min-width:110px}
+.pk-gen2-validate-btn{min-height:34px!important;padding:6px 9px!important;font-size:7px!important;white-space:nowrap}
+.pk-gen2-gif-audit-status{display:none;margin:5px 0 8px;border:1px solid #45655f;border-radius:8px;padding:7px 9px;background:#0b1d20;color:#a9c8c1;font-size:7px;line-height:1.45}
+.pk-gen2-gif-audit-status.show{display:block}.pk-gen2-gif-audit-status.ok{border-color:#4b8c62;color:#a9e4bb}.pk-gen2-gif-audit-status.bad{border-color:#9b5b58;color:#efb0aa}
+.pk-johto-family-box{width:min(1240px,96vw)!important}
+.pk-family-tools{grid-template-columns:minmax(200px,1fr) 280px!important}
+.pk-johto-family-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:calc(94svh - 225px);overflow:auto;padding:2px 3px 10px 1px;scrollbar-width:thin}
+.pk-family-card{border:1px solid #34514f;border-radius:11px;background:linear-gradient(155deg,#0e2023,#111b21);padding:9px;min-width:0}
+.pk-family-card.cross{border-color:#826f3c}.pk-family-card.branch{box-shadow:inset 0 0 0 1px rgba(183,133,217,.15)}
+.pk-family-head{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-bottom:7px}.pk-family-head b{font-size:10px;color:#edf5ef}.pk-family-tags{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end}.pk-family-tags span{font-size:5px;border:1px solid #506b65;border-radius:999px;padding:2px 4px;color:#9ab6b0}
+.pk-family-members{display:flex;align-items:flex-end;gap:3px;overflow-x:auto;padding:3px 0 7px}.pk-family-member{min-width:52px;text-align:center}.pk-family-member img{width:48px;height:48px;object-fit:contain;image-rendering:pixelated}.pk-family-member b{display:block;font-size:5.7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pk-family-member small{font-size:4.8px;color:#728f8a}
+.pk-family-evo-list{display:grid;gap:4px}.pk-family-evo{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:5px;align-items:center;border-top:1px solid #263e3d;padding-top:4px;font-size:6px}.pk-family-evo span:nth-child(2){color:#e2c66e;text-align:center}.pk-family-evo small{font-size:5.5px;color:#8fa9a4;display:block}
+.pk-family-single{font-size:6px;color:#718d88;text-align:center;padding:5px 0 2px}
+@media(max-width:900px){.pk-johto-family-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pk-gen2-catalog-tools{grid-template-columns:1fr 1fr!important}.pk-gen2-shiny-toggle,.pk-gen2-validate-btn{grid-column:auto!important}}
+@media(max-width:620px){.pk-johto-dev-actions-three{grid-template-columns:1fr!important}.pk-johto-family-grid{grid-template-columns:1fr;max-height:calc(100svh - 250px)}.pk-family-tools{grid-template-columns:1fr!important}.pk-gen2-catalog-tools{grid-template-columns:1fr 1fr!important}.pk-gen2-shiny-toggle,.pk-gen2-validate-btn{grid-column:1/-1!important;justify-content:center}}
+
 </style>
 
 <style id="pkMobileV3640131Audit">
@@ -12103,7 +12179,7 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.42.0.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.42.1.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12242,7 +12318,7 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.42.0',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.42.1',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -13927,7 +14003,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.42.0';
+  const VERSION='V36.42.1';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -14278,18 +14354,97 @@ module.exports = QRCode;
   }
   function renderGen2Catalog(){
     const grid=$('pkGen2CatalogGrid'),count=$('pkGen2CatalogCount'),auditHost=$('pkGen2CatalogAudit');if(!grid)return;
-    const audit=window.PokeSendaGen2?.audit?.(),shiny=!!$('pkGen2CatalogShiny')?.checked,list=gen2CatalogFiltered();
+    const audit=window.PokeSendaGen2?.audit?.(),shiny=!!$('pkGen2CatalogShiny')?.checked,back=$('pkGen2CatalogFacing')?.value==='back',list=gen2CatalogFiltered();
     if(auditHost&&audit)auditHost.innerHTML=[
       ['100/100',audit.count===100&&audit.uniqueDex===100?'Pokémon cargados':'REVISAR CATÁLOGO'],
       [`#${audit.minDex}–${audit.maxDex}`,audit.missing.length?`Faltan: ${audit.missing.join(', ')}`:'Sin huecos'],
       [audit.bridges,'Conexiones con Kanto'],[audit.steel,'Especies con Acero'],[audit.dark,'Especies con Siniestro'],
       [`${audit.legendary}+${audit.mythical}`,`Legendarios + mítico · ${audit.babies} bebé`]
     ].map(x=>`<div class="pk-gen2-audit-chip"><b>${x[0]}</b><small>${x[1]}</small></div>`).join('');
-    if(count)count.textContent=`Mostrando ${list.length} de 100 · ${shiny?'✨ sprites Shiny':'sprites normales'} · datos privados`;
-    grid.innerHTML=list.map(p=>{const special=gen2SpecialLabel(p),bst=(p.baseStats||[]).reduce((a,b)=>a+b,0),src=window.PokeSendaGen2.sprite(p.dex,shiny);return `<article class="pk-gen2-card ${p.bridge?'bridge':''} ${p.legendary?'legendary':''} ${p.mythical?'mythical':''}"><div class="pk-gen2-card-badges"><span class="pk-gen2-dex">#${p.dex}</span>${special?`<span class="pk-gen2-special">${special}</span>`:''}</div><div class="pk-gen2-sprite-wrap"><img loading="lazy" decoding="async" src="${src}" alt="${p.name}${shiny?' Shiny':''}" onerror="this.style.opacity='.18';this.title='Sprite no cargado'"></div><div class="pk-gen2-card-name">${p.name}</div><div class="pk-gen2-types">${p.types.map(t=>`<span class="pk-gen2-type">${gen2TypeLabel(t)}</span>`).join('')}</div><div class="pk-gen2-stats">BST ${bst} · PS ${p.baseStats[0]} · Vel ${p.baseStats[5]}</div><div class="pk-gen2-bridge">${p.bridge||''}</div></article>`;}).join('');
+    if(count)count.textContent=`Mostrando ${list.length} de 100 · ${back?'↩ espalda':'👁 frente'} · ${shiny?'✨ Shiny':'normal'} · GIF animado`;
+    grid.innerHTML=list.map(p=>{const special=gen2SpecialLabel(p),bst=(p.baseStats||[]).reduce((a,b)=>a+b,0),src=window.PokeSendaGen2.gif(p.dex,{back,shiny});return `<article class="pk-gen2-card ${p.bridge?'bridge':''} ${p.legendary?'legendary':''} ${p.mythical?'mythical':''}"><div class="pk-gen2-card-badges"><span class="pk-gen2-dex">#${p.dex}</span>${special?`<span class="pk-gen2-special">${special}</span>`:''}</div><div class="pk-gen2-sprite-wrap"><img loading="lazy" decoding="async" src="${src}" alt="${p.name}${shiny?' Shiny':''}" onerror="this.style.opacity='.18';this.title='Sprite no cargado'"></div><div class="pk-gen2-card-name">${p.name}</div><div class="pk-gen2-types">${p.types.map(t=>`<span class="pk-gen2-type">${gen2TypeLabel(t)}</span>`).join('')}</div><div class="pk-gen2-stats">BST ${bst} · PS ${p.baseStats[0]} · Vel ${p.baseStats[5]}</div><div class="pk-gen2-bridge">${p.bridge||''}</div></article>`;}).join('');
   }
   function openGen2Catalog(){if(core()?.active?.()!=='johto'){toastSafe('El catálogo Gen II solo está disponible dentro de Johto DEV.');return;}$('pkJohtoDevShell')?.classList.add('hidden');$('pkGen2CatalogOverlay')?.classList.remove('hidden');renderGen2Catalog();}
   function closeGen2Catalog(){$('pkGen2CatalogOverlay')?.classList.add('hidden');if(core()?.active?.()==='johto')showJohtoShell();}
+
+
+  const gen2NameByDex=dex=>{
+    const j=window.PokeSendaGen2?.byDex?.[dex];if(j)return j.name;
+    try{if(typeof dexName==='function')return dexName(dex);}catch(_){}
+    try{for(const f of Object.values(FAMILIES||{})){const s=f.stages?.find(x=>Number(x.dex)===Number(dex));if(s)return s.name;}}catch(_){}
+    return `#${dex}`;
+  };
+  function johtoMethodLabel(e){
+    if(!e)return '';
+    if(e.method==='level')return `Nv.${e.level}`;
+    if(e.method==='stone')return ({sun_stone:'Piedra Solar',leaf_stone:'Piedra Hoja',water_stone:'Piedra Agua',thunder_stone:'Piedra Trueno',fire_stone:'Piedra Fuego',moon_stone:'Piedra Lunar'}[e.item]||e.item);
+    if(e.method==='trade_item')return `Intercambio + ${{kings_rock:'Roca del Rey',metal_coat:'Revestimiento Metálico',dragon_scale:'Escama Dragón',up_grade:'Mejora'}[e.item]||e.item}`;
+    if(e.method==='friendship')return 'Amistad';
+    if(e.method==='friendship_day')return 'Amistad · día';
+    if(e.method==='friendship_night')return 'Amistad · noche';
+    if(e.method==='stat_branch')return `Nv.${e.level} · ${{atk_gt_def:'ATQ > DEF',def_gt_atk:'DEF > ATQ',atk_eq_def:'ATQ = DEF'}[e.condition]||e.condition}`;
+    return e.method;
+  }
+  function johtoFamilyFiltered(){
+    const q=String($('pkJohtoFamilySearch')?.value||'').trim().toLowerCase(),filter=$('pkJohtoFamilyFilter')?.value||'all';
+    return Object.values(window.PokeSendaGen2?.families||{}).filter(f=>{
+      const names=(f.members||[]).map(gen2NameByDex).join(' ').toLowerCase();
+      if(q&&!f.name.toLowerCase().includes(q)&&!names.includes(q))return false;
+      if(filter==='cross')return f.tags?.includes('cross_kanto');
+      if(filter==='branch')return f.tags?.includes('branch');
+      if(filter==='friendship')return (f.evolutions||[]).some(e=>String(e.method).startsWith('friendship'));
+      if(filter==='trade')return (f.evolutions||[]).some(e=>e.method==='trade_item');
+      if(filter==='starter')return f.tags?.includes('starter');
+      if(filter==='legendary')return f.tags?.includes('legendary')||f.tags?.includes('mythical');
+      return true;
+    });
+  }
+  function renderJohtoFamilies(){
+    const host=$('pkJohtoFamilyGrid'),auditHost=$('pkJohtoFamilyAudit'),count=$('pkJohtoFamilyCount');if(!host)return;
+    const a=window.PokeSendaGen2?.familyAudit?.(),list=johtoFamilyFiltered();
+    if(auditHost&&a)auditHost.innerHTML=[
+      [a.families,'Familias regionales'],[a.totalRegionalSpecies,'Especies en familias'],[a.gen2Species,'Gen II completas'],
+      [a.kantoBridgeSpecies,'Especies Kanto enlazadas'],[a.branchFamilies,'Familias con ramas'],[a.tradeItemEdges,'Evoluciones intercambio + objeto']
+    ].map(x=>`<div class="pk-gen2-audit-chip"><b>${x[0]}</b><small>${x[1]}</small></div>`).join('');
+    if(count)count.textContent=`Mostrando ${list.length} de ${a?.families||68} familias · ${a?.friendshipEdges||0} evoluciones por amistad · nuevos objetos requeridos: ${(a?.requiredItems||[]).length}`;
+    host.innerHTML=list.map(f=>{
+      const tags=[];
+      if(f.tags?.includes('cross_kanto'))tags.push('KANTO ↔ JOHTO');
+      if(f.tags?.includes('branch'))tags.push('RAMA');
+      if(f.tags?.includes('starter'))tags.push('INICIAL');
+      if(f.tags?.includes('legendary'))tags.push('LEGENDARIO');
+      if(f.tags?.includes('mythical'))tags.push('MÍTICO');
+      const members=(f.members||[]).map(d=>`<div class="pk-family-member"><img loading="lazy" src="${window.PokeSendaGen2.gif(d,{back:false,shiny:false})}" alt=""><b>${gen2NameByDex(d)}</b><small>#${d}${d<=151?' · Kanto':''}</small></div>`).join('');
+      const evos=(f.evolutions||[]).length?(f.evolutions||[]).map(e=>`<div class="pk-family-evo"><span>${gen2NameByDex(e.from)}<small>#${e.from}</small></span><span>→<small>${johtoMethodLabel(e)}</small></span><span>${gen2NameByDex(e.to)}<small>#${e.to}</small></span></div>`).join(''):'<div class="pk-family-single">Sin evolución dentro de Gen II.</div>';
+      return `<article class="pk-family-card ${f.tags?.includes('cross_kanto')?'cross':''} ${f.tags?.includes('branch')?'branch':''}"><div class="pk-family-head"><b>${f.name}</b><div class="pk-family-tags">${tags.map(t=>`<span>${t}</span>`).join('')}</div></div><div class="pk-family-members">${members}</div><div class="pk-family-evo-list">${evos}</div></article>`;
+    }).join('');
+  }
+  function openJohtoFamilies(){if(core()?.active?.()!=='johto')return;$('pkJohtoDevShell')?.classList.add('hidden');$('pkJohtoFamiliesOverlay')?.classList.remove('hidden');renderJohtoFamilies();}
+  function closeJohtoFamilies(){$('pkJohtoFamiliesOverlay')?.classList.add('hidden');if(core()?.active?.()==='johto')showJohtoShell();}
+
+  let gen2GifAuditRunning=false;
+  async function validateGen2Gifs(){
+    if(gen2GifAuditRunning)return;
+    gen2GifAuditRunning=true;
+    const btn=$('pkGen2ValidateGifsBtn'),status=$('pkGen2GifAuditStatus');
+    if(btn)btn.disabled=true;
+    const variants=[
+      {back:false,shiny:false,label:'frente normal'},
+      {back:true,shiny:false,label:'espalda normal'},
+      {back:false,shiny:true,label:'frente Shiny'},
+      {back:true,shiny:true,label:'espalda Shiny'}
+    ];
+    const jobs=[];for(let dex=152;dex<=251;dex++)for(const v of variants)jobs.push({dex,...v,url:window.PokeSendaGen2.gif(dex,v)});
+    let done=0,ok=0;const failed=[];
+    const loadOne=job=>new Promise(resolve=>{
+      const im=new Image(),finish=good=>{done++;if(good)ok++;else failed.push(job);if(status){status.className='pk-gen2-gif-audit-status show';status.innerHTML=`🧪 Validando assets Johto… <b>${done}/400</b> · correctos ${ok} · fallos ${failed.length}`;}resolve();};
+      const timer=setTimeout(()=>finish(false),12000);im.onload=()=>{clearTimeout(timer);finish(true)};im.onerror=()=>{clearTimeout(timer);finish(false)};im.src=job.url;
+    });
+    let next=0;const workers=Array.from({length:12},async()=>{while(next<jobs.length){const job=jobs[next++];await loadOne(job);}});
+    await Promise.all(workers);
+    if(status){status.className=`pk-gen2-gif-audit-status show ${failed.length?'bad':'ok'}`;status.innerHTML=failed.length?`⚠ Auditoría terminada: <b>${ok}/400 GIF correctos</b>. Fallaron ${failed.length}: ${failed.slice(0,20).map(x=>`#${x.dex} ${x.label}`).join(' · ')}${failed.length>20?' …':''}`:`✅ Auditoría terminada: <b>400/400 GIF correctos</b> · frente, espalda, normal y Shiny de #152–251.`;}
+    if(btn)btn.disabled=false;gen2GifAuditRunning=false;
+  }
 
   function devStats(){
     const s=core()?.summary?.();const host=$('pkJohtoDevStats');if(!host||!s)return;
@@ -14370,11 +14525,18 @@ module.exports = QRCode;
     $('regionKantoCard')?.addEventListener('click',()=>{if(core()?.active?.()==='johto')switchDev('kanto');});
     $('pkJohtoDevBackKanto')?.addEventListener('click',()=>switchDev('kanto'));
     $('pkJohtoGen2CatalogBtn')?.addEventListener('click',openGen2Catalog);
+    $('pkJohtoFamiliesBtn')?.addEventListener('click',openJohtoFamilies);
+    $('pkJohtoFamiliesClose')?.addEventListener('click',closeJohtoFamilies);
+    $('pkJohtoFamiliesOverlay')?.addEventListener('click',e=>{if(e.target===$('pkJohtoFamiliesOverlay'))closeJohtoFamilies();});
+    $('pkJohtoFamilySearch')?.addEventListener('input',renderJohtoFamilies);
+    $('pkJohtoFamilyFilter')?.addEventListener('change',renderJohtoFamilies);
     $('pkGen2CatalogClose')?.addEventListener('click',closeGen2Catalog);
     $('pkGen2CatalogOverlay')?.addEventListener('click',e=>{if(e.target===$('pkGen2CatalogOverlay'))closeGen2Catalog();});
     $('pkGen2CatalogSearch')?.addEventListener('input',renderGen2Catalog);
     $('pkGen2CatalogFilter')?.addEventListener('change',renderGen2Catalog);
+    $('pkGen2CatalogFacing')?.addEventListener('change',renderGen2Catalog);
     $('pkGen2CatalogShiny')?.addEventListener('change',renderGen2Catalog);
+    $('pkGen2ValidateGifsBtn')?.addEventListener('click',validateGen2Gifs);
     $('pkJohtoDevRegionInfo')?.addEventListener('click',()=>{devStats();openRegions({fromDevShell:true});});
     $('regionSelectOverlay')?.addEventListener('click',e=>{if(e.target===$('regionSelectOverlay'))closeRegions();});
     $('pkJohtoDevShell')?.addEventListener('click',e=>{if(e.target===$('pkJohtoDevShell'))e.stopPropagation();});
@@ -14385,6 +14547,7 @@ module.exports = QRCode;
         e.preventDefault();
         if(core()?.active?.()==='johto')switchDev('kanto');else switchDev('johto');
       }
+      if(e.key==='Escape'&&!$('pkJohtoFamiliesOverlay')?.classList.contains('hidden')){e.preventDefault();closeJohtoFamilies();return;}
       if(e.key==='Escape'&&!$('pkGen2CatalogOverlay')?.classList.contains('hidden')){e.preventDefault();closeGen2Catalog();return;}
       if(e.key==='Escape'&&!$('regionSelectOverlay')?.classList.contains('hidden'))closeRegions();
     });

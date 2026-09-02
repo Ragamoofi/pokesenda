@@ -9420,16 +9420,26 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     [{x:9,y:2,s:1.40},{x:49,y:23,s:1.18},{x:84,y:11,s:1.28}]
   ];
   function pkLobbyShuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function pkLobbyUpdateDepth(tl){
+    if(!tl)return;
+    const mons=[...tl.querySelectorAll(".mon-wrap[data-lobby-slot]")];
+    if(!mons.length)return;
+    requestAnimationFrame(()=>{
+      mons.sort((a,b)=>a.getBoundingClientRect().bottom-b.getBoundingClientRect().bottom)
+          .forEach((w,i)=>{w.style.zIndex=String(10+i);});
+    });
+  }
   function pkLobbyApplyRandomLayout(tl){
     const f=$("field"),mons=[...tl.querySelectorAll(".mon-wrap")];
     let layoutIndex=Number(f?.dataset?.pkLobbyLayout);
     if(!Number.isInteger(layoutIndex)||layoutIndex<0||layoutIndex>=PK_LOBBY_LAYOUTS.length){layoutIndex=Math.floor(Math.random()*PK_LOBBY_LAYOUTS.length);if(f)f.dataset.pkLobbyLayout=String(layoutIndex);}
     const layout=PK_LOBBY_LAYOUTS[layoutIndex];
     mons.forEach((w,i)=>{const a=layout[i%layout.length];w.dataset.lobbySlot=String(i+1);w.style.setProperty("--lobby-left",a.x+"%");w.style.setProperty("--lobby-bottom",a.y+"%");w.style.setProperty("--lobby-scale",String(a.s));if(!w.style.getPropertyValue("--lobby-nudge-x"))w.style.setProperty("--lobby-nudge-x","0px");if(!w.style.getPropertyValue("--lobby-nudge-y"))w.style.setProperty("--lobby-nudge-y","0px");if(!w.style.getPropertyValue("--lobby-tilt"))w.style.setProperty("--lobby-tilt","0deg");});
+    pkLobbyUpdateDepth(tl);
   }
   function pkLobbyStartMotion(tl,f){
     clearTimeout(pkLobbyMotionTimer);
-    const step=()=>{if(run||!f.classList.contains("pk-lobby-mode"))return;const mons=[...tl.querySelectorAll(".mon-wrap[data-lobby-slot]")];mons.forEach((w,i)=>{const ampX=i===1?8:12,ampY=i===1?5:8,dx=Math.round(-ampX+Math.random()*ampX*2),dy=Math.round(-ampY+Math.random()*ampY*2),tilt=(-1.2+Math.random()*2.4).toFixed(2);w.style.setProperty("--lobby-nudge-x",dx+"px");w.style.setProperty("--lobby-nudge-y",dy+"px");w.style.setProperty("--lobby-tilt",tilt+"deg");});pkLobbyMotionTimer=setTimeout(step,1150+Math.random()*550);};
+    const step=()=>{if(run||!f.classList.contains("pk-lobby-mode"))return;const mons=[...tl.querySelectorAll(".mon-wrap[data-lobby-slot]")];mons.forEach((w,i)=>{const ampX=i===1?8:12,ampY=i===1?5:8,dx=Math.round(-ampX+Math.random()*ampX*2),dy=Math.round(-ampY+Math.random()*ampY*2),tilt=(-1.2+Math.random()*2.4).toFixed(2);w.style.setProperty("--lobby-nudge-x",dx+"px");w.style.setProperty("--lobby-nudge-y",dy+"px");w.style.setProperty("--lobby-tilt",tilt+"deg");});pkLobbyUpdateDepth(tl);pkLobbyMotionTimer=setTimeout(step,1150+Math.random()*550);};
     pkLobbyMotionTimer=setTimeout(step,550+Math.random()*320);
   }
   function pkLobbyPhrase(id,w){
@@ -9476,7 +9486,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   }
   function pkLobbyCleanup(tl,f){
     clearTimeout(pkLobbyMotionTimer);clearTimeout(pkLobbySpeechTimer);clearTimeout(pkLobbyEasterTimer);$("pkLobbySpeech")?.remove();$("pkLobbyEasterEgg")?.remove();$("pkLobbyHouseMenu")?.remove();$("pkLobbyHouseHotspot")?.remove();$("pkLobbyProgressDecor")?.remove();
-    tl?.querySelectorAll(".mon-wrap").forEach(w=>{delete w.dataset.lobbySlot;delete w.dataset.lobbyTalkUntil;for(const n of ["--lobby-left","--lobby-bottom","--lobby-scale","--lobby-nudge-x","--lobby-nudge-y","--lobby-tilt"])w.style.removeProperty(n);});
+    tl?.querySelectorAll(".mon-wrap").forEach(w=>{delete w.dataset.lobbySlot;delete w.dataset.lobbyTalkUntil;w.style.removeProperty("z-index");for(const n of ["--lobby-left","--lobby-bottom","--lobby-scale","--lobby-nudge-x","--lobby-nudge-y","--lobby-tilt"])w.style.removeProperty(n);});
     f?.removeAttribute("data-pk-lobby-layout");
   }
   function pkPresentTeam(){
@@ -9530,6 +9540,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     if(!bn){bn=document.createElement("div");bn.id="pkLobbyBanner";bn.className="pk-lobby-banner";f.appendChild(bn);} 
     bn.textContent="Campamento base · equipo listo para la próxima expedición";
     bn.classList.remove("hidden");
+    pkLobbyUpdateDepth(tl);
     pkPreMode=true;
   }
   pkApplyBattleSizes=(function(prev){

@@ -2600,6 +2600,55 @@ body{letter-spacing:.08px}
   #pokemonDetailContent .evo-status-req{font-size:9px!important;max-width:145px;overflow:hidden;text-overflow:ellipsis}
 }
 </style>
+
+<style id="pkV364085RegionsStyle">
+/* V36.40.85 · Selector de regiones preparado para futuras expansiones */
+.region-switch-btn{
+  min-height:32px!important;display:inline-flex!important;align-items:center!important;gap:7px!important;
+  padding:4px 9px!important;border:1px solid #5a78aa!important;border-radius:10px!important;
+  background:linear-gradient(180deg,#183b70,#102954)!important;color:#f5f9ff!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.08),0 3px 9px rgba(0,0,0,.22)!important;
+  cursor:pointer!important;white-space:nowrap!important;line-height:1!important;
+}
+.region-switch-btn:hover{filter:brightness(1.12);border-color:#82a5db!important}
+.region-switch-globe{font-size:16px;line-height:1;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+.region-switch-copy{display:flex;flex-direction:column;align-items:flex-start;gap:2px;line-height:1}
+.region-switch-copy b{font-size:9px!important;letter-spacing:.55px;color:#fff!important}
+.region-switch-copy small{font-size:6.5px!important;font-weight:700;color:#ffd86e;letter-spacing:.35px;text-transform:uppercase}
+.region-switch-arrow{font-size:9px;color:#9fb7d8;margin-left:1px}
+
+.region-select-box{width:min(860px,94vw)!important;max-height:min(88vh,780px);overflow:auto;padding:0!important;border-color:#526f99!important;background:#0d1828!important}
+.region-select-head{display:flex;align-items:center;gap:12px;padding:18px 20px 15px;border-bottom:1px solid #344d70;background:linear-gradient(135deg,#142d51,#111d31 58%,#202044)}
+.region-select-head-icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:#0a1830;border:1px solid #5478a8;font-size:25px;box-shadow:0 6px 18px rgba(0,0,0,.32)}
+.region-select-head-copy{flex:1;min-width:0}.region-select-head-copy h2{margin:0 0 4px;font-size:19px}.region-select-head-copy p{margin:0;color:#9eb2ca;font-size:9px;line-height:1.5}
+.region-select-body{padding:17px 20px 20px}
+.region-current-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;color:#a9bad0;font-size:9px}.region-current-line b{color:#fff}.region-current-dot{width:7px;height:7px;border-radius:50%;background:#68d59a;box-shadow:0 0 10px rgba(104,213,154,.8)}
+.region-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.region-card{position:relative;min-height:275px;border-radius:17px;border:1px solid #405878;overflow:hidden;text-align:left;padding:0;background:#101c2b;color:#eaf2fc;box-shadow:0 12px 28px rgba(0,0,0,.28);transition:transform .14s ease,border-color .14s ease,filter .14s ease}
+.region-card.current{border-color:#4b9b75;background:linear-gradient(155deg,#10281f,#112438 62%,#122032)}
+.region-card.coming{cursor:pointer;border-color:#66578f;background:linear-gradient(155deg,#1e1730,#131d32 58%,#151b28)}
+.region-card.coming:hover{transform:translateY(-2px);border-color:#9278c3;filter:brightness(1.05)}
+.region-card-top{min-height:125px;padding:20px;position:relative;display:flex;align-items:flex-end;background:radial-gradient(circle at 75% 20%,rgba(126,190,151,.22),transparent 38%)}
+.region-card.coming .region-card-top{background:radial-gradient(circle at 75% 20%,rgba(171,132,230,.24),transparent 38%)}
+.region-number{position:absolute;right:18px;top:5px;font-size:88px;line-height:1;font-weight:1000;color:rgba(255,255,255,.055);font-family:Georgia,serif;pointer-events:none}
+.region-card-name span{display:block;font-size:8px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#87d5aa;margin-bottom:5px}.region-card.coming .region-card-name span{color:#c4a4ef}
+.region-card-name b{display:block;font-size:27px;letter-spacing:1px;color:#fff}
+.region-state-badge{position:absolute;left:18px;top:16px;padding:5px 7px;border-radius:999px;font-size:7px;font-weight:1000;letter-spacing:.8px;text-transform:uppercase;background:#1d5a3c;border:1px solid #56b880;color:#caffdc}
+.region-card.coming .region-state-badge{background:#3a2d59;border-color:#7f68a9;color:#e0cff8}
+.region-lock{position:absolute;right:18px;top:17px;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:rgba(8,12,22,.62);border:1px solid #705d95;font-size:16px}
+.region-card-info{padding:15px 18px 18px;border-top:1px solid rgba(109,133,164,.24)}
+.region-card-info p{margin:0 0 12px;color:#aebed0;font-size:9px;line-height:1.55;min-height:43px}
+.region-feature-row{display:flex;gap:6px;flex-wrap:wrap}.region-feature-row span{padding:5px 7px;border-radius:999px;background:#0b1725;border:1px solid #334b67;color:#c4d2e1;font-size:7.5px;font-weight:800}
+.region-card.coming .region-feature-row span{border-color:#493c64;color:#c9bbde}
+.region-coming-message{margin-top:13px;padding:10px 12px;border:1px solid #4d4168;border-radius:11px;background:#17172a;color:#b8aacd;font-size:9px;line-height:1.5;text-align:center;transition:all .15s ease}
+.region-coming-message strong{color:#eadcff}.region-coming-message.flash{border-color:#9a7acb;box-shadow:0 0 0 2px rgba(154,122,203,.14),0 0 20px rgba(139,103,197,.16);transform:scale(1.01)}
+.region-footer-note{margin-top:13px;text-align:center;color:#758aa2;font-size:8px;line-height:1.5}
+@media(max-width:760px){
+  .region-switch-copy small{font-size:6px!important}.region-switch-btn{padding:4px 7px!important}.region-switch-globe{font-size:14px}
+  .region-select-head{padding:14px}.region-select-body{padding:13px}.region-card-grid{grid-template-columns:1fr}.region-card{min-height:235px}.region-card-top{min-height:104px;padding:17px}.region-card-name b{font-size:23px}.region-number{font-size:74px}.region-card-info p{min-height:0}
+}
+</style>
+
 </head>
 <body>
 <div id="pkBootLoader" class="pk-boot-loader" role="status" aria-live="polite">
@@ -3164,6 +3213,50 @@ body{letter-spacing:.08px}
   </div>
 </div>
 
+
+<div id="regionSelectOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="regionSelectTitle">
+  <div class="modal-box region-select-box" onclick="event.stopPropagation()">
+    <div class="region-select-head">
+      <div class="region-select-head-icon">🌐</div>
+      <div class="region-select-head-copy">
+        <h2 id="regionSelectTitle">Regiones de PokéSenda</h2>
+        <p>Cambia de región desde un mismo lugar. Kanto es la aventura actual; nuevas regiones aparecerán aquí cuando estén listas.</p>
+      </div>
+      <button id="regionSelectCloseBtn" class="btn" type="button">Cerrar</button>
+    </div>
+    <div class="region-select-body">
+      <div class="region-current-line"><span class="region-current-dot"></span> Región activa: <b>Kanto</b> <span>·</span> Tu aventura actual continúa aquí.</div>
+      <div class="region-card-grid">
+        <div class="region-card current" aria-label="Kanto, región actual">
+          <div class="region-card-top">
+            <span class="region-state-badge">Región actual</span>
+            <span class="region-number">I</span>
+            <div class="region-card-name"><span>Disponible</span><b>KANTO</b></div>
+          </div>
+          <div class="region-card-info">
+            <p>La aventura original de PokéSenda. Continúa tus rutas, completa la Pokédex y conquista los Gimnasios de Kanto.</p>
+            <div class="region-feature-row"><span>151 Pokémon</span><span>3 rutas + Infinita</span><span>8 Gimnasios</span></div>
+          </div>
+        </div>
+        <button id="regionJohtoCard" class="region-card coming" type="button" aria-disabled="true" aria-label="Johto, próximamente">
+          <div class="region-card-top">
+            <span class="region-state-badge">Próximamente</span>
+            <span class="region-lock">🔒</span>
+            <span class="region-number">II</span>
+            <div class="region-card-name"><span>Próxima región</span><b>JOHTO</b></div>
+          </div>
+          <div class="region-card-info">
+            <p>Una nueva región se prepara para el futuro de PokéSenda. Cuando llegue, podrás seleccionarla directamente desde esta pantalla.</p>
+            <div class="region-feature-row"><span>Nuevas rutas</span><span>Nuevos Pokémon</span><span>Nuevos Gimnasios</span><span>Nueva aventura</span></div>
+          </div>
+        </button>
+      </div>
+      <div id="regionComingMessage" class="region-coming-message"><strong>Johto todavía está bloqueado.</strong> Esta tarjeta queda visible desde ahora para mostrar que PokéSenda seguirá creciendo.</div>
+      <div class="region-footer-note">El selector ya queda preparado para sumar futuras regiones sin llenar el HUD de botones separados.</div>
+    </div>
+  </div>
+</div>
+
 <div id="checkpointSelectOverlay" class="overlay hidden">
   <div class="center-card">
     <h2>Elegir checkpoint</h2>
@@ -3194,6 +3287,11 @@ body{letter-spacing:.08px}
       <div class="title title-with-menu">PokéSenda
         <button id="gameMenuBtn" class="hud-gear-btn" type="button" title="Menú principal" aria-label="Abrir menú principal">⚙</button>
       </div>
+      <button id="regionSwitchBtn" class="btn region-switch-btn" type="button" title="Cambiar región" aria-label="Abrir selector de regiones" aria-expanded="false">
+        <span class="region-switch-globe">🌐</span>
+        <span class="region-switch-copy"><b>KANTO</b><small>Johto · Próximamente</small></span>
+        <span class="region-switch-arrow">▾</span>
+      </button>
       <select id="routeSelect" class="route-select" aria-label="Ruta"></select>
       <div class="pill">Checkpoint: <b id="checkpointTop">0 m</b></div><button id="checkpointSelectBtn" class="btn checkpoint-btn hidden" title="Elegir un Centro Pokémon para comenzar esta ruta"><span class="pc-center-icon"><span class="pc-center-fallback">🏥</span><img class="pc-center-official" src="https://archives.bulbagarden.net/media/upload/8/8a/Pok%C3%A9mon_Center_FRLG.png" alt="Centro Pokémon FRLG" referrerpolicy="no-referrer" decoding="async" onload="this.style.display='block';if(this.previousElementSibling)this.previousElementSibling.style.display='none'" onerror="this.style.display='none';if(this.previousElementSibling)this.previousElementSibling.style.display='inline-block'"></span> Elegir checkpoint</button>
       <div class="pill">Poké Balls: <b id="chestsTop">0</b></div>
@@ -13053,5 +13151,38 @@ module.exports = QRCode;
 })();
 
 </script>
+
+<script id="pkV364085RegionsScript">
+(()=>{
+  'use strict';
+  const $=id=>document.getElementById(id);
+  function openRegions(){
+    $('regionSelectOverlay')?.classList.remove('hidden');
+    $('regionSwitchBtn')?.setAttribute('aria-expanded','true');
+  }
+  function closeRegions(){
+    $('regionSelectOverlay')?.classList.add('hidden');
+    $('regionSwitchBtn')?.setAttribute('aria-expanded','false');
+  }
+  function johtoComingSoon(){
+    const msg=$('regionComingMessage');
+    if(!msg)return;
+    msg.innerHTML='<strong>🔒 Johto · Próximamente.</strong> Todavía no se puede viajar a esta región. Cuando esté disponible, este mismo selector permitirá entrar sin buscar un menú nuevo.';
+    msg.classList.remove('flash');
+    void msg.offsetWidth;
+    msg.classList.add('flash');
+    setTimeout(()=>msg.classList.remove('flash'),650);
+  }
+  function boot(){
+    $('regionSwitchBtn')?.addEventListener('click',openRegions);
+    $('regionSelectCloseBtn')?.addEventListener('click',closeRegions);
+    $('regionJohtoCard')?.addEventListener('click',johtoComingSoon);
+    $('regionSelectOverlay')?.addEventListener('click',e=>{if(e.target===$('regionSelectOverlay'))closeRegions();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('regionSelectOverlay')?.classList.contains('hidden'))closeRegions();});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();
+</script>
+
 </body>
 </html>

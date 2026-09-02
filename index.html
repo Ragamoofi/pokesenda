@@ -3413,7 +3413,7 @@ body{letter-spacing:.08px}
 
 <div id="pkJohtoDevShell" class="overlay hidden pk-johto-dev-shell" role="dialog" aria-modal="true" aria-labelledby="pkJohtoDevTitle">
   <div class="modal-box pk-johto-dev-box" onclick="event.stopPropagation()">
-    <div class="pk-johto-dev-kicker">🧪 DESARROLLO PRIVADO · V36.44.0</div>
+    <div class="pk-johto-dev-kicker">🧪 DESARROLLO PRIVADO · V36.44.1</div>
     <h2 id="pkJohtoDevTitle">Región de Johto</h2>
     <p>La arquitectura multirregión ya está funcionando. Esta campaña tiene un estado regional separado de Kanto, pero todavía no contiene Pokémon Gen II, rutas ni Gimnasios jugables.</p>
     <div class="pk-johto-dev-warning"><b>No es el lanzamiento de Johto.</b> Este espacio existe para que podamos construir la expansión sin exponer contenido incompleto a los jugadores.</div>
@@ -3546,6 +3546,7 @@ body{letter-spacing:.08px}
       <button class="btn" type="button" data-johto-content-tab="tms">💿 50 MT</button>
       <button class="btn" type="button" data-johto-content-tab="items">🎒 Objetos</button>
     </div>
+    <div id="pkJohtoContentStatus" class="pk-johto-content-status"></div>
     <div id="pkJohtoContentBody" class="pk-johto-content-body"></div>
   </div>
 </div>
@@ -12332,6 +12333,15 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
 @media(max-width:950px){.pk-move-family-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pk-tm-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.pk-item-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.pk-johto-dev-actions-three{grid-template-columns:1fr!important}.pk-johto-evo-controls{grid-template-columns:repeat(2,minmax(0,1fr))!important}.pk-move-family-grid,.pk-item-grid{grid-template-columns:1fr}.pk-tm-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pk-johto-content-body{max-height:calc(100svh - 235px)}}
 
+
+.pk-johto-content-status{display:none;margin:0 0 7px;border:1px solid #3c5b58;border-radius:8px;padding:6px 8px;background:#0c1d20;color:#9dbab4;font-size:6.5px;line-height:1.4}
+.pk-johto-content-status.show{display:block}
+.pk-johto-content-status.ok{border-color:#3f7953;color:#a8dfb7;background:#10231a}
+.pk-johto-content-status.bad{border-color:#8a514f;color:#e5aaa5;background:#261515}
+.pk-johto-content-error{display:grid;justify-items:center;gap:7px;border:1px solid #8a514f;border-radius:12px;background:#241516;padding:18px;text-align:center;color:#e8bbb6}
+.pk-johto-content-error b{font-size:9px}.pk-johto-content-error small{font-size:6.5px;line-height:1.5;color:#c99793}
+.pk-johto-content-body:empty::after{content:"Cargando contenido…";display:block;border:1px dashed #3c5754;border-radius:10px;padding:18px;text-align:center;color:#78958f;font-size:7px}
+
 </style>
 
 <style id="pkMobileV3640131Audit">
@@ -12496,7 +12506,7 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.44.0.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.44.1.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12635,7 +12645,7 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.44.0',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.44.1',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -14320,7 +14330,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.44.0';
+  const VERSION='V36.44.1';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -14851,24 +14861,92 @@ module.exports = QRCode;
       [a.gymTms,'MT de Gimnasio'],[a.newItems,'Objetos nuevos'],[a.reusedItems,'Objetos reutilizados']
     ].map(x=>`<div class="pk-gen2-audit-chip"><b>${x[0]}</b><small>${x[1]}</small></div>`).join('');
   }
+  function johtoSafeTypeName(type){
+    try{return TYPE_NAMES?.[type]||type||"—";}catch(_){return type||"—";}
+  }
+  function johtoSafeBaseItem(id){
+    try{return ITEMS?.[id]||{};}catch(_){return {};}
+  }
+  function johtoSafeGif(dex){
+    try{
+      if(typeof window.PokeSendaGen2?.gif==="function")return window.PokeSendaGen2.gif(dex,{back:false,shiny:false});
+    }catch(_){}
+    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${Number(dex)||152}.gif`;
+  }
+  function johtoContentSetStatus(message="",kind=""){
+    const el=$('pkJohtoContentStatus');if(!el)return;
+    el.textContent=message;
+    el.className=`pk-johto-content-status ${message?"show":""} ${kind||""}`.trim();
+  }
   function renderJohtoContentBody(){
     const host=$('pkJohtoContentBody');if(!host)return;
-    document.querySelectorAll('[data-johto-content-tab]').forEach(b=>b.classList.toggle('active',b.dataset.johtoContentTab===johtoContentTab));
-    if(johtoContentTab==='moves'){
-      host.innerHTML=`<div class="pk-move-family-grid">${Object.entries(window.PokeSendaGen2.movesets||{}).map(([id,ms])=>{
-        const f=window.PokeSendaGen2.families[id],dex=johtoFamilyLeadDex(f);
-        return `<article class="pk-move-family-card"><div class="pk-move-family-head"><img src="${window.PokeSendaGen2.gif(dex,{back:false,shiny:false})}" alt=""><div><b>${f?.name||id}</b><small>${ms.length} movimientos naturales · modelo PokéSenda</small></div></div>${ms.map((m,i)=>`<div class="pk-move-row"><b>${i+1}. ${m.name}</b><span class="pk-move-type">${m.kind==='support'?'APOYO':(TYPE_NAMES?.[m.type]||m.type)}</span><span class="pk-move-power">${m.kind==='support'?m.effect:`POT ${m.power}${m.area?' · ÁREA':''}`}</span></div>`).join('')}</article>`;
-      }).join('')}</div>`;
-      return;
+    johtoContentSetStatus("");
+    document.querySelectorAll('[data-johto-content-tab]').forEach(b=>{
+      b.classList.toggle('active',b.dataset.johtoContentTab===johtoContentTab);
+      b.setAttribute('aria-selected',b.dataset.johtoContentTab===johtoContentTab?'true':'false');
+    });
+
+    try{
+      const gen2=window.PokeSendaGen2||{};
+      if(johtoContentTab==='moves'){
+        const entries=Object.entries(gen2.movesets||{});
+        if(!entries.length)throw new Error("No se encontraron movesets Gen II.");
+        host.innerHTML=`<div class="pk-move-family-grid">${entries.map(([id,ms])=>{
+          const f=gen2.families?.[id]||null,dex=johtoFamilyLeadDex(f);
+          const familyName=f?.name||id;
+          const rows=(Array.isArray(ms)?ms:[]).map((move,i)=>{
+            const support=move?.kind==='support';
+            const type=support?'APOYO':johtoSafeTypeName(move?.type);
+            const power=support?(move?.effect||'apoyo'):`POT ${Number(move?.power)||0}${move?.area?' · ÁREA':''}`;
+            return `<div class="pk-move-row"><b>${i+1}. ${move?.name||'Movimiento'}</b><span class="pk-move-type">${type}</span><span class="pk-move-power">${power}</span></div>`;
+          }).join('');
+          return `<article class="pk-move-family-card"><div class="pk-move-family-head"><img src="${johtoSafeGif(dex)}" alt=""><div><b>${familyName}</b><small>${Array.isArray(ms)?ms.length:0} movimientos naturales · modelo PokéSenda</small></div></div>${rows}</article>`;
+        }).join('')}</div>`;
+        johtoContentSetStatus(`✓ ${entries.length} familias cargadas · movimientos naturales listos para revisión.`,"ok");
+        return;
+      }
+
+      if(johtoContentTab==='tms'){
+        const tms=Object.values(gen2.tms||{}).sort((a,b)=>(Number(a?.number)||0)-(Number(b?.number)||0));
+        if(!tms.length)throw new Error("No se encontraron las MT de Johto.");
+        host.innerHTML=`<div class="pk-tm-grid">${tms.map(tm=>{
+          const attack=tm?.kind==='attack';
+          const detail=attack?`Pot. ${Number(tm?.power)||0} · ${Math.round((Number(tm?.accuracy)||0)*100)}%`:'Apoyo';
+          const source=tm?.gymLeader
+            ?`<small class="pk-tm-gym">🏛 Recompensa de ${tm.gymLeader}</small>`
+            :`<small>${tm?.tier==='rare'?'Gachapon MT · rareza alta':'Gachapon MT / recompensa'}</small>`;
+          return `<article class="pk-tm-card ${tm?.tier==='gym'?'gym':''}"><b>${tm?.name||'MT'}</b><small>${johtoSafeTypeName(tm?.type)} · ${detail}</small>${source}</article>`;
+        }).join('')}</div>`;
+        johtoContentSetStatus(`✓ ${tms.length} MT cargadas · ${tms.filter(tm=>tm?.tier==='gym').length} reservadas para Gimnasios.`,"ok");
+        return;
+      }
+
+      if(johtoContentTab==='items'){
+        const newItems=Object.entries(gen2.items?.newItems||{}).map(([id,it])=>({id,...(it||{}),reused:false}));
+        const reused=(gen2.items?.reused||[]).map(id=>({id,...johtoSafeBaseItem(id),reused:true})).filter(x=>x.name);
+        const list=[...newItems,...reused];
+        if(!list.length)throw new Error("No se encontraron objetos de Johto.");
+        host.innerHTML=`<div class="pk-item-grid">${list.map(it=>{
+          const visual=it.sprite
+            ?`<img src="${it.sprite}" alt="">`
+            :`<div style="font-size:28px;text-align:center">${it.icon||'🎒'}</div>`;
+          const desc=it.reused
+            ?'Ya existe en Kanto; Johto tendrá sus propias unidades dentro del inventario regional.'
+            :(it.desc||'Objeto preparado para Johto.');
+          return `<article class="pk-item-dev-card ${it.reused?'reused':''}">${visual}<div><b>${it.icon||''} ${it.name||it.id}</b><small>${desc}</small></div></article>`;
+        }).join('')}</div>`;
+        johtoContentSetStatus(`✓ ${newItems.length} objetos nuevos + ${reused.length} reutilizados cargados.`,"ok");
+        return;
+      }
+
+      johtoContentTab='moves';
+      renderJohtoContentBody();
+    }catch(error){
+      console.error("[Johto DEV · Contenido]",error);
+      host.innerHTML=`<div class="pk-johto-content-error"><b>⚠ No se pudo dibujar esta pestaña.</b><small>${String(error?.message||error||"Error desconocido")}</small><button class="btn" type="button" id="pkJohtoContentRetryBtn">Reintentar</button></div>`;
+      johtoContentSetStatus("Se detectó un error de render. El mensaje de abajo indica la causa para poder localizarlo.","bad");
+      $('pkJohtoContentRetryBtn')?.addEventListener('click',renderJohtoContentBody,{once:true});
     }
-    if(johtoContentTab==='tms'){
-      const tms=Object.values(window.PokeSendaGen2.tms||{}).sort((a,b)=>a.number-b.number);
-      host.innerHTML=`<div class="pk-tm-grid">${tms.map(tm=>`<article class="pk-tm-card ${tm.tier==='gym'?'gym':''}"><b>${tm.name}</b><small>${TYPE_NAMES?.[tm.type]||tm.type} · ${tm.kind==='attack'?`Pot. ${tm.power} · ${Math.round(tm.accuracy*100)}%`:'Apoyo'}</small>${tm.gymLeader?`<small class="pk-tm-gym">🏛 Recompensa de ${tm.gymLeader}</small>`:`<small>${tm.tier==='rare'?'Gachapon MT · rareza alta':'Gachapon MT / recompensa'}</small>`}</article>`).join('')}</div>`;
-      return;
-    }
-    const newItems=Object.entries(window.PokeSendaGen2.items?.newItems||{}).map(([id,it])=>({id,...it,reused:false}));
-    const reused=(window.PokeSendaGen2.items?.reused||[]).map(id=>({id,...(ITEMS?.[id]||{}),reused:true})).filter(x=>x.name);
-    host.innerHTML=`<div class="pk-item-grid">${[...newItems,...reused].map(it=>`<article class="pk-item-dev-card ${it.reused?'reused':''}">${it.sprite?`<img src="${it.sprite}" alt="">`:`<div style="font-size:28px;text-align:center">${it.icon||'🎒'}</div>`}<div><b>${it.icon||''} ${it.name}</b><small>${it.reused?'Ya existe en Kanto; Johto tendrá su propia copia regional.':it.desc||''}</small></div></article>`).join('')}</div>`;
   }
   function openJohtoContentLab(){
     if(core()?.active?.()!=='johto')return;
@@ -14962,6 +15040,12 @@ module.exports = QRCode;
     $('pkJohtoContentLabClose')?.addEventListener('click',closeJohtoContentLab);
     $('pkJohtoContentLabOverlay')?.addEventListener('click',e=>{if(e.target===$('pkJohtoContentLabOverlay'))closeJohtoContentLab();});
     document.querySelectorAll('[data-johto-content-tab]').forEach(b=>b.addEventListener('click',()=>{johtoContentTab=b.dataset.johtoContentTab;renderJohtoContentBody();}));
+    $('pkJohtoContentLabOverlay')?.addEventListener('click',e=>{
+      const tab=e.target.closest?.('[data-johto-content-tab]');if(!tab)return;
+      e.preventDefault();e.stopPropagation();
+      johtoContentTab=tab.dataset.johtoContentTab||'moves';
+      renderJohtoContentBody();
+    });
     $('pkJohtoEvolutionLabClose')?.addEventListener('click',closeJohtoEvolutionLab);
     $('pkJohtoEvolutionLabOverlay')?.addEventListener('click',e=>{if(e.target===$('pkJohtoEvolutionLabOverlay'))closeJohtoEvolutionLab();});
     $('pkJohtoEvoFamily')?.addEventListener('change',johtoEvoSpeciesOptions);

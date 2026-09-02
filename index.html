@@ -3413,7 +3413,7 @@ body{letter-spacing:.08px}
 
 <div id="pkJohtoDevShell" class="overlay hidden pk-johto-dev-shell" role="dialog" aria-modal="true" aria-labelledby="pkJohtoDevTitle">
   <div class="modal-box pk-johto-dev-box" onclick="event.stopPropagation()">
-    <div class="pk-johto-dev-kicker">🧪 DESARROLLO PRIVADO · V36.46.0</div>
+    <div class="pk-johto-dev-kicker">🧪 DESARROLLO PRIVADO · V36.46.1</div>
     <h2 id="pkJohtoDevTitle">Región de Johto</h2>
     <p>La arquitectura multirregión ya está funcionando. Esta campaña tiene un estado regional separado de Kanto, pero todavía no contiene Pokémon Gen II, rutas ni Gimnasios jugables.</p>
     <div class="pk-johto-dev-warning"><b>No es el lanzamiento de Johto.</b> Este espacio existe para que podamos construir la expansión sin exponer contenido incompleto a los jugadores.</div>
@@ -6167,6 +6167,34 @@ body{letter-spacing:.08px}
   }
 
   pkEnsureRegionEnvelope(state);
+
+  // V36.46.1 · Guard de arranque regional.
+  // El motor Kanto usa state.starter===null para abrir Bulbasaur/Charmander/Squirtle.
+  // En Johto starter=null es correcto hasta que el adaptador Gen II esté conectado,
+  // por lo que ese flujo legacy debe quedar completamente bloqueado.
+  function pkIsJohtoRuntime(){return state?.activeRegion==="johto";}
+  function pkHideKantoEntryFlows(){
+    if(!pkIsJohtoRuntime())return false;
+    document.getElementById("starterOverlay")?.classList.add("hidden");
+    document.getElementById("pkFirstWelcomeOverlay")?.classList.add("hidden");
+    document.getElementById("mainMenu")?.classList.add("hidden");
+    return true;
+  }
+  function pkRouteToJohtoCampaign(){
+    if(!pkHideKantoEntryFlows())return false;
+    const launch=()=>{
+      try{
+        pkHideKantoEntryFlows();
+        if(window.PokeSendaRegions?.showCampaign)window.PokeSendaRegions.showCampaign();
+      }catch(e){console.error("[Johto DEV · regional boot]",e);}
+    };
+    if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(launch,0),{once:true});
+    else setTimeout(launch,0);
+    return true;
+  }
+  window.PokeSendaRegionBoot={isJohto:pkIsJohtoRuntime,hideKantoEntryFlows:pkHideKantoEntryFlows,routeToJohto:pkRouteToJohtoCampaign};
+  if(pkIsJohtoRuntime())pkRouteToJohtoCampaign();
+
   window.PokeSendaRegionCore={
     version:PK_REGION_SYSTEM_VERSION,
     ids:[...PK_REGION_IDS],
@@ -6561,6 +6589,14 @@ body{letter-spacing:.08px}
   }
 
   function updateMenuInfo(){
+    if(state?.activeRegion==="johto"){
+      const rs=state.regions?.johto||{},chosen=state.johtoStarterChoice||rs.johtoStarterChoice||null;
+      if($("menuSaveInfo"))$("menuSaveInfo").textContent=chosen?`Johto DEV · campaña iniciada`:`Johto DEV · elige tu inicial`;
+      if($("menuPlayBtn"))$("menuPlayBtn").textContent="Continuar Johto DEV";
+      const avatarReady=!!state.trainerAvatar;const trainerBtn=$("menuTrainerBtn");if(trainerBtn){trainerBtn.textContent=avatarReady?"Cambiar avatar":"Elegir avatar";trainerBtn.classList.toggle("primary",!avatarReady);}
+      const profileBtn=$("menuProfileBtn");if(profileBtn)profileBtn.disabled=!avatarReady;
+      return;
+    }
     const completed=ROUTE_ORDER.reduce((n,r)=>n+(state.routes[r]?.completions||0),0);
     const infiniteText=infiniteUnlocked()?` · ♾ Récord: ${formatMeters(state.infiniteExpedition?.bestDistance||0)}`:"";
     $("menuSaveInfo").textContent=state.starter?`Pokédex: ${pokedexDiscoveredCount()}/${pokedexTotalCount()} · Logros: ${achievementUnlockedCount()}/${ACHIEVEMENTS.length} · ₽${Math.floor(state.pokedollars||0).toLocaleString("es-CL")} · Poké Balls: ${state.totalChests||0} · Rutas completadas: ${completed}${infiniteText}`:"Partida nueva";
@@ -6571,6 +6607,11 @@ body{letter-spacing:.08px}
   }
 
   function chooseStarter(id){
+    if(state?.activeRegion==="johto"){
+      $("starterOverlay")?.classList.add("hidden");
+      window.PokeSendaRegionBoot?.routeToJohto?.();
+      return;
+    }
     const keepMusicVolume=currentMusicVolume(),keepMusicTrack=$("bgMusic")?.dataset.trackKey||state.options?.musicTrack||"classic_menu",keepSfxVolume=Math.max(0,Math.min(1,Number(state.options?.sfxVolume??.60)));
     state=freshState();state.options.musicVolume=keepMusicVolume;state.options.musicTrack=MUSIC_TRACKS[keepMusicTrack]?keepMusicTrack:"classic_menu";state.options.musicPlaylist=true;state.options.sfxVolume=keepSfxVolume;state.starter=id;startMusic();state.owned=[id];state.progress[id]=freshPokemonProgress(1,"rare");state.progress[id].moveRanks=baseMovesFor(id).map(m=>(m.kind==="support"||(m.unlockStage||0)<=0)?1:0);state.formation=[id,null,null,null,null,null];state.dexSeen=Array.isArray(state.dexSeen)?state.dexSeen:[];if(!state.dexSeen.includes(FAMILIES[id].stages[0].dex))state.dexSeen.push(FAMILIES[id].stages[0].dex);markDexUnread(FAMILIES[id].stages[0].dex);
     save();$("starterOverlay").classList.add("hidden");$("mainMenu").classList.add("hidden");
@@ -6601,7 +6642,13 @@ body{letter-spacing:.08px}
 
   function returnToMenu(){
     if(run){stopCenterContinueTimer();stopLoop();const cp=routeStartPoint(),reached=run.distance,inf=isInfiniteMode();recordExpeditionHistory(run,{result:"abandoned",distance:reached,checkpoint:inf?0:cp,routeId:state.currentRoute});if(inf)state.infiniteExpedition.bestDistance=Math.max(state.infiniteExpedition.bestDistance||0,reached||0);addLog(inf?`Expedición Infinita abandonada a ${formatMeters(reached)}. La próxima salida vuelve a 0 m.`:`Expedición abandonada. Próxima salida: ${formatMeters(cp)}.`);run=null;save();}
-    $("summary").classList.remove("show");$("mainMenu").classList.remove("hidden");renderEverything();updateMenuInfo();startMenuMusic();
+    $("summary").classList.remove("show");
+    if(state?.activeRegion==="johto"){
+      $("mainMenu").classList.add("hidden");
+      window.PokeSendaRegionBoot?.routeToJohto?.();
+      return;
+    }
+    $("mainMenu").classList.remove("hidden");renderEverything();updateMenuInfo();startMenuMusic();
   }
 
   async function stopExpedition(){pkAutoRestartTransition=false;
@@ -9000,7 +9047,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   $("evolveNoBtn").addEventListener("click",()=>finishEvolutionChoice(false));
 
   renderCaptureLog();renderExpeditionHistory();setLogTab("general");
-  const retroAchievements=checkAchievements({silent:true});if(retroAchievements.length)localStorage.setItem(SAVE_KEY,JSON.stringify(state));applyOptions();updateMenuInfo();renderEverything();initTimedGacha();startMusic();
+  const retroAchievements=checkAchievements({silent:true});if(retroAchievements.length)localStorage.setItem(SAVE_KEY,JSON.stringify(state));applyOptions();updateMenuInfo();if(state?.activeRegion==="johto")window.PokeSendaRegionBoot?.routeToJohto?.();else renderEverything();initTimedGacha();startMusic();
   const resumeSoundtrackAfterAutoplayBlock=()=>{if(state.options.musicVolume<=0)return;if(introSequenceActive())ensureIntroPlaying();else startMusic();};
   document.addEventListener("pointerdown",resumeSoundtrackAfterAutoplayBlock,{passive:true});document.addEventListener("keydown",resumeSoundtrackAfterAutoplayBlock);
   if(inventoryMigrationResult.excessUnits>0)setTimeout(()=>toast(`Inventario V32.4: ${inventoryMigrationResult.excessUnits} excedentes vendidos · +₽${inventoryMigrationResult.refund.toLocaleString("es-CL")}`),650);
@@ -9649,6 +9696,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     state.trainerAvatar={...pkDraft,name};
     save();pkRenderTrainers();pkCloseCreator();
     if(pkCreatorFirstTime){
+      if(state?.activeRegion==="johto"){window.PokeSendaRegionBoot?.routeToJohto?.();return;}
       if(!state.starter)$("starterOverlay").classList.remove("hidden");
       else{renderEverything();}
     }else{
@@ -9662,12 +9710,14 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function pkContinueAfterFirstWelcome(){
     $("pkFirstWelcomeOverlay")?.classList.add("hidden");
     state.pokesendaWelcomeSeen=true;save();
+    if(state?.activeRegion==="johto"){window.PokeSendaRegionBoot?.routeToJohto?.();return;}
     if(!state.starter)$("starterOverlay").classList.remove("hidden");else renderEverything();
   }
   $("pkFirstWelcomeContinueBtn")?.addEventListener("click",pkContinueAfterFirstWelcome);
   function pkOnPlay(){
     $("mainMenu").classList.add("hidden");
     startMusic();
+    if(state?.activeRegion==="johto"){window.PokeSendaRegionBoot?.routeToJohto?.();return;}
     if(!state.trainerAvatar){pkOpenCreator(true);return;}
     if(!state.starter&&!state.pokesendaWelcomeSeen&&pkShowFirstWelcome())return;
     if(!state.starter)$("starterOverlay").classList.remove("hidden");else renderEverything();
@@ -10049,6 +10099,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     state.trainerAvatar={name,trainerId:def.id,gender:def.gender};
     save();pkRenderTrainers();pkCloseCreator();
     if(pkCreatorFirstTime){
+      if(state?.activeRegion==="johto"){window.PokeSendaRegionBoot?.routeToJohto?.();return;}
       if(!state.starter&&!state.pokesendaWelcomeSeen&&pkShowFirstWelcome())return;
       if(!state.starter)$("starterOverlay").classList.remove("hidden");
       else renderEverything();
@@ -12505,6 +12556,9 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
 .pk-johto-lobby-top{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;border-bottom:1px solid #3d5650;padding-bottom:9px}.pk-johto-lobby-actions{display:flex;gap:6px}.pk-johto-lobby-hero{display:grid;grid-template-columns:1.4fr .8fr 1fr;gap:9px;margin:11px 0}.pk-johto-lobby-sign{display:grid;align-content:center;min-height:150px;border:1px solid #796435;border-radius:13px;padding:16px;background:linear-gradient(145deg,#183432,#192b25 58%,#352b16)}.pk-johto-lobby-sign small{color:#c5aa5e;font-size:6px}.pk-johto-lobby-sign b{color:#fff0b9;font-size:26px;margin:5px 0}.pk-johto-lobby-sign span{color:#9db7af;font-size:7px}.pk-johto-lobby-starter{display:grid;place-items:center;border:1px solid #4b6964;border-radius:13px;background:#0c2023;min-height:150px;text-align:center}.pk-johto-lobby-starter img{width:116px;height:116px;object-fit:contain;image-rendering:pixelated}.pk-johto-lobby-starter b{display:block;color:#f2dc96;font-size:10px}.pk-johto-lobby-starter small{display:block;color:#849f99;font-size:5.8px}.pk-johto-lobby-stats{display:grid;gap:6px}.pk-johto-lobby-stats>div{display:grid;align-content:center;border:1px solid #3e5b56;border-radius:10px;background:#0d2022;padding:8px 10px}.pk-johto-lobby-stats b{font-size:13px;color:#f0d67f}.pk-johto-lobby-stats small{font-size:5.7px;color:#829e98}.pk-johto-lobby-section-title{font-size:8px;font-weight:1000;color:#b9c9c3;margin:4px 0 6px}.pk-johto-lobby-routes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.pk-johto-lobby-route{border:1px solid #425d58;border-radius:12px;background:#102123;padding:10px;min-height:142px}.pk-johto-lobby-route.unlocked{border-color:#94773a;background:linear-gradient(155deg,#292612,#102523)}.pk-johto-lobby-route.locked{opacity:.62}.pk-johto-lobby-route .state{font-size:5px;color:#9db5af}.pk-johto-lobby-route h3{font-size:11px;color:#f1e0a9;margin:6px 0 3px}.pk-johto-lobby-route p,.pk-johto-lobby-route small{font-size:5.8px;color:#91aaa4;line-height:1.4}.pk-johto-lobby-route .btn{width:100%;margin-top:6px;font-size:6px!important}.pk-johto-lobby-footer{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:10px;border-top:1px solid #354d48;padding-top:8px}.pk-johto-lobby-footer span{font-size:5.7px;color:#758f89}
 @media(max-width:760px){.pk-johto-starter-grid,.pk-johto-lobby-routes{grid-template-columns:1fr}.pk-johto-lobby-hero{grid-template-columns:1fr}.pk-johto-lobby-top{grid-template-columns:1fr}.pk-johto-lobby-actions{display:grid;grid-template-columns:1fr 1fr}.pk-johto-lobby-footer{flex-direction:column;align-items:stretch}}
 
+
+/* V36.46.1 · Johto activo nunca puede enseñar onboarding/starter de Kanto. */
+body.pk-region-johto-dev #starterOverlay,body.pk-region-johto-dev #pkFirstWelcomeOverlay{display:none!important}
 </style>
 
 <style id="pkMobileV3640131Audit">
@@ -12669,7 +12723,7 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.46.0.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.46.1.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12808,7 +12862,7 @@ body.pk-region-johto-dev #mainMenu{filter:saturate(.75) hue-rotate(115deg)}
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.46.0',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.46.1',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -14493,7 +14547,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.46.0';
+  const VERSION='V36.46.1';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -15172,8 +15226,8 @@ module.exports = QRCode;
   function johtoStarterSelected(){const id=String(state?.johtoStarterChoice||'');return JOHTO_STARTER_FAMILIES.includes(id)?id:null;}
   function chooseJohtoStarter(id){if(core()?.active?.()!=='johto'||!JOHTO_STARTER_FAMILIES.includes(id))return;state.johtoStarterChoice=id;state.johtoIntroSeen=true;try{core()?.registerRegionalDex?.(JOHTO_STARTER_DEX[id],'johto');pkSyncActiveRegionSnapshot(state);localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(_){}$('pkJohtoStarterOverlay')?.classList.add('hidden');showJohtoLobby();}
   function renderJohtoLobby(){const chosen=johtoStarterSelected();if(!chosen)return;const dex=JOHTO_STARTER_DEX[chosen],name=JOHTO_STARTER_NAME[chosen],starterHost=$('pkJohtoLobbyStarter');if(starterHost)starterHost.innerHTML=`<div><img src="${window.PokeSendaGen2.gif(dex,{back:false,shiny:false})}" alt="${name}"><b>${name}</b><small>${JOHTO_STARTER_TYPE[chosen]} · tu inicial de Johto</small></div>`;if($('pkJohtoLobbyMoney'))$('pkJohtoLobbyMoney').textContent=`₽${Math.max(0,Math.floor(Number(state.pokedollars||0))).toLocaleString('es-CL')}`;if($('pkJohtoLobbyDex'))$('pkJohtoLobbyDex').textContent=String(core()?.regionalDex?.('johto')?.length||1);if($('pkJohtoLobbyBadges'))$('pkJohtoLobbyBadges').textContent=`${Math.min(8,Math.max(0,Number(state.gyms?.badges?.length||0)))}/8`;const host=$('pkJohtoLobbyRoutes');if(!host)return;const order=window.PokeSendaGen2?.routes?.order||[],dist=window.PokeSendaGen2?.routes?.starterDistribution?.(chosen)||{};host.innerHTML=order.map((id,index)=>{const r=window.PokeSendaGen2.routes.blueprints[id],unlocked=index===0,starterName=JOHTO_STARTER_NAME[dist[id]]||johtoFamilyName(dist[id]);return `<article class="pk-johto-lobby-route ${unlocked?'unlocked':'locked'}"><span class="state">${unlocked?'DISPONIBLE EN DEV':'🔒 BLOQUEADA'}</span><h3>${r.name}</h3><p>${r.description}</p><small>${r.recommended} · inicial raro: ${starterName}</small><small>✨ ${r.legendaryFamilies.map(johtoFamilyName).join(' + ')} · jefe: ${johtoFamilyName(r.finalBoss)}</small><button class="btn ${unlocked?'warn':''}" type="button" data-johto-lobby-route="${id}" ${unlocked?'':'disabled'}>${unlocked?'🧭 Preparar Pradera Ámbar':'Completa la ruta anterior'}</button></article>`;}).join('');}
-  function showJohtoStarter(){closeJohtoCampaignViews();$('pkJohtoDevShell')?.classList.add('hidden');$('pkJohtoStarterOverlay')?.classList.remove('hidden');}
-  function showJohtoLobby(){if(!johtoStarterSelected()){showJohtoStarter();return;}closeJohtoCampaignViews();$('pkJohtoDevShell')?.classList.add('hidden');state.johtoLobbyVisits=Math.max(0,Number(state.johtoLobbyVisits||0))+1;try{pkSyncActiveRegionSnapshot(state);localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(_){}renderJohtoLobby();$('pkJohtoLobbyOverlay')?.classList.remove('hidden');}
+  function showJohtoStarter(){window.PokeSendaRegionBoot?.hideKantoEntryFlows?.();closeJohtoCampaignViews();$('pkJohtoDevShell')?.classList.add('hidden');$('pkJohtoStarterOverlay')?.classList.remove('hidden');}
+  function showJohtoLobby(){window.PokeSendaRegionBoot?.hideKantoEntryFlows?.();if(!johtoStarterSelected()){showJohtoStarter();return;}closeJohtoCampaignViews();$('pkJohtoDevShell')?.classList.add('hidden');state.johtoLobbyVisits=Math.max(0,Number(state.johtoLobbyVisits||0))+1;try{pkSyncActiveRegionSnapshot(state);localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(_){}renderJohtoLobby();$('pkJohtoLobbyOverlay')?.classList.remove('hidden');}
   function openJohtoRouteFromLobby(id){if(id!=='johto_route1')return;$('pkJohtoLobbyOverlay')?.classList.add('hidden');openJohtoRoutesLab();setTimeout(()=>{document.querySelector('.pk-route-dev-card.r1')?.scrollIntoView({behavior:'smooth',block:'center'});toastSafe('🧭 Pradera Ámbar seleccionada · combate DEV es la siguiente capa');},80);}
   async function resetJohtoDevCampaign(){let ok=false;try{ok=window.confirm('¿Reiniciar solamente la campaña DEV de Johto? Kanto no se tocará.');}catch(_){}if(!ok)return;try{pkSyncActiveRegionSnapshot(state);state.regions.johto=pkFreshRegionalState('johto');state.activeRegion='johto';pkApplyRegionalSnapshot(state,state.regions.johto,'johto');pkSyncActiveRegionSnapshot(state);localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(e){console.error(e);return;}showJohtoStarter();}
 
@@ -15187,6 +15241,7 @@ module.exports = QRCode;
   }
   function showJohtoShell(forceTools=false){
     document.body.classList.add('pk-region-johto-dev');
+    window.PokeSendaRegionBoot?.hideKantoEntryFlows?.();
     closeJohtoCampaignViews();
     if(forceTools){$('pkJohtoDevShell')?.classList.remove('hidden');devStats();updateRegionUI();return;}
     $('pkJohtoDevShell')?.classList.add('hidden');
@@ -15209,8 +15264,13 @@ module.exports = QRCode;
     const c=core();if(!c)return;
     const out=c.switchRegion(regionId,{dev:true});
     if(!out?.ok){toastSafe(out?.reason||'No se pudo cambiar de región');return false;}
-    if(regionId==='johto'){closeRegions({restoreDevShell:false});showJohtoShell();}
-    else{hideJohtoShell();postSwitchRender();}
+    if(regionId==='johto'){closeRegions({restoreDevShell:false});showJohtoShell(false);}
+    else{
+      closeJohtoCampaignViews();hideJohtoShell();
+      $('starterOverlay')?.classList.add('hidden');
+      if(state.starter){$('mainMenu')?.classList.add('hidden');postSwitchRender();}
+      else{$('mainMenu')?.classList.remove('hidden');updateMenuInfo?.();}
+    }
     return true;
   }
   function johtoPublicClick(){
@@ -15251,6 +15311,11 @@ module.exports = QRCode;
   }
   function boot(){
     updateRegionUI();
+    const legacyGuard=new MutationObserver(()=>{
+      if(core()?.active?.()!=='johto')return;
+      window.PokeSendaRegionBoot?.hideKantoEntryFlows?.();
+    });
+    ['starterOverlay','pkFirstWelcomeOverlay','mainMenu'].forEach(id=>{const el=$(id);if(el)legacyGuard.observe(el,{attributes:true,attributeFilter:['class']});});
     if(core()?.active?.()==='johto')showJohtoShell(false);else hideJohtoShell();
 
     $('regionSwitchBtn')?.addEventListener('click',openRegions);
@@ -15318,7 +15383,7 @@ module.exports = QRCode;
       if(e.key==='Escape'&&!$('regionSelectOverlay')?.classList.contains('hidden'))closeRegions();
     });
   }
-  window.PokeSendaRegions={open:openRegions,refresh:updateRegionUI,devToggle:()=>core()?.active?.()==='johto'?switchDev('kanto'):switchDev('johto')};
+  window.PokeSendaRegions={open:openRegions,refresh:updateRegionUI,showCampaign:()=>showJohtoShell(false),showTools:()=>showJohtoShell(true),devToggle:()=>core()?.active?.()==='johto'?switchDev('kanto'):switchDev('johto')};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
 </script>

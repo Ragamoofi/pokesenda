@@ -11788,7 +11788,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.51.0.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.51.1.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -11927,7 +11927,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.51.0',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.51.1',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -13612,7 +13612,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.51.0';
+  const VERSION='V36.51.1';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -14194,7 +14194,9 @@ const EXTRA={"natures":{"fuerte":{"name":"Fuerte","up":"atk","down":"atk","neutr
 const MAX_DISTANCE=10000,MAX_LEVEL=60,RESERVE_XP_RATE=.10,POKEMON_CENTERS=[2500,5000,7500],ROUND_HEAL=.045;
 const ACT={hp:.52,atk:.54,def:.88,speed:1,bossHp:4.8,finalBossHp:10,bossAtk:1.35};
 const $=id=>document.getElementById(id),API=()=>window.PokeSendaJohtoIsolated,DATA=()=>API()?.getData?.()||{};
-const PHYSICAL=new Set(["normal","fighting","flying","poison","ground","rock","bug","ghost","steel"]);
+const PHYSICAL_TYPES=new Set(["normal","fighting","flying","poison","ground","rock","bug","ghost","steel"]);
+const PHYSICAL_MOVE_NAMES=new Set(["Doble Ataque","Picadura","Tijera X","Cola Dragón","Chispa","Doble Patada","Golpe Karate","Llave Vital","Tajo Cruzado","Colmillo Ígneo","Ataque Ala","Golpe Aéreo","Pico Taladro","Picotazo","Impresionar","Lengüetazo","Bomba Germen","Hoja Afilada","Látigo Cepa","Excavar","Hueso Palo","Huesomerang","Terremoto","Agarre","Arañazo","Atadura","Ataque Rápido","Azote","Cornada","Destructor","Doble Filo","Golpe Cabeza","Golpe Cuerpo","Hipercolmillo","Mordisco","Pisotón","Placaje","Aguijón Venenoso","Picotazo Veneno","Veneno Cruzado","Avalancha","Lanzarrocas","Acua Cola","Martillazo"]);
+const SPECIAL_MOVE_NAMES=new Set(["Viento Plata","Furia Dragón","Pulso Dragón","Descarga","Electrotela","Impactrueno","Rayo","Trueno","Brillo Mágico","Voz Cautivadora","Ascua","Lanzallamas","Aire Afilado","Tornado","Vendaval","Bola Sombra","Absorber","Megaagotar","Rayo Aurora","Rayo Hielo","Ventisca","Bomba Sónica","Rapidez","Bomba Lodo","Ácido","Come Sueños","Confusión","Psicorrayo","Psíquico","Poder Pasado","Burbuja","Hidrobomba","Hidropulso","Pistola Agua","Surf"]);
 const STARTERS=["j_chikorita","j_cyndaquil","j_totodile"],WEAK={j_chikorita:"j_totodile",j_cyndaquil:"j_chikorita",j_totodile:"j_cyndaquil"},STRONG={j_chikorita:"j_cyndaquil",j_cyndaquil:"j_totodile",j_totodile:"j_chikorita"};
 const TYPE={
  normal:{rock:.5,ghost:0,steel:.5},fire:{fire:.5,water:.5,grass:2,ice:2,bug:2,rock:.5,dragon:.5,steel:2},
@@ -14235,7 +14237,9 @@ function canEquip(itemId,p){
 }
 function createPokemon(fid,level=1,starter=false,shiny=false,dexOverride=null){
   const f=fam(fid);if(!f)return null;const dex=Number(dexOverride||f.members?.[0]);if(!dex)return null;
-  const p={familyId:fid,dex,level:Math.max(1,level),xp:0,nature:randomNature(),copies:1,shinyUnlocked:!!shiny,starter:!!starter,heldItem:null,stars:1};
+  const p={familyId:fid,dex,level:Math.max(1,level),xp:0,nature:randomNature(),copies:1,shinyUnlocked:!!shiny,starter:!!starter,heldItem:null,stars:1,skillPoints:Math.max(0,Math.max(1,level)-1),moveRanks:[0,0,0,0]};
+  const stage=Math.max(0,(f.members||[]).indexOf(dex)),moves=DATA().movesets?.[fid]||[];
+  moves.forEach((m,i)=>{if(i<4&&(m.kind==="support"||Number(m.unlockStage||0)<=stage))p.moveRanks[i]=1;});
   js.pokemon[fid]=p;if(!js.dex.includes(dex))js.dex.push(dex);return p;
 }
 function migrate(){
@@ -14249,6 +14253,20 @@ function migrate(){
   js.options=Object.assign({autoRepeat:false,autoPotion:false,autoOpen:false,battleSpeed:1},js.options||{});
   js.options.battleSpeed=[1,2,4].includes(Number(js.options.battleSpeed))?Number(js.options.battleSpeed):1;
   if(STARTERS.includes(js.starter)&&!js.pokemon[js.starter])createPokemon(js.starter,1,true,false);
+  for(const [fid,p] of Object.entries(js.pokemon)){
+    if(!p||!fam(fid))continue;
+    const stage=Math.max(0,(fam(fid).members||[]).indexOf(Number(p.dex)));
+    const moves=DATA().movesets?.[fid]||[];
+    if(!Number.isFinite(Number(p.skillPoints)))p.skillPoints=Math.max(0,Number(p.level||1)-1);
+    p.skillPoints=Math.max(0,Math.floor(Number(p.skillPoints)||0));
+    p.moveRanks=Array.isArray(p.moveRanks)?p.moveRanks.slice(0,4):[];
+    while(p.moveRanks.length<4)p.moveRanks.push(0);
+    moves.forEach((m,i)=>{
+      if((m.kind==="support"||Number(m.unlockStage||0)<=stage)&&Number(p.moveRanks[i]||0)<=0)p.moveRanks[i]=1;
+      p.moveRanks[i]=Math.max(0,Math.min(25,Math.floor(Number(p.moveRanks[i]||0))));
+    });
+    p.stars=Math.max(1,Math.min(5,Math.floor(Number(p.stars||1))));
+  }
   let legacy=Array.isArray(js.formation)?js.formation:(Array.isArray(js.team)?js.team:[]);
   js.formation=Array(6).fill(null);legacy.filter(id=>js.pokemon[id]).slice(0,6).forEach((id,i)=>js.formation[i]=id);
   if(js.starter&&!js.formation.some(Boolean))js.formation[0]=js.starter;
@@ -14296,7 +14314,20 @@ function derived(p,id=null){
 }
 function stageIndex(fid,dex){return Math.max(0,(fam(fid)?.members||[]).indexOf(Number(dex)));}
 function unlockedMoves(fid,dex,kind="attack"){const idx=stageIndex(fid,dex);return(DATA().movesets?.[fid]||[]).filter(m=>m.kind===kind&&Number(m.unlockStage||0)<=idx);}
-function moveCategory(m){return PHYSICAL.has(m.type)?"physical":"special";}
+function playerMoveEntries(id,kind="attack"){
+  const p=js.pokemon[id],idx=stageIndex(id,p?.dex),moves=DATA().movesets?.[id]||[];
+  return moves.map((m,i)=>({m,i,rank:Math.max(0,Number(p?.moveRanks?.[i]||0))}))
+    .filter(x=>x.m.kind===kind&&Number(x.m.unlockStage||0)<=idx&&(kind==="support"||x.rank>0));
+}
+function moveRankMult(rank){return 1+.018*(Math.max(1,Number(rank)||1)-1);}
+
+function moveCategory(m){
+  if(m?.kind==="support")return "status";
+  if(m?.category)return m.category;
+  if(PHYSICAL_MOVE_NAMES.has(m?.name))return "physical";
+  if(SPECIAL_MOVE_NAMES.has(m?.name))return "special";
+  return PHYSICAL_TYPES.has(m?.type)?"physical":"special";
+}
 function statusImmune(ent,type){const types=ent.stats?.types||species(ent.dex).types||[];return(type==="burn"&&types.includes("fire"))||(type==="poison"&&(types.includes("poison")||types.includes("steel")))||(type==="paralysis"&&types.includes("electric"))||(type==="freeze"&&types.includes("ice"));}
 function applyStatus(ent,type,source=null){if(!ent||ent.status||statusImmune(ent,type))return false;ent.status={type,turns:type==="sleep"?2+Math.floor(Math.random()*3):0,source};ent.statusTick=3;return true;}
 function maybeMoveStatus(m,e,source){
@@ -14365,20 +14396,26 @@ function derivedFor(id){return derived(js.pokemon[id],id);}
 function teamWiped(){return !!run&&Object.values(run.team).every(t=>!t.alive);}
 function faint(id,reason="combate"){const t=run.team[id];if(!t?.alive)return;t.alive=false;t.hp=0;log("💀 "+name(js.pokemon[id].dex)+" queda debilitado por "+reason+".");markCombatants();}
 function chooseAttack(id){
-  const p=js.pokemon[id],moves=unlockedMoves(id,p.dex,"attack"),enemies=livingEnemies();if(!moves.length||!enemies.length)return null;let best=null;
-  for(const m of moves)for(const e of enemies){const mult=typeMult(m.type,e.stats.types),d=estimatedDamage(id,e,m);const score=Math.min(e.hp,d)+(d>=e.hp?e.maxHp*.14:0)+(mult>1?e.maxHp*.035:0);if(!best||score>best.score)best={m,e,score};}
+  const entries=playerMoveEntries(id,"attack"),enemies=livingEnemies();if(!entries.length||!enemies.length)return null;let best=null;
+  for(const entry of entries)for(const e of enemies){
+    const mult=typeMult(entry.m.type,e.stats.types),d=estimatedDamage(id,e,entry),score=Math.min(e.hp,d)+(d>=e.hp?e.maxHp*.14:0)+(mult>1?e.maxHp*.035:0);
+    if(!best||score>best.score)best={entry,e,score};
+  }
   return best;
 }
-function estimatedDamage(id,e,m){const d=derivedFor(id),cat=moveCategory(m),off=cat==="special"?d.spAtk:d.atk,def=cat==="special"?e.stats.spDef:e.stats.def,stab=d.types.includes(m.type)?1.2:1,item=currentItem(js.pokemon[id]),itemBoost=item?.boostType===m.type?1+(item.power||0):1;return off*idlePower(m.power)*typeMult(m.type,e.stats.types)*stab*defenseFactor(def)*itemBoost;}
-function smartSupport(id){
-  const p=js.pokemon[id],moves=unlockedMoves(id,p.dex,"support");if(!moves.length)return null;const m=moves[0],ids=battleIds(),ratios=ids.map(x=>run.team[x].hp/run.team[x].maxHp),min=Math.min(...ratios),avg=ratios.reduce((a,b)=>a+b,0)/ratios.length,boss=livingEnemies().some(e=>e.boss);
-  if(["Hipnosis","Canto","Onda Trueno","Rayo Confuso","Beso Dulce"].includes(m.name)&&Math.random()<.70)return m;
-  if(m.effect==="heal"&&min<.58)return m;if(m.effect==="guard"&&(boss||avg<.62)&&Math.random()<.7)return m;if(["haste","power"].includes(m.effect)&&(boss||livingEnemies().length>=3)&&Math.random()<.42)return m;return null;
+function estimatedDamage(id,e,entry){
+  const m=entry.m,d=derivedFor(id),cat=moveCategory(m),off=cat==="special"?d.spAtk:d.atk,def=cat==="special"?e.stats.spDef:e.stats.def,stab=d.types.includes(m.type)?1.2:1,item=currentItem(js.pokemon[id]),itemBoost=item?.boostType===m.type?1+(item.power||0):1;
+  return off*idlePower(m.power)*moveRankMult(entry.rank)*typeMult(m.type,e.stats.types)*stab*defenseFactor(def)*itemBoost;
 }
-function useSupport(id,m){
-  const ids=battleIds(),t=run.team[id],d=derivedFor(id),amount=.05*d.supportMult;
-  if(["Hipnosis","Canto"].includes(m.name)){const e=targetEnemy();if(e&&Math.random()<.75&&applyStatus(e,"sleep",id))log("💤 "+name(js.pokemon[id].dex)+" usa "+m.name+".");return;}
-  if(m.name==="Onda Trueno"){const e=targetEnemy();if(e&&Math.random()<.40&&applyStatus(e,"paralysis",id))log("⚡ "+name(js.pokemon[id].dex)+" usa Onda Trueno.");return;}
+function smartSupport(id){
+  const entries=playerMoveEntries(id,"support");if(!entries.length)return null;const entry=entries[0],m=entry.m,ids=battleIds(),ratios=ids.map(x=>run.team[x].hp/run.team[x].maxHp),min=Math.min(...ratios),avg=ratios.reduce((a,b)=>a+b,0)/ratios.length,boss=livingEnemies().some(e=>e.boss);
+  if(["Hipnosis","Canto","Onda Trueno","Rayo Confuso","Beso Dulce"].includes(m.name)&&Math.random()<.70)return entry;
+  if(m.effect==="heal"&&min<.58)return entry;if(m.effect==="guard"&&(boss||avg<.62)&&Math.random()<.7)return entry;if(["haste","power"].includes(m.effect)&&(boss||livingEnemies().length>=3)&&Math.random()<.42)return entry;return null;
+}
+function useSupport(id,entry){
+  const m=entry.m,rank=Math.max(1,entry.rank||1),ids=battleIds(),d=derivedFor(id),amount=(.05+.003*(rank-1))*d.supportMult;
+  if(["Hipnosis","Canto"].includes(m.name)){const e=targetEnemy();if(e&&Math.random()<Math.min(.99,.75+.004*(rank-1))&&applyStatus(e,"sleep",id))log("💤 "+name(js.pokemon[id].dex)+" usa "+m.name+".");return;}
+  if(m.name==="Onda Trueno"){const e=targetEnemy();if(e&&Math.random()<Math.min(.99,.40+.004*(rank-1))&&applyStatus(e,"paralysis",id))log("⚡ "+name(js.pokemon[id].dex)+" usa Onda Trueno.");return;}
   if(["Rayo Confuso","Beso Dulce"].includes(m.name)){const e=targetEnemy();if(e){e.confusion=2+Math.floor(Math.random()*4);log("💫 "+name(js.pokemon[id].dex)+" usa "+m.name+".");}return;}
   if(m.effect==="heal"){const target=ids.slice().sort((a,b)=>run.team[a].hp/run.team[a].maxHp-run.team[b].hp/run.team[b].maxHp)[0]||id,b=run.team[target].hp;run.team[target].hp=Math.min(run.team[target].maxHp,run.team[target].hp+run.team[target].maxHp*amount);log("💚 "+name(js.pokemon[id].dex)+" usa "+m.name+": +"+Math.ceil(run.team[target].hp-b)+" PS.");}
   else if(m.effect==="guard"){for(const x of ids){run.team[x].guard=Math.max(run.team[x].guard||0,amount);run.team[x].guardTime=5;}log("🛡️ "+name(js.pokemon[id].dex)+" usa "+m.name+".");}
@@ -14390,8 +14427,13 @@ function playerAction(id){
   if((t.confusion||0)>0){t.confusion--;if(Math.random()<.33){t.hp-=Math.max(1,t.maxHp*.08);if(t.hp<=0)faint(id,"confusión");return;}}
   const support=smartSupport(id);if(support){useSupport(id,support);return;}
   const best=chooseAttack(id);if(!best)return;
-  const m=best.m,targets=m.area?livingEnemies().slice(0,4):[best.e],d=derivedFor(id),cat=moveCategory(m),off=cat==="special"?d.spAtk:d.atk,item=currentItem(p);
-  for(const e of targets){if(!e.alive)continue;const def=cat==="special"?e.stats.spDef:e.stats.def,stab=d.types.includes(m.type)?1.2:1,mult=typeMult(m.type,e.stats.types),area=m.area?.60:1,boost=item?.boostType===m.type?1+(item.power||0):1,crit=Math.random()<d.crit,raw=off*idlePower(m.power)*stab*mult*defenseFactor(def)*(1+(t.power||0))*boost*area*(.92+Math.random()*.16)*(crit?1.65:1),actual=Math.min(e.hp,Math.max(0,raw));e.hp-=raw;run.stats[id].damage+=actual;if(mult>1.01)run.stats[id].superEffective++;if(crit)run.stats[id].crits++;maybeMoveStatus(m,e,id);if(e.hp<=0)killEnemy(e,id);if(d.slowProc&&Math.random()<d.slowProc)e.attackTimer+=.38;}
+  const entry=best.entry,m=entry.m,targets=m.area?livingEnemies().slice(0,4):[best.e],d=derivedFor(id),cat=moveCategory(m),off=cat==="special"?d.spAtk:d.atk,item=currentItem(p);
+  for(const e of targets){
+    if(!e.alive)continue;
+    const def=cat==="special"?e.stats.spDef:e.stats.def,stab=d.types.includes(m.type)?1.2:1,mult=typeMult(m.type,e.stats.types),area=m.area?.60:1,boost=item?.boostType===m.type?1+(item.power||0):1,crit=Math.random()<d.crit;
+    const raw=off*idlePower(m.power)*moveRankMult(entry.rank)*stab*mult*defenseFactor(def)*(1+(t.power||0))*boost*area*(.92+Math.random()*.16)*(crit?1.65:1),actual=Math.min(e.hp,Math.max(0,raw));
+    e.hp-=raw;run.stats[id].damage+=actual;if(mult>1.01)run.stats[id].superEffective++;if(crit)run.stats[id].crits++;maybeMoveStatus(m,e,id);if(e.hp<=0)killEnemy(e,id);if(d.slowProc&&Math.random()<d.slowProc)e.attackTimer+=.38;
+  }
 }
 function enemyAction(e){
   if(actionBlocked(e,name(e.dex)))return;const ids=battleIds().filter(id=>run.team[id]?.alive);if(!ids.length)return;
@@ -14422,11 +14464,19 @@ function awardRoundXp(isBoss=false){
   log("✨ XP de ronda: "+total+" total · combate 100% · reserva 10%"+(isBoss?" · jefe":"")+".");run.roundXp=0;run.roundCombatants=[];save();
 }
 function grantXp(id,amount){
-  const p=js.pokemon[id];p.xp=(p.xp||0)+amount;while(p.level<MAX_LEVEL&&p.xp>=xpNeed(p.level)){p.xp-=xpNeed(p.level);p.level++;log(name(p.dex)+" sube a Nv."+p.level+".");tryLinearEvolution(id);}
+  const p=js.pokemon[id];p.xp=(p.xp||0)+amount;
+  while(p.level<MAX_LEVEL&&p.xp>=xpNeed(p.level)){
+    p.xp-=xpNeed(p.level);p.level++;p.skillPoints=Math.max(0,Number(p.skillPoints||0))+1;
+    log(name(p.dex)+" sube a Nv."+p.level+" y gana 1 punto de movimiento.");tryLinearEvolution(id);
+  }
 }
 function tryLinearEvolution(id){
   const p=js.pokemon[id],f=fam(id),edges=(f?.evolutions||[]).filter(e=>e.method==="level"&&Number(e.from)===Number(p.dex)&&p.level>=Number(e.level||999));
-  if(edges.length!==1)return;const e=edges[0];p.dex=Number(e.to);if(!js.dex.includes(p.dex))js.dex.push(p.dex);if(run?.team[id])refreshCombatant(id);log("✨ Evolución: "+name(e.from)+" → "+name(e.to)+".");
+  if(edges.length!==1)return;const e=edges[0];p.dex=Number(e.to);if(!js.dex.includes(p.dex))js.dex.push(p.dex);
+  const stage=Math.max(0,(f.members||[]).indexOf(Number(p.dex))),moves=DATA().movesets?.[id]||[];
+  p.moveRanks=Array.isArray(p.moveRanks)?p.moveRanks:[1,0,0,1];while(p.moveRanks.length<4)p.moveRanks.push(0);
+  moves.forEach((m,i)=>{if((m.kind==="support"||Number(m.unlockStage||0)<=stage)&&Number(p.moveRanks[i]||0)<=0)p.moveRanks[i]=1;});
+  if(run?.team[id])refreshCombatant(id);log("✨ Evolución: "+name(e.from)+" → "+name(e.to)+".");
 }
 function refreshCombatant(id){const t=run.team[id],d=derivedFor(id),ratio=t.hp/Math.max(1,t.maxHp);t.maxHp=d.maxHp;t.hp=Math.max(t.alive?1:0,t.maxHp*ratio);}
 function finishNormalRound(){
@@ -14549,6 +14599,8 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 window.PokeSendaJohtoBattleIsolated={
  start:startRun,stop:stopRun,openReward,continueReward,closeCenter,saveKey:SAVE,
  getState:()=>JSON.parse(JSON.stringify(js||{})),getRun:()=>run?JSON.parse(JSON.stringify(run)):null,getReward:()=>reward?JSON.parse(JSON.stringify(reward)):null,
+ getPokemonView:id=>{migrate();const p=js.pokemon[id];if(!p)return null;return {p:JSON.parse(JSON.stringify(p)),stats:derived(p,id),moves:(DATA().movesets?.[id]||[]).map((m,i)=>({m:{...m},i,rank:Number(p.moveRanks?.[i]||0),unlocked:Number(m.unlockStage||0)<=stageIndex(id,p.dex)||m.kind==="support"})),inRun:!!run,alive:run?.team?.[id]?.alive??null,hp:run?.team?.[id]?.hp??null,maxHp:run?.team?.[id]?.maxHp??null};},
+ upgradeMove:(id,i)=>{migrate();const p=js.pokemon[id],m=DATA().movesets?.[id]?.[Number(i)];if(!p||!m||Number(p.skillPoints||0)<=0)return false;const stage=stageIndex(id,p.dex);if(m.kind!=="support"&&Number(m.unlockStage||0)>stage)return false;p.moveRanks=Array.isArray(p.moveRanks)?p.moveRanks:[1,0,0,1];while(p.moveRanks.length<4)p.moveRanks.push(0);const rank=Math.max(1,Number(p.moveRanks[i]||1));if(rank>=25)return false;p.moveRanks[i]=rank+1;p.skillPoints--;save();return true;},
  reload:()=>{migrate();return JSON.parse(JSON.stringify(js||{}));},
  setSpeed:s=>{migrate();s=Number(s);if(![1,2,4].includes(s))return false;js.options.battleSpeed=s;if(run)run.speed=s;save();render();return true;},
  setOption:(k,v)=>{migrate();if(!["autoRepeat","autoPotion","autoOpen"].includes(k))return false;js.options[k]=!!v;save();render();return true;},
@@ -14585,6 +14637,96 @@ window.PokeSendaJohtoBattleIsolated={
 #pkRegionRuntimeRoot .pk-runtime-disabled-card{border:1px solid #5e583c;border-radius:10px;background:#242013;padding:12px;text-align:center;color:#c6bb8a;font-size:7px;line-height:1.5}
 #pkRegionRuntimeRoot .pk-runtime-toast{position:fixed;left:50%;top:88px;transform:translateX(-50%);z-index:470000;border:1px solid #75926c;border-radius:999px;background:#0d251ddd;color:#eff8ec;padding:8px 13px;font-size:8px;font-weight:900;opacity:0;pointer-events:none;transition:.18s}.pk-runtime-toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
 @media(max-width:700px){#pkRegionRuntimeRoot{display:block;overflow:auto}#pkRegionRuntimeRoot .game{width:100%;min-height:100svh;border-radius:0}.pk-j-box-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* V36.51.1 · Johto usa las MISMAS medidas de producción 1920×1080 que Kanto. */
+#pkRegionRuntimeRoot{
+  padding:6px!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+#pkRegionRuntimeRoot .game{
+  width:min(1908px,calc(100vw - 12px))!important;
+  height:min(1068px,calc(100vh - 12px))!important;
+  max-width:none!important;
+  max-height:none!important;
+  display:flex!important;
+  flex-direction:column!important;
+  border-radius:14px!important;
+}
+#pkRegionRuntimeRoot .top{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  grid-template-areas:"meta run" "nav auto"!important;
+  gap:7px 12px!important;
+  padding:9px 12px!important;
+  flex:0 0 auto!important;
+}
+#pkRegionRuntimeRoot .top-meta{grid-area:meta!important;display:flex!important}
+#pkRegionRuntimeRoot .top-run{grid-area:run!important;display:flex!important}
+#pkRegionRuntimeRoot .top-nav{grid-area:nav!important;display:flex!important}
+#pkRegionRuntimeRoot .top-auto{grid-area:auto!important;display:flex!important}
+#pkRegionRuntimeRoot .main{
+  flex:1!important;
+  min-height:0!important;
+  grid-template-columns:minmax(0,1fr) 500px!important;
+}
+#pkRegionRuntimeRoot .field{height:100%!important;min-height:0!important}
+#pkRegionRuntimeRoot .right{height:100%!important;max-height:none!important;padding:10px!important}
+
+/* Barra de ruta: nunca puede desaparecer/comprimirse en escritorio. */
+#pkRegionRuntimeRoot .hud{display:block!important;visibility:visible!important;opacity:1!important}
+#pkRegionRuntimeRoot .hudrow{display:flex!important;align-items:center!important}
+#pkRegionRuntimeRoot .route-progress{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  position:relative!important;
+  flex:1 1 auto!important;
+  min-width:180px!important;
+  min-height:34px!important;
+  padding-top:14px!important;
+}
+#pkRegionRuntimeRoot .route-progress .timebar{display:block!important;width:100%!important}
+#pkRegionRuntimeRoot .route-progress .timefill{display:block!important;height:100%!important}
+
+/* Formación: se utilizan los controles buscables reales de Kanto. */
+#pkRegionRuntimeRoot .formation-combo{position:relative!important;display:flex!important;align-items:center!important;gap:5px!important;margin:3px 0 2px!important;z-index:2}
+#pkRegionRuntimeRoot .formation-slot.combo-open{z-index:80!important}
+#pkRegionRuntimeRoot .formation-combo-menu{z-index:1000!important}
+#pkRegionRuntimeRoot .formation-pokemon{cursor:pointer!important}
+#pkRegionRuntimeRoot .formation-slot .skill-point-badge{display:flex!important}
+
+/* Campo: clases y colocación exactas que esperan los últimos fixes visuales de Kanto. */
+#pkRegionRuntimeRoot #teamLine.pk-team-one{grid-template-columns:1fr!important}
+#pkRegionRuntimeRoot #teamLine.pk-team-two{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+#pkRegionRuntimeRoot #teamLine.pk-team-three{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+#pkRegionRuntimeRoot #teamLine .mon-wrap,
+#pkRegionRuntimeRoot #enemyTeamLine .enemy-slot{cursor:pointer!important}
+#pkRegionRuntimeRoot .pk-hud{pointer-events:none}
+#pkRegionRuntimeRoot .pk-type{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  border-radius:999px!important;padding:1px 5px!important;color:white!important;
+  font-size:6px!important;font-weight:950!important;margin:1px!important
+}
+
+/* La ficha clonada de Kanto vuelve a usar su tamaño/jerarquía completa. */
+#pkRegionRuntimeRoot #pokemonDetailContent .team-card{margin:0!important}
+#pkRegionRuntimeRoot #pokemonDetailContent .moves-first-label{display:block!important}
+#pkRegionRuntimeRoot #pokemonDetailContent .skill.move-skill{cursor:pointer!important}
+#pkRegionRuntimeRoot #pokemonDetailContent .skill.move-skill:disabled{cursor:default!important}
+
+/* Escritorio reducido: exactamente el mismo corte de la plantilla Kanto. */
+@media(max-width:1500px){
+  #pkRegionRuntimeRoot{overflow:auto!important}
+  #pkRegionRuntimeRoot .game{height:auto!important;min-height:calc(100vh - 12px)!important}
+  #pkRegionRuntimeRoot .main{grid-template-columns:minmax(0,1fr) 430px!important;min-height:690px!important}
+  #pkRegionRuntimeRoot .right{height:auto!important;max-height:690px!important}
+  #pkRegionRuntimeRoot .top{display:flex!important}
+  #pkRegionRuntimeRoot .top-meta,#pkRegionRuntimeRoot .top-run,#pkRegionRuntimeRoot .top-nav,#pkRegionRuntimeRoot .top-auto{display:contents!important}
+}
+
 </style>
 
 
@@ -14602,6 +14744,11 @@ const gif=(dex,back=false,shiny=false)=>ANIM+(back?(shiny?"back/shiny/":"back/")
 const fam=id=>D().families?.[id],species=d=>D().species?.find(x=>Number(x.dex)===Number(d))||{dex:Number(d),name:CROSS_NAMES[Number(d)]||("#"+d),types:[]};
 const nameDex=d=>species(d).name||("#"+d),natureName=k=>({fuerte:"Fuerte",huraña:"Huraña",audaz:"Audaz",firme:"Firme",picara:"Pícara",osada:"Osada",docil:"Dócil",placida:"Plácida",agitada:"Agitada",floja:"Floja",miedosa:"Miedosa",activa:"Activa",seria:"Seria",alegre:"Alegre",ingenua:"Ingenua",modesta:"Modesta",afable:"Afable",mansa:"Mansa",timida:"Tímida",alocada:"Alocada",serena:"Serena",amable:"Amable",grosera:"Grosera",cauta:"Cauta",rara:"Rara"}[k]||"Seria");
 const roleNames=["GUARDIA","ASALTO","APOYO"],roleClass=["pos-guard","pos-striker","pos-support"];
+const TYPE_ES={normal:"Normal",fire:"Fuego",water:"Agua",electric:"Eléctrico",grass:"Planta",ice:"Hielo",fighting:"Lucha",poison:"Veneno",ground:"Tierra",flying:"Volador",psychic:"Psíquico",bug:"Bicho",rock:"Roca",ghost:"Fantasma",dragon:"Dragón",dark:"Siniestro",steel:"Acero",fairy:"Hada",support:"Apoyo"};
+const TYPE_COLOR={normal:"#a8a77a",fire:"#ee8130",water:"#6390f0",electric:"#d9a521",grass:"#7ac74c",ice:"#7cc9c6",fighting:"#c22e28",poison:"#a33ea1",ground:"#d9b25f",flying:"#a98ff3",psychic:"#f95587",bug:"#a6b91a",rock:"#b6a136",ghost:"#735797",dragon:"#6f35fc",dark:"#705746",steel:"#b7b7ce",fairy:"#d685ad"};
+const starHTML=n=>Array.from({length:5},(_,i)=>i<Math.max(1,Number(n)||1)?"★":'<span class="off">★</span>').join("");
+const normalizeSearch=t=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
+
 function toast(msg){const t=el("pkRuntimeToast");if(!t)return;t.textContent=msg;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),1800);}
 function cloneNode(selector){const n=document.querySelector(selector);if(!n)return null;const c=n.cloneNode(true);c.classList.add("hidden");root.appendChild(c);return c;}
 function build(){if(root)return;root=document.createElement("div");root.id="pkRegionRuntimeRoot";root.className="hidden pk-region-johto-runtime";document.body.appendChild(root);
@@ -14622,19 +14769,114 @@ function prepareMenu(){if(!menu)return;el("menuPatchNotesBtn",menu)?.remove();q(
 function renderMenu(){const s=read(),info=el("menuSaveInfo",menu);if(info)info.textContent=(s.dex?.length||0)+" especies · ₽"+Math.floor(s.money||0).toLocaleString("es-CL")+" · "+(s.routes?.johto_route1?.completions||0)+" rutas completas";}
 function prepareStarter(){if(!starter)return;const h=q("h2",starter);if(h)h.textContent="Elige tu primer compañero de Johto";const p=q("p",starter);if(p)p.textContent="Tu campaña de Johto comienza desde cero y se guarda por separado de Kanto.";const buttons=qa("[data-starter]",starter),defs=[{id:"j_cyndaquil",dex:155,name:"Cyndaquil",desc:"Fuego · ofensivo y rápido"},{id:"j_totodile",dex:158,name:"Totodile",desc:"Agua · resistente y físico"},{id:"j_chikorita",dex:152,name:"Chikorita",desc:"Planta · equilibrada y soporte"}];buttons.forEach((b,i)=>{const d=defs[i];if(!d)return;b.dataset.jStarter=d.id;delete b.dataset.starter;const img=q("img",b);if(img)img.src=gif(d.dex);const strong=q("b",b),small=q("small",b);if(strong)strong.textContent=d.name;if(small)small.textContent=d.desc;b.onclick=()=>chooseStarter(d.id,d.dex);});}
 function chooseStarter(id,dex){let s=read();s.starter=id;s.dex=Array.isArray(s.dex)?s.dex:[];s.pokemon=s.pokemon&&typeof s.pokemon==="object"?s.pokemon:{};s.formation=Array.isArray(s.formation)?s.formation:Array(6).fill(null);if(!s.pokemon[id])s.pokemon[id]={familyId:id,dex,level:1,xp:0,nature:["firme","seria","alegre","modesta","cauta"][Math.floor(Math.random()*5)],copies:1,shinyUnlocked:false,starter:true,heldItem:null,stars:1};if(!s.dex.includes(dex))s.dex.push(dex);if(!s.formation.some(Boolean))s.formation[0]=id;write(s);B()?.reload?.();showLobby();}
-function prepareGame(){if(!game)return;const region=el("regionSwitchBtn",game);if(region){const b=q(".region-switch-copy b",region),sm=q(".region-switch-copy small",region);if(b)b.textContent="JOHTO";if(sm)sm.textContent="Kanto · Disponible";region.onclick=showRegionSelector;}const rs=el("routeSelect",game);if(rs){rs.innerHTML='<option value="johto_route1">Pradera Ámbar</option><option value="johto_route2" disabled>Bosque Ancestral · próximamente</option><option value="johto_route3" disabled>Senda Plateada · próximamente</option>';rs.value="johto_route1";}el("gameMenuBtn",game).onclick=showLobby;el("startBtn",game).onclick=()=>{const r=B()?.getRun?.();if(r){B()?.togglePause?.();renderAll();}else B()?.start?.();};el("stopRunBtn",game).onclick=()=>B()?.stop?.();el("checkpointSelectBtn",game).onclick=openCheckpoint;qa("[data-speed]",game).forEach(b=>b.onclick=()=>{B()?.setSpeed?.(Number(b.dataset.speed));renderAll();});el("autoRepeatBtn",game).onclick=()=>toggleOpt("autoRepeat");el("autoOpenBtn",game).onclick=()=>toggleOpt("autoOpen");el("autoPotionBtn",game).onclick=()=>toggleOpt("autoPotion");el("lootBtn",game).onclick=openInventory;el("pokedexBtn",game).onclick=openPokedex;el("pcBoxBtn",game).onclick=openBox;const ach=el("achievementsBtn",game),tree=el("skillTreeBtn",game);for(const x of [ach,tree]){if(x)x.classList.add("pk-runtime-unsupported");}if(ach)ach.onclick=()=>toast("Logros regionales: siguiente capa de la plantilla");if(tree)tree.onclick=()=>toast("Árbol regional: siguiente capa de la plantilla");q(".timed-gacha-label",game).textContent="🔮 Gachapon Premium · sistema global en preparación regional";qa("[data-tg-claim],[data-tg-buy]",game).forEach(x=>{x.disabled=true;x.textContent="Próximamente";});const stat=q("[data-tg-status]",game);if(stat)stat.textContent="La franja se conserva en la plantilla; se conectará al sistema global.";game.addEventListener("click",e=>{const mon=e.target.closest?.("[data-j-pokemon]");if(mon)openDetail(mon.dataset.jPokemon);});}
+function prepareGame(){
+  if(!game)return;
+  game.style.removeProperty("width");game.style.removeProperty("height");
+  const region=el("regionSwitchBtn",game);if(region){const b=q(".region-switch-copy b",region),sm=q(".region-switch-copy small",region);if(b)b.textContent="JOHTO";if(sm)sm.textContent="Kanto · Disponible";region.onclick=showRegionSelector;}
+  const rs=el("routeSelect",game);if(rs){rs.innerHTML='<option value="johto_route1">Pradera Ámbar</option><option value="johto_route2" disabled>Bosque Ancestral · próximamente</option><option value="johto_route3" disabled>Senda Plateada · próximamente</option>';rs.value="johto_route1";}
+  const field=el("field",game);field?.classList.remove("pk-lobby-mode","route2","route3","routeInfinite");field?.classList.add("route1");
+  q(".hud",game)?.classList.remove("hidden");q(".route-progress",game)?.classList.remove("hidden");
+  el("gameMenuBtn",game).onclick=showLobby;
+  el("startBtn",game).onclick=()=>{const r=B()?.getRun?.();if(r){B()?.togglePause?.();renderAll();}else B()?.start?.();};
+  el("stopRunBtn",game).onclick=()=>B()?.stop?.();
+  el("checkpointSelectBtn",game).onclick=openCheckpoint;
+  qa("[data-speed]",game).forEach(b=>b.onclick=()=>{B()?.setSpeed?.(Number(b.dataset.speed));renderAll();});
+  el("autoRepeatBtn",game).onclick=()=>toggleOpt("autoRepeat");el("autoOpenBtn",game).onclick=()=>toggleOpt("autoOpen");el("autoPotionBtn",game).onclick=()=>toggleOpt("autoPotion");
+  el("lootBtn",game).onclick=openInventory;el("pokedexBtn",game).onclick=openPokedex;el("pcBoxBtn",game).onclick=openBox;
+  const ach=el("achievementsBtn",game),tree=el("skillTreeBtn",game);for(const x of [ach,tree])if(x)x.classList.add("pk-runtime-unsupported");
+  if(ach)ach.onclick=()=>toast("Logros regionales: se conectarán sobre esta misma ventana de Kanto.");
+  if(tree)tree.onclick=()=>toast("Árbol regional: se conectará sobre esta misma ventana de Kanto.");
+  const tg=q(".timed-gacha-label",game);if(tg)tg.textContent="🔮 Gachapon Premium · sistema global en preparación regional";
+  qa("[data-tg-claim],[data-tg-buy]",game).forEach(x=>{x.disabled=true;x.textContent="Próximamente";});const stat=q("[data-tg-status]",game);if(stat)stat.textContent="La franja se conserva en la plantilla; se conectará al sistema global.";
+  game.addEventListener("click",e=>{const mon=e.target.closest?.("[data-j-pokemon]");if(mon)openDetail(mon.dataset.jPokemon);});
+}
 function toggleOpt(k){const s=B()?.getState?.()||read(),v=!s.options?.[k];B()?.setOption?.(k,v);renderAll();}
 function prepareRegionSelector(){if(!regionOverlay)return;const close=el("regionSelectCloseBtn",regionOverlay);if(close)close.onclick=closeRegionSelector;const kanto=q(".region-card.current",regionOverlay),johto=el("regionJohtoCard",regionOverlay),line=q(".region-current-line",regionOverlay),msg=el("regionComingMessage",regionOverlay),headp=q(".region-select-head-copy p",regionOverlay);if(headp)headp.textContent="Todas las regiones comparten la misma interfaz de PokéSenda, pero conservan su progreso regional por separado.";if(line)line.innerHTML='<span class="region-current-dot"></span> Región activa: <b>Johto DEV</b> <span>·</span> Campaña aislada de Kanto.';if(kanto){kanto.classList.remove("current");kanto.classList.add("available");kanto.setAttribute("role","button");kanto.tabIndex=0;const badge=q(".region-state-badge",kanto);if(badge)badge.textContent="Volver a Kanto";kanto.onclick=()=>closeRoot();kanto.onkeydown=e=>{if(e.key==="Enter"||e.key===" ")closeRoot();};}if(johto){johto.classList.remove("coming");johto.classList.add("current");johto.removeAttribute("aria-disabled");johto.disabled=false;const badge=q(".region-state-badge",johto);if(badge)badge.textContent="Región actual · DEV";const lock=q(".region-lock",johto);if(lock)lock.textContent="🍂";const top=q(".region-card-name span",johto);if(top)top.textContent="En desarrollo privado";const info=q(".region-card-info p",johto);if(info)info.textContent="Segunda campaña de PokéSenda. Mismo juego y sistemas, con progreso, Pokémon, rutas, objetos y Gimnasios propios.";johto.onclick=closeRegionSelector;}if(msg)msg.innerHTML='<strong>Johto está activo solo para desarrollo.</strong> Kanto conserva su partida original y nunca se sobrescribe al viajar.';}
 function showRegionSelector(){regionReturnView=currentView;regionOverlay.classList.remove("hidden");}
 function closeRegionSelector(){regionOverlay.classList.add("hidden");}
 function renderAll(){if(currentView!=="game")return;const s=B()?.getState?.()||read(),r=B()?.getRun?.();renderTop(s,r);renderWorld(s,r);renderFormation(s,r);renderDamage(s,r);renderLog(s,r);}
-function renderTop(s,r){const rs=s.routes?.johto_route1||{},dist=r?.distance??(rs.farmCheckpoint||0),cp=rs.farmCheckpoint||0;el("collectionTop",game).textContent=(s.dex?.length||0)+"/131";el("moneyTop",game).textContent="₽"+Math.floor(s.money||0).toLocaleString("es-CL");el("mtTicketsTop",game).textContent=String(s.mtTickets||0);el("checkpointBtnValue",game).textContent=cp.toLocaleString("es-CL")+" m";el("checkpointSelectBtn",game).classList.remove("hidden");el("checkpointSelectBtn",game).disabled=!!r;el("distance",game).textContent=Math.floor(dist).toLocaleString("es-CL")+" m / 10.000 m";el("bestDistance",game).textContent=((rs.bestDistance||0)/1000).toFixed(2).replace(".",",")+" km";el("objectiveFill",game).style.width=Math.min(100,dist/10000*100)+"%";el("routeHudName",game).textContent="Pradera Ámbar";el("nextBoss",game).textContent=dist>=10000?"final":Math.min(10,Math.floor(dist/1000)+1)+" km";const field=el("field",game);field.classList.remove("route2","route3","routeInfinite");field.classList.add("route1");const start=el("startBtn",game),stop=el("stopRunBtn",game);if(r){start.textContent=r.paused?"▶ Continuar expedición":"⏸ Pausar expedición";start.classList.toggle("run-paused",!!r.paused);start.classList.toggle("run-running",!r.paused);stop.disabled=!!r.rewardPending;}else{start.textContent="Comenzar expedición";start.classList.remove("run-paused","run-running");stop.disabled=true;}qa("[data-speed]",game).forEach(b=>b.classList.toggle("active",Number(b.dataset.speed)===(s.options?.battleSpeed||1)));el("autoRepeatBtn",game).classList.toggle("active",!!s.options?.autoRepeat);el("autoOpenBtn",game).classList.toggle("active",!!s.options?.autoOpen);el("autoPotionBtn",game).classList.toggle("active",!!s.options?.autoPotion);const paused=el("pausedBanner",game);if(paused)paused.classList.toggle("show",!!r?.paused&&!r.rewardPending);for(const c of CENTERS){const m=el("centerMark"+c,game);if(m){m.classList.remove("hidden");m.classList.toggle("visited",(rs.centersSeen||[]).includes(c));}}}
+function renderTop(s,r){
+  const rs=s.routes?.johto_route1||{},auto=rs.farmCheckpoint===null||rs.farmCheckpoint===undefined||rs.farmCheckpoint==="auto",cp=auto?Number(rs.checkpoint||0):Number(rs.farmCheckpoint||0),dist=r?.distance??cp;
+  el("collectionTop",game).textContent=(s.dex?.length||0)+"/131";el("moneyTop",game).textContent="₽"+Math.floor(s.money||0).toLocaleString("es-CL");el("mtTicketsTop",game).textContent=String(s.mtTickets||0);
+  el("checkpointBtnValue",game).textContent=cp.toLocaleString("es-CL")+" m";el("checkpointSelectBtn",game).classList.remove("hidden");el("checkpointSelectBtn",game).disabled=!!r;
+  el("distance",game).textContent=Math.floor(dist).toLocaleString("es-CL")+" m / 10.000 m";el("bestDistance",game).textContent=((rs.bestDistance||0)/1000).toFixed(2).replace(".",",")+" km";el("objectiveFill",game).style.width=Math.min(100,dist/10000*100)+"%";el("routeHudName",game).textContent="Pradera Ámbar";el("nextBoss",game).textContent=dist>=10000?"final":Math.min(10,Math.floor(dist/1000)+1)+" km";
+  const field=el("field",game);field.classList.remove("pk-lobby-mode","route2","route3","routeInfinite");field.classList.add("route1");q(".hud",game)?.classList.remove("hidden");q(".route-progress",game)?.classList.remove("hidden");
+  const start=el("startBtn",game),stop=el("stopRunBtn",game);if(r){start.textContent=r.paused?"▶ Continuar expedición":"⏸ Pausar expedición";start.classList.toggle("run-paused",!!r.paused);start.classList.toggle("run-running",!r.paused);stop.disabled=!!r.rewardPending;}else{start.textContent="Comenzar expedición";start.classList.remove("run-paused","run-running");stop.disabled=true;}
+  qa("[data-speed]",game).forEach(b=>b.classList.toggle("active",Number(b.dataset.speed)===(s.options?.battleSpeed||1)));el("autoRepeatBtn",game).classList.toggle("active",!!s.options?.autoRepeat);el("autoOpenBtn",game).classList.toggle("active",!!s.options?.autoOpen);el("autoPotionBtn",game).classList.toggle("active",!!s.options?.autoPotion);
+  const paused=el("pausedBanner",game);if(paused)paused.classList.toggle("show",!!r?.paused&&!r.rewardPending);
+  for(const c of CENTERS){const mk=el("centerMark"+c,game);if(mk){mk.classList.remove("hidden");mk.classList.toggle("visited",(rs.centersSeen||[]).includes(c));}}
+}
 function assignments(s,r){const f=Array.isArray(s.formation)?s.formation:Array(6).fill(null),used=new Set(),out=[];const alive=id=>!!(id&&r?.team?.[id]?.alive&&!used.has(id));for(let role=0;role<3;role++){let id=f[role];if(r&&!alive(id)){const pref=f[role+3];id=alive(pref)?pref:f.slice(3).find(alive)||null;}if(!r&&id&&!used.has(id)||r&&alive(id)){used.add(id);out.push({id,role});}}return out;}
 function hpBand(p){return p>50?"hp-green":p>20?"hp-yellow":"hp-red";}
 function statusHTML(t){const icons={burn:"🔥",poison:"☠️",paralysis:"⚡",sleep:"💤",freeze:"❄️"},a=[];if(t?.status?.type)a.push(icons[t.status.type]||"●");if((t?.confusion||0)>0)a.push("💫");return a.join(" ");}
-function renderWorld(s,r){const team=el("teamLine",game),enemy=el("enemyTeamLine",game);team.innerHTML="";enemy.innerHTML="";if(!r){for(let i=0;i<3;i++){const id=s.formation?.[i],p=id&&s.pokemon?.[id];if(!p){const e=document.createElement("div");e.className="empty-team";e.textContent="＋";team.appendChild(e);continue;}team.appendChild(worldMon(id,p,null,i,false));}return;}const as=assignments(s,r);for(const {id,role} of [...as].reverse()){const p=s.pokemon[id],t=r.team[id];team.appendChild(worldMon(id,p,t,role,true));}for(let i=as.length;i<3;i++){const e=document.createElement("div");e.className="empty-team";e.textContent="＋";team.prepend(e);}for(const e of (r.enemies||[]).filter(x=>x.alive&&x.hp>0)){const slot=document.createElement("div");slot.className="enemy-slot";const pct=Math.max(0,e.hp/e.maxHp*100);slot.innerHTML='<div class="enemy '+(e.boss?"boss":"")+'"><div class="battle-hp enemy-world-hp"><div class="battle-hp-fill '+hpBand(pct)+'" style="width:'+pct+'%"></div></div><span class="levelbadge">Nv.'+e.level+'</span><img src="'+gif(e.dex)+'"></div><div class="enemy-status-row">'+statusHTML(e)+'</div><div class="enemy-name">'+nameDex(e.dex)+'</div>'+(e.boss?'<div class="enemy-role">JEFE</div>':'')+'<div class="types">'+(species(e.dex).types||[]).join("/")+'</div>';enemy.appendChild(slot);}}
-function worldMon(id,p,t,role,back){const w=document.createElement("div");w.className="mon-wrap";w.dataset.jPokemon=id;const pct=t?Math.max(0,t.hp/t.maxHp*100):100;w.innerHTML='<div class="mon"><div class="battle-hp ally-world-hp"><div class="battle-hp-fill '+hpBand(pct)+'" style="width:'+pct+'%"></div></div><span class="posbadge">Nv.'+p.level+'</span><img src="'+gif(p.dex,back,!!p.shinyUnlocked)+'"></div><div class="status-badges">'+statusHTML(t)+'</div><div class="mon-name">'+nameDex(p.dex)+'</div>';return w;}
-function renderFormation(s,r){const wrap=el("formationControls",game);if(!wrap)return;const f=Array.isArray(s.formation)?s.formation:Array(6).fill(null),labels=["1 · GUARDIA","2 · ASALTO","3 · APOYO","4 · GUARDIA","5 · ASALTO","6 · APOYO"],grid=document.createElement("div");grid.className="formation-grid";for(let i=0;i<6;i++){const id=f[i],p=id&&s.pokemon?.[id],slot=document.createElement("div");slot.className="formation-slot "+(i<3?"active-slot":"reserve-slot")+(i>=3?(i===3?" bench-guard":i===4?" bench-striker":" bench-support"):"");let visual='<div class="formation-empty-visual">＋</div>';if(p){const t=r?.team?.[id],hp=t?Math.ceil(t.hp)+"/"+Math.ceil(t.maxHp)+(t.alive?"":" · KO"):"Listo",need=Math.max(1,Math.round(42*Math.pow(p.level,1.27))),xp=p.level>=60?100:Math.min(100,(p.xp||0)/need*100);visual='<div class="formation-pokemon" data-j-pokemon="'+id+'"><img src="'+gif(p.dex)+'"><div><b>'+nameDex(p.dex)+'</b><small>Nv.'+p.level+'</small><span class="formation-position-tag '+roleClass[i%3]+'">'+(i<3?roleNames[i]:"↪ "+roleNames[i-3])+'</span><div class="formation-stars stars">★</div><div class="formation-status">'+statusHTML(t)+'</div><small>'+hp+'</small></div></div><div class="xpbar"><div class="xpfill" style="width:'+xp+'%"></div></div><div class="tiny-xp"><span>'+Math.floor(p.xp||0)+' XP</span><span>'+need+' sig.</span></div>';}const options=['<option value="">— Vacío —</option>',...Object.keys(s.pokemon||{}).map(x=>'<option value="'+x+'" '+(x===id?'selected':'')+'>'+nameDex(s.pokemon[x].dex)+' · Nv.'+s.pokemon[x].level+'</option>')].join("");slot.innerHTML='<div class="formation-slot-label"><span>'+labels[i]+'</span><span>'+(i<3?"COMBATE":"PRIORIDAD")+'</span></div>'+visual+'<select class="route-select" data-j-form-slot="'+i+'" '+(r?'disabled':'')+'>'+options+'</select>';grid.appendChild(slot);}wrap.innerHTML="";wrap.appendChild(grid);const banner=document.createElement("div");banner.className="type-synergy-banner";banner.innerHTML='<b>🔗 Afinidad de tipo</b> · Reúne 3 combatientes que compartan al menos un tipo para obtener las bonificaciones tácticas del sistema de Kanto.';banner.style.margin="8px 0 0";wrap.appendChild(banner);qa("[data-j-form-slot]",wrap).forEach(sel=>sel.onchange=()=>changeFormation(Number(sel.dataset.jFormSlot),sel.value));}
+function renderWorld(s,r){
+  const team=el("teamLine",game),enemy=el("enemyTeamLine",game);team.innerHTML="";enemy.innerHTML="";
+  team.classList.remove("pk-team-one","pk-team-two","pk-team-three");
+  if(!r){
+    const pre=(s.formation||[]).slice(0,3).filter(id=>id&&s.pokemon?.[id]);
+    [...pre].reverse().forEach((id,rev)=>{const role=pre.length-1-rev;team.appendChild(worldMon(id,s.pokemon[id],null,role,false));});
+    if(pre.length)team.classList.add("pk-team-"+["","one","two","three"][pre.length]);
+    return;
+  }
+  const as=assignments(s,r);
+  [...as].reverse().forEach(({id,role})=>{const p=s.pokemon[id],t=r.team[id];if(p&&t)team.appendChild(worldMon(id,p,t,role,true));});
+  if(as.length)team.classList.add("pk-team-"+["","one","two","three"][as.length]);
+  for(const e of (r.enemies||[]).filter(x=>x.alive&&x.hp>0)){
+    const slot=document.createElement("div");slot.className="enemy-slot";slot.dataset.jEnemy=e.uid||"";const pct=Math.max(0,e.hp/e.maxHp*100);
+    slot.innerHTML='<div id="enemyAvatar-j-'+(e.uid||Math.random())+'" class="enemy '+(e.boss?"boss ":"")+'"><div class="battle-hp enemy-world-hp" style="'+(e.boss?"width:112px":"")+'"><div class="battle-hp-fill '+hpBand(pct)+'" style="width:'+pct+'%"></div></div><span class="levelbadge">Nv.'+e.level+'</span><img src="'+gif(e.dex)+'" alt="'+nameDex(e.dex)+'"></div><div class="enemy-status-row">'+statusHTML(e)+'</div><div class="enemy-name">'+nameDex(e.dex)+'</div>'+(e.boss?'<div class="enemy-role">JEFE</div>':'')+'<div class="types"></div>';
+    worldHud(slot,false,species(e.dex).types||[]);enemy.appendChild(slot);
+  }
+}
+
+function worldHud(slot,ally,types=[]){
+  const box=q(ally?".mon":".enemy",slot);if(!box)return;
+  let hud=q(":scope > .pk-hud",box);if(!hud){hud=document.createElement("div");hud.className="pk-hud";box.appendChild(hud);}
+  let row=q(":scope > .pk-hprow",hud);if(!row){row=document.createElement("div");row.className="pk-hprow";hud.appendChild(row);}
+  const nm=q(ally?".mon-name":".enemy-name",slot),hp=q(".battle-hp",box),badge=q(ally?".posbadge":".levelbadge",box);
+  if(nm&&nm.parentNode!==hud)hud.insertBefore(nm,row);if(hp&&hp.parentNode!==row)row.appendChild(hp);if(badge&&badge.parentNode!==row)row.appendChild(badge);
+  let ty=q(".types",slot);if(!ty){ty=document.createElement("div");ty.className="types";slot.appendChild(ty);}
+  ty.innerHTML=(types||[]).map(t=>'<span class="pk-type" style="background:'+(TYPE_COLOR[t]||"#5b6470")+'">'+(TYPE_ES[t]||t)+'</span>').join("");
+  if(ty.parentNode!==hud)hud.appendChild(ty);
+}
+function worldMon(id,p,t,role,back){
+  const w=document.createElement("div");w.className="mon-wrap";w.dataset.jPokemon=id;w.dataset.battleRole=String(role);
+  const pct=t?Math.max(0,t.hp/t.maxHp*100):100,item=p.heldItem?itemDef(p.heldItem):null;
+  w.innerHTML='<div id="avatar-j-'+id+'" class="mon">'+(item?'<div class="held-badge ally-held-badge" title="Lleva '+item.name+'"><span>'+item.icon+'</span></div>':'')+'<div class="battle-hp ally-world-hp"><div class="battle-hp-fill '+hpBand(pct)+'" style="width:'+pct+'%"></div></div><span class="posbadge">Nv.'+p.level+'</span><img src="'+gif(p.dex,back,!!p.shinyUnlocked)+'" alt="'+nameDex(p.dex)+'"></div><div class="field-stars stars">'+starHTML(p.stars||1)+'</div><div class="status-badges">'+statusHTML(t)+'</div><div class="mon-name">'+nameDex(p.dex)+'</div>';
+  worldHud(w,true,species(p.dex).types||[]);return w;
+}
+function renderFormation(s,r){
+  const wrap=el("formationControls",game);if(!wrap)return;wrap.innerHTML="";
+  const f=Array.isArray(s.formation)?s.formation:Array(6).fill(null),labels=["1 · GUARDIA","2 · ASALTO","3 · APOYO","4 · GUARDIA","5 · ASALTO","6 · APOYO"],grid=document.createElement("div");grid.className="formation-grid";
+  const choices=Object.keys(s.pokemon||{});
+  for(let i=0;i<6;i++){
+    const id=f[i],p=id&&s.pokemon?.[id],t=id&&r?.team?.[id],slot=document.createElement("div"),role=i<3?i:i-3;
+    slot.className="formation-slot "+(i<3?"active-slot":"reserve-slot")+(i>=3?(role===0?" bench-guard":role===1?" bench-striker":" bench-support"):"")+(t&&!t.alive?" ko-slot":"");
+    let visual='<div class="formation-empty-visual">＋</div>';
+    if(p){
+      const need=Math.max(1,Math.round(42*Math.pow(p.level,1.27))),pct=p.level>=60?100:Math.min(100,(p.xp||0)/need*100),hp=t?Math.max(0,Math.ceil(t.hp))+"/"+Math.ceil(t.maxHp)+(t.alive?"":" · KO"):(B()?.getPokemonView?.(id)?.stats?.maxHp||"—")+" PS";
+      visual='<div class="formation-pokemon" data-j-pokemon="'+id+'"><img src="'+gif(p.dex)+'" alt="'+nameDex(p.dex)+'"><div><b>'+nameDex(p.dex)+'</b><small>Nv.'+p.level+'</small><span class="formation-position-tag '+roleClass[role]+'">'+(i<3?roleNames[role]:"↪ "+roleNames[role])+'</span><div class="formation-stars stars">'+starHTML(p.stars||1)+'</div><div class="formation-status">'+statusHTML(t)+'</div><small>'+hp+'</small></div></div><div class="xpbar"><div class="xpfill" style="width:'+pct+'%"></div></div><div class="tiny-xp"><span>'+(p.level>=60?"MAX":Math.floor(p.xp||0)+" XP")+'</span><span>'+(p.level>=60?"":need+" sig.")+'</span></div>';
+    }
+    const opts=['<button class="formation-combo-option '+(!id?"selected":"")+'" type="button" data-j-choice=""><span class="formation-combo-empty">—</span><span><b>Vacío</b><small>Dejar este puesto libre</small></span></button>']
+      .concat(choices.map(x=>{const pp=s.pokemon[x],sel=x===id,tt=r?.team?.[x];return'<button class="formation-combo-option '+(sel?"selected":"")+'" type="button" data-j-choice="'+x+'" data-j-search="'+nameDex(pp.dex)+' '+pp.level+'"><img src="'+gif(pp.dex)+'"><span><b>'+(sel?"✓ ":"")+nameDex(pp.dex)+'</b><small>Nv.'+pp.level+(tt&&!tt.alive?" · DEBILITADO":"")+'</small></span></button>';})).join("");
+    slot.innerHTML='<div class="formation-slot-label"><span>'+labels[i]+'</span><span>'+(i<3?"COMBATE":"PRIORIDAD")+'</span></div>'+(p&&Number(p.skillPoints||0)>0?'<span class="skill-point-badge" title="'+p.skillPoints+' puntos de movimiento disponibles">+'+p.skillPoints+'</span>':'')+visual+'<div class="formation-combo" data-j-combo="'+i+'"><button class="formation-swap-icon" type="button" title="Cambiar Pokémon" '+(r?"disabled":"")+'>⇄</button><input class="formation-combo-input" type="search" placeholder="Cambiar Pokémon..." autocomplete="off" spellcheck="false" '+(r?"disabled":"")+'><span class="formation-combo-caret">▾</span><div class="formation-combo-menu hidden">'+opts+'<div class="formation-combo-no-results hidden">No hay Pokémon que coincidan.</div></div></div>';
+    grid.appendChild(slot);
+  }
+  wrap.appendChild(grid);
+  const banner=document.createElement("div");banner.className="type-synergy-banner";banner.innerHTML='<b>🔗 Afinidad de tipo</b> · Reúne 3 combatientes que compartan al menos un tipo para obtener +5% ATQ/AT. ESP. y +5% Support.';banner.style.margin="8px 0 0";wrap.appendChild(banner);
+  if(r){const note=document.createElement("div");note.className="party-lock-note";note.textContent="🔒 Equipo bloqueado durante la expedición. Usa ⏹ Parar para sustituir integrantes.";wrap.appendChild(note);}
+  wrap.querySelectorAll("[data-j-pokemon]").forEach(x=>x.onclick=()=>openDetail(x.dataset.jPokemon));
+  wrap.querySelectorAll(".formation-combo").forEach(combo=>{
+    const idx=Number(combo.dataset.jCombo),input=q(".formation-combo-input",combo),menu=q(".formation-combo-menu",combo),swap=q(".formation-swap-icon",combo),options=qa(".formation-combo-option",combo),empty=q(".formation-combo-no-results",combo);
+    const closeOthers=()=>qa(".formation-combo.open",wrap).forEach(c=>{if(c!==combo){c.classList.remove("open");c.closest(".formation-slot")?.classList.remove("combo-open");q(".formation-combo-menu",c)?.classList.add("hidden");}});
+    const filter=()=>{const term=normalizeSearch(input.value);let shown=0;options.forEach((b,n)=>{if(n===0){b.classList.toggle("hidden",!!term);return;}const ok=!term||normalizeSearch(b.dataset.jSearch||b.textContent).includes(term);b.classList.toggle("hidden",!ok);if(ok)shown++;});empty?.classList.toggle("hidden",shown>0||!term);};
+    const open=()=>{if(input.disabled)return;closeOthers();combo.classList.add("open");combo.closest(".formation-slot")?.classList.add("combo-open");menu.classList.remove("hidden");filter();};
+    const close=()=>{combo.classList.remove("open");combo.closest(".formation-slot")?.classList.remove("combo-open");menu.classList.add("hidden");input.value="";};
+    input?.addEventListener("focus",open);input?.addEventListener("click",open);input?.addEventListener("input",()=>{open();filter();});swap?.addEventListener("click",e=>{e.preventDefault();input?.focus();open();});
+    menu?.addEventListener("mousedown",e=>{const b=e.target.closest("[data-j-choice]");if(!b)return;e.preventDefault();changeFormation(idx,b.dataset.jChoice||"");});
+    input?.addEventListener("keydown",e=>{if(e.key==="Escape"){e.preventDefault();close();input.blur();}else if(e.key==="Enter"){const b=options.find((x,n)=>n>0&&!x.classList.contains("hidden"));if(b){e.preventDefault();changeFormation(idx,b.dataset.jChoice||"");}}});
+    input?.addEventListener("blur",()=>setTimeout(()=>{if(!combo.matches(":focus-within"))close();},90));
+  });
+}
 function changeFormation(i,id){const s=read();if(B()?.getRun?.())return;let f=Array.isArray(s.formation)?s.formation:Array(6).fill(null),old=f[i]||null;if(id){const other=f.indexOf(id);if(other>=0)f[other]=old;}f[i]=id||null;s.formation=f;write(s);B()?.reload?.();renderAll();}
 function renderDamage(s,r){const wrap=el("damagePanel",game);if(!wrap)return;const stats=r?.stats||{};if(!Object.keys(stats).length){wrap.innerHTML='<div class="damage-empty">La información de combate aparecerá cuando inicies una expedición.</div>';return;}const entries=Object.entries(stats).map(([id,x])=>({id,v:Number(x.damage||0),p:s.pokemon[id]})).filter(x=>x.p).sort((a,b)=>b.v-a.v),total=entries.reduce((n,x)=>n+x.v,0),max=Math.max(1,...entries.map(x=>x.v));wrap.innerHTML='<div class="damage-head"><b>⚔ Daño acumulado</b><div class="grow"></div><small>'+Math.round(total).toLocaleString("es-CL")+' total</small></div><div class="damage-list">'+entries.map(x=>'<div class="damage-row"><img src="'+gif(x.p.dex)+'"><div class="damage-main"><b>'+nameDex(x.p.dex)+'</b><div class="damage-bar"><div class="damage-fill" style="width:'+(x.v/max*100).toFixed(1)+'%"></div></div></div><div class="damage-number"><b>'+Math.round(x.v).toLocaleString("es-CL")+'</b><small>'+(total?x.v/total*100:0).toFixed(1)+'%</small></div></div>').join("")+'</div>';}
 function renderLog(s,r){const log=el("log",game);if(log)log.innerHTML=(r?.log?.length?r.log:["Johto listo. Forma tu equipo y comienza Pradera Ámbar."]).map(x=>'<div>'+x+'</div>').join("");const cap=el("captureLog",game);if(cap)cap.innerHTML='<div class="capture-log-empty">Capturas regionales: '+Object.keys(s.pokemon||{}).length+' familias obtenidas.</div>';const hist=el("expeditionHistory",game);if(hist)hist.innerHTML='<div class="exp-history-empty">Pradera Ámbar · mejor '+Math.floor(s.routes?.johto_route1?.bestDistance||0).toLocaleString("es-CL")+' m · '+(s.routes?.johto_route1?.completions||0)+' completadas.</div>';}
@@ -14662,8 +14904,34 @@ function prepareBox(){if(!boxOverlay)return;el("pcBoxCloseBtn",boxOverlay).oncli
 function openBox(){el("pcBoxSearch",boxOverlay).value="";renderBox();boxOverlay.classList.remove("hidden");}
 function renderBox(){const s=read(),qv=(el("pcBoxSearch",boxOverlay).value||"").toLowerCase(),ids=Object.keys(s.pokemon||{}).filter(id=>(nameDex(s.pokemon[id].dex)+" "+s.pokemon[id].level).toLowerCase().includes(qv)),f=new Set((s.formation||[]).filter(Boolean));el("pcBoxGrid",boxOverlay).innerHTML=ids.map(id=>{const p=s.pokemon[id];return'<div class="pk-j-box-card '+(f.has(id)?'in-team':'')+'" data-j-pokemon="'+id+'"><img src="'+gif(p.dex)+'"><b>'+nameDex(p.dex)+'</b><small>Nv.'+p.level+' · '+natureName(p.nature)+'</small><small>'+(p.shinyUnlocked?'✨ Shiny disponible · ':'')+'copias '+(p.copies||1)+'</small><button class="btn" data-j-box-toggle="'+id+'">'+(f.has(id)?'Quitar de Formación':'Añadir a Formación')+'</button></div>';}).join("")||'<div class="pc-box-empty">No hay Pokémon que coincidan.</div>';el("pcBoxOwnedCount",boxOverlay).textContent=String(ids.length);el("pcBoxFormationCount",boxOverlay).textContent=String(f.size);el("pcBoxStoredCount",boxOverlay).textContent=String(Math.max(0,ids.length-f.size));el("pcBoxSearchCount",boxOverlay).textContent=String(ids.length);qa("[data-j-box-toggle]",boxOverlay).forEach(b=>b.onclick=e=>{e.stopPropagation();toggleBox(b.dataset.jBoxToggle);});qa("[data-j-pokemon]",boxOverlay).forEach(c=>c.onclick=e=>{if(!e.target.closest("button"))openDetail(c.dataset.jPokemon);});}
 function toggleBox(id){if(B()?.getRun?.()){toast("Detén la expedición para cambiar integrantes");return;}const s=read(),f=Array.isArray(s.formation)?s.formation:Array(6).fill(null),i=f.indexOf(id);if(i>=0){if(f.filter(Boolean).length<=1)return toast("Debes conservar al menos un Pokémon");f[i]=null;}else{const free=f.indexOf(null);if(free<0)return toast("La Formación ya tiene 6 Pokémon");f[free]=id;}s.formation=f;write(s);B()?.reload?.();renderBox();renderAll();}
-function prepareDetail(){if(!detailOverlay)return;el("pokemonDetailCloseBtn",detailOverlay).onclick=()=>detailOverlay.classList.add("hidden");el("pokemonPrevBtn",detailOverlay).classList.add("hidden");el("pokemonNextBtn",detailOverlay).classList.add("hidden");}
-function openDetail(idOrDex){const s=read(),id=s.pokemon?.[idOrDex]?idOrDex:Object.keys(s.pokemon||{}).find(x=>Number(s.pokemon[x].dex)===Number(idOrDex)),p=id?s.pokemon[id]:null;if(!p)return;el("pokemonDetailTitle",detailOverlay).textContent=nameDex(p.dex)+' · Nv.'+p.level;el("pokemonDetailContent",detailOverlay).innerHTML='<div class="pokemon-detail-main"><img src="'+gif(p.dex)+'"><div><h3>'+nameDex(p.dex)+'</h3><div class="role-badge">Johto · '+natureName(p.nature)+'</div><div class="combat-stat-grid"><div class="combat-stat"><b>'+p.level+'</b><small>Nivel</small></div><div class="combat-stat"><b>'+Math.floor(p.xp||0)+'</b><small>XP actual</small></div><div class="combat-stat"><b>'+(p.copies||1)+'</b><small>Copias</small></div><div class="combat-stat"><b>'+(p.shinyUnlocked?'Sí':'No')+'</b><small>Shiny</small></div></div><div class="pk-runtime-note">Esta ficha usa la ventana real de Kanto. Estadísticas avanzadas, movimientos, MT, estrellas y evoluciones especiales se irán conectando aquí, no en otro diseño.</div></div></div>';detailOverlay.classList.remove("hidden");}
+function prepareDetail(){
+  if(!detailOverlay)return;el("pokemonDetailCloseBtn",detailOverlay).onclick=()=>detailOverlay.classList.add("hidden");
+  el("pokemonPrevBtn",detailOverlay).classList.remove("hidden");el("pokemonNextBtn",detailOverlay).classList.remove("hidden");
+  el("pokemonPrevBtn",detailOverlay).onclick=()=>navigateDetail(-1);el("pokemonNextBtn",detailOverlay).onclick=()=>navigateDetail(1);
+}
+
+let detailPokemonId=null;
+function detailIds(){const s=read(),formation=(s.formation||[]).filter(id=>s.pokemon?.[id]),rest=Object.keys(s.pokemon||{}).filter(id=>!formation.includes(id));return [...formation,...rest];}
+function navigateDetail(dir){const ids=detailIds();if(!detailPokemonId||ids.length<2)return;let i=ids.indexOf(detailPokemonId);if(i<0)i=0;detailPokemonId=ids[(i+dir+ids.length)%ids.length];openDetail(detailPokemonId);}
+function moveDetailHTML(m,rank){
+  rank=Math.max(1,Number(rank)||1);
+  if(m.kind==="support"){
+    const amount=.05+.003*(rank-1),label=m.effect==="heal"?"Curación":m.effect==="guard"?"Protección":m.effect==="haste"?"Velocidad":"Potenciación";
+    return '<span class="move-detail"><span class="move-detail-row"><span class="move-chip"><b>Clase</b><span class="value">Support</span></span><span class="move-chip move-current"><b>R'+rank+'</b><span class="value">'+label+' '+(amount*100).toFixed(1)+'%</span></span><span class="move-chip move-next"><b>Próximo</b><span class="value">'+(rank<25?"R"+(rank+1):"MÁXIMO")+'</span></span></span></span>';
+  }
+  const bonus=.018*(rank-1),effective=Number(m.power||0)*(1+bonus);
+  return '<span class="move-detail"><span class="move-detail-row"><span class="move-chip"><b>Tipo</b><span class="value">'+(TYPE_ES[m.type]||m.type)+'</span></span><span class="move-chip"><b>Potencia base</b><span class="value">'+(m.power||"—")+'</span></span><span class="move-chip move-current"><b>Bonus R'+rank+'</b><span class="value">+'+(bonus*100).toFixed(1)+'%</span></span><span class="move-chip move-current"><b>Potencia efectiva</b><span class="value">'+effective.toFixed(1)+'</span></span></span></span>';
+}
+function openDetail(idOrDex){
+  const s=read(),id=s.pokemon?.[idOrDex]?idOrDex:Object.keys(s.pokemon||{}).find(x=>Number(s.pokemon[x].dex)===Number(idOrDex)),p=id?s.pokemon[id]:null;if(!p)return;
+  detailPokemonId=id;const view=B()?.getPokemonView?.(id),st=view?.stats||{},moves=view?.moves||[],need=Math.max(1,Math.round(42*Math.pow(p.level,1.27))),pct=p.level>=60?100:Math.min(100,(p.xp||0)/need*100),types=species(p.dex).types||[],inFormation=(s.formation||[]).includes(id),hpText=view?.inRun&&view.maxHp!=null?Math.ceil(view.hp||0)+"/"+Math.ceil(view.maxHp)+(view.alive===false?" · DEBILITADO":""):(st.maxHp||"—")+" PS";
+  const moveButtons=moves.map(x=>{const m=x.m,rank=Math.max(1,Number(x.rank||1)),unlocked=!!x.unlocked,maxed=rank>=25,can=unlocked&&Number(p.skillPoints||0)>0&&!maxed,color=TYPE_COLOR[m.type]||"#718096";return'<button class="skill move-skill '+(m.kind==="support"?"support-skill ":"")+(unlocked?"":"locked-move")+'" style="--move-color:'+color+';border-color:'+color+'" data-j-upgrade-move="'+x.i+'" '+(can?"":"disabled")+'><strong><span>'+m.name+'</span><span>'+(unlocked?"R"+rank+"/25":"🔒 Evo "+m.unlockStage)+'</span></strong><small>'+(unlocked?moveDetailHTML(m,rank):"Se desbloquea al evolucionar.")+'</small></button>';}).join("");
+  el("pokemonDetailTitle",detailOverlay).textContent=nameDex(p.dex);
+  const ids=detailIds(),nav=ids.length>1;el("pokemonPrevBtn",detailOverlay).disabled=!nav;el("pokemonNextBtn",detailOverlay).disabled=!nav;
+  el("pokemonDetailContent",detailOverlay).innerHTML='<div class="team-card"><div class="team-head"><img class="poke-img" src="'+gif(p.dex)+'" alt="'+nameDex(p.dex)+'"><div class="team-title"><b>'+nameDex(p.dex)+' · Nv.'+p.level+'</b><small>'+types.map(t=>TYPE_ES[t]||t).join("/")+' · '+hpText+'</small><span class="role-badge">Johto · '+natureName(p.nature)+'</span><div class="stars">'+starHTML(p.stars||1)+'</div><div class="party-status">'+(inFormation?"Equipo preparado":"Fuera de la formación")+'</div></div><span style="font-size:10px;color:var(--good);font-weight:900">'+Number(p.skillPoints||0)+' pts</span></div><div class="xpbar"><div class="xpfill" style="width:'+pct+'%"></div></div><div class="statline"><span>'+(p.level>=60?"Nivel máximo":Math.floor(p.xp||0)+" / "+need+" XP")+'</span><span>'+((1/Math.max(.25,Number(st.cd||1))).toFixed(2))+' atq/s</span></div><div class="nature-card nature-card-textonly"><span class="nature-copy"><small>NATURALEZA</small><b>'+natureName(p.nature)+'</b><span class="nature-effect">La naturaleza modifica ±10% las estadísticas base correspondientes.</span></span></div><div class="moves-first-label">MOVIMIENTOS · '+Number(p.skillPoints||0)+' PUNTOS DISPONIBLES</div><div class="skills">'+moveButtons+'</div><div class="statline"><span>PS '+Math.round(st.maxHp||0)+' · ATQ '+Number(st.atk||0).toFixed(1)+' · AT.ESP '+Number(st.spAtk||0).toFixed(1)+'</span><span>DEF '+Number(st.def||0).toFixed(0)+' · DEF.ESP '+Number(st.spDef||0).toFixed(0)+'</span></div></div>';
+  qa("[data-j-upgrade-move]",detailOverlay).forEach(btn=>btn.onclick=()=>{if(B()?.upgradeMove?.(id,Number(btn.dataset.jUpgradeMove))){B()?.reload?.();openDetail(id);renderAll();}});
+  detailOverlay.classList.remove("hidden");
+}
 function openDexDetail(dex){const s=read(),id=Object.keys(s.pokemon||{}).find(x=>Number(s.pokemon[x].dex)===Number(dex));if(id)openDetail(id);}
 function onRewardClose(){rewardOverlay.classList.add("hidden");showGame();}
 function bindKeys(){document.addEventListener("keydown",e=>{if(e.ctrlKey&&e.altKey&&!e.shiftKey&&String(e.key).toLowerCase()==="j"){e.preventDefault();e.stopImmediatePropagation();root&&!root.classList.contains("hidden")?closeRoot():open();return;}if(e.key==="Escape"&&root&&!root.classList.contains("hidden")){if(!rewardOverlay?.classList.contains("hidden")||!centerOverlay?.classList.contains("hidden"))return;if(currentView==="game")showLobby();else if(currentView==="menu")closeRoot();}},true);}

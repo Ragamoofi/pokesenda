@@ -11841,7 +11841,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.53.0.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.54.0.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -11980,7 +11980,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.53.0',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.54.0',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -13665,7 +13665,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.53.0';
+  const VERSION='V36.54.0';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -14333,6 +14333,14 @@ function migrate(){
   js.achievements.premiumTickets=Math.max(0,Math.floor(Number(js.achievements.premiumTickets||0)));
   js.achievements.shinyTickets=Math.max(0,Math.floor(Number(js.achievements.shinyTickets||0)));
   js.routeEventStats=Object.assign({seen:0,completed:0,ignored:0,battlesWon:0,camps:0,backpacks:0},js.routeEventStats||{});
+  js.gyms=js.gyms&&typeof js.gyms==="object"?js.gyms:{};
+  js.gyms.badges=Array.isArray(js.gyms.badges)?js.gyms.badges:[];
+  js.gyms.wins=js.gyms.wins&&typeof js.gyms.wins==="object"?js.gyms.wins:{};
+  js.gyms.attempts=js.gyms.attempts&&typeof js.gyms.attempts==="object"?js.gyms.attempts:{};
+  js.gyms.bestTimes=js.gyms.bestTimes&&typeof js.gyms.bestTimes==="object"?js.gyms.bestTimes:{};
+  js.gyms.firstWinAt=js.gyms.firstWinAt&&typeof js.gyms.firstWinAt==="object"?js.gyms.firstWinAt:{};
+  js.gyms.lastTeam=js.gyms.lastTeam&&typeof js.gyms.lastTeam==="object"?js.gyms.lastTeam:{};
+  js.gyms.leagueUnlocked=!!js.gyms.leagueUnlocked;
   js.options=Object.assign({autoRepeat:false,autoPotion:false,autoOpen:false,battleSpeed:1,animations:true,combatFloats:true,confirmStop:true,routeEvents:true},js.options||{});
   js.options.battleSpeed=[1,2,4].includes(Number(js.options.battleSpeed))?Number(js.options.battleSpeed):1;
   if(STARTERS.includes(js.starter)&&!js.pokemon[js.starter])createPokemon(js.starter,1,true,false);
@@ -14768,6 +14776,193 @@ function processAutoPotion(){
 }
 function routeStartPoint(){const rs=js.routes.johto_route1;if(rs.farmCheckpoint===null||rs.farmCheckpoint===undefined||rs.farmCheckpoint==="auto")return Number(rs.checkpoint||0);const fp=Number(rs.farmCheckpoint);return[0,2500,5000,7500].includes(fp)&&((rs.centersSeen||[]).includes(fp)||fp===0||rs.completions>0)?fp:Number(rs.checkpoint||0);}
 
+
+/* ============================================================
+   GIMNASIOS DE JOHTO · 6 VS 6 · PARIDAD DE REGLAS CON KANTO
+   ============================================================ */
+const J_GYM_ORDER=["falkner","bugsy","whitney","morty","chuck","jasmine","pryce","clair"];
+const J_GYM_DEFS={
+ falkner:{leader:"Falkner",city:"Ciudad Malva",gym:"Gimnasio Malva",type:"flying",badge:"Medalla Céfiro",icon:"🪽",color:"#8aa8d7",portrait:"falkner",money:75000,tickets:1,tm:"j_tm31",recommended:"Nv.60 · 4–5★ · endgame",rule:"Corriente Ascendente · alta velocidad y presión aérea; Noctowl JEFE acelera la segunda fase.",roster:[[193,60],[176,61],[225,61],[198,62],[227,62],[164,64]],ace:164},
+ bugsy:{leader:"Bugsy",city:"Pueblo Azalea",gym:"Gimnasio Azalea",type:"bug",badge:"Medalla Colmena",icon:"🐝",color:"#9eb347",portrait:"bugsy",money:100000,tickets:1,tm:"j_tm49",recommended:"Nv.60 · 4–5★ · endgame",rule:"Enjambre · ataques múltiples y presión constante; Scizor JEFE aumenta su ofensiva en Fase 2.",roster:[[168,60],[166,61],[193,61],[205,62],[214,62],[212,64]],ace:212},
+ whitney:{leader:"Whitney",city:"Ciudad Trigal",gym:"Gimnasio Trigal",type:"normal",badge:"Medalla Planicie",icon:"🌼",color:"#dd8fb1",portrait:"whitney",money:125000,tickets:1,tm:"j_tm45",recommended:"Nv.60 · 4–5★ · endgame",rule:"Ritmo Imparable · aguante, curación y presión prolongada; Miltank JEFE se recupera al entrar en Fase 2.",roster:[[162,60],[190,61],[203,61],[217,62],[242,62],[241,64]],ace:241},
+ morty:{leader:"Morty",city:"Ciudad Iris",gym:"Gimnasio Iris",type:"ghost",badge:"Medalla Niebla",icon:"👻",color:"#80659b",portrait:"morty",money:150000,tickets:1,tm:"j_tm30",recommended:"Nv.60 · 4–5★ · endgame",rule:"Niebla Espectral · estados y Confusión dominan la pelea; Misdreavus JEFE intensifica el caos en Fase 2.",roster:[[198,60],[215,61],[178,61],[197,62],[229,62],[200,64]],ace:200},
+ chuck:{leader:"Chuck",city:"Ciudad Orquídea",gym:"Gimnasio Orquídea",type:"fighting",badge:"Medalla Tormenta",icon:"🥋",color:"#c86a50",portrait:"chuck",money:200000,tickets:2,tm:"j_tm01",recommended:"Nv.60 · 4–5★ · endgame",rule:"Disciplina de Acero · potencia física y críticos; Hitmontop JEFE aumenta su fuerza al entrar en Fase 2.",roster:[[106,60],[107,61],[62,61],[214,62],[217,62],[237,64]],ace:237},
+ jasmine:{leader:"Jasmine",city:"Ciudad Olivo",gym:"Gimnasio Olivo",type:"steel",badge:"Medalla Mineral",icon:"⚙️",color:"#aeb7c4",portrait:"jasmine",money:250000,tickets:2,tm:"j_tm23",recommended:"Nv.60 · 4–5★ · endgame",rule:"Fortaleza Mineral · enorme defensa y reducción de daño; Steelix JEFE endurece la segunda fase.",roster:[[205,60],[212,61],[227,61],[207,62],[248,62],[208,64]],ace:208},
+ pryce:{leader:"Pryce",city:"Pueblo Caoba",gym:"Gimnasio Caoba",type:"ice",badge:"Medalla Glaciar",icon:"❄️",color:"#77b9cc",portrait:"pryce",money:350000,tickets:2,tm:"j_tm16",recommended:"Nv.60 · 4–5★ · endgame",rule:"Frío Extremo · ralentización y congelación; Piloswine JEFE reduce aún más el ritmo rival en Fase 2.",roster:[[238,60],[124,61],[215,61],[225,62],[220,62],[221,64]],ace:221},
+ clair:{leader:"Clair",city:"Ciudad Endrino",gym:"Gimnasio Endrino",type:"dragon",badge:"Medalla Dragón",icon:"🐉",color:"#7561d9",portrait:"clair",money:500000,tickets:3,tm:"j_tm24",recommended:"Nv.60 · 4–5★ · endgame",rule:"Linaje Dragón · ofensiva equilibrada y gran resistencia; Kingdra JEFE desata todo su poder en Fase 2.",roster:[[117,60],[181,61],[207,61],[248,62],[160,62],[230,64]],ace:230}
+};
+const J_GYM_TRAINING={
+ falkner:{stars:5,rank:12,hp:1.34,atk:1.32,def:1.24,speed:1.15,bossHp:2.20,bossAtk:1.38,bossDef:1.18,bossSpeed:1.24,phaseAtk:1.16,phaseSpeed:1.18,phaseReduction:.05},
+ bugsy:{stars:5,rank:12,hp:1.36,atk:1.36,def:1.25,speed:1.12,bossHp:2.25,bossAtk:1.44,bossDef:1.20,bossSpeed:1.15,phaseAtk:1.22,phaseSpeed:1.12,phaseReduction:.06},
+ whitney:{stars:5,rank:12,hp:1.46,atk:1.30,def:1.30,speed:1.06,bossHp:2.55,bossAtk:1.34,bossDef:1.32,bossSpeed:1.05,phaseAtk:1.12,phaseSpeed:1.05,phaseReduction:.10},
+ morty:{stars:5,rank:12,hp:1.34,atk:1.40,def:1.24,speed:1.12,bossHp:2.22,bossAtk:1.48,bossDef:1.18,bossSpeed:1.18,phaseAtk:1.22,phaseSpeed:1.16,phaseReduction:.05},
+ chuck:{stars:5,rank:12,hp:1.40,atk:1.40,def:1.28,speed:1.07,bossHp:2.42,bossAtk:1.46,bossDef:1.25,bossSpeed:1.08,phaseAtk:1.25,phaseSpeed:1.08,phaseReduction:.07},
+ jasmine:{stars:5,rank:12,hp:1.46,atk:1.30,def:1.42,speed:1.00,bossHp:2.60,bossAtk:1.34,bossDef:1.48,bossSpeed:1.00,phaseAtk:1.10,phaseSpeed:1.02,phaseReduction:.16},
+ pryce:{stars:5,rank:12,hp:1.40,atk:1.34,def:1.32,speed:1.06,bossHp:2.42,bossAtk:1.38,bossDef:1.30,bossSpeed:1.06,phaseAtk:1.15,phaseSpeed:1.05,phaseReduction:.09},
+ clair:{stars:5,rank:12,hp:1.42,atk:1.40,def:1.34,speed:1.10,bossHp:2.50,bossAtk:1.48,bossDef:1.32,bossSpeed:1.12,phaseAtk:1.25,phaseSpeed:1.12,phaseReduction:.10}
+};
+let jGym=null,jGymTimer=null;
+
+function jGymDef(id){return J_GYM_DEFS[id]||null;}
+function jGymTraining(id){return J_GYM_TRAINING[id]||J_GYM_TRAINING.falkner;}
+function jGymHasBadge(id){return (js.gyms?.badges||[]).includes(id);}
+function jGymUnlocked(id){const i=J_GYM_ORDER.indexOf(id);return i===0||(i>0&&jGymHasBadge(J_GYM_ORDER[i-1]));}
+function jGymBadgeCount(){return (js.gyms?.badges||[]).filter(id=>J_GYM_ORDER.includes(id)).length;}
+function jGymFamilyForDex(dex){return Object.keys(DATA().families||{}).find(id=>(fam(id)?.members||[]).includes(Number(dex)))||null;}
+function jGymStats(){return {damage:0,healing:0,taken:0,kos:0,crits:0,superEffective:0};}
+function jGymPlayerEntity(id,index){
+  const p=js.pokemon[id],d=derived(p),moves=johtoMovesFor(id).map((m,i)=>m?{m:{...m},rank:Math.max(1,Number(p.moveRanks?.[i]||1)),i}:null).filter(Boolean);
+  return {side:"player",id,dex:p.dex,name:name(p.dex),level:p.level,types:[...d.types],maxHp:d.maxHp,hp:d.maxHp,atk:d.atk,spAtk:d.spAtk,def:d.def,spDef:d.spDef,cd:d.cd,crit:d.crit,critDamage:d.critDamage||1.65,lifesteal:d.lifesteal||0,survive:d.survive||0,moves,attackTimer:d.cd*(.65+Math.random()*.30),alive:true,status:null,statusTick:3,confusion:0,index,stars:p.stars||1,itemId:p.heldItem||null,stats:jGymStats()};
+}
+function jGymEnemyEntity(dex,level,gymId,index){
+  const fid=jGymFamilyForDex(dex),g=jGymDef(gymId),tr=jGymTraining(gymId),ace=Number(dex)===Number(g.ace),baseP={dex:Number(dex),level:Number(level),nature:"seria",heldItem:null,stars:tr.stars},core=derived(baseP),star=1+.10*(tr.stars-1);
+  const bossHp=ace?tr.bossHp:1,bossAtk=ace?tr.bossAtk:1,bossDef=ace?tr.bossDef:1,bossSpeed=ace?tr.bossSpeed:1;
+  const natural=fid?(DATA().movesets?.[fid]||[]):[],stage=fid?stageIndex(fid,dex):0;
+  let moves=natural.map((m,i)=>({m:{...m},rank:tr.rank+(ace?2:0),i})).filter(x=>x.m.kind==="support"||Number(x.m.unlockStage||0)<=stage);
+  if(ace&&tmDef(g.tm)){const sig=tmMove(g.tm),slot=sig.kind==="support"?moves.findIndex(x=>x.m.kind==="support"):moves.findIndex(x=>x.m.kind==="attack");if(slot>=0)moves[slot]={m:sig,rank:tr.rank+3,i:slot};else moves.push({m:sig,rank:tr.rank+3,i:moves.length});}
+  if(!moves.some(x=>x.m.kind==="attack"))moves.unshift({m:{kind:"attack",name:"Placaje",type:"normal",power:40},rank:tr.rank,i:0});
+  const maxHp=Math.max(1,Math.round(core.maxHp*tr.hp*star*bossHp)),atk=core.atk*tr.atk*star*bossAtk,spAtk=core.spAtk*tr.atk*star*bossAtk,def=core.def*tr.def*star*bossDef,spDef=core.spDef*tr.def*star*bossDef,cd=Math.max(.50,core.cd/(tr.speed*(1+.025*(tr.stars-1))*bossSpeed));
+  return {side:"enemy",familyId:fid,dex:Number(dex),name:name(dex),level:Number(level),types:[...(species(dex).types||["normal"])],maxHp,hp:maxHp,atk,spAtk,def,spDef,cd,crit:.10+(ace?.035:0),critDamage:1.65,moves,attackTimer:cd*(.65+Math.random()*.30),alive:true,status:null,statusTick:3,confusion:0,index,ace,bossPhase:false,reduction:ace?.06:0,stats:jGymStats()};
+}
+function jGymActive(arr,slots){return slots.map(i=>i==null?null:arr[i]).filter(e=>e?.alive);}
+function jGymAlive(arr){return arr.filter(e=>e.alive).length;}
+function jGymFillSlot(side,slot){
+  const arr=side==="player"?jGym.player:jGym.enemy,slots=side==="player"?jGym.playerSlots:jGym.enemySlots;
+  if(slots[slot]!=null&&arr[slots[slot]]?.alive)return;
+  const used=new Set(slots.filter(x=>x!=null));
+  const next=arr.findIndex((e,i)=>e.alive&&!used.has(i));slots[slot]=next>=0?next:null;
+}
+function jGymEnsureSlots(){for(let s=0;s<3;s++){jGymFillSlot("player",s);jGymFillSlot("enemy",s);}}
+function jGymRoleMult(e,slot){
+  if(e.side!=="player")return {atk:1,spAtk:1,def:1,spDef:1,cd:1,reduction:0,support:1};
+  if(slot===0)return {atk:1,spAtk:1,def:1.18,spDef:1.18,cd:1,reduction:.06,support:1};
+  if(slot===1)return {atk:1.12,spAtk:1.12,def:1,spDef:1,cd:1,reduction:0,support:1};
+  return {atk:1,spAtk:1,def:1,spDef:1,cd:1/1.15,reduction:0,support:1.20};
+}
+function jGymTypeMult(type,types){return typeMult(type,types);}
+function jGymMoveCat(m){return moveCategory(m);}
+function jGymLog(msg){if(!jGym)return;jGym.logs=[msg,...jGym.logs].slice(0,28);window.PokeSendaJohtoRuntime?.onGymRender?.();}
+function jGymStatusText(e){const a=[];if(e?.status?.type)a.push(STATUS_META[e.status.type]||e.status.type);if((e?.confusion||0)>0)a.push(STATUS_META.confusion);return a.join(" ");}
+function jGymApplyStatus(e,type,source=null){if(!e||e.status||statusImmune(e,type))return false;e.status={type,turns:type==="sleep"?2+Math.floor(Math.random()*3):0,source};e.statusTick=3;return true;}
+function jGymBlocked(e){
+  if(!e?.status)return false;
+  if(e.status.type==="sleep"){e.status.turns--;if(e.status.turns<=0)e.status=null;else return true;}
+  if(e.status?.type==="freeze"){if(Math.random()<.20)e.status=null;else return true;}
+  if(e.status?.type==="paralysis"&&Math.random()<.25)return true;
+  return false;
+}
+function jGymBestAttack(attacker,target,slot){
+  const attacks=attacker.moves.filter(x=>x.m.kind==="attack");if(!attacks.length)return null;
+  let best=null;for(const x of attacks){const cat=jGymMoveCat(x.m),rm=jGymRoleMult(attacker,slot),off=(cat==="special"?attacker.spAtk*rm.spAtk:attacker.atk*rm.atk),def=(cat==="special"?target.spDef:target.def),stab=attacker.types.includes(x.m.type)?1.2:1,mult=jGymTypeMult(x.m.type,target.types),d=off*idlePower(x.m.power)*moveRankMult(x.rank)*stab*mult*defenseFactor(def);if(!best||d>best.score)best={...x,score:d};}return best;
+}
+function jGymUseSupport(e,slot){
+  const supports=e.moves.filter(x=>x.m.kind==="support");if(!supports.length)return false;
+  const allies=jGymActive(e.side==="player"?jGym.player:jGym.enemy,e.side==="player"?jGym.playerSlots:jGym.enemySlots),low=allies.slice().sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0],x=supports[Math.floor(Math.random()*supports.length)],m=x.m;
+  if(m.effect==="heal"&&low&&low.hp/low.maxHp<.65){const heal=low.maxHp*(.06+.003*(x.rank-1))*jGymRoleMult(e,slot).support;const before=low.hp;low.hp=Math.min(low.maxHp,low.hp+heal);e.stats.healing+=low.hp-before;jGymLog("💚 "+e.name+" usa "+m.name+" sobre "+low.name+".");return true;}
+  if(m.effect==="guard"&&Math.random()<.28){for(const a of allies){a.guard=Math.max(a.guard||0,.08);a.guardTime=5;}jGymLog("🛡️ "+e.name+" usa "+m.name+".");return true;}
+  if(m.effect==="haste"&&Math.random()<.25){for(const a of allies){a.haste=Math.max(a.haste||0,.08);a.hasteTime=5;}jGymLog("⚡ "+e.name+" usa "+m.name+".");return true;}
+  if(["Hipnosis","Canto"].includes(m.name)&&Math.random()<.45){const enemies=jGymActive(e.side==="player"?jGym.enemy:jGym.player,e.side==="player"?jGym.enemySlots:jGym.playerSlots),t=enemies[0];if(t&&jGymApplyStatus(t,"sleep",e.name)){jGymLog("💤 "+e.name+" usa "+m.name+".");return true;}}
+  if(m.name==="Onda Trueno"&&Math.random()<.45){const enemies=jGymActive(e.side==="player"?jGym.enemy:jGym.player,e.side==="player"?jGym.enemySlots:jGym.playerSlots),t=enemies[0];if(t&&jGymApplyStatus(t,"paralysis",e.name)){jGymLog("⚡ "+e.name+" usa Onda Trueno.");return true;}}
+  if(["Rayo Confuso","Beso Dulce"].includes(m.name)&&Math.random()<.45){const enemies=jGymActive(e.side==="player"?jGym.enemy:jGym.player,e.side==="player"?jGym.enemySlots:jGym.playerSlots),t=enemies[0];if(t){t.confusion=2+Math.floor(Math.random()*4);jGymLog("💫 "+e.name+" usa "+m.name+".");return true;}}
+  return false;
+}
+function jGymDamage(attacker,target,moveEntry,slot){
+  const m=moveEntry.m,cat=jGymMoveCat(m),rm=jGymRoleMult(attacker,slot),off=cat==="special"?attacker.spAtk*rm.spAtk:attacker.atk*rm.atk,def=cat==="special"?target.spDef:target.def,stab=attacker.types.includes(m.type)?1.2:1,mult=jGymTypeMult(m.type,target.types),crit=Math.random()<attacker.crit,area=m.area?.60:1;
+  let raw=off*idlePower(m.power)*moveRankMult(moveEntry.rank)*stab*mult*defenseFactor(def)*area*(.92+Math.random()*.16)*(crit?(attacker.critDamage||1.65):1);
+  const targetSlot=(target.side==="player"?jGym.playerSlots:jGym.enemySlots).findIndex(i=>i!=null&&(target.side==="player"?jGym.player[i]:jGym.enemy[i])===target),trm=jGymRoleMult(target,targetSlot);
+  raw*=1-Math.min(.65,(target.reduction||0)+(trm.reduction||0)+(target.guard||0));const actual=Math.min(target.hp,Math.max(0,raw));target.hp-=raw;attacker.stats.damage+=actual;target.stats.taken+=actual;if(crit)attacker.stats.crits++;if(mult>1.01)attacker.stats.superEffective++;
+  if((attacker.lifesteal||m.drain)&&actual>0){const before=attacker.hp;attacker.hp=Math.min(attacker.maxHp,attacker.hp+actual*((attacker.lifesteal||0)+(m.drain||0)));attacker.stats.healing+=attacker.hp-before;}
+  if(m.statusType&&target.alive){if(m.statusType==="confusion")target.confusion=2+Math.floor(Math.random()*3);else jGymApplyStatus(target,m.statusType,attacker.name);}
+  if(m.slow)target.attackTimer+=.45;
+  return {actual,crit,mult};
+}
+function jGymFaint(e,killer=null){
+  if(!e.alive)return;e.alive=false;e.hp=0;if(killer)killer.stats.kos++;
+  if(e.side==="player")jGym.playerFaints++;else jGym.enemyFaints++;
+  jGymLog("💀 "+e.name+" queda fuera de combate.");
+  jGymEnsureSlots();
+}
+function jGymBossPhase(e){
+  if(!e?.ace||e.bossPhase||e.hp/e.maxHp>.50)return;
+  e.bossPhase=true;const tr=jGymTraining(jGym.gymId);e.atk*=tr.phaseAtk;e.spAtk*=tr.phaseAtk;e.cd/=tr.phaseSpeed;e.reduction=Math.min(.55,(e.reduction||0)+tr.phaseReduction);
+  if(jGym.gymId==="whitney")e.hp=Math.min(e.maxHp,e.hp+e.maxHp*.15);
+  if(jGym.gymId==="jasmine")e.guard=Math.max(e.guard||0,.12),e.guardTime=999;
+  jGymLog("🔥 "+e.name+" entra en FASE 2.");
+}
+function jGymAction(e,slot){
+  if(!e?.alive||jGymBlocked(e))return;
+  if((e.confusion||0)>0){e.confusion--;if(Math.random()<.33){e.hp-=e.maxHp*.07;if(e.hp<=0)jGymFaint(e,null);return;}}
+  if(jGymUseSupport(e,slot))return;
+  const targets=jGymActive(e.side==="player"?jGym.enemy:jGym.player,e.side==="player"?jGym.enemySlots:jGym.playerSlots);if(!targets.length)return;
+  let best=null;
+  for(const t of targets){const mv=jGymBestAttack(e,t,slot);if(mv&&(!best||mv.score>best.mv.score))best={t,mv};}
+  if(!best)return;
+  if(Number(best.mv.m.tmAccuracy??1)<1&&Math.random()>Number(best.mv.m.tmAccuracy)){jGymLog("💨 "+e.name+" falla "+best.mv.m.name+".");return;}
+  const res=jGymDamage(e,best.t,best.mv,slot);if(best.t.hp<=0)jGymFaint(best.t,e);if(best.t.side==="enemy")jGymBossPhase(best.t);
+  if(res.mult>1.01||res.crit)jGymLog((res.crit?"💥 CRÍTICO · ":"")+e.name+" usa "+best.mv.m.name+(res.mult>1.01?" · ¡Supereficaz!":"")+".");
+}
+function jGymProcessStatus(dt){
+  for(const e of [...jGym.player,...jGym.enemy]){if(!e.alive)continue;
+    if(e.guardTime>0){e.guardTime-=dt;if(e.guardTime<=0)e.guard=0;}if(e.hasteTime>0){e.hasteTime-=dt;if(e.hasteTime<=0)e.haste=0;}
+    if(!["burn","poison"].includes(e.status?.type))continue;e.statusTick=(e.statusTick??3)-dt;if(e.statusTick<=0){e.statusTick+=3;e.hp-=e.maxHp*(e.status.type==="burn"?.045:.065);if(e.hp<=0)jGymFaint(e,null);}
+  }
+}
+function jGymLeaderPulse(){
+  if(!jGym)return;const g=jGym.gymId,enemy=jGymActive(jGym.enemy,jGym.enemySlots),player=jGymActive(jGym.player,jGym.playerSlots);if(!enemy.length||!player.length)return;
+  if(g==="falkner")for(const e of enemy)e.attackTimer=Math.max(0,e.attackTimer-.18);
+  else if(g==="bugsy")for(const e of enemy){e.atk*=1.012;e.spAtk*=1.012;}
+  else if(g==="whitney"){const e=enemy.slice().sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0];e.hp=Math.min(e.maxHp,e.hp+e.maxHp*.025);}
+  else if(g==="morty"&&Math.random()<.35){const t=player[Math.floor(Math.random()*player.length)];t.confusion=Math.max(t.confusion||0,2);}
+  else if(g==="chuck")for(const e of enemy){e.atk*=1.015;e.spAtk*=1.015;}
+  else if(g==="jasmine")for(const e of enemy){e.guard=Math.max(e.guard||0,.03);e.guardTime=4.2;}
+  else if(g==="pryce"&&Math.random()<.25){const t=player[Math.floor(Math.random()*player.length)];t.attackTimer+=.28;}
+  else if(g==="clair")for(const e of enemy){e.atk*=1.012;e.spAtk*=1.012;}
+}
+function jGymTick(){
+  if(!jGym||jGym.finished||jGym.paused)return;const now=performance.now(),dt=Math.min(.22,(now-jGym.lastTick)/1000);jGym.lastTick=now;jGym.elapsed+=dt;jGym.pulse-=dt;if(jGym.pulse<=0){jGym.pulse+=4;jGymLeaderPulse();}jGymProcessStatus(dt);jGymEnsureSlots();
+  if(jGymAlive(jGym.player)<=0){jGymFinish(false);return;}if(jGymAlive(jGym.enemy)<=0){jGymFinish(true);return;}
+  for(let slot=0;slot<3;slot++){const i=jGym.playerSlots[slot],e=i==null?null:jGym.player[i];if(!e?.alive)continue;e.attackTimer-=dt;if(e.attackTimer<=0){jGymAction(e,slot);if(!e.alive)continue;const rm=jGymRoleMult(e,slot);e.attackTimer+=Math.max(.15,e.cd*rm.cd/(1+(e.haste||0)))*(e.status?.type==="paralysis"?2:1);}}
+  for(let slot=0;slot<3;slot++){const i=jGym.enemySlots[slot],e=i==null?null:jGym.enemy[i];if(!e?.alive)continue;e.attackTimer-=dt;if(e.attackTimer<=0){jGymAction(e,slot);if(!e.alive)continue;e.attackTimer+=Math.max(.15,e.cd/(1+(e.haste||0)))*(e.status?.type==="paralysis"?2:1);}}
+  if(jGymAlive(jGym.player)<=0){jGymFinish(false);return;}if(jGymAlive(jGym.enemy)<=0){jGymFinish(true);return;}
+  window.PokeSendaJohtoRuntime?.onGymRender?.();
+}
+function jGymStart(id){
+  migrate();if(run||jGym||!jGymUnlocked(id))return {ok:false,msg:run?"Detén la expedición actual para desafiar un Gimnasio.":"Gimnasio no disponible."};
+  const ids=(js.formation||[]).filter(Boolean).filter(id=>js.pokemon[id]).slice(0,6);if(ids.length<3)return {ok:false,msg:"Necesitas al menos 3 Pokémon en la Formación."};
+  const g=jGymDef(id);js.gyms.attempts[id]=Number(js.gyms.attempts[id]||0)+1;save();
+  jGym={gymId:id,player:ids.map((pid,i)=>jGymPlayerEntity(pid,i)),enemy:g.roster.map(([dex,lv],i)=>jGymEnemyEntity(dex,lv,id,i)),playerSlots:[0,1,2],enemySlots:[0,1,2],elapsed:0,lastTick:performance.now(),paused:false,finished:false,logs:[],playerFaints:0,enemyFaints:0,pulse:4,potionUses:0,result:null};
+  jGymLog("🏛 Comienza el desafío contra "+g.leader+".");jGymLog("🔥 6 vs 6 · el AS del Líder es un JEFE de dos fases.");jGymLog("📜 "+g.rule);
+  clearInterval(jGymTimer);jGymTimer=setInterval(jGymTick,80);window.PokeSendaJohtoRuntime?.onGymStarted?.();return {ok:true};
+}
+function jGymPause(v=null){if(!jGym||jGym.finished)return false;jGym.paused=v==null?!jGym.paused:!!v;jGym.lastTick=performance.now();window.PokeSendaJohtoRuntime?.onGymRender?.();return jGym.paused;}
+function jGymPotionItems(){return ["hyper_potion","super_potion","potion","full_heal"].filter(id=>Number(js.inventory?.[id]||0)>0);}
+function jGymUsePotion(itemId,playerIndex){
+  migrate();if(!jGym||jGym.finished||jGym.potionUses>=3)return {ok:false,msg:"Botiquín agotado."};const e=jGym.player[Number(playerIndex)],it=EXTRA.itemDefs?.[itemId];if(!e?.alive||!it||Number(js.inventory?.[itemId]||0)<=0)return {ok:false,msg:"No puedes usar ese objeto."};
+  if(itemId==="full_heal"){if(!e.status&&!e.confusion)return {ok:false,msg:"Ese Pokémon no tiene estados que curar."};e.status=null;e.confusion=0;}
+  else if(it.healPct){if(e.hp>=e.maxHp)return {ok:false,msg:"Ese Pokémon ya tiene todos sus PS."};const before=e.hp;e.hp=Math.min(e.maxHp,e.hp+e.maxHp*it.healPct);e.stats.healing+=e.hp-before;}
+  else return {ok:false,msg:"Objeto no válido para el Botiquín."};
+  js.inventory[itemId]--;if(js.inventory[itemId]<=0)delete js.inventory[itemId];jGym.potionUses++;save();window.PokeSendaJohtoRuntime?.onGymRender?.();return {ok:true};
+}
+function jGymForfeit(){if(!jGym)return false;jGymFinish(false,{forfeit:true});return true;}
+function jGymFinish(win,{forfeit=false}={}){
+  if(!jGym||jGym.finished)return;const battle=jGym,g=jGymDef(battle.gymId);battle.finished=true;clearInterval(jGymTimer);jGymTimer=null;
+  let first=false,money=0,tickets=0,tmNew=false;
+  if(win){
+    first=!jGymHasBadge(battle.gymId);js.gyms.wins[battle.gymId]=Number(js.gyms.wins[battle.gymId]||0)+1;const old=Number(js.gyms.bestTimes[battle.gymId]||0);if(!old||battle.elapsed<old)js.gyms.bestTimes[battle.gymId]=battle.elapsed;
+    js.gyms.lastTeam[battle.gymId]=battle.player.map(e=>({id:e.id,name:e.name,dex:e.dex,level:e.level}));
+    if(first){
+      js.gyms.badges.push(battle.gymId);js.gyms.firstWinAt[battle.gymId]=Date.now();money=g.money;tickets=g.tickets;js.money=(js.money||0)+money;ensureGymAchievementState();js.achievements.premiumTickets=(js.achievements.premiumTickets||0)+tickets;
+      tmNew=!js.tms?.[g.tm];js.tms=js.tms||{};js.tms[g.tm]=true;if(!tmNew){js.money+=50000;money+=50000;}
+    }
+    js.gyms.leagueUnlocked=jGymBadgeCount()>=8;
+  }
+  save();battle.result={win,first,money,tickets,tm:g.tm,tmNew,forfeit,badgeCount:jGymBadgeCount()};window.PokeSendaJohtoRuntime?.onGymFinished?.(JSON.parse(JSON.stringify(battle)));jGym=null;
+}
+function ensureGymAchievementState(){
+  js.achievements=js.achievements&&typeof js.achievements==="object"?js.achievements:{};
+  js.achievements.premiumTickets=Math.max(0,Number(js.achievements.premiumTickets||0));
+}
+
 function pushHistory(result,distance,extra={}){
   js.expeditionHistory=Array.isArray(js.expeditionHistory)?js.expeditionHistory:[];
   const stats=run?.stats||{},party=(run?.partyIds||[]).map(id=>({id,dex:js.pokemon[id]?.dex||0,name:name(js.pokemon[id]?.dex||0),level:js.pokemon[id]?.level||1,damage:Math.round(stats[id]?.damage||0),taken:Math.round(stats[id]?.damageTaken||0),healing:Math.round(stats[id]?.healing||0),kos:stats[id]?.kos||0}));
@@ -14834,6 +15029,18 @@ window.PokeSendaJohtoBattleIsolated={
  getRarity:id=>familyRarity(id),
  getItemDef:id=>EXTRA.itemDefs?.[id]||null,
  getTMDefs:()=>JSON.parse(JSON.stringify(DATA().tms||{})),
+ getGymDefs:()=>JSON.parse(JSON.stringify(J_GYM_DEFS)),
+ getGymOrder:()=>[...J_GYM_ORDER],
+ getGymState:()=>{migrate();return JSON.parse(JSON.stringify(js.gyms||{}));},
+ getGymBattle:()=>jGym?JSON.parse(JSON.stringify(jGym)):null,
+ gymHasBadge:id=>{migrate();return jGymHasBadge(id);},
+ gymUnlocked:id=>{migrate();return jGymUnlocked(id);},
+ gymStart:id=>jGymStart(id),
+ gymPause:v=>jGymPause(v),
+ gymForfeit:()=>jGymForfeit(),
+ gymPotionItems:()=>{migrate();return jGymPotionItems();},
+ gymUsePotion:(itemId,index)=>jGymUsePotion(itemId,index),
+
  getTMCompatStatus:()=>({ready:GEN2_TM_COMPAT_READY,loading:GEN2_TM_COMPAT_LOADING,error:GEN2_TM_COMPAT_ERROR,source:GEN2_TM_COMPAT_SOURCE}),
  tmIsCompatible:(tmId,id)=>{migrate();return tmIsCompatible(tmId,id);},
  tmCapacity:id=>{migrate();return tmCapacity(id);},
@@ -15020,6 +15227,28 @@ window.PokeSendaJohtoBattleIsolated={
  #pkRegionRuntimeRoot .tm-equip-slots{grid-column:1/-1}
 }
 
+
+/* V36.54 · Gimnasios Johto sobre componentes de Kanto */
+#pkRegionRuntimeRoot #gymSelectOverlay,
+#pkRegionRuntimeRoot #gymBattleOverlay,
+#pkRegionRuntimeRoot #gymPotionOverlay,
+#pkRegionRuntimeRoot #gymMonDetailOverlay,
+#pkRegionRuntimeRoot #gymResultOverlay{z-index:470700!important}
+#pkRegionRuntimeRoot #gymHudBtn{position:relative}
+#pkRegionRuntimeRoot #gymHudBtn .hud-icon-count{position:absolute;right:-4px;top:-5px;min-width:20px;padding:1px 3px;border-radius:999px;background:#161b20;border:1px solid #8d7740;font-size:5px;line-height:1.4}
+#pkRegionRuntimeRoot .gym-arena-bg{background:
+ radial-gradient(circle at 50% 16%,rgba(255,239,176,.20),transparent 28%),
+ linear-gradient(180deg,#172728 0%,#203739 48%,#172326 49%,#0d1719 100%)!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="falkner"] .gym-arena-bg{background:linear-gradient(180deg,#87a6b8,#d6c59c 56%,#79684a 57%,#4e4734)!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="bugsy"] .gym-arena-bg{background:linear-gradient(180deg,#50684d,#a2a85c 56%,#584d32 57%,#302b20)!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="whitney"] .gym-arena-bg{background:linear-gradient(180deg,#d9a3b6,#e9d3c3 56%,#b88787 57%,#795d63)!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="morty"] .gym-arena-bg{background:linear-gradient(180deg,#493f63,#7e668c 56%,#342b43 57%,#191723)!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="chuck"] .gym-arena-bg{background:linear-gradient(180deg,#678b92,#a3c7ca 48%,#7c6544 49%,#4d3d29)!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="jasmine"] .gym-arena-bg{background:linear-gradient(180deg,#8094a0,#c6ced1 56%,#747d80 57%,#3f484c)!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="pryce"] .gym-arena-bg{background:linear-gradient(180deg,#9ac5d4,#d9eef0 56%,#7ea8b3 57%,#456c77)!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="clair"] .gym-arena-bg{background:linear-gradient(180deg,#404166,#7773a6 56%,#343351 57%,#191928)!important}
+#pkRegionRuntimeRoot .gym-player-trainer img,#pkRegionRuntimeRoot .gym-leader-full img{image-rendering:pixelated}
+
 </style>
 
 
@@ -15027,7 +15256,7 @@ window.PokeSendaJohtoBattleIsolated={
 (()=>{
 "use strict";
 const SAVE="pokesenda_johto_dev_isolated_v1",ANIM="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/",CENTERS=[2500,5000,7500];
-let root=null,game=null,menu=null,starter=null,regionOverlay=null,rewardOverlay=null,centerOverlay=null,checkpointOverlay=null,lootPanel=null,pokedexOverlay=null,boxOverlay=null,pcSwapOverlay=null,detailOverlay=null,skillTreeOverlay=null,optionsOverlay=null,mtGachaOverlay=null,tmEquipOverlay=null,achievementsOverlay=null,achievementTmChoiceOverlay=null,routeEventOverlay=null,renderTimer=null,currentView="menu",pokedexFilter="all",regionReturnView="menu",formationSig="",worldSig="",pcStatus="all",pcRarity="all",pcSort="dex",pcSortDir="asc",treeZoom=.68,pcSwapSource=null,pcFormationSource=null,detailPokemonId=null,mtGachaRolling=false,achievementFilter="all",achievementReturn="game",achievementTmMilestone=null,achievementTmSelected=null,routeEventTimer=null,routeEventDeadline=0;
+let root=null,game=null,menu=null,starter=null,regionOverlay=null,rewardOverlay=null,centerOverlay=null,checkpointOverlay=null,lootPanel=null,pokedexOverlay=null,boxOverlay=null,pcSwapOverlay=null,detailOverlay=null,skillTreeOverlay=null,optionsOverlay=null,mtGachaOverlay=null,tmEquipOverlay=null,achievementsOverlay=null,achievementTmChoiceOverlay=null,routeEventOverlay=null,gymSelectOverlay=null,gymBattleOverlay=null,gymPotionOverlay=null,gymMonDetailOverlay=null,gymResultOverlay=null,renderTimer=null,currentView="menu",pokedexFilter="all",regionReturnView="menu",formationSig="",worldSig="",pcStatus="all",pcRarity="all",pcSort="dex",pcSortDir="asc",treeZoom=.68,pcSwapSource=null,pcFormationSource=null,detailPokemonId=null,mtGachaRolling=false,achievementFilter="all",achievementReturn="game",achievementTmMilestone=null,achievementTmSelected=null,routeEventTimer=null,routeEventDeadline=0,gymBattleTab="log",gymPotionWasPaused=false,gymDetailWasPaused=false;
 const D=()=>window.PokeSendaJohtoIsolated?.getData?.()||{},B=()=>window.PokeSendaJohtoBattleIsolated;
 const CROSS_NAMES={25:"Pikachu",26:"Raichu",35:"Clefairy",36:"Clefable",39:"Jigglypuff",40:"Wigglytuff",41:"Zubat",42:"Golbat",43:"Oddish",44:"Gloom",45:"Vileplume",60:"Poliwag",61:"Poliwhirl",62:"Poliwrath",79:"Slowpoke",80:"Slowbro",95:"Onix",106:"Hitmonlee",107:"Hitmonchan",113:"Chansey",116:"Horsea",117:"Seadra",123:"Scyther",124:"Jynx",125:"Electabuzz",126:"Magmar",133:"Eevee",134:"Vaporeon",135:"Jolteon",136:"Flareon",137:"Porygon"};
 const read=()=>{try{return JSON.parse(localStorage.getItem(SAVE)||"{}");}catch(_){return {};}};
@@ -15111,12 +15340,12 @@ function toast(msg){const t=el("pkRuntimeToast");if(!t)return;t.textContent=msg;
 function cloneNode(selector){const n=document.querySelector(selector);if(!n)return null;const c=n.cloneNode(true);c.classList.add("hidden");root.appendChild(c);return c;}
 function build(){if(root)return;root=document.createElement("div");root.id="pkRegionRuntimeRoot";root.className="hidden pk-region-johto-runtime";document.body.appendChild(root);
   // We literally clone Kanto's production components. cloneNode does not copy its event listeners.
-  menu=cloneNode("body > #mainMenu");game=cloneNode("body > .game");starter=cloneNode("body > #starterOverlay");regionOverlay=cloneNode("body > #regionSelectOverlay");checkpointOverlay=cloneNode("body > #checkpointSelectOverlay");centerOverlay=cloneNode("body > #centerOverlay");rewardOverlay=cloneNode("body > #rewardOverlay");lootPanel=cloneNode("body > #lootPanel");pokedexOverlay=cloneNode("body > #pokedexOverlay");boxOverlay=cloneNode("body > #pcBoxOverlay");pcSwapOverlay=cloneNode("body > #pcSwapOverlay");detailOverlay=cloneNode("body > #pokemonDetailOverlay");skillTreeOverlay=cloneNode("body > #skillTreeOverlay");optionsOverlay=cloneNode("body > #optionsOverlay");mtGachaOverlay=cloneNode("body > #mtGachaOverlay");tmEquipOverlay=cloneNode("body > #tmEquipOverlay");achievementsOverlay=cloneNode("body > #achievementsOverlay");achievementTmChoiceOverlay=cloneNode("body > #achievementTmChoiceOverlay");routeEventOverlay=cloneNode("body > #routeEventOverlay");
+  menu=cloneNode("body > #mainMenu");game=cloneNode("body > .game");starter=cloneNode("body > #starterOverlay");regionOverlay=cloneNode("body > #regionSelectOverlay");checkpointOverlay=cloneNode("body > #checkpointSelectOverlay");centerOverlay=cloneNode("body > #centerOverlay");rewardOverlay=cloneNode("body > #rewardOverlay");lootPanel=cloneNode("body > #lootPanel");pokedexOverlay=cloneNode("body > #pokedexOverlay");boxOverlay=cloneNode("body > #pcBoxOverlay");pcSwapOverlay=cloneNode("body > #pcSwapOverlay");detailOverlay=cloneNode("body > #pokemonDetailOverlay");skillTreeOverlay=cloneNode("body > #skillTreeOverlay");optionsOverlay=cloneNode("body > #optionsOverlay");mtGachaOverlay=cloneNode("body > #mtGachaOverlay");tmEquipOverlay=cloneNode("body > #tmEquipOverlay");achievementsOverlay=cloneNode("body > #achievementsOverlay");achievementTmChoiceOverlay=cloneNode("body > #achievementTmChoiceOverlay");routeEventOverlay=cloneNode("body > #routeEventOverlay");gymSelectOverlay=cloneNode("body > #gymSelectOverlay");gymBattleOverlay=cloneNode("body > #gymBattleOverlay");gymPotionOverlay=cloneNode("body > #gymPotionOverlay");gymMonDetailOverlay=cloneNode("body > #gymMonDetailOverlay");gymResultOverlay=cloneNode("body > #gymResultOverlay");
   const toastEl=document.createElement("div");toastEl.id="pkRuntimeToast";toastEl.className="pk-runtime-toast";root.appendChild(toastEl);
   root.addEventListener("click",e=>e.stopPropagation());root.addEventListener("pointerdown",e=>e.stopPropagation());
-  prepareMenu();prepareStarter();prepareRegionSelector();prepareGame();prepareCheckpoint();prepareCenter();prepareReward();prepareInventory();preparePokedex();prepareBox();prepareDetail();prepareSkillTree();prepareOptions();prepareMT();prepareAchievements();prepareRouteEvents();
+  prepareMenu();prepareStarter();prepareRegionSelector();prepareGame();prepareCheckpoint();prepareCenter();prepareReward();prepareInventory();preparePokedex();prepareBox();prepareDetail();prepareSkillTree();prepareOptions();prepareMT();prepareAchievements();prepareRouteEvents();prepareGyms();
 }
-function hideViews(){[menu,game,starter,regionOverlay,checkpointOverlay,centerOverlay,rewardOverlay,lootPanel,pokedexOverlay,boxOverlay,pcSwapOverlay,detailOverlay,skillTreeOverlay,optionsOverlay,mtGachaOverlay,tmEquipOverlay,achievementsOverlay,achievementTmChoiceOverlay,routeEventOverlay].forEach(x=>x?.classList.add("hidden"));}
+function hideViews(){[menu,game,starter,regionOverlay,checkpointOverlay,centerOverlay,rewardOverlay,lootPanel,pokedexOverlay,boxOverlay,pcSwapOverlay,detailOverlay,skillTreeOverlay,optionsOverlay,mtGachaOverlay,tmEquipOverlay,achievementsOverlay,achievementTmChoiceOverlay,routeEventOverlay,gymSelectOverlay,gymBattleOverlay,gymPotionOverlay,gymMonDetailOverlay,gymResultOverlay].forEach(x=>x?.classList.add("hidden"));}
 function openRoot(){build();document.getElementById("pkIsoJohtoRoot")?.classList.add("hidden");root.classList.remove("hidden");}
 function closeRoot(){if(B()?.getRun?.())B()?.stop?.();hideViews();root.classList.add("hidden");currentView="kanto";}
 function showStarter(){openRoot();hideViews();starter.classList.remove("hidden");currentView="starter";}
@@ -15145,6 +15374,10 @@ function prepareGame(){
   if(ach){ach.classList.remove("pk-runtime-unsupported");ach.onclick=()=>openAchievements("game");}
   if(tree){tree.classList.remove("pk-runtime-unsupported");tree.onclick=openSkillTree;}
   if(el("mtTicketTop",game))el("mtTicketTop",game).onclick=()=>openInventory("tms");
+  let gymBtn=el("gymHudBtn",game);
+  if(!gymBtn){const nav=q(".top-nav",game);if(nav){gymBtn=document.createElement("button");gymBtn.id="gymHudBtn";gymBtn.className="btn icon-only-btn gym-hud-btn";gymBtn.title="Gimnasios de Johto";gymBtn.setAttribute("aria-label","Gimnasios de Johto");gymBtn.innerHTML="🏛";nav.appendChild(gymBtn);}}
+  if(gymBtn){gymBtn.title="Gimnasios de Johto";gymBtn.setAttribute("aria-label","Gimnasios de Johto");gymBtn.onclick=()=>openGyms("game");}
+
   const tg=q(".timed-gacha-label",game);if(tg)tg.textContent="🔮 Gachapon Premium · sistema global en preparación regional";
   qa("[data-tg-claim],[data-tg-buy]",game).forEach(x=>{x.disabled=true;x.textContent="Próximamente";});const stat=q("[data-tg-status]",game);if(stat)stat.textContent="La franja se conserva en la plantilla; se conectará al sistema global.";
   game.addEventListener("click",e=>{const mon=e.target.closest?.("[data-j-pokemon]");if(mon)openDetail(mon.dataset.jPokemon);});
@@ -15172,7 +15405,7 @@ function updateWorldFrame(s,r){
 function renderAll(){
   if(currentView!=="game")return;
   checkAchievements();
-  const s=B()?.getState?.()||read(),r=B()?.getRun?.();renderTop(s,r);
+  const s=B()?.getState?.()||read(),r=B()?.getRun?.();renderTop(s,r);updateGymHud();
   const ws=currentWorldSignature(s,r);if(ws!==worldSig){worldSig=ws;renderWorld(s,r);}else updateWorldFrame(s,r);
   const fs=currentFormationSignature(s,r),editing=!!q(".formation-combo:focus-within",game);
   if(fs!==formationSig&&!editing){formationSig=fs;renderFormation(s,r);}else updateFormationFrame(s,r);
@@ -15359,7 +15592,7 @@ function onRouteEventClosed(){clearInterval(routeEventTimer);routeEventTimer=nul
 /* =========================================================
    LOGROS JOHTO · MISMO COMPONENTE / FLUJO DE KANTO
    ========================================================= */
-const J_ACH_CAT={adventure:"Aventura",collection:"Colección",trainer:"Entrenador"};
+const J_ACH_CAT={adventure:"Aventura",collection:"Colección",trainer:"Entrenador",gyms:"Gimnasios"};
 function johtoRoutePoolFamilyIds(){
   const r=D().routes?.johto_route1||{},out=[];
   for(const ids of Object.values(r.gachaByRarity||{}))for(const id of ids||[])if(id&&!out.includes(id))out.push(id);
@@ -15407,7 +15640,11 @@ const J_ACH=[
  {id:"tree_complete",category:"trainer",icon:"💠",title:"Árbol completo",desc:"Lleva todos los nodos del Árbol a su rango máximo.",points:100,val:s=>johtoTreeRanks(s),target:()=>johtoTreeMaxRanks()},
  {id:"tm_1",category:"trainer",icon:"💿",title:"Primera MT",desc:"Obtén tu primera MT permanente por cualquier método.",points:10,val:s=>Object.values(s.tms||{}).filter(Boolean).length,target:1},
  {id:"tm_25",category:"trainer",icon:"📀",title:"Biblioteca de MT",desc:"Consigue 25 MT diferentes de la colección de Generación II.",points:5,val:s=>Object.values(s.tms||{}).filter(Boolean).length,target:25},
- {id:"tm_50",category:"trainer",icon:"🏆",title:"Maestro de las MT",desc:"Completa las 50 MT de Generación II.",points:20,val:s=>Object.values(s.tms||{}).filter(Boolean).length,target:50}
+ {id:"tm_50",category:"trainer",icon:"🏆",title:"Maestro de las MT",desc:"Completa las 50 MT de Generación II.",points:20,val:s=>Object.values(s.tms||{}).filter(Boolean).length,target:50},
+ {id:"gym_1",category:"gyms",icon:"🏅",title:"Primera Medalla",desc:"Derrota a Falkner y consigue la Medalla Céfiro.",points:15,val:s=>(s.gyms?.badges||[]).length,target:1},
+ {id:"gym_4",category:"gyms",icon:"🏛️",title:"Mitad de Johto",desc:"Consigue 4 Medallas de Gimnasio.",points:30,val:s=>(s.gyms?.badges||[]).length,target:4},
+ {id:"gym_8",category:"gyms",icon:"👑",title:"Dominio de Johto",desc:"Consigue las 8 Medallas de Gimnasio de Johto.",points:75,val:s=>(s.gyms?.badges||[]).length,target:8},
+ {id:"gym_wins_20",category:"gyms",icon:"⚔️",title:"Especialista en Líderes",desc:"Suma 20 victorias entre desafíos y revanchas de Gimnasio.",points:30,val:s=>Object.values(s.gyms?.wins||{}).reduce((n,x)=>n+Number(x||0),0),target:20}
 ];
 const J_ROAD=[
  {id:"road100",points:100,icon:"💰",title:"Primer gran paso",desc:"₽50.000",money:50000},
@@ -15485,11 +15722,11 @@ function renderAchievements(){
   renderAchievementRoad(s,points);
   qa("[data-achievement-filter]",achievementsOverlay).forEach(b=>{
     const cat=b.dataset.achievementFilter||"all";
-    const unsupported=cat==="gyms"||cat==="special";
+    const unsupported=cat==="special";
     b.classList.toggle("hidden",unsupported);
     b.classList.toggle("active",!unsupported&&cat===achievementFilter);
   });
-  if(["gyms","special"].includes(achievementFilter))achievementFilter="all";
+  if(achievementFilter==="special")achievementFilter="all";
   const defs=J_ACH.filter(d=>achievementFilter==="all"||d.category===achievementFilter),grid=el("achievementGrid",achievementsOverlay);
   grid.innerHTML=defs.map(d=>{
     const target=achTarget(d),cur=achValue(d,s),done=!!unlocked[d.id],cl=claimed.has(d.id),pr=Math.min(100,cur/target*100),stamp=done?new Date(unlocked[d.id]).toLocaleDateString("es-CL"):"En progreso";
@@ -15542,6 +15779,118 @@ function confirmAchievementTM(){
   const s=read(),a=ensureAchievementShape(s),m=achievementTmMilestone;if(a.claimedMilestones.includes(m.id))return;
   s.tms=s.tms&&typeof s.tms==="object"?s.tms:{};s.tms[achievementTmSelected]=true;a.claimedMilestones.push(m.id);a.tmChoices[m.id]=achievementTmSelected;write(s);B()?.reload?.();
   const tm=D().tms?.[achievementTmSelected];achievementTmChoiceOverlay.classList.add("hidden");achievementTmMilestone=null;achievementTmSelected=null;toast("💿 "+(tm?.name||"MT")+" añadida a la colección.");renderAchievements();renderAll();
+}
+
+
+/* ==========================================================
+   GIMNASIOS JOHTO · COMPONENTES CLONADOS DE KANTO
+   ========================================================== */
+function jGymDefs(){return B()?.getGymDefs?.()||{};}
+function jGymOrder(){return B()?.getGymOrder?.()||[];}
+function jGymState(){return B()?.getGymState?.()||{badges:[],wins:{},attempts:{},bestTimes:{}};}
+function jGymLeaderImg(g){return "https://play.pokemonshowdown.com/sprites/trainers/"+g.portrait+".png";}
+function jGymFormatTime(sec){sec=Math.max(0,Number(sec)||0);const m=Math.floor(sec/60),s=Math.floor(sec%60),cs=Math.floor((sec-Math.floor(sec))*100);return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")+"."+String(cs).padStart(2,"0");}
+function jGymBadgeHTML(id,cls="gym-badge-mini"){const g=jGymDefs()[id];return '<span class="'+cls+'" style="--badge:'+(g?.color||"#aaa")+'" title="'+(g?.badge||"Medalla")+'"><span style="font-size:22px;line-height:1">'+(g?.icon||"🏅")+'</span></span>';}
+function jGymAvgLevel(){const s=read(),ids=(s.formation||[]).filter(id=>s.pokemon?.[id]);return ids.length?ids.reduce((n,id)=>n+Number(s.pokemon[id].level||1),0)/ids.length:0;}
+function updateGymHud(){
+  const n=(jGymState().badges||[]).length,b=el("gymHudBtn",game);if(!b)return;
+  b.title="Gimnasios de Johto · "+n+"/8 Medallas";
+  let c=q(".hud-icon-count",b);if(!c){c=document.createElement("span");c.className="hud-icon-count";b.appendChild(c);}c.textContent=n+"/8";
+}
+function prepareGyms(){
+  if(!gymSelectOverlay)return;
+  el("gymSelectCloseBtn",gymSelectOverlay).onclick=closeGyms;
+  gymSelectOverlay.onclick=e=>{if(e.target===gymSelectOverlay)closeGyms();};
+  el("gymBattlePotionBtn",gymBattleOverlay).onclick=openGymPotion;
+  el("gymBattlePauseBtn",gymBattleOverlay).onclick=toggleGymPause;
+  el("gymBattleForfeitBtn",gymBattleOverlay).onclick=()=>{if(confirm("¿Rendirse del desafío de Gimnasio?"))B()?.gymForfeit?.();};
+  el("gymLogTabBtn",gymBattleOverlay).onclick=()=>setGymBattleTab("log");
+  el("gymDamageTabBtn",gymBattleOverlay).onclick=()=>setGymBattleTab("damage");
+  el("gymPotionCloseBtn",gymPotionOverlay).onclick=closeGymPotion;
+  gymPotionOverlay.onclick=e=>{if(e.target===gymPotionOverlay)closeGymPotion();};
+  el("gymMonDetailCloseBtn",gymMonDetailOverlay).onclick=closeGymMonDetail;
+  gymMonDetailOverlay.onclick=e=>{if(e.target===gymMonDetailOverlay)closeGymMonDetail();};
+  el("gymResultContinueBtn",gymResultOverlay).onclick=()=>{gymResultOverlay.classList.add("hidden");openGyms("game");};
+  const profile=el("gymResultProfileBtn",gymResultOverlay);if(profile){profile.textContent="🏅 Ver Medallas";profile.onclick=()=>{gymResultOverlay.classList.add("hidden");openGyms("game");};}
+}
+function openGyms(from="game"){
+  if(B()?.getRun?.())return toast("Detén la expedición actual para entrar a Gimnasios.");
+  renderGymSelect();gymSelectOverlay.classList.remove("hidden");
+}
+function closeGyms(){gymSelectOverlay.classList.add("hidden");}
+function renderGymSelect(){
+  const defs=jGymDefs(),order=jGymOrder(),gs=jGymState(),badges=new Set(gs.badges||[]),avg=jGymAvgLevel(),s=read(),next=order.find(id=>!badges.has(id))||null;
+  el("gymSelectTitle",gymSelectOverlay).innerHTML='<span class="gym-official-title">🏛 Gimnasios de Johto</span>';
+  const subtitle=q(".pokemon-detail-head .tiny",gymSelectOverlay);if(subtitle)subtitle.textContent="Desafíos endgame · niveles fijos · cada Medalla desbloquea el siguiente Gimnasio";
+  el("gymSelectSummary",gymSelectOverlay).innerHTML='<div class="gym-summary-stat"><b>'+badges.size+'/8</b><small>Medallas de Johto</small></div><div class="gym-summary-stat"><b>'+(avg?avg.toFixed(1):"—")+'</b><small>Nivel medio de la Formación</small></div><div class="gym-summary-stat"><b>'+((s.formation||[]).filter(Boolean).length)+'/6</b><small>Pokémon preparados</small></div><div class="gym-summary-stat"><b>'+(next?defs[next].leader:"COMPLETADO")+'</b><small>'+(next?"Próximo líder":"Johto dominado")+'</small></div>';
+  el("gymSelectGrid",gymSelectOverlay).innerHTML=order.map((id,i)=>{const g=defs[id],unlocked=B()?.gymUnlocked?.(id),done=badges.has(id),wins=Number(gs.wins?.[id]||0),attempts=Number(gs.attempts?.[id]||0),best=Number(gs.bestTimes?.[id]||0);return '<div class="gym-card '+(unlocked?"":"locked")+' '+(done?"completed":"")+'"><div class="gym-card-head">'+jGymBadgeHTML(id)+'<div class="gym-card-portrait"><img src="'+jGymLeaderImg(g)+'" alt="'+g.leader+'"></div><div><small>'+(i+1)+'/8 · '+g.city+'</small><h3>'+g.leader+'</h3><small>'+(TYPE_ES[g.type]||g.type)+' · '+g.badge+'</small></div></div><div class="gym-card-roster">'+g.roster.map(([dex,lv])=>'<img src="'+gif(dex)+'" title="'+nameDex(dex)+' · Nv.'+lv+(Number(dex)===Number(g.ace)?" · JEFE":"")+'">').join("")+'</div><div class="gym-card-rule">'+g.rule+'</div><div class="gym-card-meta"><span>⚔ '+g.recommended+'</span><span>★5 · Mov.R12 · AS JEFE en 2 fases</span><span>'+(done?"✓ "+wins+" victoria"+(wins===1?"":"s"):unlocked?"DISPONIBLE":"BLOQUEADO")+'</span></div>'+(best?'<div class="tiny muted" style="text-align:center">Mejor tiempo · '+jGymFormatTime(best)+' · Intentos '+attempts+'</div>':"")+(unlocked?'<button class="btn '+(done?"":"primary")+'" data-j-gym="'+id+'">'+(done?"Revancha":"Desafiar")+'</button>':'<div class="gym-lock-note">🔒 Derrota a '+(defs[order[i-1]]?.leader||"el líder anterior")+'</div>')+'</div>';}).join("");
+  qa("[data-j-gym]",gymSelectOverlay).forEach(b=>b.onclick=()=>challengeGym(b.dataset.jGym));
+}
+function challengeGym(id){
+  const g=jGymDefs()[id],s=read(),team=(s.formation||[]).filter(Boolean);if(team.length<3)return toast("Necesitas al menos 3 Pokémon en la Formación.");
+  const msg='¿Desafiar a '+g.leader+'?\\n\\n6 vs 6 · velocidad fija ×1\\nBotiquín: máximo 3 usos\\nLos PS reales de tu equipo no cambian al salir.';
+  if(!confirm(msg))return;const res=B()?.gymStart?.(id);if(!res?.ok)return toast(res?.msg||"No se pudo iniciar el desafío.");
+}
+function onGymStarted(){
+  gymSelectOverlay.classList.add("hidden");gymResultOverlay.classList.add("hidden");gymBattleOverlay.dataset.gymId=B()?.getGymBattle?.()?.gymId||"";gymBattleOverlay.classList.remove("hidden");setGymBattleTab("log");onGymRender();
+}
+function gymStatusHTML(e){if(!e)return"";const a=[];if(e.status?.type)a.push({burn:"🔥 BRN",poison:"☠ PSN",paralysis:"⚡ PAR",sleep:"💤 SLP",freeze:"❄ FRZ"}[e.status.type]||e.status.type);if(Number(e.confusion||0)>0)a.push("💫 CONF");return a.join(" ");}
+function gymMonNode(e,side,index,slot){
+  const pct=Math.max(0,Math.min(100,e.hp/e.maxHp*100)),boss=e.ace,front=side==="enemy";
+  return '<button class="gym-mon '+(boss?"boss ":"")+(e.bossPhase?"phase-two ":"")+'" data-j-gym-mon="'+side+'" data-j-gym-index="'+index+'"><div class="gym-mon-sprite-wrap"><img src="'+gif(e.dex,!front)+'" alt="'+e.name+'"></div><div class="gym-mon-copy"><b>'+e.name+' · Nv.'+e.level+(boss?" · JEFE":"")+'</b><small>'+e.types.map(t=>TYPE_ES[t]||t).join("/")+(e.itemId?" · "+(itemDef(e.itemId)?.name||e.itemId):"")+'</small><div class="gym-mon-hp"><i style="width:'+pct+'%"></i></div><small>'+Math.ceil(Math.max(0,e.hp))+' / '+Math.ceil(e.maxHp)+' PS</small><span class="gym-mon-status">'+gymStatusHTML(e)+'</span></div></button>';
+}
+function gymReserveHTML(arr,slots,side){
+  const active=new Set(slots.filter(x=>x!=null));return arr.map((e,i)=>'<button class="gym-reserve-mon '+(!e.alive?"fainted ":"")+(active.has(i)?"active ":"")+'" data-j-gym-mon="'+side+'" data-j-gym-index="'+i+'" title="'+e.name+' · Nv.'+e.level+'"><img src="'+gif(e.dex)+'"><small>'+e.name+'</small></button>').join("");
+}
+function onGymRender(){
+  const b=B()?.getGymBattle?.();if(!b||gymBattleOverlay.classList.contains("hidden"))return;const g=jGymDefs()[b.gymId];gymBattleOverlay.dataset.gymId=b.gymId;
+  el("gymBattleKicker",gymBattleOverlay).textContent=g.gym+" · "+g.badge;el("gymBattleTitle",gymBattleOverlay).textContent=g.leader;el("gymBattleRule",gymBattleOverlay).textContent=g.rule;el("gymBattleTimer",gymBattleOverlay).textContent=jGymFormatTime(b.elapsed);el("gymBattleScore",gymBattleOverlay).textContent=b.player.filter(x=>x.alive).length+" vs "+b.enemy.filter(x=>x.alive).length;
+  el("gymBattlePauseBtn",gymBattleOverlay).textContent=b.paused?"▶ Continuar":"⏸ Pausa";el("gymBattlePotionBtn",gymBattleOverlay).textContent="🧪 Botiquín "+b.potionUses+"/3";el("gymBattlePotionBtn",gymBattleOverlay).disabled=b.potionUses>=3;
+  el("gymLeaderHeadImg",gymBattleOverlay).src=jGymLeaderImg(g);
+  const leader=el("gymLeaderFull",gymBattleOverlay);leader.innerHTML='<img src="'+jGymLeaderImg(g)+'" alt="'+g.leader+'">';leader.style.setProperty("--leader-color",g.color);
+  const trainer=el("gymPlayerTrainer",gymBattleOverlay),src=q("body > .game .pk-trainer-back img")?.src||q(".pk-trainer-back img",game)?.src||"";trainer.innerHTML=src?'<img src="'+src+'" alt="Entrenador">':"";
+  el("gymPlayerSide",gymBattleOverlay).innerHTML=b.playerSlots.map((idx,slot)=>idx==null?"":gymMonNode(b.player[idx],"player",idx,slot)).join("");
+  el("gymEnemySide",gymBattleOverlay).innerHTML=b.enemySlots.map((idx,slot)=>idx==null?"":gymMonNode(b.enemy[idx],"enemy",idx,slot)).join("");
+  el("gymPlayerReserve",gymBattleOverlay).innerHTML=gymReserveHTML(b.player,b.playerSlots,"player");el("gymEnemyReserve",gymBattleOverlay).innerHTML=gymReserveHTML(b.enemy,b.enemySlots,"enemy");
+  el("gymBattleLog",gymBattleOverlay).innerHTML=(b.logs||[]).map(x=>'<div>'+x+'</div>').join("");
+  renderGymDamage(b);qa("[data-j-gym-mon]",gymBattleOverlay).forEach(x=>x.onclick=()=>openGymMonDetail(x.dataset.jGymMon,Number(x.dataset.jGymIndex)));
+}
+function setGymBattleTab(tab){gymBattleTab=tab;el("gymLogTabBtn",gymBattleOverlay).classList.toggle("active",tab==="log");el("gymDamageTabBtn",gymBattleOverlay).classList.toggle("active",tab==="damage");el("gymBattleLog",gymBattleOverlay).classList.toggle("hidden",tab!=="log");el("gymBattleDamage",gymBattleOverlay).classList.toggle("hidden",tab!=="damage");if(tab==="damage")renderGymDamage(B()?.getGymBattle?.());}
+function renderGymDamage(b){
+  if(!b)return;const rows=[...b.player.map((e,i)=>({e,i,side:"Tu equipo"})),...b.enemy.map((e,i)=>({e,i,side:jGymDefs()[b.gymId]?.leader||"Líder"}))].sort((a,c)=>Number(c.e.stats?.damage||0)-Number(a.e.stats?.damage||0)),max=Math.max(1,...rows.map(x=>Number(x.e.stats?.damage||0)));
+  el("gymBattleDamage",gymBattleOverlay).innerHTML=rows.map(x=>'<div class="gym-damage-row"><img src="'+gif(x.e.dex)+'"><div><b>'+x.e.name+'</b><small>'+x.side+'</small><div class="gym-damage-bar"><i style="width:'+(Number(x.e.stats?.damage||0)/max*100)+'%"></i></div></div><strong>'+Math.round(Number(x.e.stats?.damage||0)).toLocaleString("es-CL")+'</strong></div>').join("");
+}
+function toggleGymPause(){B()?.gymPause?.();onGymRender();}
+function openGymPotion(){
+  const b=B()?.getGymBattle?.();if(!b||b.potionUses>=3)return;gymPotionWasPaused=!!b.paused;if(!b.paused)B()?.gymPause?.(true);renderGymPotion();gymPotionOverlay.classList.remove("hidden");onGymRender();
+}
+function closeGymPotion(){gymPotionOverlay.classList.add("hidden");if(!gymPotionWasPaused)B()?.gymPause?.(false);onGymRender();}
+function renderGymPotion(){
+  const b=B()?.getGymBattle?.(),s=read();if(!b)return;el("gymPotionTitle",gymPotionOverlay).textContent="🧪 Botiquín de combate · "+b.potionUses+"/3 usos";
+  const items=B()?.gymPotionItems?.()||[];el("gymPotionItems",gymPotionOverlay).innerHTML=items.length?items.map(id=>{const it=itemDef(id);return '<button class="gym-potion-item" data-j-gym-potion="'+id+'"><span>'+itemIcon(it)+'</span><b>'+it.name+'</b><small>×'+Number(s.inventory?.[id]||0)+'</small></button>';}).join(""):'<div class="gym-potion-empty">No tienes medicinas compatibles en la Mochila.</div>';
+  let selected=items[0]||null;qa("[data-j-gym-potion]",gymPotionOverlay).forEach(x=>x.onclick=()=>{selected=x.dataset.jGymPotion;qa("[data-j-gym-potion]",gymPotionOverlay).forEach(y=>y.classList.toggle("active",y===x));});
+  if(items[0])q("[data-j-gym-potion]",gymPotionOverlay)?.classList.add("active");
+  el("gymPotionTargets",gymPotionOverlay).innerHTML=b.player.map((e,i)=>'<button class="gym-potion-target '+(!e.alive?"disabled":"")+'" data-j-gym-target="'+i+'" '+(!e.alive?"disabled":"")+'><img src="'+gif(e.dex)+'"><b>'+e.name+'</b><small>'+Math.ceil(e.hp)+'/'+Math.ceil(e.maxHp)+' PS · '+(gymStatusHTML(e)||"Sin estado")+'</small></button>').join("");
+  qa("[data-j-gym-target]",gymPotionOverlay).forEach(x=>x.onclick=()=>{if(!selected)return;const res=B()?.gymUsePotion?.(selected,Number(x.dataset.jGymTarget));if(!res?.ok)return toast(res?.msg||"No se pudo usar la medicina.");renderGymPotion();onGymRender();});
+}
+function openGymMonDetail(side,index){
+  const b=B()?.getGymBattle?.();if(!b)return;const e=(side==="player"?b.player:b.enemy)[index];if(!e)return;gymDetailWasPaused=!!b.paused;if(!b.paused)B()?.gymPause?.(true);
+  el("gymMonDetailTitle",gymMonDetailOverlay).textContent=e.name+" · Nv."+e.level;el("gymMonDetailSub",gymMonDetailOverlay).textContent=(side==="player"?"Tu equipo":jGymDefs()[b.gymId].leader)+" · "+e.types.map(t=>TYPE_ES[t]||t).join("/")+(e.ace?" · JEFE":"");
+  el("gymMonDetailContent",gymMonDetailOverlay).innerHTML='<div class="team-card"><div class="team-head"><img class="poke-img" src="'+gif(e.dex)+'"><div class="team-title"><b>'+e.name+'</b><small>'+Math.ceil(e.hp)+' / '+Math.ceil(e.maxHp)+' PS · '+(gymStatusHTML(e)||"Sin estado")+'</small><div class="stars">'+starHTML(e.stars||5)+'</div></div></div><div class="statline"><span>ATQ '+Number(e.atk||0).toFixed(1)+' · AT.ESP '+Number(e.spAtk||0).toFixed(1)+'</span><span>DEF '+Number(e.def||0).toFixed(0)+' · DEF.ESP '+Number(e.spDef||0).toFixed(0)+'</span></div><div class="moves-first-label">MOVIMIENTOS</div><div class="skills">'+(e.moves||[]).map(x=>'<div class="skill move-skill"><strong><span>'+x.m.name+'</span><span>R'+x.rank+'</span></strong><small>'+(TYPE_ES[x.m.type]||x.m.type)+' · '+(x.m.kind==="attack"?"Potencia "+(x.m.power||"—"):"Support")+'</small></div>').join("")+'</div><div class="statline"><span>Daño '+Math.round(e.stats?.damage||0).toLocaleString("es-CL")+'</span><span>KO '+Number(e.stats?.kos||0)+' · Curación '+Math.round(e.stats?.healing||0).toLocaleString("es-CL")+'</span></div></div>';
+  gymMonDetailOverlay.classList.remove("hidden");
+}
+function closeGymMonDetail(){gymMonDetailOverlay.classList.add("hidden");if(!gymDetailWasPaused)B()?.gymPause?.(false);onGymRender();}
+function onGymFinished(snapshot){
+  gymBattleOverlay.classList.add("hidden");gymPotionOverlay.classList.add("hidden");gymMonDetailOverlay.classList.add("hidden");const g=jGymDefs()[snapshot.gymId],r=snapshot.result||{},win=!!r.win;
+  const box=q(".gym-result-box",gymResultOverlay);box?.classList.toggle("victory",win);box?.classList.toggle("defeat",!win);
+  el("gymResultBadge",gymResultOverlay).style.setProperty("--badge",g.color);el("gymResultBadge",gymResultOverlay).innerHTML='<div style="font-size:60px;line-height:1">'+g.icon+'</div><small>'+g.badge+'</small>';
+  if(win){el("gymResultKicker",gymResultOverlay).textContent=r.first?"🏆 "+g.leader.toUpperCase()+" DERROTADO · NUEVA MEDALLA":"✓ REVANCHA SUPERADA";el("gymResultTitle",gymResultOverlay).textContent=r.first?"¡"+g.badge+" conseguida!":"¡Victoria sobre "+g.leader+"!";const next=jGymOrder()[jGymOrder().indexOf(snapshot.gymId)+1],unlock=next?'<br><span class="gym-next-unlock">🔓 '+jGymDefs()[next].gym+' queda desbloqueado.</span>':'<br><span class="gym-next-unlock">🏅 ¡Has conquistado los 8 Gimnasios de Johto!</span>';el("gymResultText",gymResultOverlay).innerHTML=r.first?'Tu equipo venció al <b>Líder '+g.leader+'</b> en <b>'+jGymFormatTime(snapshot.elapsed)+'</b>. La <b>'+g.badge+'</b> ya forma parte de tu progreso regional.'+unlock:'Has vuelto a derrotar a <b>'+g.leader+'</b> en <b>'+jGymFormatTime(snapshot.elapsed)+'</b>. La revancha queda registrada.';el("gymResultRewards",gymResultOverlay).innerHTML=r.first?'<div class="gym-reward-card money"><b>💰 ₽'+Number(r.money||0).toLocaleString("es-CL")+'</b><small>Pokédólares de Johto</small></div><div class="gym-reward-card tm"><b>💿 '+(D().tms?.[g.tm]?.name||g.tm)+'</b><small>'+(r.tmNew?"Nueva MT permanente":"MT ya obtenida · compensación incluida")+'</small></div><div class="gym-reward-card ticket"><b>🎟️ ×'+Number(r.tickets||0)+'</b><small>Ticket Premium regional</small></div>':'<div class="gym-rematch-note"><b>🔁 Revancha completada</b><br>Sin recompensa permanente adicional. La victoria y el mejor tiempo sí quedan registrados.</div>';}
+  else{el("gymResultKicker",gymResultOverlay).textContent=r.forfeit?"DESAFÍO ABANDONADO":"DESAFÍO FALLIDO";el("gymResultTitle",gymResultOverlay).textContent=g.leader+" protege su Medalla";el("gymResultText",gymResultOverlay).innerHTML='Tu equipo no superó el desafío tras <b>'+jGymFormatTime(snapshot.elapsed)+'</b>. Los PS reales de tus Pokémon no cambiaron. Las medicinas usadas sí se consumieron.';el("gymResultRewards",gymResultOverlay).innerHTML='<b>Sin penalización de progreso:</b> no perdiste Pokédólares, PS reales ni avance de ruta.';}
+  el("gymResultStats",gymResultOverlay).innerHTML=renderGymResultStats(snapshot);gymResultOverlay.classList.remove("hidden");B()?.reload?.();checkAchievements();updateGymHud();renderAll();
+}
+function renderGymResultStats(b){
+  const rows=[...b.player.map(e=>({e,side:"TU EQUIPO"})),...b.enemy.map(e=>({e,side:jGymDefs()[b.gymId]?.leader?.toUpperCase()||"LÍDER"}))].sort((a,c)=>Number(c.e.stats?.damage||0)-Number(a.e.stats?.damage||0));
+  return '<div class="gym-result-stat-grid"><div class="gym-result-stat"><b>'+jGymFormatTime(b.elapsed)+'</b><small>Duración</small></div><div class="gym-result-stat"><b>'+b.enemyFaints+'/6</b><small>Rivales derrotados</small></div><div class="gym-result-stat"><b>'+b.playerFaints+'/6</b><small>Bajas propias</small></div><div class="gym-result-stat"><b>'+b.potionUses+'/3</b><small>Botiquín</small></div></div><div class="gym-result-damage-list">'+rows.map(x=>'<div class="gym-result-damage-row"><img src="'+gif(x.e.dex)+'"><span><b>'+x.e.name+'</b><small>'+x.side+'</small></span><strong>'+Math.round(Number(x.e.stats?.damage||0)).toLocaleString("es-CL")+' daño</strong></div>').join("")+'</div>';
 }
 
 function preparePokedex(){
@@ -15635,7 +15984,7 @@ function onRewardClose(){rewardOverlay.classList.add("hidden");showGame();}
 function bindKeys(){document.addEventListener("keydown",e=>{if(e.ctrlKey&&e.altKey&&!e.shiftKey&&String(e.key).toLowerCase()==="j"){e.preventDefault();e.stopImmediatePropagation();root&&!root.classList.contains("hidden")?closeRoot():open();return;}if(e.key==="Escape"&&root&&!root.classList.contains("hidden")){if(!rewardOverlay?.classList.contains("hidden")||!centerOverlay?.classList.contains("hidden"))return;if(currentView==="game")showLobby();else if(currentView==="menu")closeRoot();}},true);}
 function boot(){build();bindKeys();renderTimer=setInterval(()=>{if(root&&!root.classList.contains("hidden")&&currentView==="game")renderAll();},160);}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();
-window.PokeSendaJohtoRuntime={open,close:closeRoot,showLobby,showGame,el:id=>el(id),renderAll,checkAchievements,onCenterOpen,onCenterTick,onCenterClose,onRewardReady,onRewardRoll,onRewardFinalized,onRewardClose,onRunFailed,onTMCompatChanged,onRouteEvent,onRouteEventClosed};
+window.PokeSendaJohtoRuntime={open,close:closeRoot,showLobby,showGame,el:id=>el(id),renderAll,checkAchievements,onCenterOpen,onCenterTick,onCenterClose,onRewardReady,onRewardRoll,onRewardFinalized,onRewardClose,onRunFailed,onTMCompatChanged,onRouteEvent,onRouteEventClosed,onGymStarted,onGymRender,onGymFinished};
 })();
 </script>
 

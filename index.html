@@ -11906,7 +11906,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.58.3.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.58.5.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12045,7 +12045,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.58.3',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.58.5',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -13730,7 +13730,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.58.3';
+  const VERSION='V36.58.5';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -16492,7 +16492,7 @@ window.PokeSendaJohtoRuntime={open,close:closeRoot,showLobby,showGame,reopenProf
 })();
 </script>
 
-<!-- PokeSenda V36.58.3 · auditoría visual recuperada desde el punto de desvío · Johto -->
+<!-- PokeSenda V36.58.5 · auditoría visual recuperada desde el punto de desvío · Johto -->
 
 <style id="pkVisualAuditRecoveryV36581">
 /* Auditoría visual recuperada · estados interactivos Johto */
@@ -16645,29 +16645,50 @@ window.PokeSendaJohtoRuntime={open,close:closeRoot,showLobby,showGame,reopenProf
 }
 @media(max-width:440px){#pkGlobalInfiniteRoot .field{height:455px!important;min-height:455px!important}}
 </style>
-
-
-
-<style id="pkDevGrantRedeemStyle">
-.pk-devgrant-box{width:min(650px,94vw)!important;background:linear-gradient(180deg,#12243d,#091525)!important;border:2px solid #44688f!important}.pk-devgrant-box h2{margin:0 0 5px;font-size:15px}.pk-devgrant-box p{font-size:8px;color:#9db2cb;line-height:1.55}.pk-devgrant-box textarea{width:100%;box-sizing:border-box;min-height:120px;resize:vertical;background:#07111e;border:1px solid #3c5e83;color:#edf5ff;border-radius:9px;padding:10px;font-family:inherit;font-size:8px}.pk-devgrant-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:9px}.pk-devgrant-msg{margin-top:10px;padding:9px;border:1px solid #355474;border-radius:8px;background:#0a1828;color:#acc0d5;font-size:8px;line-height:1.45}.pk-devgrant-msg.ok{border-color:#3c8158;background:#0b2819;color:#b8edc7}.pk-devgrant-msg.bad{border-color:#8c4d56;background:#30161b;color:#ffc0c7}
-</style>
-<script id="pkDevGrantRedeemV36584">
-(()=>{'use strict';
-const LINK_KEY='pokesenda_beta1_cloud_link_v1',PREFIX='PSDG1',PUBLIC_JWK={"kty":"EC","crv":"P-256","x":"JzoWmMhIcU7UhizeYjFUXuJj_aTbqRorGxDiBDsjdzo","y":"uBxDkc4FGM4pxzY_tbD6Do6tBpM2L6IdyRZk37wAbWE","ext":true,"key_ops":["verify"]},$=id=>document.getElementById(id);
-function readJson(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(_){return null}}function cloudId(){const v=readJson(LINK_KEY);return String(v?.slotId||'').trim().toLowerCase()}function validId(v){return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(v||'').trim())}function b64uBytes(s){let b=String(s||'').replace(/-/g,'+').replace(/_/g,'/');while(b.length%4)b+='=';const bin=atob(b);return Uint8Array.from(bin,c=>c.charCodeAt(0))}function b64uText(s){return new TextDecoder().decode(b64uBytes(s))}function core(p){return JSON.stringify({v:p.v,to:p.to,region:p.region,amount:p.amount,nonce:p.nonce,ts:p.ts,note:p.note||''})}
-async function parseAndVerify(code){code=String(code||'').trim();const parts=code.split('.');if(parts.length!==3||parts[0]!==PREFIX)throw new Error('Formato de código DEV inválido');let p;try{p=JSON.parse(b64uText(parts[1]))}catch(_){throw new Error('Código DEV dañado')}if(p?.v!==1||!validId(p.to)||!['kanto','johto'].includes(p.region)||!Number.isInteger(p.amount)||p.amount<=0||p.amount>10000000||!p.nonce||!Number.isFinite(Number(p.ts)))throw new Error('Datos DEV inválidos');if(!crypto?.subtle)throw new Error('Tu navegador no permite verificar la firma DEV');const key=await crypto.subtle.importKey('jwk',PUBLIC_JWK,{name:'ECDSA',namedCurve:'P-256'},false,['verify']);const ok=await crypto.subtle.verify({name:'ECDSA',hash:'SHA-256'},key,b64uBytes(parts[2]),new TextEncoder().encode(core(p)));if(!ok)throw new Error('Firma DEV inválida: código no emitido por el desarrollador');return p}
-function bridge(r){return r==='johto'?window.PokeSendaJohtoBattleIsolated:window.PokeSendaKantoGlobalBridge}function setMsg(t,tone=''){const e=$('pkDevGrantMsg');if(e){e.className='pk-devgrant-msg '+tone;e.textContent=t}}function close(){$('pkDevGrantOverlay')?.classList.add('hidden')}
-function ensureUI(){if(!$('pkDevGrantOverlay')){const o=document.createElement('div');o.id='pkDevGrantOverlay';o.className='overlay hidden';o.innerHTML=`<div class="modal-box pk-devgrant-box" onclick="event.stopPropagation()"><div class="pokemon-detail-head"><div><h2>🎟 Canjear código del desarrollador</h2><p>Solo acepta códigos firmados por la herramienta privada DEV.</p></div><div class="grow"></div><button id="pkDevGrantClose" class="btn">Cerrar</button></div><textarea id="pkDevGrantCode" spellcheck="false" placeholder="PSDG1.…"></textarea><div class="pk-devgrant-actions"><button id="pkDevGrantRedeem" class="btn primary">Canjear</button></div><div id="pkDevGrantMsg" class="pk-devgrant-msg">El código debe estar dirigido a tu Cloud ID.</div></div>`;document.body.appendChild(o);$('pkDevGrantClose').onclick=close;o.onclick=e=>{if(e.target===o)close()};$('pkDevGrantRedeem').onclick=redeem}const actions=document.querySelector('#pkCloudOverlay .pk-cloud-actions');if(actions&&!$('pkCloudDevGrantBtn')){const b=document.createElement('button');b.id='pkCloudDevGrantBtn';b.className='btn';b.type='button';b.textContent='🎟 Canjear código DEV';b.onclick=open;actions.appendChild(b)}}
-function open(){ensureUI();$('pkDevGrantCode').value='';setMsg(cloudId()?'Pega el código DEV recibido.':'Activa Cloud Save primero.',cloudId()?'':'bad');$('pkDevGrantOverlay').classList.remove('hidden')}
-async function redeem(){const me=cloudId();if(!me)return setMsg('Activa Cloud Save antes de canjear.','bad');let p;try{p=await parseAndVerify($('pkDevGrantCode')?.value)}catch(e){return setMsg(e.message,'bad')}if(p.to.toLowerCase()!==me)return setMsg('Este código DEV pertenece a otro Cloud ID.','bad');const b=bridge(p.region);if(!b?.applyDevGrant)return setMsg('La región indicada no está disponible.','bad');const ledger=b.devGrantLedger?.()||[];if(ledger.some(x=>String(x?.nonce||'')===String(p.nonce)))return setMsg('Este código DEV ya fue canjeado.','bad');const res=b.applyDevGrant(p.amount,{nonce:p.nonce,issuedAt:p.ts,note:p.note||''});if(!res?.ok)return setMsg(res?.msg||'No se pudo aplicar el código DEV.','bad');$('pkDevGrantCode').value='';setMsg('✅ +₽'+p.amount.toLocaleString('es-CL')+' añadidos en '+(p.region==='johto'?'Johto':'Kanto')+'.','ok');try{await window.PKCloud?.sync?.()}catch(_){}}
-window.PokeSendaDevGrantRedeem={open};function boot(){ensureUI();setInterval(ensureUI,1500)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();setTimeout(ensureUI,800);
-})();
-</script>
-
-<!-- Expedición Infinita Global Kanto+Johto retirada en V36.58.3.
+<!-- Expedición Infinita Global Kanto+Johto retirada en V36.58.5.
      Kanto vuelve a utilizar su Expedición Infinita nativa. -->
 
-<!-- PokeSenda V36.58.4 · Regalos jugador-a-jugador retirados; grants DEV firmados. -->
 
+
+\n<script id="pkDevMoneyInboxV36585">
+(()=>{'use strict';
+const SUPABASE_URL='https://rkxbqpamksltyosulmut.supabase.co';
+const SUPABASE_KEY='sb_publishable_Y7aNyG3ggvVxBa6GwGvpsw_eAWhjWwO';
+const LINK_KEY='pokesenda_beta1_cloud_link_v1';
+let busy=false,lastToastAt=0;
+function readLink(){try{const v=JSON.parse(localStorage.getItem(LINK_KEY)||'null');return v&&v.slotId&&v.secret?v:null}catch(_){return null}}
+async function rpc(fn,args){const c=new AbortController(),t=setTimeout(()=>c.abort(),12000);try{const r=await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`,{method:'POST',signal:c.signal,headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(args)});const tx=await r.text();let b=null;try{b=tx?JSON.parse(tx):null}catch(_){b=tx}if(!r.ok)throw new Error(b?.message||b?.details||tx||`HTTP ${r.status}`);return b}finally{clearTimeout(t)}}
+function bridge(region){return region==='johto'?window.PokeSendaJohtoBattleIsolated:window.PokeSendaKantoGlobalBridge}
+function safeToast(msg){const now=Date.now();if(now-lastToastAt<600)return;lastToastAt=now;try{if(typeof window.toast==='function')window.toast(msg);else console.log(msg)}catch(_){console.log(msg)}}
+function asRows(v){return Array.isArray(v)?v:(v?[v]:[])}
+async function check(){
+ if(busy||!navigator.onLine)return;const link=readLink();if(!link)return;busy=true;
+ try{
+  const pending=asRows(await rpc('pokesenda_list_pending_dev_money_grants',{p_slot_id:link.slotId,p_secret:link.secret}));
+  if(!pending.length)return;
+  const ack=[],applied=[];let kantoTouched=false;
+  for(const g of pending){
+   const id=String(g.grant_id||g.id||'');const region=String(g.region||'').toLowerCase(),amount=Math.trunc(Number(g.amount)||0);
+   if(!id||!['kanto','johto'].includes(region)||amount<=0)continue;
+   const b=bridge(region);if(!b?.applyDevGrant)continue;
+   const res=b.applyDevGrant(amount,{nonce:id,issuedAt:Date.parse(g.created_at||'')||Date.now(),note:String(g.note||'').slice(0,120)});
+   if(res?.ok||/ya fue canjeado|ya fue aplicado|duplic/i.test(String(res?.msg||''))){ack.push(id);if(res?.ok){applied.push({region,amount});if(region==='kanto')kantoTouched=true;}}
+  }
+  if(ack.length){
+   await rpc('pokesenda_ack_dev_money_grants',{p_slot_id:link.slotId,p_secret:link.secret,p_grant_ids:ack});
+   if(kantoTouched){try{await window.PKCloud?.sync?.()}catch(_){}}
+   if(applied.length){const total=applied.reduce((n,x)=>n+x.amount,0),regions=[...new Set(applied.map(x=>x.region==='johto'?'Johto':'Kanto'))].join(' + ');safeToast(`🎁 Regalo DEV recibido · +₽${total.toLocaleString('es-CL')} · ${regions}`)}
+  }
+ }catch(e){console.warn('[DEV Money Inbox]',e?.message||e)}finally{busy=false}
+}
+function installCloudIdCopy(){
+ const actions=document.querySelector('#pkCloudOverlay .pk-cloud-actions');if(!actions||document.getElementById('pkCloudCopyFullIdBtn'))return;
+ const b=document.createElement('button');b.id='pkCloudCopyFullIdBtn';b.className='btn';b.type='button';b.textContent='📋 Copiar Cloud ID completo';
+ b.onclick=async()=>{const id=String(readLink()?.slotId||'');if(!id)return safeToast('Activa Cloud Save primero');try{await navigator.clipboard.writeText(id);safeToast('📋 Cloud ID completo copiado')}catch(_){prompt('Copia tu Cloud ID completo:',id)}};actions.appendChild(b);
+}
+function boot(){installCloudIdCopy();setInterval(installCloudIdCopy,1600);setTimeout(check,3000);setInterval(check,60000);window.addEventListener('focus',check);window.addEventListener('online',check);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')check()})}
+window.PokeSendaDevMoneyInbox={check};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();
+</script>\n<!-- PokeSenda V36.58.5 · Administración DEV directa por buzón Cloud. Sin códigos de canje. -->\n
 </body>
 </html>

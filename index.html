@@ -3296,10 +3296,10 @@ body{letter-spacing:.08px}
     <div class="pokedex-welcome"><div><b>Bienvenido a la Pokédex</b><span>Pulsa cualquier Pokémon registrado para descubrir datos curiosos, el origen y significado de su nombre, hábitat, estadísticas y mucho más.</span></div></div>
     <div class="pokedex-summary"><button class="filter-chip active" data-dex-status="all">Todos: <b id="pokedexCaught">0</b></button><button class="filter-chip dex-new-filter" data-dex-status="new">🆕 Nuevo: <b id="pokedexNewCount">0</b></button><button class="filter-chip" data-dex-status="owned">En posesión: <b id="pokedexOwned">0</b></button><button class="filter-chip" data-dex-status="registered">Registrados</button><button class="filter-chip" data-dex-status="locked">No descubiertos</button><button class="filter-chip" data-dex-status="shiny">✨ Shiny</button><span class="pill">Familias: <b id="pokedexFamilies">0</b></span><span class="pill shiny-count-pill">✨ Shiny: <b id="pokedexShiny">0/151</b></span></div>
     <div class="filter-strip" id="pokedexRarityFilters"><span class="filter-strip-label">Rareza:</span><button class="filter-chip active" data-dex-rarity="all">Todas</button><button class="filter-chip rarity-common" data-dex-rarity="common">Común</button><button class="filter-chip rarity-uncommon" data-dex-rarity="uncommon">Poco común</button><button class="filter-chip rarity-rare" data-dex-rarity="rare">Raro</button><button class="filter-chip rarity-epic" data-dex-rarity="epic">Épico</button><button class="filter-chip rarity-legendary" data-dex-rarity="legendary">Legendario</button></div>
-    <div class="filter-strip pokedex-route-filters" id="pokedexRouteFilters"><span class="filter-strip-label">Zona:</span><button class="filter-chip active" data-dex-route="all">Todas</button><button class="filter-chip dex-route-route" data-dex-route="route1" title="Familias del Gachapon de Ruta Verde">Ruta <b id="pokedexRoute1Count">0/0</b></button><button class="filter-chip dex-route-cave" data-dex-route="route2" title="Familias del Gachapon de Cueva Rocosa">Cueva <b id="pokedexRoute2Count">0/0</b></button><button class="filter-chip dex-route-coast" data-dex-route="route3" title="Familias del Gachapon de Costa Azul">Costa <b id="pokedexRoute3Count">0/0</b></button></div>
+    <div class="filter-strip pokedex-route-filters" id="pokedexRouteFilters"><span class="filter-strip-label">Zona:</span><button class="filter-chip active" data-dex-route="all">Todas</button><button class="filter-chip dex-route-route" data-dex-route="route1" title="Pokémon de Ruta Verde, incluyendo evoluciones">Ruta <b id="pokedexRoute1Count">0/0</b></button><button class="filter-chip dex-route-cave" data-dex-route="route2" title="Pokémon de Cueva Rocosa, incluyendo evoluciones">Cueva <b id="pokedexRoute2Count">0/0</b></button><button class="filter-chip dex-route-coast" data-dex-route="route3" title="Pokémon de Costa Azul, incluyendo evoluciones">Costa <b id="pokedexRoute3Count">0/0</b></button></div>
     <div class="pokedex-tools"><input id="pokedexSearch" class="pokedex-search" type="search" placeholder="🔎 Buscar por nombre, número o tipo..." autocomplete="off" spellcheck="false"><span id="pokedexFilterCount" class="pill">151/151</span></div>
     <div class="tiny muted" style="margin-bottom:4px">La Pokédex es un historial: <b>EN POSESIÓN</b> significa que puedes usar esa especie ahora mismo; <b>REGISTRADO</b> significa que la poseíste antes pero actualmente tienes otra evolución de su familia.</div>
-    <div class="pokedex-filter-note">Los filtros de estado, rareza, zona y búsqueda se pueden combinar. Los contadores de Ruta, Cueva y Costa indican <b>familias del pool obtenidas / familias totales</b>.</div>
+    <div class="pokedex-filter-note">Los filtros de estado, rareza, zona y búsqueda se pueden combinar. Los contadores de Ruta, Cueva y Costa indican <b>Pokémon registrados / Pokémon totales de la zona, incluyendo evoluciones</b>.</div>
     <div id="pokedexGrid" class="pokedex-grid"></div>
   </div>
 </div>
@@ -6378,13 +6378,24 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
     if(!routeId||routeId==="all")return null;
     return new Set(achievementRouteIds(routeId));
   }
+  // V36.59.2 · Los contadores de zona de la Pokédex cuentan especies, no familias.
+  // Cada familia del pool aporta todas sus formas evolutivas y cada N.º Pokédex cuenta una sola vez.
+  function pokedexRouteDexSet(routeId){
+    const dexes=new Set();
+    for(const id of achievementRouteIds(routeId)){
+      for(const st of (FAMILIES[id]?.stages||[])){
+        const dex=Number(st?.dex);if(dex>=1&&dex<=151)dexes.add(dex);
+      }
+    }
+    return dexes;
+  }
   function updatePokedexRouteProgress(){
-    const defs=[["route1","pokedexRoute1Count"],["route2","pokedexRoute2Count"],["route3","pokedexRoute3Count"]];
+    const defs=[["route1","pokedexRoute1Count"],["route2","pokedexRoute2Count"],["route3","pokedexRoute3Count"]],seen=new Set((state.dexSeen||[]).map(Number));
     for(const [routeId,elementId] of defs){
       const el=$(elementId);if(!el)continue;
-      const total=achievementRouteIds(routeId).length,owned=achievementOwnedRouteCount(routeId);
-      el.textContent=`${owned}/${total}`;
-      el.parentElement?.setAttribute("title",`${ROUTES[routeId].name}: ${owned} de ${total} familias del pool obtenidas`);
+      const routeDex=pokedexRouteDexSet(routeId),total=routeDex.size,registered=[...routeDex].filter(dex=>seen.has(dex)).length;
+      el.textContent=`${registered}/${total}`;
+      el.parentElement?.setAttribute("title",`${ROUTES[routeId].name}: ${registered} de ${total} Pokémon registrados · incluye evoluciones`);
     }
   }
   function renderPokedex(){
@@ -7814,7 +7825,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     return weightedRewardPick(normalRewardWeightedPool(routeId,km,incenseType));
   }
 
-  // V36.59.1 · Catálogo Shiny Maestro de Kanto (#001–151).
+  // V36.59.2 · Catálogo Shiny Maestro de Kanto (#001–151).
   // La probabilidad de que una tirada sea Shiny NO cambia. Cuando la tirada ya resultó Shiny,
   // la especie/forma se resuelve desde un catálogo independiente que contiene las 151 formas
   // de Kanto, incluidas evoluciones por nivel, piedra e intercambio. Se conserva primero la
@@ -11954,7 +11965,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.59.1.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.59.2.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12093,7 +12104,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.59.1',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.59.2',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -13778,7 +13789,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.59.1';
+  const VERSION='V36.59.2';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -16910,7 +16921,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
-<!-- PokeSenda V36.59.1 · Catálogo Shiny Maestro 151 + Modo Ventana Flotante + Regalito DEV bloqueante. -->
+<!-- PokeSenda V36.59.2 · Catálogo Shiny Maestro 151 + Modo Ventana Flotante + Regalito DEV bloqueante. -->
 
 </body>
 </html>

@@ -5530,7 +5530,7 @@ body{letter-spacing:.08px}
     return {refund,excessUnits};
   }
   const inventoryMigrationResult=normalizeInventoryStackLimits();
-  let run=null,loop=null,logs=[],lastRender=0,pendingReward=null,optionsReturn="menu",summaryMode="close",pkAutoRestartTransition=false;
+  let run=null,loop=null,logs=[],lastRender=0,pendingReward=null,optionsReturn="menu",summaryMode="close",pkAutoRestartTransition=false,pkFloatingDriver=false;
   let activeLogTab="general",pcBoxStatusFilter="all",pcBoxRarityFilter="all",pcBoxSort=["dex","name","level","stars","rarity","type","power"].includes(state.options?.pcBoxSort)?state.options.pcBoxSort:"dex",pcBoxSortDir=state.options?.pcBoxSortDir==="desc"?"desc":"asc",pokedexStatusFilter="all",pokedexRarityFilter="all",pokedexRouteFilter="all";
   let achievementReturn="game",achievementFilter="all",pendingAchievementTmMilestone=null,pendingAchievementTmSelection=null;
   let evolutionQueue=[],evolutionModalOpen=false,currentEvolution=null;
@@ -7153,14 +7153,14 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
     if(isInfiniteMode()){state.infiniteExpedition.totalRuns=(state.infiniteExpedition.totalRuns||0)+1;state.infiniteExpedition.checkpoint=0;save();}
     for(const id of partyIds)touchRunItem(id);
     addLog(isInfiniteMode()?`♾ Expedición Infinita iniciada desde 0 m con ${partyIds.length} Pokémon. Sin checkpoints y sin Pokédólares directos: caer reinicia el intento.`:`Expedición iniciada con ${partyIds.length} Pokémon. Máximo 3 combaten; el resto queda de reserva.`);
-    renderEverything();spawnRound();loop=setInterval(tick,100);
+    renderEverything();spawnRound();if(!pkFloatingDriver)loop=setInterval(tick,100);
   }
 
   function pauseRun(logIt=true){
     if(!run||run.paused)return;stopLoop();run.paused=true;if(logIt)addLog(`⏸ Pausa en ${formatMeters(run.distance)}. Puedes organizar equipo y objetos.`);renderEverything();
   }
   function resumeRun(logIt=true){
-    if(!run||!run.paused||evolutionModalOpen)return;sanitizeRunCombatState();reconcileRunLifeStates();if(!run||run.rewardPending)return;pruneDefeatedRunEnemies();run.paused=false;syncRunTeam();run.lastTick=performance.now();stopLoop();loop=setInterval(tick,100);if(logIt)addLog(`▶ Expedición reanudada desde ${formatMeters(run.distance)}.`);renderEverything();
+    if(!run||!run.paused||evolutionModalOpen)return;sanitizeRunCombatState();reconcileRunLifeStates();if(!run||run.rewardPending)return;pruneDefeatedRunEnemies();run.paused=false;syncRunTeam();run.lastTick=performance.now();stopLoop();if(!pkFloatingDriver)loop=setInterval(tick,100);if(logIt)addLog(`▶ Expedición reanudada desde ${formatMeters(run.distance)}.`);renderEverything();
   }
   function togglePause(){if(!run)return;run.paused?resumeRun():pauseRun();}
 
@@ -7494,12 +7494,12 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
     stopLoop();run.paused=true;run.centerPending=firstVisit;healAtCenter(meters);
     if(!firstVisit){
       stopCenterContinueTimer();$("centerOverlay").classList.add("hidden");run.centerPending=false;run.paused=false;run.spawnDelay=.35;run.lastTick=performance.now();
-      addLog(`🏥 Centro Pokémon ${formatMeters(meters)}: equipo restaurado automáticamente, sin detener el farmeo.`);renderEverything();loop=setInterval(tick,100);return;
+      addLog(`🏥 Centro Pokémon ${formatMeters(meters)}: equipo restaurado automáticamente, sin detener el farmeo.`);renderEverything();if(!pkFloatingDriver)loop=setInterval(tick,100);return;
     }
     $("centerText").textContent=`Llegaste por primera vez al Centro Pokémon de ${formatMeters(meters)}. Zona de descanso: todo tu equipo fue curado y revivido. Checkpoint de seguridad guardado en ${formatMeters(meters)}.`;$("centerOverlay").classList.remove("hidden");addLog(`🏥 Nuevo Centro Pokémon ${formatMeters(meters)}: equipo restaurado. Tu punto de farmeo sigue en ${formatMeters(run.farmStart||0)}.`);renderEverything();startCenterContinueTimer();
   }
   function closePokemonCenter(auto=false){
-    stopCenterContinueTimer();if(!run)return;$("centerOverlay").classList.add("hidden");run.centerPending=false;run.paused=false;run.spawnDelay=.7;run.lastTick=performance.now();stopLoop();loop=setInterval(tick,100);renderEverything();
+    stopCenterContinueTimer();if(!run)return;$("centerOverlay").classList.add("hidden");run.centerPending=false;run.paused=false;run.spawnDelay=.7;run.lastTick=performance.now();stopLoop();if(!pkFloatingDriver)loop=setInterval(tick,100);renderEverything();
   }
   const ROUTE_EVENT_CHANCE=.032;
   const ROUTE_EVENTS=[
@@ -7555,7 +7555,7 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
     if(!run)return;stopLoop();run.paused=true;
     $("routeEventKicker").textContent=`Evento de ruta · ${ROUTES[state.currentRoute].name}`;$("routeEventIcon").textContent=ev.icon;$("routeEventTitle").textContent=ev.title;$("routeEventText").textContent=ev.text;$("routeEventPrimary").textContent=ev.primary;$("routeEventSecondary").textContent=ev.secondary;$("routeEventPrimary").dataset.eventAction=ev.id;$("routeEventHint").textContent="Los eventos no sustituyen los jefes ni los Centros Pokémon.";$("routeEventOverlay").classList.remove("hidden");addLog(`${ev.icon} Evento: ${ev.title}.`);renderTop();startRouteEventDecisionTimer();
   }
-  function closeRouteEvent(resume=true){stopRouteEventDecisionTimer();$("routeEventOverlay").classList.add("hidden");if(!run)return;run.eventPending=null;if(resume){run.paused=false;run.spawnDelay=.55;run.lastTick=performance.now();stopLoop();loop=setInterval(tick,100);renderEverything();}}
+  function closeRouteEvent(resume=true){stopRouteEventDecisionTimer();$("routeEventOverlay").classList.add("hidden");if(!run)return;run.eventPending=null;if(resume){run.paused=false;run.spawnDelay=.55;run.lastTick=performance.now();stopLoop();if(!pkFloatingDriver)loop=setInterval(tick,100);renderEverything();}}
   function healEventCamp(){if(!run)return;let healed=0;for(const id of run.partyIds||[]){const t=run.team[id];if(!t?.alive)continue;const before=t.hp;t.hp=Math.min(t.maxHp,t.hp+t.maxHp*.30);healed+=Math.max(0,t.hp-before);}addLog(`🏕️ Campamento: el equipo recupera ${Math.ceil(healed)} PS en total.`);toast("Campamento · equipo curado 30%");renderTeamWorld();renderFormation();}
   function eventGuaranteedItem(min="common",source="Evento de ruta"){
     const order=["common","uncommon","rare","epic","legendary"],minIdx=Math.max(0,order.indexOf(min));let candidates=Object.entries(ITEMS).filter(([_,it])=>!it.restrictFamily&&!it.consumable&&order.indexOf(it.rarity)>=minIdx);if(!candidates.length)candidates=Object.entries(ITEMS).filter(([_,it])=>!it.consumable);if(!candidates.length)return false;
@@ -7576,7 +7576,7 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
     state.pokedollars-=INCENSE_PRICE;state.items[id]=(state.items[id]||0)+1;run.incenseVendorBought[type]=true;markItemNew(id);addLog(`🧿 Compraste ${it.name} por ₽${INCENSE_PRICE.toLocaleString("es-CL")}.`);toast(`${it.name} ×1`);save();renderTop();renderStoneInventory();renderIncenseVendor();
   }
   function closeIncenseVendor(){
-    $("incenseVendorOverlay").classList.add("hidden");if(!run)return;run.incenseVendorOffers=null;run.incenseVendorBought=null;run.eventPending=null;run.paused=false;run.spawnDelay=.55;run.lastTick=performance.now();stopLoop();loop=setInterval(tick,100);renderEverything();
+    $("incenseVendorOverlay").classList.add("hidden");if(!run)return;run.incenseVendorOffers=null;run.incenseVendorBought=null;run.eventPending=null;run.paused=false;run.spawnDelay=.55;run.lastTick=performance.now();stopLoop();if(!pkFloatingDriver)loop=setInterval(tick,100);renderEverything();
   }
 
   const MINT_PRICE=50000,MASTER_MINT_PRICE=150000,MASTER_MINT_VENDOR_CHANCE=.02;
@@ -7584,7 +7584,7 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
   function renderMintVendor(){const grid=$("mintVendorGrid");if(!grid||!run)return;run.mintVendorOffers=Array.isArray(run.mintVendorOffers)&&run.mintVendorOffers.length?run.mintVendorOffers:randomMintVendorOffers();run.mintVendorBought=run.mintVendorBought||{};grid.innerHTML=run.mintVendorOffers.map((o,i)=>{const master=o.kind==="master",k=o.nature,n=master?null:NATURES[k],price=master?MASTER_MINT_PRICE:MINT_PRICE,key=master?"master":k,bought=!!run.mintVendorBought[key],have=master?(state.masterMints||0):(state.mints?.[k]||0),can=(state.pokedollars||0)>=price;return `<div class="mint-offer ${master?"legendary":""} ${bought?"bought":""}"><div class="mint-img-frame"><img src="${master?mintSpriteUrl("seria"):mintSpriteUrl(k)}" alt="${master?"Menta Maestra":`Menta ${n.name}`}" onerror="this.style.display='none';this.parentElement.textContent='🌿'"></div><h3>${master?"✨ Menta Maestra":`Menta ${n.name}`}</h3><p>${master?"Legendaria. Permite elegir cualquiera de las 25 naturalezas; no aumenta el máximo de poder.":natureEffectText(k)}<br>Tienes ×${have}.</p><span class="mint-offer-price">₽${price.toLocaleString("es-CL")}</span><button class="btn ${master?"warn":"primary"}" data-buy-mint="${i}" ${bought||!can?"disabled":""}>${bought?"Comprada":!can?"Sin dinero":"Comprar"}</button></div>`;}).join("");grid.querySelectorAll("[data-buy-mint]").forEach(b=>b.addEventListener("click",()=>buyMintVendorOffer(Number(b.dataset.buyMint))));}
   function openMintVendor(){if(!run)return;stopRouteEventDecisionTimer();$("routeEventOverlay").classList.add("hidden");run.mintVendorOffers=randomMintVendorOffers();run.mintVendorBought={};renderMintVendor();$("mintVendorOverlay").classList.remove("hidden");addLog("🌿 La Vendedora de Mentas de Cueva Rocosa ofrece 3 Mentas aleatorias: ₽50.000 cada una. Muy rara vez trae una Menta Maestra por ₽150.000.");renderTop();}
   function buyMintVendorOffer(index){if(!run)return;const o=run.mintVendorOffers?.[index];if(!o)return;const master=o.kind==="master",key=master?"master":o.nature;if(run.mintVendorBought?.[key])return;const price=master?MASTER_MINT_PRICE:MINT_PRICE;if((state.pokedollars||0)<price){toast(`Necesitas ₽${price.toLocaleString("es-CL")}`);return;}state.pokedollars-=price;if(master)state.masterMints=Math.max(0,Number(state.masterMints)||0)+1;else{state.mints=state.mints||{};state.mints[o.nature]=Math.max(0,Number(state.mints[o.nature])||0)+1;}run.mintVendorBought[key]=true;addLog(`🌿 Compraste ${master?"Menta Maestra":`Menta ${NATURES[o.nature].name}`} por ₽${price.toLocaleString("es-CL")}.`);toast(master?"✨ Menta Maestra ×1":`Menta ${NATURES[o.nature].name} ×1`);save();renderTop();renderMintVendor();renderCards();}
-  function closeMintVendor(){$("mintVendorOverlay").classList.add("hidden");if(!run)return;run.mintVendorOffers=null;run.mintVendorBought=null;run.eventPending=null;run.paused=false;run.spawnDelay=.55;run.lastTick=performance.now();stopLoop();loop=setInterval(tick,100);renderEverything();}
+  function closeMintVendor(){$("mintVendorOverlay").classList.add("hidden");if(!run)return;run.mintVendorOffers=null;run.mintVendorBought=null;run.eventPending=null;run.paused=false;run.spawnDelay=.55;run.lastTick=performance.now();stopLoop();if(!pkFloatingDriver)loop=setInterval(tick,100);renderEverything();}
 
   function weightedEventFamily(rareOnly=false){const routeId=state.currentRoute,km=Math.max(1,Math.floor((run?.distance||0)/1000)+1),pool=rewardPoolFor(routeId,km).filter(x=>!rareOnly||["rare","epic","legendary"].includes(x.rarity));const usable=pool.length?pool:rewardPoolFor(routeId,km);let total=usable.reduce((s,x)=>s+x.weight,0),r=Math.random()*total;for(const x of usable){r-=x.weight;if(r<=0)return x.id;}return usable[0]?.id||ROUTES[routeId].enemies[0];}
   function startEventBattle(type){
@@ -7593,7 +7593,7 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
     if(type==="mystery"){const id=weightedEventFamily(true),count=Math.random()<.35?2:1;for(let i=0;i<count;i++)enemies.push(mk(id,i,base+1+Math.floor(Math.random()*2),false));meta.label="Pokémon misterioso";}
     else if(type==="rich"){const pool=encounterPool();for(let i=0;i<3;i++){const id=pool[Math.floor(Math.random()*pool.length)];enemies.push(mk(id,i,base+1+Math.floor(Math.random()*3),false));}meta.label="Entrenador adinerado";}
     else if(type==="ambush"){const pool=encounterPool(),id=pool[Math.floor(Math.random()*pool.length)];for(let i=0;i<4;i++){const e=mk(id,i,base+2+Math.floor(Math.random()*3),false);e.maxHp*=1.22;e.hp=e.maxHp;e.atk*=1.12;e.spAtk*=1.12;enemies.push(e);}meta.label="Emboscada";}
-    run.eventBattle=meta;run.enemies=enemies;addLog(`⚔️ ${meta.label}: ${enemies.map(e=>`${e.name} Nv.${e.level}`).join(" · ")}.`);run.lastTick=performance.now();stopLoop();loop=setInterval(tick,100);renderEverything();
+    run.eventBattle=meta;run.enemies=enemies;addLog(`⚔️ ${meta.label}: ${enemies.map(e=>`${e.name} Nv.${e.level}`).join(" · ")}.`);run.lastTick=performance.now();stopLoop();if(!pkFloatingDriver)loop=setInterval(tick,100);renderEverything();
   }
   function completeEventBattle(){
     if(!run?.eventBattle)return;const meta=run.eventBattle,type=meta.type,km=Math.max(1,Math.floor(run.distance/1000)+1),routeIdx=Math.max(0,ROUTE_ORDER.indexOf(state.currentRoute));run.eventBattle=null;
@@ -7973,10 +7973,10 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     if(!pendingReward?.result||pendingReward.animating)return;
     const wasTimed=!!pendingReward.timedGacha,wasInfinite=!!pendingReward.infiniteGacha,timedSource=pendingReward.premiumSource,km=pendingReward.km,isRouteEnd=!wasInfinite&&km>=10;$("rewardOverlay").classList.add("hidden");pendingReward=null;$("openChestBtn").textContent="Capturar";
     if(wasTimed){updateTimedGachaUI();if(run){sanitizeRunCombatState();reconcileRunLifeStates();pruneDefeatedRunEnemies();}if(timedGachaResumeRun&&run&&run.paused)resumeRun(false);timedGachaResumeRun=false;if(timedSource==="achievement"||timedSource==="shinyAchievement"){renderAchievements();$("achievementsOverlay").classList.remove("hidden");}return;}
-    if(wasInfinite){if(!run){renderEverything();return;}run.rewardPending=false;pruneDefeatedRunEnemies();run.spawnDelay=.9;run.paused=false;run.lastTick=performance.now();stopLoop();loop=setInterval(tick,100);renderEverything();return;}
+    if(wasInfinite){if(!run){renderEverything();return;}run.rewardPending=false;pruneDefeatedRunEnemies();run.spawnDelay=.9;run.paused=false;run.lastTick=performance.now();stopLoop();if(!pkFloatingDriver)loop=setInterval(tick,100);renderEverything();return;}
     if(!run)return;run.rewardPending=false;if(isRouteEnd){completeRoute();return;}
     if(run.pendingCenterAfterReward){const c=run.pendingCenterAfterReward;run.pendingCenterAfterReward=null;openPokemonCenter(c);return;}
-    pruneDefeatedRunEnemies();run.spawnDelay=.9;run.paused=false;run.lastTick=performance.now();stopLoop();loop=setInterval(tick,100);renderEverything();
+    pruneDefeatedRunEnemies();run.spawnDelay=.9;run.paused=false;run.lastTick=performance.now();stopLoop();if(!pkFloatingDriver)loop=setInterval(tick,100);renderEverything();
   }
 
   function finishAutoRewardAfterCelebrations(){
@@ -10835,6 +10835,27 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
       save();try{renderEverything();updateMenuInfo();}catch(_){}return {ok:true,balance:state.pokedollars};
     }catch(e){return {ok:false,msg:e?.message||"No se pudo aplicar el grant DEV"};}},
     refresh:()=>{try{renderEverything();updateMenuInfo();}catch(_){}},
+    floatingSetDriver:(on)=>{try{
+      pkFloatingDriver=!!on;
+      if(pkFloatingDriver){stopLoop();return true;}
+      if(run&&!run.paused&&!run.rewardPending&&!evolutionModalOpen){run.lastTick=performance.now();stopLoop();loop=setInterval(tick,100);}
+      return true;
+    }catch(_){return false}},
+    floatingPulse:()=>{try{
+      if(!pkFloatingDriver)return false;
+      if(!run&&pkAutoRestartTransition){startRun();return true;}
+      if(run?.centerPending&&typeof updateCenterContinueTimer==="function")updateCenterContinueTimer();
+      if(typeof routeEventDecisionTimer!=="undefined"&&routeEventDecisionTimer&&typeof updateRouteEventDecisionTimer==="function")updateRouteEventDecisionTimer();
+      if(run&&!run.paused&&!run.rewardPending&&!evolutionModalOpen)tick();
+      return true;
+    }catch(_){return false}},
+    floatingSnapshot:()=>{try{
+      const active=!!run,inf=isInfiniteMode(),route=inf?"Expedición Infinita":(ROUTES[state.currentRoute]?.name||"Kanto"),ids=active?battleIds():[],team=ids.map(id=>{const t=run.team[id],st=ownedStage(id);return{name:st.name,hp:Math.max(0,Number(t?.hp||0)),maxHp:Math.max(1,Number(t?.maxHp||1)),alive:!!t?.alive};});
+      return {region:"kanto",regionName:"Kanto",active,autoRestart:!!pkAutoRestartTransition,paused:!!run?.paused,blocked:!!(run?.rewardPending||run?.centerPending||run?.eventPending||evolutionModalOpen),route,distance:Number(run?.distance||0),maxDistance:inf?0:MAX_DISTANCE,infinite:inf,speed:Number(state.options?.speed||1),money:Number(state.pokedollars||0),round:Number(run?.roundIndex||0),enemies:active?livingEnemies().length:0,team};
+    }catch(_){return {region:"kanto",regionName:"Kanto",active:false,autoRestart:!!pkAutoRestartTransition,paused:false,route:"Kanto",distance:0,maxDistance:MAX_DISTANCE,speed:1,money:0,round:0,enemies:0,team:[]}}},
+    floatingSetSpeed:(s)=>{try{s=Number(s);if(![1,2,4].includes(s))return false;state.options.speed=s;save();renderEverything();return true}catch(_){return false}},
+    floatingTogglePause:()=>{try{if(!run||run.rewardPending||evolutionModalOpen)return null;togglePause();return !!run?.paused}catch(_){return null}},
+    floatingStart:()=>{try{if(!run)startRun();return !!run}catch(_){return false}},
     summary:()=>({dex:pokedexDiscoveredCount(),dexList:[...new Set((state.dexSeen||[]).map(Number))],shinyDex:shinyDexCount(),shinyDexList:[...new Set((state.shinyDex||[]).map(Number))],badges:gymBadgeCount(),achievements:achievementPointsEarned(),owned:(state.owned||[]).length,infiniteBest:Number(state.infiniteExpedition?.bestDistance||0),route3Complete:Number(state.routes?.route3?.completions||0)>0})
   };
     })();
@@ -11908,7 +11929,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.58.8.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.59.0.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12047,7 +12068,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.58.8',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.59.0',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -13732,7 +13753,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.58.8';
+  const VERSION='V36.59.0';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -14371,7 +14392,7 @@ function candyReward(rarity){
   return n;
 }
 
-let js=null,run=null,timer=null,reward=null,centerTimer=null,centerDeadline=0;
+let js=null,run=null,timer=null,reward=null,centerTimer=null,centerDeadline=0,floatingDriver=false,floatingAutoRestartPending=false;
 
 function load(){try{const x=JSON.parse(localStorage.getItem(SAVE)||"{}");return x&&typeof x==="object"?x:{};}catch(_){return {};}}
 function save(){localStorage.setItem(SAVE,JSON.stringify(js));}
@@ -14764,7 +14785,8 @@ function tick(){
   if(run&&!livingEnemies().length&&!run.rewardPending&&!run.centerPending){run.spawnDelay-=dt;if(run.spawnDelay<=0)spawnRound();}
   if(teamWiped()){failRun();return;}render();
 }
-function schedule(){clearInterval(timer);if(run)timer=setInterval(tick,100);}
+function schedule(){clearInterval(timer);timer=null;if(run&&!floatingDriver)timer=setInterval(tick,100);}
+function queueAutoRestart(){if(floatingDriver){floatingAutoRestartPending=true;return;}setTimeout(startRun,0);}
 function log(s){if(!run)return;run.log=[s,...(run.log||[])].slice(0,24);$("pkIsoBattleLog").innerHTML=run.log.map(x=>"• "+x).join("<br>");}
 function killEnemy(e,killer){
   if(!e?.alive)return;e.alive=false;e.hp=0;if(killer&&run.stats[killer])run.stats[killer].kos++;run.roundXp+=e.xp;run.defeated++;js.stats.defeated++;const heldMoney=Math.max(0,...battleIds().map(pid=>derivedFor(pid).moneyBonus||0)),money=Math.max(1,Math.round((2+e.level*.72)*(e.boss?5:1)*(1+.025*skillRank("f1")+(skillRank("f8") ? 0.10 : 0)+(skillRank("trainer") ? 0.03 : 0)+heldMoney)));js.money=(js.money||0)+money;run.earned+=money;rollHeldDrop();save();
@@ -14990,7 +15012,7 @@ function continueReward(){
 function completeRoute(){
   const rs=js.routes.johto_route1;rs.completions++;rs.bestDistance=MAX_DISTANCE;
   const fullFromZero=Number(run?.startDistance||0)===0;if(fullFromZero)js.mtGacha.tickets=Math.max(0,Number(js.mtGacha.tickets||0))+1;
-  pushHistory("Completada",MAX_DISTANCE,{mtTicket:fullFromZero});save();const auto=js.options.autoRepeat;run=null;if(auto){setTimeout(startRun,0);return;}if(window.PokeSendaJohtoRuntime?.showLobby)window.PokeSendaJohtoRuntime.showLobby();else API()?.open?.();
+  pushHistory("Completada",MAX_DISTANCE,{mtTicket:fullFromZero});save();const auto=js.options.autoRepeat;run=null;if(auto){queueAutoRestart();return;}if(window.PokeSendaJohtoRuntime?.showLobby)window.PokeSendaJohtoRuntime.showLobby();else API()?.open?.();
 }
 function rollPotion(){
   const mult=1+.05*skillRank("f10")+(skillRank("f8") ? 0.10 : 0);if(Math.random()>=DATA().drops.route1.potionDropChance*mult)return;
@@ -15229,7 +15251,7 @@ function pushHistory(result,distance,extra={}){
   js.expeditionHistory=js.expeditionHistory.slice(0,10);save();
 }
 function startRun(){
-  migrate();if(run)return;const ids=formationIds().slice(0,6);if(!ids.length)return;const start=routeStartPoint(),team={};
+  migrate();floatingAutoRestartPending=false;if(run)return;const ids=formationIds().slice(0,6);if(!ids.length)return;const start=routeStartPoint(),team={};
   for(const id of ids){const d=derived(js.pokemon[id]);team[id]={familyId:id,ownerId:id,hp:d.maxHp,maxHp:d.maxHp,alive:true,attackTimer:.25+Math.random()*.35,status:null,statusTick:3,confusion:0,guard:0,guardTime:0,haste:0,hasteTime:0,power:0,powerTime:0,autoPotionCooldown:0};}
   run={distance:start,startDistance:start,startedAt:Date.now(),partyIds:ids,team,enemies:[],roundIndex:0,roundXp:0,roundCombatants:[],pendingBoss:false,bossActive:false,rewardPending:false,centerPending:false,eventPending:null,eventBattle:null,eventCooldown:2,eventCount:0,incenseVendorOffers:null,incenseVendorBought:null,mintVendorOffers:null,mintVendorBought:null,mintVendorSeen:false,paused:false,centersVisited:POKEMON_CENTERS.filter(c=>c<=start),spawnDelay:0,defeated:0,earned:0,items:0,log:[],speed:js.options.battleSpeed,stats:Object.fromEntries(ids.map(id=>[id,{damage:0,healing:0,damageTaken:0,crits:0,superEffective:0,kos:0,deaths:0}]))};
   js.stats.runs++;save();$("pkIsoRunEnd").classList.add("hidden");$("pkIsoCenterOverlay").classList.add("hidden");openBattle();log("Expedición real iniciada desde "+start+" m con "+ids.length+" Pokémon.");spawnRound();schedule();render();
@@ -15237,12 +15259,12 @@ function startRun(){
 function openBattle(){if(window.PokeSendaJohtoRuntime?.showGame){window.PokeSendaJohtoRuntime.showGame();return;}document.querySelectorAll("#pkIsoJohtoRoot .pk-iso-panel").forEach(x=>x.classList.add("hidden"));$("pkIsoJohtoRoot").classList.remove("hidden");$("pkIsoBattle").classList.remove("hidden");}
 function failRun(){
   clearInterval(timer);timer=null;const rs=js.routes.johto_route1;rs.deaths++;rs.bestDistance=Math.max(rs.bestDistance,run.distance);pushHistory("Derrota",run.distance);save();const auto=js.options.autoRepeat;
-  if(auto){run=null;setTimeout(startRun,0);return;}
+  if(auto){run=null;queueAutoRestart();return;}
   if(window.PokeSendaJohtoRuntime?.onRunFailed){const failedDistance=Math.floor(run.distance),failedCheckpoint=routeStartPoint();run=null;window.PokeSendaJohtoRuntime.onRunFailed(failedDistance,failedCheckpoint);return;}
   $("pkIsoRunEndText").textContent="Llegaste a "+Math.floor(run.distance)+" m. La siguiente expedición partirá desde "+routeStartPoint()+" m.";$("pkIsoRunEnd").classList.remove("hidden");
 }
 function stopRun(){
-  clearInterval(timer);timer=null;clearInterval(centerTimer);centerTimer=null;if(run&&run.distance>=(run.startDistance||0))pushHistory("Detenida",run.distance);run=null;if(window.PokeSendaJohtoRuntime?.showLobby)window.PokeSendaJohtoRuntime.showLobby();else API()?.open?.();
+  floatingAutoRestartPending=false;clearInterval(timer);timer=null;clearInterval(centerTimer);centerTimer=null;if(run&&run.distance>=(run.startDistance||0))pushHistory("Detenida",run.distance);run=null;if(window.PokeSendaJohtoRuntime?.showLobby)window.PokeSendaJohtoRuntime.showLobby();else API()?.open?.();
 }
 function statusText(ent){const a=[];if(ent.status?.type)a.push(STATUS_META[ent.status.type]);if((ent.confusion||0)>0)a.push(STATUS_META.confusion);return a.join(" ");}
 function render(){
@@ -15285,6 +15307,10 @@ window.PokeSendaJohtoBattleIsolated={
  start:startRun,stop:stopRun,openReward,continueReward,closeCenter,saveKey:SAVE,
  getState:()=>JSON.parse(JSON.stringify(js||{})),getRun:()=>run?JSON.parse(JSON.stringify(run)):null,getReward:()=>reward?JSON.parse(JSON.stringify(reward)):null,
  globalBusy:()=>({run:!!run,gym:!!jGym}),
+ floatingSetDriver:(on)=>{try{floatingDriver=!!on;clearInterval(timer);timer=null;if(!floatingDriver&&run&&!run.paused&&!run.rewardPending&&!run.centerPending)schedule();return true}catch(_){return false}},
+ floatingPulse:()=>{try{if(!floatingDriver)return false;if(!run&&floatingAutoRestartPending){startRun();return true;}if(run?.centerPending)updateCenterTimer();else if(run&&!run.paused&&!run.rewardPending)tick();return true}catch(_){return false}},
+ floatingSnapshot:()=>{try{migrate();const active=!!run,ids=active?battleIds():[],team=ids.map(id=>{const t=run.team[id],p=js.pokemon[id];return{name:name(p?.dex||0),hp:Math.max(0,Number(t?.hp||0)),maxHp:Math.max(1,Number(t?.maxHp||1)),alive:!!t?.alive};});return{region:"johto",regionName:"Johto",active,autoRestart:!!floatingAutoRestartPending,paused:!!run?.paused,blocked:!!(run?.rewardPending||run?.centerPending||run?.eventPending),route:"Pradera Ámbar",distance:Number(run?.distance||0),maxDistance:MAX_DISTANCE,infinite:false,speed:Number(run?.speed||js.options?.battleSpeed||1),money:Number(js.money||0),round:Number(run?.roundIndex||0),enemies:active?livingEnemies().length:0,team}}catch(_){return{region:"johto",regionName:"Johto",active:false,autoRestart:!!floatingAutoRestartPending,paused:false,route:"Pradera Ámbar",distance:0,maxDistance:MAX_DISTANCE,speed:1,money:0,round:0,enemies:0,team:[]}}},
+ floatingStart:()=>{try{floatingAutoRestartPending=false;if(!run)startRun();return !!run}catch(_){return false}},
  devPauseAll:()=>{try{const snap={run:!!run&&!run.paused,gym:!!jGym&&!jGym.paused};if(snap.run){run.paused=true;render();}if(snap.gym)jGymPause(true);return snap;}catch(_){return {run:false,gym:false}}},
  devResumeAll:(snap={})=>{try{if(snap.run&&run?.paused&&!run.rewardPending&&!run.centerPending){run.paused=false;render();}if(snap.gym&&jGym?.paused)jGymPause(false);return true;}catch(_){return false}},
  abandonRunForGlobal:()=>{try{if(!run)return false;stopRun();return true;}catch(_){return false;}},
@@ -16493,7 +16519,7 @@ function onRewardClose(){rewardOverlay.classList.add("hidden");showGame();}
 function bindKeys(){document.addEventListener("keydown",e=>{if(e.ctrlKey&&e.altKey&&!e.shiftKey&&String(e.key).toLowerCase()==="j"){e.preventDefault();e.stopImmediatePropagation();root&&!root.classList.contains("hidden")?closeRoot():open();return;}if(e.key==="Escape"&&root&&!root.classList.contains("hidden")){if(!rewardOverlay?.classList.contains("hidden")||!centerOverlay?.classList.contains("hidden"))return;if(currentView==="game")showLobby();else if(currentView==="menu")closeRoot();}},true);}
 function boot(){build();bindKeys();renderTimer=setInterval(()=>{if(root&&!root.classList.contains("hidden")&&currentView==="game")renderAll();},160);}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();
-window.PokeSendaJohtoRuntime={open,close:closeRoot,showLobby,showGame,reopenProfile:reopenRegionalProfile,el:id=>el(id),renderAll,checkAchievements,updatePremiumUI,syncPremiumClock,onCenterOpen,onCenterTick,onCenterClose,onRewardReady,onRewardRoll,onRewardFinalized,onRewardClose,onRunFailed,onTMCompatChanged,onRouteEvent,onRouteEventClosed,onIncenseVendorOpen,onMintVendorOpen,onEvolutionReady,onGymStarted,onGymRender,onGymFinished};
+window.PokeSendaJohtoRuntime={open,close:closeRoot,showLobby,showGame,reopenProfile:reopenRegionalProfile,el:id=>el(id),renderAll,checkAchievements,updatePremiumUI,syncPremiumClock,onCenterOpen,onCenterTick,onCenterClose,onRewardReady,onRewardRoll,onRewardFinalized,onRewardClose,onRunFailed,onTMCompatChanged,onRouteEvent,onRouteEventClosed,onIncenseVendorOpen,onMintVendorOpen,onEvolutionReady,onGymStarted,onGymRender,onGymFinished,floatingUiPulse:()=>{try{if(routeEventTimer)updateRouteEventTimer();return true}catch(_){return false}}};
 })();
 </script>
 
@@ -16728,7 +16754,138 @@ function boot(){installCloudIdCopy();setInterval(installCloudIdCopy,1600);setTim
 window.PokeSendaDevMoneyInbox={check};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
 </script>
-<!-- PokeSenda V36.58.8 · Regalito DEV bloqueante con pausa real. -->
+
+<style id="pkFloatingModeMainStyle">
+.pk-floating-mode-btn{position:relative}
+.pk-floating-mode-btn.pk-floating-active{box-shadow:0 0 0 2px rgba(108,219,255,.38),0 0 18px rgba(86,186,255,.32)!important}
+.pk-floating-mode-btn.pk-floating-active:after{content:"";position:absolute;right:4px;top:4px;width:6px;height:6px;border-radius:50%;background:#63e793;box-shadow:0 0 8px #63e793}
+</style>
+<script id="pkFloatingModeV36590">
+(()=>{'use strict';
+let floatWin=null,pulseTimer=null,uiTimer=null,driverRegion=null,fallbackMode=false,closing=false;
+const fmt=n=>Math.max(0,Math.floor(Number(n)||0)).toLocaleString('es-CL');
+function jRootVisible(){const r=document.getElementById('pkRegionRuntimeRoot');return !!r&&!r.classList.contains('hidden')}
+function bridge(region){return region==='johto'?window.PokeSendaJohtoBattleIsolated:window.PokeSendaKantoGlobalBridge}
+function snap(region){try{return bridge(region)?.floatingSnapshot?.()||null}catch(_){return null}}
+function preferredRegion(){
+ const j=snap('johto'),k=snap('kanto');
+ if(j?.active&&jRootVisible())return'johto';
+ if(k?.active)return'kanto';
+ if(j?.active)return'johto';
+ return jRootVisible()?'johto':'kanto';
+}
+function setDriver(region){
+ if(driverRegion===region)return;
+ if(driverRegion)try{bridge(driverRegion)?.floatingSetDriver?.(false)}catch(_){}
+ driverRegion=region||null;
+ if(driverRegion)try{bridge(driverRegion)?.floatingSetDriver?.(true)}catch(_){}
+}
+function syncDriver(){
+ const region=preferredRegion(),s=snap(region);
+ if(s?.active||s?.autoRestart)setDriver(region);else setDriver(null);
+ return {region,s};
+}
+function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function pipCSS(){return `
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#071321;color:#eef7ff;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+body{user-select:none}.wrap{height:100%;display:grid;grid-template-rows:auto auto 1fr auto;padding:10px 11px 9px;background:linear-gradient(145deg,#08182a,#0c2239 58%,#101d2d)}
+.head{display:flex;align-items:center;gap:8px;min-width:0}.logo{font-size:13px;font-weight:1000;color:#ffcf48;letter-spacing:.4px}.region{font-size:9px;font-weight:900;padding:4px 7px;border:1px solid #39648a;border-radius:999px;color:#acd7ff;background:#0e2945}.live{margin-left:auto;font-size:9px;font-weight:900;color:#6ee29a;display:flex;align-items:center;gap:5px}.dot{width:7px;height:7px;border-radius:50%;background:#6ee29a;box-shadow:0 0 9px #6ee29a}.live.paused{color:#ffd76d}.live.paused .dot{background:#ffd76d;box-shadow:0 0 9px #ffd76d}.live.idle{color:#8095aa}.live.idle .dot{background:#607387;box-shadow:none}
+.route{margin-top:7px;display:grid;grid-template-columns:1fr auto;gap:7px;align-items:end}.route b{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.route small{display:block;margin-top:2px;font-size:8px;color:#8faec8}.distance{font-size:16px;font-weight:1000;color:#fff;text-align:right;font-variant-numeric:tabular-nums}.bar{height:5px;background:#07101c;border:1px solid #29465f;border-radius:999px;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#3cb8ff,#6ee29a);width:0%}
+.mid{display:grid;grid-template-columns:1fr 108px;gap:8px;margin-top:8px;min-height:0}.team{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.mon{border:1px solid #294a65;border-radius:8px;background:#0a1b2c;padding:6px;min-width:0}.mon b{display:block;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mon small{font-size:7px;color:#8ca6bd}.hp{height:4px;background:#050c14;border-radius:999px;overflow:hidden;margin-top:5px}.hp i{display:block;height:100%;background:#66d98b}.hp.low i{background:#ef6b67}.stats{border:1px solid #294a65;border-radius:8px;background:#0a1b2c;padding:6px 8px;display:grid;grid-template-columns:1fr 1fr;gap:5px}.stat b{display:block;font-size:10px}.stat small{font-size:6.5px;color:#829bb2;text-transform:uppercase}
+.controls{display:flex;gap:6px;align-items:center;margin-top:8px}.controls button{height:29px;border:1px solid #355e80;border-radius:8px;background:#102b47;color:#eaf6ff;font-weight:900;font-size:9px;cursor:pointer;padding:0 10px}.controls button:hover{background:#173a5d}.controls .speed{width:35px;padding:0}.controls .speed.active{background:#2e7a54;border-color:#62d894}.controls .pause{flex:1;background:#183c63}.controls .focus{background:#17283a}.controls .close{width:31px;padding:0;color:#ffb1ae;border-color:#724247;background:#321b24}
+.notice{position:absolute;inset:0;background:rgba(5,13,23,.96);display:none;align-items:center;justify-content:center;text-align:center;padding:20px;z-index:10}.notice.show{display:flex}.notice b{font-size:14px;display:block}.notice span{font-size:9px;color:#9eb6ca;display:block;margin-top:7px;line-height:1.45}.notice button{margin-top:12px;height:32px;border-radius:8px;border:1px solid #4c7595;background:#153553;color:#fff;font-weight:900}
+.compat{font-size:6.5px;color:#667f94;text-align:center;margin-top:4px}
+`;}
+function buildDoc(w){
+ const d=w.document;d.open();d.write(`<!doctype html><html><head><meta charset="utf-8"><title>PokéSenda · Ventana flotante</title><style>${pipCSS()}</style></head><body><div class="wrap">
+ <div class="head"><span class="logo">◓ PokéSenda</span><span id="pkfRegion" class="region">Kanto</span><span id="pkfLive" class="live idle"><i class="dot"></i><span>ESPERANDO</span></span></div>
+ <div><div class="route"><div><b id="pkfRoute">Sin expedición activa</b><small id="pkfSub">Inicia una expedición y déjala trabajando aquí.</small></div><div id="pkfDistance" class="distance">0 m</div></div><div class="bar"><i id="pkfProgress"></i></div></div>
+ <div class="mid"><div id="pkfTeam" class="team"></div><div class="stats"><div class="stat"><b id="pkfMoney">₽0</b><small>Dinero</small></div><div class="stat"><b id="pkfRound">0</b><small>Oleada</small></div><div class="stat"><b id="pkfEnemies">0</b><small>Rivales</small></div><div class="stat"><b id="pkfSpeedStat">×1</b><small>Velocidad</small></div></div></div>
+ <div><div class="controls"><button class="speed" data-pkf-speed="1">×1</button><button class="speed" data-pkf-speed="2">×2</button><button class="speed" data-pkf-speed="4">×4</button><button id="pkfPause" class="pause">⏸ Pausar</button><button id="pkfFocus" class="focus">↗ Juego</button><button id="pkfClose" class="close">×</button></div><div id="pkfCompat" class="compat"></div></div>
+ <div id="pkfNotice" class="notice"><div><b id="pkfNoticeTitle">PokéSenda necesita atención</b><span id="pkfNoticeText"></span><button id="pkfNoticeFocus">Volver al juego</button></div></div>
+ </div></body></html>`);d.close();
+ d.querySelectorAll('[data-pkf-speed]').forEach(b=>b.onclick=()=>setSpeed(Number(b.dataset.pkfSpeed)));
+ d.getElementById('pkfPause').onclick=togglePause;
+ d.getElementById('pkfFocus').onclick=focusGame;
+ d.getElementById('pkfClose').onclick=closeFloating;
+ d.getElementById('pkfNoticeFocus').onclick=focusGame;
+}
+function focusGame(){try{window.focus()}catch(_){}}
+function setSpeed(s){const r=preferredRegion(),b=bridge(r);if(r==='kanto')b?.floatingSetSpeed?.(s);else b?.setSpeed?.(s);updateUI()}
+function togglePause(){const r=preferredRegion(),b=bridge(r);if(r==='kanto')b?.floatingTogglePause?.();else b?.togglePause?.();updateUI()}
+function pulse(){
+ if(!floatWin||floatWin.closed)return closeFloating();
+ const {region,s}=syncDriver();
+ if(region==='johto')try{window.PokeSendaJohtoRuntime?.floatingUiPulse?.()}catch(_){}
+ if(s?.active||s?.autoRestart)try{bridge(region)?.floatingPulse?.()}catch(_){}
+}
+function giftState(){
+ const o=document.getElementById('pkDevGiftModal');if(!o||o.classList.contains('hidden'))return null;
+ return {amount:document.getElementById('pkDevGiftAmount')?.textContent||'',region:document.getElementById('pkDevGiftRegion')?.textContent||'',message:document.getElementById('pkDevGiftMessageText')?.textContent||''};
+}
+function updateUI(){
+ if(!floatWin||floatWin.closed)return;
+ const d=floatWin.document,{region,s}=syncDriver();if(!d||!s)return;
+ const live=d.getElementById('pkfLive'),status=!s.active?'ESPERANDO':s.paused?'PAUSADA':'FARMEANDO';live.className='live '+(!s.active?'idle':s.paused?'paused':'');live.querySelector('span').textContent=status;
+ d.getElementById('pkfRegion').textContent=s.regionName||region;
+ d.getElementById('pkfRoute').textContent=s.route||'Expedición';
+ d.getElementById('pkfSub').textContent=!s.active?'Inicia una expedición en la ventana principal.':s.blocked?'Hay una decisión o recompensa pendiente.':s.infinite?'Modo Infinita · sin límite de distancia':`${s.enemies} rival${s.enemies===1?'':'es'} activo${s.enemies===1?'':'s'}`;
+ d.getElementById('pkfDistance').textContent=s.infinite?`${fmt(s.distance)} m`:`${fmt(s.distance)} m`;
+ d.getElementById('pkfProgress').style.width=s.maxDistance?`${Math.max(0,Math.min(100,s.distance/s.maxDistance*100))}%`:'100%';
+ d.getElementById('pkfMoney').textContent=`₽${fmt(s.money)}`;d.getElementById('pkfRound').textContent=fmt(s.round);d.getElementById('pkfEnemies').textContent=fmt(s.enemies);d.getElementById('pkfSpeedStat').textContent=`×${s.speed||1}`;
+ d.getElementById('pkfTeam').innerHTML=(s.team?.length?s.team:[{name:'—',hp:0,maxHp:1},{name:'—',hp:0,maxHp:1},{name:'—',hp:0,maxHp:1}]).slice(0,3).map(m=>{const pct=Math.max(0,Math.min(100,Number(m.hp||0)/Math.max(1,Number(m.maxHp||1))*100));return `<div class="mon"><b>${escapeHtml(m.name)}</b><small>${m.alive===false?'Debilitado':`${Math.ceil(m.hp||0)} / ${Math.ceil(m.maxHp||1)} PS`}</small><div class="hp ${pct<30?'low':''}"><i style="width:${pct}%"></i></div></div>`}).join('');
+ d.querySelectorAll('[data-pkf-speed]').forEach(b=>b.classList.toggle('active',Number(b.dataset.pkfSpeed)===Number(s.speed||1)));
+ const p=d.getElementById('pkfPause');p.disabled=!s.active||!!s.blocked;p.textContent=s.paused?'▶ Continuar':'⏸ Pausar';
+ const g=giftState(),n=d.getElementById('pkfNotice');
+ if(g){n.classList.add('show');d.getElementById('pkfNoticeTitle').textContent=`🎁 REGALITO RECIBIDO · ${g.amount}`;d.getElementById('pkfNoticeText').textContent=[g.region,g.message].filter(Boolean).join(' · ');}
+ else if(s.active&&s.blocked){n.classList.add('show');d.getElementById('pkfNoticeTitle').textContent='PokéSenda necesita atención';d.getElementById('pkfNoticeText').textContent='Hay una recompensa, Centro Pokémon, evento o decisión pendiente. Vuelve un momento al juego para continuar.'}
+ else n.classList.remove('show');
+ d.getElementById('pkfCompat').textContent=fallbackMode?'Modo compatibilidad · mantén esta ventana abierta':'Ventana siempre visible · el combate se ejecuta desde aquí';
+}
+function markButtons(active){document.querySelectorAll('.pk-floating-mode-btn').forEach(b=>b.classList.toggle('pk-floating-active',!!active))}
+async function openFloating(){
+ if(floatWin&&!floatWin.closed){try{floatWin.focus()}catch(_){}return}
+ fallbackMode=false;closing=false;
+ try{
+  if('documentPictureInPicture'in window&&window.documentPictureInPicture?.requestWindow){
+   if(document.fullscreenElement)try{await document.exitFullscreen()}catch(_){}
+   floatWin=await window.documentPictureInPicture.requestWindow({width:470,height:235});
+  }else{
+   fallbackMode=true;floatWin=window.open('','pokesenda_floating','popup=yes,width=470,height=260,resizable=yes,scrollbars=no');
+   if(!floatWin)throw new Error('popup_blocked');
+  }
+ }catch(e){
+  try{if(typeof window.toast==='function')window.toast('No se pudo abrir la ventana flotante. Permite ventanas emergentes para PokéSenda.')}catch(_){}
+  floatWin=null;return;
+ }
+ buildDoc(floatWin);markButtons(true);syncDriver();updateUI();
+ pulseTimer=floatWin.setInterval(pulse,100);uiTimer=floatWin.setInterval(updateUI,300);
+ try{floatWin.addEventListener('pagehide',closeFloating,{once:true});floatWin.addEventListener('unload',closeFloating,{once:true})}catch(_){}
+}
+function closeFloating(){
+ if(closing)return;closing=true;
+ if(pulseTimer&&floatWin)try{floatWin.clearInterval(pulseTimer)}catch(_){}
+ if(uiTimer&&floatWin)try{floatWin.clearInterval(uiTimer)}catch(_){}
+ pulseTimer=uiTimer=null;setDriver(null);markButtons(false);
+ const w=floatWin;floatWin=null;
+ try{if(w&&!w.closed)w.close()}catch(_){}
+ setTimeout(()=>{closing=false},50);
+}
+function installButton(host){
+ if(!host||host.querySelector('.pk-floating-mode-btn'))return;
+ const b=document.createElement('button');b.type='button';b.className='btn icon-only-btn pk-floating-mode-btn';b.title='Modo ventana flotante · farmea mientras haces otra cosa';b.setAttribute('aria-label','Abrir modo ventana flotante');b.textContent='▣';b.onclick=openFloating;host.appendChild(b);
+}
+function installButtons(){
+ installButton([...document.querySelectorAll('.game .top-nav')].find(n=>!n.closest('#pkRegionRuntimeRoot'))||document.querySelector('.top-nav'));
+ installButton(document.querySelector('#pkRegionRuntimeRoot .top-nav'));
+}
+function boot(){installButtons();setInterval(installButtons,1400);window.addEventListener('beforeunload',closeFloating)}
+window.PokeSendaFloatingMode={open:openFloating,close:closeFloating,pulse,update:updateUI,isOpen:()=>!!floatWin&&!floatWin.closed};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();
+</script>
+
+<!-- PokeSenda V36.59.0 · Modo Ventana Flotante + Regalito DEV bloqueante. -->
 
 </body>
 </html>

@@ -2790,6 +2790,65 @@ body{letter-spacing:.08px}
 <style id="pkV36582GlobalGiftStyle">
 .pk-global-toast{position:fixed!important;left:50%!important;top:88px!important;transform:translateX(-50%)!important;z-index:490500!important;border:1px solid #8f82d7!important;border-radius:999px!important;background:#111a32ee!important;color:#f4f1ff!important;padding:9px 14px!important;font-size:9px!important;font-weight:900!important;opacity:0!important;pointer-events:none!important;box-shadow:0 8px 28px #0009,0 0 20px #7f70c633!important;transition:.18s!important}.pk-global-toast.show{opacity:1!important;transform:translateX(-50%) translateY(-4px)!important}
 </style>
+
+<style id="pkPokemonDetailVisualV36597">
+/* V36.59.7 · Ficha Pokémon: jerarquía visual para Evolución, Objeto, MT y Movimientos. */
+#pokemonDetailContent .pk-detail-evolution-wrap,
+#pokemonDetailContent .pk-detail-module{
+  position:relative;margin:12px 0;padding:12px;border-radius:14px;border:1px solid #40546c;
+  background:linear-gradient(145deg,#111b28,#162334);box-shadow:inset 0 1px rgba(255,255,255,.025),0 7px 18px rgba(0,0,0,.13);overflow:hidden;
+}
+#pokemonDetailContent .pk-detail-evolution-wrap{border-color:#816a30;background:linear-gradient(145deg,#201d12,#172130 58%,#1c1a12)}
+#pokemonDetailContent .pk-detail-item-module{border-color:#42698e;background:linear-gradient(145deg,#0e1b2c,#14283c)}
+#pokemonDetailContent .pk-detail-tm-module{border-color:#765f9d;background:linear-gradient(145deg,#17162b,#1d2137 57%,#17192b)}
+#pokemonDetailContent .pk-detail-moves-module{border-color:#465a70;background:linear-gradient(145deg,#111b27,#172432)}
+#pokemonDetailContent .pk-detail-module::before,#pokemonDetailContent .pk-detail-evolution-wrap::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:#6f849a;opacity:.8}
+#pokemonDetailContent .pk-detail-evolution-wrap::before{background:#e4bf55}#pokemonDetailContent .pk-detail-item-module::before{background:#65a7dc}#pokemonDetailContent .pk-detail-tm-module::before{background:#a687de}#pokemonDetailContent .pk-detail-moves-module::before{background:#d77968}
+#pokemonDetailContent .pk-detail-module-head,#pokemonDetailContent .pk-detail-section-title{display:flex;align-items:center;gap:9px;margin:0 0 10px;min-width:0}
+#pokemonDetailContent .pk-detail-module-head>div,#pokemonDetailContent .pk-detail-section-title>div{min-width:0;flex:1}
+#pokemonDetailContent .pk-detail-module-head b,#pokemonDetailContent .pk-detail-section-title b{display:block;font-size:13px;color:#f4f8ff;line-height:1.2}
+#pokemonDetailContent .pk-detail-module-head small,#pokemonDetailContent .pk-detail-section-title small{display:block;font-size:9px;color:#9eb0c3;line-height:1.4;margin-top:2px}
+#pokemonDetailContent .pk-detail-title-icon{width:34px;min-width:34px;height:34px;border:1px solid #52687f;border-radius:10px;display:grid;place-items:center;background:#0b1622;font-size:18px;box-shadow:inset 0 0 10px rgba(255,255,255,.035)}
+#pokemonDetailContent .pk-detail-module-badge{margin-left:auto;border:1px solid #75649c;border-radius:999px;padding:5px 8px;background:#171429;color:#cdb7f3;font-size:8px;font-weight:1000;white-space:nowrap}
+#pokemonDetailContent .pk-detail-evolution-wrap .evo-status-card{margin:0!important;background:rgba(11,18,27,.52)!important;border-radius:11px!important}
+#pokemonDetailContent .pk-detail-evolve-action{width:100%;margin:8px 0 0!important;min-height:34px;font-size:10.5px!important;border-color:#50bd78!important;background:linear-gradient(180deg,#24663c,#17492c)!important;color:#eafff0!important}
+#pokemonDetailContent .pk-detail-item-body{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(270px,.95fr);gap:10px;align-items:stretch}
+#pokemonDetailContent .pk-detail-item-body .held-item-info{margin:0!important;min-height:72px;padding:10px 12px!important;border-radius:11px!important;background:linear-gradient(145deg,#0b1929,#10243a)!important;border-color:#345d84!important}
+#pokemonDetailContent .pk-detail-item-body .held-item-info-icon{width:46px!important;min-width:46px!important;height:46px!important;border:1px solid #365b80;border-radius:10px;background:#091421}
+#pokemonDetailContent .pk-detail-item-body .held-item-info-icon img{width:36px;height:36px;object-fit:contain;image-rendering:pixelated}
+#pokemonDetailContent .pk-detail-item-body .held-item-info-icon .item-icon{width:36px!important;height:36px!important;max-width:36px!important;max-height:36px!important}
+#pokemonDetailContent .pk-detail-item-body .held-item-info b{font-size:12px!important}#pokemonDetailContent .pk-detail-item-body .held-item-info small{font-size:9.5px!important}
+#pokemonDetailContent .pk-detail-control{display:flex;flex-direction:column;justify-content:center;gap:5px;padding:9px 10px;border:1px solid #314b66;border-radius:11px;background:#0c1725}
+#pokemonDetailContent .pk-detail-control label{font-size:8px;color:#8fa8c2;font-weight:1000;letter-spacing:.65px}
+#pokemonDetailContent .pk-detail-control select,#pokemonDetailContent .held-item-select{width:100%;min-height:38px;background:#101f31;color:#f0f6ff;border:1px solid #4b6887;border-radius:9px;padding:8px 9px;font-size:10.5px}
+#pokemonDetailContent .pk-detail-control small{font-size:8.5px;color:#8298ae;line-height:1.35}
+#pokemonDetailContent .pk-detail-tm-module .tm-rarity-rule{margin:0 0 9px!important;border-color:#66558d!important;background:linear-gradient(145deg,#15152a,#1c1c32)!important}
+#pokemonDetailContent .pk-detail-tm-module .tm-loadout-summary{margin:0 0 9px!important;border-color:#66558d!important;background:#111528!important}
+#pokemonDetailContent .pk-detail-tm-module .tm-slot-grid{margin-top:0!important}
+#pokemonDetailContent .pk-detail-tm-module .tm-slot-cell{min-height:102px;border-color:#4d4d72;background:linear-gradient(145deg,#121426,#191c31)}
+#pokemonDetailContent .pk-detail-tm-module .tm-slot-cell.occupied{border-color:#6e8f82;background:linear-gradient(145deg,#12221d,#182c25)}
+#pokemonDetailContent .pk-detail-tm-module .tm-capacity-note{margin-bottom:0!important;background:#0f1424;border-color:#4d486d}
+#pokemonDetailContent .pk-detail-tm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#pokemonDetailContent .pk-detail-tm-card{appearance:none;text-align:left;min-height:82px;padding:10px;border:1px solid #4d4b72;border-radius:11px;background:linear-gradient(145deg,#121426,#1a1d32);color:#edf2fb;cursor:pointer;display:flex;flex-direction:column;gap:4px;transition:.14s}
+#pokemonDetailContent .pk-detail-tm-card.occupied{border-color:#6f649e;background:linear-gradient(145deg,#19162e,#24203b);box-shadow:inset 0 0 18px rgba(162,126,222,.05)}
+#pokemonDetailContent .pk-detail-tm-card.occupied:hover{transform:translateY(-1px);border-color:#a78cdb;filter:brightness(1.08)}
+#pokemonDetailContent .pk-detail-tm-card.empty{opacity:.58;border-style:dashed;cursor:default}
+#pokemonDetailContent .pk-detail-tm-slot{align-self:flex-start;border:1px solid #635989;border-radius:999px;padding:3px 6px;color:#bfaee3;background:#141225;font-size:7.5px;font-weight:1000;letter-spacing:.35px}
+#pokemonDetailContent .pk-detail-tm-card b{font-size:11px;line-height:1.25}#pokemonDetailContent .pk-detail-tm-card small{font-size:8.5px;line-height:1.4;color:#9ba8bb}
+#pokemonDetailContent .pk-detail-moves-module .skills{margin-top:0!important}
+#pokemonDetailContent .pk-detail-moves-module .skill{background:linear-gradient(145deg,#111b28,#172534)!important}
+#pokemonDetailContent .pk-detail-moves-module .skill:not(:disabled):hover{transform:translateY(-1px)}
+#pokemonDetailContent .pk-detail-module + .pk-detail-module{margin-top:10px}
+#pkRegionRuntimeRoot #pokemonDetailContent .pk-detail-module,#pkRegionRuntimeRoot #pokemonDetailContent .pk-detail-evolution-wrap{display:block!important}
+@media(max-width:760px){
+ #pokemonDetailContent .pk-detail-item-body{grid-template-columns:1fr}
+ #pokemonDetailContent .pk-detail-tm-grid{grid-template-columns:1fr}
+ #pokemonDetailContent .pk-detail-module,#pokemonDetailContent .pk-detail-evolution-wrap{padding:10px;margin:10px 0}
+ #pokemonDetailContent .pk-detail-module-head,#pokemonDetailContent .pk-detail-section-title{align-items:flex-start}
+ #pokemonDetailContent .pk-detail-module-badge{font-size:7.5px;padding:4px 6px}
+}
+</style>
+
 </head>
 <body>
 
@@ -3538,7 +3597,7 @@ body{letter-spacing:.08px}
       </div>
       <div id="infoPanel" class="info-panel help-v3315 hidden" role="dialog" aria-label="Guía del Entrenador">
         <div class="info-panel-head">
-          <div><b>❔ Guía del Entrenador</b><small>Guía clara · V36.59.6 · empieza por lo esencial y busca detalles solo cuando los necesites</small></div>
+          <div><b>❔ Guía del Entrenador</b><small>Guía clara · V36.59.7 · empieza por lo esencial y busca detalles solo cuando los necesites</small></div>
           <div class="grow"></div><button id="infoCloseBtn" class="btn">Cerrar</button>
         </div>
         <div class="help-search-wrap">
@@ -6269,12 +6328,11 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
       <div class="xpbar"><div class="xpfill" style="width:${pct}%"></div></div><div class="statline"><span>${p.level>=MAX_LEVEL?"Nivel máximo":`${Math.floor(p.xp)} / ${need} XP`}</span><span>${(1/d.cd).toFixed(2)} atq/s</span></div>
       <div class="star-row"><span class="tiny muted">🍬 ${isEeveeEvolutionId(id)?`Eevee ${state.eeveeCandies||0}`:(p.candies||0)}${p.stars<5?` · Próx. ★: ${cost.toLocaleString("es-CL")}`:" · 5★ MAX"}</span><button class="star-upgrade" data-star="${id}" ${canStar?"":"disabled"}>Subir ★</button></div>
       ${natureCardHTML(id)}
+      <section class="pk-detail-evolution-wrap"><div class="pk-detail-section-title"><span class="pk-detail-title-icon">🧬</span><div><b>Evolución</b><small>Progreso de esta forma y requisito de la siguiente etapa.</small></div></div>${evoHTML}${ready?`<button class="mini-btn evolve-now pk-detail-evolve-action" data-evolve="${id}">✨ Evolucionar ahora</button>`:""}</section>
       ${id==="eevee"||isEeveeEvolutionId(id)?`<div class="eevee-forms-box"><div class="eevee-forms-head"><b>🧬 Familia Eevee</b><small>${eeveeOwnedEvolutionCount()}/3 evoluciones en posesión · Eevee sin evolucionar: ${state.owned.includes("eevee")?"Sí":"No"} · 🍬 ${state.eeveeCandies||0}</small></div><div class="eevee-form-buttons">${[["eevee",133,"Eevee"],["vaporeon",134,"Vaporeon"],["jolteon",135,"Jolteon"],["flareon",136,"Flareon"]].map(([fid,dex,name])=>{const owned=state.owned.includes(fid),activeForm=fid===id;return `<button class="eevee-form-btn ${activeForm?"active":""}" disabled><img src="${spriteUrl(dex)}"><span>${owned?name:"???"}</span></button>`;}).join("")}</div><div class="tiny muted" style="margin-top:6px">Solo puedes tener un Eevee sin evolucionar a la vez. Mientras ese Eevee siga en posesión, cualquier Eevee adicional capturado se convierte en caramelos compartidos. Al evolucionarlo, vuelve a quedar libre el espacio para capturar otro Eevee y completar otra rama. Cuando tengas Vaporeon, Jolteon y Flareon, los Eevee posteriores seguirán dando caramelos para estrellas.</div></div>`:""}
-      <div class="moves-first-label">⚔ Movimientos · mejora rápida</div><div class="skills">${moveButtons}</div>
-      ${evoHTML}${ready?`<button class="mini-btn evolve-now" data-evolve="${id}" style="width:100%;margin-bottom:6px">✨ Evolucionar ahora</button>`:""}
-      <div class="item-slot"><label>Objeto</label><select class="held-select" data-held="${id}" ${canEditTeam()?"":"disabled"}>${itemOptionsForPokemon(id)}</select></div>
-      ${heldItemInfoHTML(p.heldItem)}
-      ${tmLoadoutEditorHTML(id)}
+      <section class="pk-detail-module pk-detail-item-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">🎒</span><div><b>Objeto equipado</b><small>Bonificación activa y cambio rápido de objeto.</small></div></div><div class="pk-detail-item-body">${heldItemInfoHTML(p.heldItem)}<div class="pk-detail-control"><label>CAMBIAR OBJETO</label><select class="held-select" data-held="${id}" ${canEditTeam()?"":"disabled"}>${itemOptionsForPokemon(id)}</select><small>${canEditTeam()?"El objeto anterior vuelve al inventario si hay espacio.":"Pausa la expedición para cambiar objetos."}</small></div></div></section>
+      <section class="pk-detail-module pk-detail-tm-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">💿</span><div><b>Máquinas Técnicas</b><small>Configura las MT permanentes de este Pokémon y sus ranuras válidas.</small></div></div>${tmLoadoutEditorHTML(id)}</section>
+      <section class="pk-detail-module pk-detail-moves-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">⚔</span><div><b>Movimientos</b><small>${p.skillPoints} punto${p.skillPoints===1?"":"s"} disponible${p.skillPoints===1?"":"s"} para mejorar rangos.</small></div></div><div class="skills">${moveButtons}</div></section>
       <div class="database-note" style="margin-top:11px">Las seis estadísticas base pertenecen a la especie. El juego las traduce a PS, daño físico/especial, resistencia y velocidad; estrellas, nivel, árbol y objetos modifican después esos valores.</div>
       ${databaseStatsHTML(st)}
       <div class="combat-stat-grid"><div class="combat-stat"><b>${d.maxHp}</b><small>PS de combate</small></div><div class="combat-stat"><b>${d.atk.toFixed(1)} / ${d.spAtk.toFixed(1)}</b><small>ATQ físico / especial</small></div><div class="combat-stat"><b>${Math.round(d.def)} / ${Math.round(d.spDef)}</b><small>DEF / DEF Esp.</small></div><div class="combat-stat"><b>${(1/d.cd).toFixed(2)}/s</b><small>Velocidad ataque</small></div></div>
@@ -11973,7 +12031,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.59.6.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.59.7.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12112,7 +12170,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.59.6',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.59.7',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -13797,7 +13855,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.59.6';
+  const VERSION='V36.59.7';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -16535,8 +16593,11 @@ function openDetail(idOrDex,returnSurface=null){
   const edges=(fam(id)?.evolutions||[]).filter(e=>Number(e.from)===Number(p.dex)),evoHTML=edges.length?edges.map(e=>{const target=nameDex(e.to),req=e.method==="level"?"Nv. "+e.level:e.method==="stone"?(itemDef(e.item)?.name||e.item):e.method==="trade_item"?(itemDef(e.item)?.name||e.item)+" + Cable de Intercambio":e.method==="friendship_day"?"Amistad alta · Día":e.method==="friendship_night"?"Amistad alta · Noche":e.method==="friendship"?"Amistad alta":e.method==="choice_completion"?"Nv. "+(e.level||20)+" · elección Tyrogue":e.method;const opt=(B()?.getEvolutionOptions?.(id)||[]).find(x=>Number(x.to)===Number(e.to)),ready=!!opt?.ready;return'<div class="evo-status-card '+(ready?"ready":"")+'"><span class="evo-status-tag">'+(ready?"EVO LISTA":"EVO")+'</span><span class="evo-status-main"><small>Próxima evolución</small><b>'+target+'</b></span><span class="evo-status-req">'+req+(ready?'<button class="mini-btn" data-j-evolve="'+e.to+'">Evolucionar</button>':"")+'</span></div>';}).join(""):'<div class="evo-status-card max"><span class="evo-status-tag">EVO MAX</span><span class="evo-status-main"><small>Cadena evolutiva</small><b>Completada</b></span><span class="evo-status-req">✓</span></div>';
   const moveButtons=moves.map(x=>{const m=x.m,rank=Math.max(1,Number(x.rank||1)),unlocked=!!x.unlocked,maxed=rank>=25,can=unlocked&&Number(p.skillPoints||0)>0&&!maxed,color=TYPE_COLOR[m.type]||"#718096";return'<button class="skill move-skill '+(m.kind==="support"?"support-skill ":"")+(unlocked?"":"locked-move")+'" style="--move-color:'+color+';border-color:'+color+'" data-j-upgrade-move="'+x.i+'" '+(can?"":"disabled")+'><strong><span>'+m.name+'</span><span>'+(unlocked?"R"+rank+"/25":"🔒 Evo "+m.unlockStage)+'</span></strong><small>'+(unlocked?moveDetailHTML(m,rank):"Se desbloquea al evolucionar.")+'</small></button>';}).join("");
   const itemOptions=['<option value="">— Sin objeto —</option>',...Object.entries(s.inventory||{}).filter(([iid,n])=>{const it=itemDef(iid);return Number(n)>0&&it&&!it.consumable&&!it.evolutionStone&&!it.tradeOnly&&!it.incense&&(!it.evolutionCatalyst||it.boostType||it.hp||it.atk||it.speed||it.crit||it.dodge||it.statusResist||it.money);}).map(([iid,n])=>'<option value="'+iid+'" '+(p.heldItem===iid?"selected":"")+'>'+(itemDef(iid).name||iid)+' ×'+n+'</option>')].join("");
+  const heldDef=p.heldItem?itemDef(p.heldItem):null,tmLoad=Array.isArray(p.tmLoadout)?p.tmLoadout:[null,null,null,null],tmCap=Math.max(1,Number(B()?.tmCapacity?.(id)||1)),tmUsed=tmLoad.filter(Boolean).length;
+  const heldVisual=heldDef?'<div class="held-item-info"><span class="held-item-info-icon">'+(heldDef.sprite?'<img src="'+heldDef.sprite+'" alt="">':(heldDef.icon||"🎒"))+'</span><div><b>'+heldDef.name+'</b><small>'+(heldDef.desc||"Objeto equipado en este Pokémon.")+'</small></div></div>':'<div class="held-item-info empty"><span class="held-item-info-icon">—</span><div><b>Sin objeto equipado</b><small>Este Pokémon no recibe bonificaciones de objeto.</small></div></div>';
+  const tmCards=tmLoad.map((tmId,slot)=>tmId&&D().tms?.[tmId]?'<button class="pk-detail-tm-card occupied" data-j-detail-tm="'+tmId+'"><span class="pk-detail-tm-slot">'+tmSlotName(slot)+'</span><b>'+D().tms[tmId].name+'</b><small>MT permanente · pulsa para revisar o reasignar.</small></button>':'<button class="pk-detail-tm-card empty" disabled><span class="pk-detail-tm-slot">'+tmSlotName(slot)+'</span><b>Sin MT</b><small>'+(tmUsed>=tmCap?'Límite de '+tmCap+' MT alcanzado.':'Ranura disponible para una MT compatible.')+'</small></button>').join("");
   el("pokemonDetailTitle",detailOverlay).textContent=nameDex(p.dex);const ids=detailIds(),nav=ids.length>1;el("pokemonPrevBtn",detailOverlay).disabled=!nav;el("pokemonNextBtn",detailOverlay).disabled=!nav;
-  el("pokemonDetailContent",detailOverlay).innerHTML='<div class="team-card"><div class="team-head"><img class="poke-img" src="'+gif(p.dex,false,!!(p.shinyUnlocked&&p.shinyEquipped))+'"><div class="team-title"><b>'+nameDex(p.dex)+' · Nv.'+p.level+'</b><small>'+types.map(t=>TYPE_ES[t]||t).join("/")+' · '+Math.round(st.maxHp||0)+' PS</small><span class="role-badge">'+rarityName(rar)+' · '+natureName(p.nature)+'</span><div class="stars">'+starHTML(p.stars||1)+'</div><div class="party-status">'+(inFormation?"Equipo preparado":"Fuera de la formación")+'</div></div><span style="font-size:10px;color:var(--good);font-weight:900">'+Number(p.skillPoints||0)+' pts</span></div><div class="xpbar"><div class="xpfill" style="width:'+pct+'%"></div></div><div class="statline"><span>'+(p.level>=60?"Nivel máximo":Math.floor(p.xp||0)+" / "+need+" XP")+'</span><span>'+((1/Math.max(.25,Number(st.cd||1))).toFixed(2))+' atq/s</span></div><div class="star-row"><span class="tiny muted">🍬 '+Number(p.candies||0)+(p.stars<5?" · Próx. ★: "+cost.toLocaleString("es-CL"):" · 5★ MAX")+'</span><button class="star-upgrade" data-j-star="'+id+'" '+(canStar?"":"disabled")+'>Subir ★</button></div><div class="nature-card nature-card-textonly"><span class="nature-copy"><small>NATURALEZA</small><b>'+natureName(p.nature)+'</b><span class="nature-effect">Amistad: '+Number(p.friendship||0)+'/255</span></span>'+(totalOwnedMints()>0?'<button class="btn mini-btn" data-j-use-mint="'+id+'">🌿 Usar Menta</button>':'')+'</div>'+evoHTML+'<div class="held-item-section"><h3>Objeto equipado</h3><select class="held-item-select" data-j-held="'+id+'" '+(canEditTeam()?"":"disabled")+'>'+itemOptions+'</select></div>'+(p.shinyUnlocked?'<div class="star-row"><span>✨ Variante Shiny desbloqueada</span><button class="mini-btn" data-j-shiny="'+id+'">'+(p.shinyEquipped?"Usar normal":"Equipar Shiny")+'</button></div>':"")+'<div class="moves-first-label">MT EQUIPADAS</div><div class="skills">'+(Array.isArray(p.tmLoadout)?p.tmLoadout:[null,null,null,null]).map((tmId,slot)=>tmId&&D().tms?.[tmId]?'<button class="skill move-skill" data-j-detail-tm="'+tmId+'"><strong><span>'+tmSlotName(slot)+'</span><span>'+D().tms[tmId].name+'</span></strong><small>MT permanente · pulsa para revisar o reasignar.</small></button>':'<button class="skill move-skill" disabled><strong><span>'+tmSlotName(slot)+'</span><span>Sin MT</span></strong></button>').join('')+'</div><div class="moves-first-label">MOVIMIENTOS · '+Number(p.skillPoints||0)+' PUNTOS DISPONIBLES</div><div class="skills">'+moveButtons+'</div><div class="statline"><span>PS '+Math.round(st.maxHp||0)+' · ATQ '+Number(st.atk||0).toFixed(1)+' · AT.ESP '+Number(st.spAtk||0).toFixed(1)+'</span><span>DEF '+Number(st.def||0).toFixed(0)+' · DEF.ESP '+Number(st.spDef||0).toFixed(0)+'</span></div></div>';
+  el("pokemonDetailContent",detailOverlay).innerHTML='<div class="team-card"><div class="team-head"><img class="poke-img" src="'+gif(p.dex,false,!!(p.shinyUnlocked&&p.shinyEquipped))+'"><div class="team-title"><b>'+nameDex(p.dex)+' · Nv.'+p.level+'</b><small>'+types.map(t=>TYPE_ES[t]||t).join("/")+' · '+Math.round(st.maxHp||0)+' PS</small><span class="role-badge">'+rarityName(rar)+' · '+natureName(p.nature)+'</span><div class="stars">'+starHTML(p.stars||1)+'</div><div class="party-status">'+(inFormation?"Equipo preparado":"Fuera de la formación")+'</div></div><span style="font-size:10px;color:var(--good);font-weight:900">'+Number(p.skillPoints||0)+' pts</span></div><div class="xpbar"><div class="xpfill" style="width:'+pct+'%"></div></div><div class="statline"><span>'+(p.level>=60?"Nivel máximo":Math.floor(p.xp||0)+" / "+need+" XP")+'</span><span>'+((1/Math.max(.25,Number(st.cd||1))).toFixed(2))+' atq/s</span></div><div class="star-row"><span class="tiny muted">🍬 '+Number(p.candies||0)+(p.stars<5?" · Próx. ★: "+cost.toLocaleString("es-CL"):" · 5★ MAX")+'</span><button class="star-upgrade" data-j-star="'+id+'" '+(canStar?"":"disabled")+'>Subir ★</button></div><div class="nature-card nature-card-textonly"><span class="nature-copy"><small>NATURALEZA</small><b>'+natureName(p.nature)+'</b><span class="nature-effect">Amistad: '+Number(p.friendship||0)+'/255</span></span>'+(totalOwnedMints()>0?'<button class="btn mini-btn" data-j-use-mint="'+id+'">🌿 Usar Menta</button>':'')+'</div><section class="pk-detail-evolution-wrap"><div class="pk-detail-section-title"><span class="pk-detail-title-icon">🧬</span><div><b>Evolución</b><small>Requisitos y siguiente etapa de esta forma.</small></div></div>'+evoHTML+'</section>'+(p.shinyUnlocked?'<div class="star-row"><span>✨ Variante Shiny desbloqueada</span><button class="mini-btn" data-j-shiny="'+id+'">'+(p.shinyEquipped?"Usar normal":"Equipar Shiny")+'</button></div>':'')+'<section class="pk-detail-module pk-detail-item-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">🎒</span><div><b>Objeto equipado</b><small>Bonificación activa y cambio rápido de objeto.</small></div></div><div class="pk-detail-item-body">'+heldVisual+'<div class="pk-detail-control"><label>CAMBIAR OBJETO</label><select class="held-item-select" data-j-held="'+id+'" '+(canEditTeam()?"":"disabled")+'>'+itemOptions+'</select><small>'+(canEditTeam()?"El objeto anterior vuelve al inventario si hay espacio.":"Pausa la expedición para cambiar objetos.")+'</small></div></div></section><section class="pk-detail-module pk-detail-tm-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">💿</span><div><b>Máquinas Técnicas</b><small>MT permanentes · capacidad según rareza.</small></div><span class="pk-detail-module-badge">'+tmUsed+'/'+tmCap+' EN USO</span></div><div class="pk-detail-tm-grid">'+tmCards+'</div></section><section class="pk-detail-module pk-detail-moves-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">⚔</span><div><b>Movimientos</b><small>'+Number(p.skillPoints||0)+' punto'+(Number(p.skillPoints||0)===1?"":"s")+' disponible'+(Number(p.skillPoints||0)===1?"":"s")+' para mejorar rangos.</small></div></div><div class="skills">'+moveButtons+'</div></section><div class="statline"><span>PS '+Math.round(st.maxHp||0)+' · ATQ '+Number(st.atk||0).toFixed(1)+' · AT.ESP '+Number(st.spAtk||0).toFixed(1)+'</span><span>DEF '+Number(st.def||0).toFixed(0)+' · DEF.ESP '+Number(st.spDef||0).toFixed(0)+'</span></div></div>';
   qa("[data-j-upgrade-move]",detailOverlay).forEach(btn=>btn.onclick=()=>{if(B()?.upgradeMove?.(id,Number(btn.dataset.jUpgradeMove))){B()?.reload?.();openDetail(id,returnSurface);formationSig="";renderAll();}});
   q("[data-j-star]",detailOverlay)?.addEventListener("click",()=>{if(B()?.upgradeStar?.(id)){B()?.reload?.();openDetail(id,returnSurface);formationSig="";worldSig="";renderAll();}});
   q("[data-j-shiny]",detailOverlay)?.addEventListener("click",()=>{if(B()?.setShiny?.(id,!p.shinyEquipped)){B()?.reload?.();openDetail(id,returnSurface);worldSig="";renderAll();}});
@@ -16803,7 +16864,7 @@ window.PokeSendaDevMoneyInbox={check};if(document.readyState==='loading')documen
 </script>
 
 <style id="pkFloatingModeMainStyle">
-/* V36.59.6 · acceso discreto dentro del campo, fuera del HUD superior. */
+/* V36.59.7 · acceso discreto dentro del campo, fuera del HUD superior. */
 .pk-floating-mode-btn{position:absolute!important;right:12px!important;top:158px!important;z-index:31!important;width:32px!important;height:32px!important;min-width:32px!important;padding:0!important;border-radius:10px!important;border:1px solid rgba(117,153,184,.72)!important;background:linear-gradient(145deg,rgba(24,45,64,.86),rgba(11,24,36,.86))!important;color:#dcecff!important;font-size:15px!important;line-height:1!important;opacity:.72;box-shadow:0 5px 14px rgba(0,0,0,.34)!important;transition:opacity .15s ease,transform .15s ease,filter .15s ease;backdrop-filter:blur(2px)}
 .pk-floating-mode-btn:hover{opacity:1;transform:translateY(-1px);filter:brightness(1.14)}
 .pk-floating-mode-btn.pk-floating-active{opacity:1;border-color:#69c8f4!important;box-shadow:0 0 0 2px rgba(108,219,255,.26),0 0 16px rgba(86,186,255,.26)!important}
@@ -16938,7 +16999,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
-<!-- PokeSenda V36.59.6 · Resultado de Gimnasios accesible: Cerrar arriba a la derecha + clic fuera para volver a selección, Kanto y Johto. Conserva Ventana Flotante y ayuda de Eventos/Mentas. -->
+<!-- PokeSenda V36.59.7 · Resultado de Gimnasios accesible: Cerrar arriba a la derecha + clic fuera para volver a selección, Kanto y Johto. Conserva Ventana Flotante y ayuda de Eventos/Mentas. -->
 
 </body>
 </html>

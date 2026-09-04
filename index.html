@@ -2792,7 +2792,7 @@ body{letter-spacing:.08px}
 </style>
 
 <style id="pkPokemonDetailVisualV36597">
-/* V36.59.8 · Ficha Pokémon: jerarquía visual para Evolución, Objeto, MT y Movimientos. */
+/* V36.59.9 · Ficha Pokémon: jerarquía visual para Evolución, Objeto, MT y Movimientos. */
 #pokemonDetailContent .pk-detail-evolution-wrap,
 #pokemonDetailContent .pk-detail-module{
   position:relative;margin:12px 0;padding:12px;border-radius:14px;border:1px solid #40546c;
@@ -2838,6 +2838,20 @@ body{letter-spacing:.08px}
 #pokemonDetailContent .pk-detail-moves-module .skills{margin-top:0!important}
 #pokemonDetailContent .pk-detail-moves-module .skill{background:linear-gradient(145deg,#111b28,#172534)!important}
 #pokemonDetailContent .pk-detail-moves-module .skill:not(:disabled):hover{transform:translateY(-1px)}
+#pokemonDetailContent .pk-detail-points-badge{border-color:#8e604f;background:#251714;color:#ffc3ad}
+#pokemonDetailContent .pk-tm-compact-status{display:flex;align-items:center;gap:12px;margin:0 0 9px;padding:8px 10px;border:1px solid #554a78;border-radius:10px;background:#111426}
+#pokemonDetailContent .pk-tm-compact-status>div:first-child{min-width:0;flex:1}
+#pokemonDetailContent .pk-tm-compact-status b{display:block;font-size:10px;color:#eadfff;text-transform:uppercase}
+#pokemonDetailContent .pk-tm-compact-status small{display:block;margin-top:2px;font-size:8px;color:#9f98b8}
+#pokemonDetailContent .pk-tm-compact-count{border:1px solid #66558d;border-radius:999px;padding:4px 7px;background:#171429;color:#cdb7f3;font-size:7.5px;font-weight:1000;white-space:nowrap}
+#pokemonDetailContent .pk-tm-compact-meter{display:flex;gap:5px;align-items:center}
+#pokemonDetailContent .pk-tm-compact-status .tm-capacity-pip{width:26px;height:5px;border-radius:999px}
+#pokemonDetailContent .pk-detail-tm-module .tm-slot-cell{min-height:78px!important;padding-bottom:9px!important}
+#pokemonDetailContent .pk-detail-tm-module .tm-slot-cell>small{display:none!important}
+#pokemonDetailContent .pk-detail-tm-module .tm-slot-select{margin-top:7px!important;min-height:38px!important}
+#pokemonDetailContent .pk-detail-tm-module .pk-tm-compact-note{margin-top:9px!important;padding:7px 9px!important;font-size:8px!important;text-align:center}
+#pokemonDetailContent .pk-detail-tm-card{min-height:68px}
+#pokemonDetailContent .pk-detail-tm-card.empty{justify-content:center}
 #pokemonDetailContent .pk-detail-module + .pk-detail-module{margin-top:10px}
 #pkRegionRuntimeRoot #pokemonDetailContent .pk-detail-module,#pkRegionRuntimeRoot #pokemonDetailContent .pk-detail-evolution-wrap{display:block!important}
 @media(max-width:760px){
@@ -3597,7 +3611,7 @@ body{letter-spacing:.08px}
       </div>
       <div id="infoPanel" class="info-panel help-v3315 hidden" role="dialog" aria-label="Guía del Entrenador">
         <div class="info-panel-head">
-          <div><b>❔ Guía del Entrenador</b><small>Guía clara · V36.59.8 · empieza por lo esencial y busca detalles solo cuando los necesites</small></div>
+          <div><b>❔ Guía del Entrenador</b><small>Guía clara · V36.59.9 · empieza por lo esencial y busca detalles solo cuando los necesites</small></div>
           <div class="grow"></div><button id="infoCloseBtn" class="btn">Cerrar</button>
         </div>
         <div class="help-search-wrap">
@@ -6264,7 +6278,7 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
 
 
   function tmOptionsForPokemon(id,slot){
-    const p=state.progress[id],loadout=tmLoadoutForProgress(p),current=loadout[slot]||"";let html='<option value="">— Sin MT —</option>';
+    const p=state.progress[id],loadout=tmLoadoutForProgress(p),current=loadout[slot]||"",emptyLabel=TM_SLOT_DEFS[slot]?.kind==="support"?"Elegir MT Support":"Elegir MT ofensiva";let html=`<option value="">— ${emptyLabel} —</option>`;
     const owned=Object.entries(state.tms||{}).filter(([tmId,v])=>v&&TMS[tmId]&&tmIsCompatible(tmId,id)&&tmSlotAcceptsTM(slot,tmId)&&!tmDuplicatesNaturalMove(tmId,id)).sort((a,b)=>TMS[a[0]].number-TMS[b[0]].number);
     for(const [tmId] of owned){
       const tm=TMS[tmId],m=tm.move,label=m.kind==="attack"?`${displayType(m.type)} · Pot.${m.basePower} · ${Math.round((m.tmAccuracy??1)*100)}%`:`${displayType(m.type)} · Estado/Apoyo`;
@@ -6276,7 +6290,6 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
   function tmLoadoutEditorHTML(id){
     const p=state.progress[id];if(!p)return"";
     const rarity=familyRarity(id),cap=tmSlotCapacityFromRarity(rarity),loadout=tmLoadoutForProgress(p),used=loadout.filter(Boolean).length,editable=canEditTeam(),limitReached=used>=cap;
-    const summary=tmSummaryForPokemon(id)||"Sin MT equipada";
     const rarityName=RARITIES[rarity]?.name||rarity;
     const pips=Array.from({length:4},(_,i)=>`<span class="tm-capacity-pip ${i<used?"used":i<cap?"allowed":"locked"}"></span>`).join("");
     const grid=TM_SLOT_DEFS.map(def=>{
@@ -6286,12 +6299,12 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
       const stateClass=current?"occupied":capacityLocked?"capacity-locked":"available";
       const badgeClass=current?"occupied":capacityLocked?"locked":"available";
       const badgeText=current?"EQUIPADA":capacityLocked?"🔒 BLOQUEADA":"LIBRE";
-      const hint=capacityLocked?`Límite de ${cap} MT alcanzado. Quita una MT equipada para desbloquear esta ranura.`:(def.kind==="support"?"Solo admite MT de Support / Estado.":"Solo admite MT ofensivas.");
-      const options=capacityLocked?'<option value="">🔒 Límite de rareza alcanzado</option>':tmOptionsForPokemon(id,def.index);
-      return `<div class="tm-slot-cell ${stateClass}"><div class="tm-slot-head"><label>${def.kind==="support"?"✦":"⚔"} ${def.label}</label><span class="tm-slot-state ${badgeClass}">${badgeText}</span></div><select class="tm-slot-select" data-tm-pokemon="${id}" data-tm-slot="${def.index}" ${disabled?"disabled":""}>${options}</select><small class="${capacityLocked?"tm-slot-lock-note":""}">${current?`Equipada: ${current.name}.`:hint}</small></div>`;
+      const options=capacityLocked?'<option value="">🔒 Límite alcanzado</option>':tmOptionsForPokemon(id,def.index);
+      const title=def.kind==="support"?"MT Support / Estado":"MT ofensiva";
+      return `<div class="tm-slot-cell ${stateClass}" title="${title}"><div class="tm-slot-head"><label>${def.kind==="support"?"✦":"⚔"} ${def.label}</label><span class="tm-slot-state ${badgeClass}">${badgeText}</span></div><select class="tm-slot-select" data-tm-pokemon="${id}" data-tm-slot="${def.index}" ${disabled?"disabled":""}>${options}</select></div>`;
     }).join("");
-    const capacityText=cap===4?"Puede personalizar las 4 ranuras con MT compatibles.":`Puede elegir libremente cualquier ${cap} de las 4 ranuras. Al llegar a ${cap}/${cap}, las vacías restantes se bloquean automáticamente.`;
-    return `<div class="tm-rarity-rule"><div class="tm-rarity-head"><b>💿 Capacidad de MT</b><span class="tm-rarity-badge">${rarityName} · máximo ${cap}</span></div><small>${capacityText}</small><div class="tm-capacity-meter" aria-label="${used} de ${cap} MT equipadas">${pips}</div><small>Común/Poco común 1 · Raro 2 · Épico 3 · Legendario 4.</small></div><div class="tm-loadout-summary"><div><b>MT equipadas</b>${summary}</div><span>${used}/${cap} EN USO</span></div><div class="tm-slot-grid">${grid}</div><div class="tm-capacity-note">${editable?(limitReached&&cap<4?`<strong>Límite alcanzado:</strong> las ranuras vacías están bloqueadas. Quita una MT equipada para volver a elegir otra ranura.`:`Puedes elegir cualquier ranura permitida por el tipo de MT. Las ofensivas usan Ataque 1–3 y las MT Support usan la ranura Support.`):"Detén la expedición para cambiar MT. Puedes seguir revisando esta ficha mientras el combate está activo."}</div>`;
+    const note=!editable?"Pausa la expedición para cambiar MT.":(limitReached&&cap<4?`Límite de ${cap} MT alcanzado · quita una equipada para usar otra ranura.`:"");
+    return `<div class="pk-tm-compact-status"><div><b>${rarityName}</b><small>Máximo ${cap} MT equipadas a la vez</small></div><span class="pk-tm-compact-count">${used}/${cap} EN USO</span><div class="pk-tm-compact-meter" aria-label="${used} de ${cap} MT equipadas">${pips}</div></div><div class="tm-slot-grid">${grid}</div>${note?`<div class="tm-capacity-note pk-tm-compact-note">${note}</div>`:""}`;
   }
   function changeTM(id,slot,tmId){if(!canEditTeam())return;const p=state.progress[id];if(!p)return;slot=Math.max(0,Math.min(3,Number(slot)||0));tmId=tmId||null;if(tmId&&!GEN1_TM_COMPAT_READY){toast(GEN1_TM_COMPAT_ERROR?"No se pudo verificar la compatibilidad R/B. Revisa tu conexión y vuelve a abrir el juego.":"Verificando compatibilidad MT de Rojo/Azul…");return;}if(tmId&&tmDuplicatesNaturalMove(tmId,id)){toast(`${ownedStage(id).name} ya aprende ${TMS[tmId]?.move?.name||"ese movimiento"} de forma natural; no puede repetirlo con una MT.`);return;}if(tmId&&(!state.tms?.[tmId]||!tmIsCompatible(tmId,id)||!tmSlotAcceptsTM(slot,tmId))){toast("Ese Pokémon no puede aprender esa MT en esa ranura según Pokémon Rojo/Azul");return;}const loadout=tmLoadoutForProgress(p),old=loadout[slot]||null;if(old===tmId)return;if(tmId){const otherSlot=loadout.findIndex((x,i)=>i!==slot&&x===tmId),capacity=tmSlotCapacityForPokemon(id),used=loadout.filter(Boolean).length;if(otherSlot<0&&!old&&used>=capacity){toast(`Este Pokémon ya alcanzó su límite de ${capacity} MT equipadas por rareza. Quita una primero.`);renderCards();return;}if(otherSlot>=0)loadout[otherSlot]=null;loadout[slot]=tmId;p.tmLoadout=loadout;syncLegacyTMFields(p);p.moveRanks=p.moveRanks||[1,0,0,1];if((p.moveRanks[slot]||0)<1)p.moveRanks[slot]=1;toast(otherSlot>=0?`${TMS[tmId].name} movida a ${tmSlotLabel(slot)} de ${ownedStage(id).name}`:`${TMS[tmId].name} enseñada a ${ownedStage(id).name}`);}else{loadout[slot]=null;p.tmLoadout=loadout;syncLegacyTMFields(p);toast(`MT retirada de ${tmSlotLabel(slot)} de ${ownedStage(id).name}`);}save();renderCards();renderTMInventory();if(typeof inventoryTMDetailId!=="undefined"&&inventoryTMDetailId)renderTMEquipOverlay();}
   function changeTMSlot(id,slot){return;}
@@ -6328,11 +6341,12 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
       <div class="xpbar"><div class="xpfill" style="width:${pct}%"></div></div><div class="statline"><span>${p.level>=MAX_LEVEL?"Nivel máximo":`${Math.floor(p.xp)} / ${need} XP`}</span><span>${(1/d.cd).toFixed(2)} atq/s</span></div>
       <div class="star-row"><span class="tiny muted">🍬 ${isEeveeEvolutionId(id)?`Eevee ${state.eeveeCandies||0}`:(p.candies||0)}${p.stars<5?` · Próx. ★: ${cost.toLocaleString("es-CL")}`:" · 5★ MAX"}</span><button class="star-upgrade" data-star="${id}" ${canStar?"":"disabled"}>Subir ★</button></div>
       ${natureCardHTML(id)}
-      <section class="pk-detail-evolution-wrap"><div class="pk-detail-section-title"><span class="pk-detail-title-icon">🧬</span><div><b>Evolución</b><small>Progreso de esta forma y requisito de la siguiente etapa.</small></div></div>${evoHTML}${ready?`<button class="mini-btn evolve-now pk-detail-evolve-action" data-evolve="${id}">✨ Evolucionar ahora</button>`:""}</section>
+      <section class="pk-detail-evolution-wrap"><div class="pk-detail-section-title"><span class="pk-detail-title-icon">🧬</span><div><b>Evolución</b></div></div>${evoHTML}${ready?`<button class="mini-btn evolve-now pk-detail-evolve-action" data-evolve="${id}">✨ Evolucionar ahora</button>`:""}</section>
+      <section class="pk-detail-module pk-detail-moves-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">⚔</span><div><b>Movimientos</b><small>Pulsa un movimiento para subir su rango.</small></div><span class="pk-detail-module-badge pk-detail-points-badge">${p.skillPoints} PTS</span></div><div class="skills">${moveButtons}</div></section>
       ${id==="eevee"||isEeveeEvolutionId(id)?`<div class="eevee-forms-box"><div class="eevee-forms-head"><b>🧬 Familia Eevee</b><small>${eeveeOwnedEvolutionCount()}/3 evoluciones en posesión · Eevee sin evolucionar: ${state.owned.includes("eevee")?"Sí":"No"} · 🍬 ${state.eeveeCandies||0}</small></div><div class="eevee-form-buttons">${[["eevee",133,"Eevee"],["vaporeon",134,"Vaporeon"],["jolteon",135,"Jolteon"],["flareon",136,"Flareon"]].map(([fid,dex,name])=>{const owned=state.owned.includes(fid),activeForm=fid===id;return `<button class="eevee-form-btn ${activeForm?"active":""}" disabled><img src="${spriteUrl(dex)}"><span>${owned?name:"???"}</span></button>`;}).join("")}</div><div class="tiny muted" style="margin-top:6px">Solo puedes tener un Eevee sin evolucionar a la vez. Mientras ese Eevee siga en posesión, cualquier Eevee adicional capturado se convierte en caramelos compartidos. Al evolucionarlo, vuelve a quedar libre el espacio para capturar otro Eevee y completar otra rama. Cuando tengas Vaporeon, Jolteon y Flareon, los Eevee posteriores seguirán dando caramelos para estrellas.</div></div>`:""}
       <section class="pk-detail-module pk-detail-item-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">🎒</span><div><b>Objeto equipado</b><small>Bonificación activa y cambio rápido de objeto.</small></div></div><div class="pk-detail-item-body">${heldItemInfoHTML(p.heldItem)}<div class="pk-detail-control"><label>CAMBIAR OBJETO</label><select class="held-select" data-held="${id}" ${canEditTeam()?"":"disabled"}>${itemOptionsForPokemon(id)}</select><small>${canEditTeam()?"El objeto anterior vuelve al inventario si hay espacio.":"Pausa la expedición para cambiar objetos."}</small></div></div></section>
-      <section class="pk-detail-module pk-detail-tm-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">💿</span><div><b>Máquinas Técnicas</b><small>Configura las MT permanentes de este Pokémon y sus ranuras válidas.</small></div></div>${tmLoadoutEditorHTML(id)}</section>
-      <section class="pk-detail-module pk-detail-moves-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">⚔</span><div><b>Movimientos</b><small>${p.skillPoints} punto${p.skillPoints===1?"":"s"} disponible${p.skillPoints===1?"":"s"} para mejorar rangos.</small></div></div><div class="skills">${moveButtons}</div></section>
+      <section class="pk-detail-module pk-detail-tm-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">💿</span><div><b>Máquinas Técnicas</b><small>Elige una MT en la ranura que corresponda.</small></div></div>${tmLoadoutEditorHTML(id)}</section>
+
       <div class="database-note" style="margin-top:11px">Las seis estadísticas base pertenecen a la especie. El juego las traduce a PS, daño físico/especial, resistencia y velocidad; estrellas, nivel, árbol y objetos modifican después esos valores.</div>
       ${databaseStatsHTML(st)}
       <div class="combat-stat-grid"><div class="combat-stat"><b>${d.maxHp}</b><small>PS de combate</small></div><div class="combat-stat"><b>${d.atk.toFixed(1)} / ${d.spAtk.toFixed(1)}</b><small>ATQ físico / especial</small></div><div class="combat-stat"><b>${Math.round(d.def)} / ${Math.round(d.spDef)}</b><small>DEF / DEF Esp.</small></div><div class="combat-stat"><b>${(1/d.cd).toFixed(2)}/s</b><small>Velocidad ataque</small></div></div>
@@ -12032,7 +12046,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.59.8.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.59.9.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12171,7 +12185,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.59.8',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.59.9',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -13856,7 +13870,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.59.8';
+  const VERSION='V36.59.9';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -16597,9 +16611,9 @@ function openDetail(idOrDex,returnSurface=null){
   const itemOptions=['<option value="">— Sin objeto —</option>',...Object.entries(s.inventory||{}).filter(([iid,n])=>{const it=itemDef(iid);return Number(n)>0&&it&&!it.consumable&&!it.evolutionStone&&!it.tradeOnly&&!it.incense&&(!it.evolutionCatalyst||it.boostType||it.hp||it.atk||it.speed||it.crit||it.dodge||it.statusResist||it.money);}).map(([iid,n])=>'<option value="'+iid+'" '+(p.heldItem===iid?"selected":"")+'>'+(itemDef(iid).name||iid)+' ×'+n+'</option>')].join("");
   const heldDef=p.heldItem?itemDef(p.heldItem):null,tmLoad=Array.isArray(p.tmLoadout)?p.tmLoadout:[null,null,null,null],tmCap=Math.max(1,Number(B()?.tmCapacity?.(id)||1)),tmUsed=tmLoad.filter(Boolean).length;
   const heldVisual=heldDef?'<div class="held-item-info"><span class="held-item-info-icon">'+(heldDef.sprite?'<img src="'+heldDef.sprite+'" alt="">':(heldDef.icon||"🎒"))+'</span><div><b>'+heldDef.name+'</b><small>'+(heldDef.desc||"Objeto equipado en este Pokémon.")+'</small></div></div>':'<div class="held-item-info empty"><span class="held-item-info-icon">—</span><div><b>Sin objeto equipado</b><small>Este Pokémon no recibe bonificaciones de objeto.</small></div></div>';
-  const tmCards=tmLoad.map((tmId,slot)=>tmId&&D().tms?.[tmId]?'<button class="pk-detail-tm-card occupied" data-j-detail-tm="'+tmId+'"><span class="pk-detail-tm-slot">'+tmSlotName(slot)+'</span><b>'+D().tms[tmId].name+'</b><small>MT permanente · pulsa para revisar o reasignar.</small></button>':'<button class="pk-detail-tm-card empty" disabled><span class="pk-detail-tm-slot">'+tmSlotName(slot)+'</span><b>Sin MT</b><small>'+(tmUsed>=tmCap?'Límite de '+tmCap+' MT alcanzado.':'Ranura disponible para una MT compatible.')+'</small></button>').join("");
+  const tmCards=tmLoad.map((tmId,slot)=>tmId&&D().tms?.[tmId]?'<button class="pk-detail-tm-card occupied" data-j-detail-tm="'+tmId+'"><span class="pk-detail-tm-slot">'+tmSlotName(slot)+'</span><b>'+D().tms[tmId].name+'</b><small>Pulsa para cambiar</small></button>':'<button class="pk-detail-tm-card empty" disabled><span class="pk-detail-tm-slot">'+tmSlotName(slot)+'</span><b>'+(tmUsed>=tmCap?'Bloqueada':'Libre')+'</b></button>').join("");
   el("pokemonDetailTitle",detailOverlay).textContent=nameDex(p.dex);const ids=detailIds(),nav=ids.length>1;el("pokemonPrevBtn",detailOverlay).disabled=!nav;el("pokemonNextBtn",detailOverlay).disabled=!nav;
-  el("pokemonDetailContent",detailOverlay).innerHTML='<div class="team-card"><div class="team-head"><img class="poke-img" src="'+gif(p.dex,false,!!(p.shinyUnlocked&&p.shinyEquipped))+'"><div class="team-title"><b>'+nameDex(p.dex)+' · Nv.'+p.level+'</b><small>'+types.map(t=>TYPE_ES[t]||t).join("/")+' · '+Math.round(st.maxHp||0)+' PS</small><span class="role-badge">'+rarityName(rar)+' · '+natureName(p.nature)+'</span><div class="stars">'+starHTML(p.stars||1)+'</div><div class="party-status">'+(inFormation?"Equipo preparado":"Fuera de la formación")+'</div></div><span style="font-size:10px;color:var(--good);font-weight:900">'+Number(p.skillPoints||0)+' pts</span></div><div class="xpbar"><div class="xpfill" style="width:'+pct+'%"></div></div><div class="statline"><span>'+(p.level>=60?"Nivel máximo":Math.floor(p.xp||0)+" / "+need+" XP")+'</span><span>'+((1/Math.max(.25,Number(st.cd||1))).toFixed(2))+' atq/s</span></div><div class="star-row"><span class="tiny muted">🍬 '+Number(p.candies||0)+(p.stars<5?" · Próx. ★: "+cost.toLocaleString("es-CL"):" · 5★ MAX")+'</span><button class="star-upgrade" data-j-star="'+id+'" '+(canStar?"":"disabled")+'>Subir ★</button></div><div class="nature-card nature-card-textonly"><span class="nature-copy"><small>NATURALEZA</small><b>'+natureName(p.nature)+'</b><span class="nature-effect">Amistad: '+Number(p.friendship||0)+'/255</span></span>'+(totalOwnedMints()>0?'<button class="btn mini-btn" data-j-use-mint="'+id+'">🌿 Usar Menta</button>':'')+'</div><section class="pk-detail-evolution-wrap"><div class="pk-detail-section-title"><span class="pk-detail-title-icon">🧬</span><div><b>Evolución</b><small>Requisitos y siguiente etapa de esta forma.</small></div></div>'+evoHTML+'</section>'+(p.shinyUnlocked?'<div class="star-row"><span>✨ Variante Shiny desbloqueada</span><button class="mini-btn" data-j-shiny="'+id+'">'+(p.shinyEquipped?"Usar normal":"Equipar Shiny")+'</button></div>':'')+'<section class="pk-detail-module pk-detail-item-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">🎒</span><div><b>Objeto equipado</b><small>Bonificación activa y cambio rápido de objeto.</small></div></div><div class="pk-detail-item-body">'+heldVisual+'<div class="pk-detail-control"><label>CAMBIAR OBJETO</label><select class="held-item-select" data-j-held="'+id+'" '+(canEditTeam()?"":"disabled")+'>'+itemOptions+'</select><small>'+(canEditTeam()?"El objeto anterior vuelve al inventario si hay espacio.":"Pausa la expedición para cambiar objetos.")+'</small></div></div></section><section class="pk-detail-module pk-detail-tm-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">💿</span><div><b>Máquinas Técnicas</b><small>MT permanentes · capacidad según rareza.</small></div><span class="pk-detail-module-badge">'+tmUsed+'/'+tmCap+' EN USO</span></div><div class="pk-detail-tm-grid">'+tmCards+'</div></section><section class="pk-detail-module pk-detail-moves-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">⚔</span><div><b>Movimientos</b><small>'+Number(p.skillPoints||0)+' punto'+(Number(p.skillPoints||0)===1?"":"s")+' disponible'+(Number(p.skillPoints||0)===1?"":"s")+' para mejorar rangos.</small></div></div><div class="skills">'+moveButtons+'</div></section><div class="statline"><span>PS '+Math.round(st.maxHp||0)+' · ATQ '+Number(st.atk||0).toFixed(1)+' · AT.ESP '+Number(st.spAtk||0).toFixed(1)+'</span><span>DEF '+Number(st.def||0).toFixed(0)+' · DEF.ESP '+Number(st.spDef||0).toFixed(0)+'</span></div></div>';
+  el("pokemonDetailContent",detailOverlay).innerHTML='<div class="team-card"><div class="team-head"><img class="poke-img" src="'+gif(p.dex,false,!!(p.shinyUnlocked&&p.shinyEquipped))+'"><div class="team-title"><b>'+nameDex(p.dex)+' · Nv.'+p.level+'</b><small>'+types.map(t=>TYPE_ES[t]||t).join("/")+' · '+Math.round(st.maxHp||0)+' PS</small><span class="role-badge">'+rarityName(rar)+' · '+natureName(p.nature)+'</span><div class="stars">'+starHTML(p.stars||1)+'</div><div class="party-status">'+(inFormation?"Equipo preparado":"Fuera de la formación")+'</div></div><span style="font-size:10px;color:var(--good);font-weight:900">'+Number(p.skillPoints||0)+' pts</span></div><div class="xpbar"><div class="xpfill" style="width:'+pct+'%"></div></div><div class="statline"><span>'+(p.level>=60?"Nivel máximo":Math.floor(p.xp||0)+" / "+need+" XP")+'</span><span>'+((1/Math.max(.25,Number(st.cd||1))).toFixed(2))+' atq/s</span></div><div class="star-row"><span class="tiny muted">🍬 '+Number(p.candies||0)+(p.stars<5?" · Próx. ★: "+cost.toLocaleString("es-CL"):" · 5★ MAX")+'</span><button class="star-upgrade" data-j-star="'+id+'" '+(canStar?"":"disabled")+'>Subir ★</button></div><div class="nature-card nature-card-textonly"><span class="nature-copy"><small>NATURALEZA</small><b>'+natureName(p.nature)+'</b><span class="nature-effect">Amistad: '+Number(p.friendship||0)+'/255</span></span>'+(totalOwnedMints()>0?'<button class="btn mini-btn" data-j-use-mint="'+id+'">🌿 Usar Menta</button>':'')+'</div><section class="pk-detail-evolution-wrap"><div class="pk-detail-section-title"><span class="pk-detail-title-icon">🧬</span><div><b>Evolución</b></div></div>'+evoHTML+'</section><section class="pk-detail-module pk-detail-moves-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">⚔</span><div><b>Movimientos</b><small>Pulsa un movimiento para subir su rango.</small></div><span class="pk-detail-module-badge pk-detail-points-badge">'+Number(p.skillPoints||0)+' PTS</span></div><div class="skills">'+moveButtons+'</div></section>'+(p.shinyUnlocked?'<div class="star-row"><span>✨ Variante Shiny desbloqueada</span><button class="mini-btn" data-j-shiny="'+id+'">'+(p.shinyEquipped?"Usar normal":"Equipar Shiny")+'</button></div>':'')+'<section class="pk-detail-module pk-detail-item-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">🎒</span><div><b>Objeto equipado</b><small>Bonificación activa y cambio rápido de objeto.</small></div></div><div class="pk-detail-item-body">'+heldVisual+'<div class="pk-detail-control"><label>CAMBIAR OBJETO</label><select class="held-item-select" data-j-held="'+id+'" '+(canEditTeam()?"":"disabled")+'>'+itemOptions+'</select><small>'+(canEditTeam()?"El objeto anterior vuelve al inventario si hay espacio.":"Pausa la expedición para cambiar objetos.")+'</small></div></div></section><section class="pk-detail-module pk-detail-tm-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">💿</span><div><b>Máquinas Técnicas</b><small>Capacidad según rareza.</small></div><span class="pk-detail-module-badge">'+tmUsed+'/'+tmCap+' EN USO</span></div><div class="pk-detail-tm-grid">'+tmCards+'</div></section><div class="statline"><span>PS '+Math.round(st.maxHp||0)+' · ATQ '+Number(st.atk||0).toFixed(1)+' · AT.ESP '+Number(st.spAtk||0).toFixed(1)+'</span><span>DEF '+Number(st.def||0).toFixed(0)+' · DEF.ESP '+Number(st.spDef||0).toFixed(0)+'</span></div></div>';
   qa("[data-j-upgrade-move]",detailOverlay).forEach(btn=>btn.onclick=()=>{if(B()?.upgradeMove?.(id,Number(btn.dataset.jUpgradeMove))){B()?.reload?.();openDetail(id,returnSurface);formationSig="";renderAll();}});
   q("[data-j-star]",detailOverlay)?.addEventListener("click",()=>{if(B()?.upgradeStar?.(id)){B()?.reload?.();openDetail(id,returnSurface);formationSig="";worldSig="";renderAll();}});
   q("[data-j-shiny]",detailOverlay)?.addEventListener("click",()=>{if(B()?.setShiny?.(id,!p.shinyEquipped)){B()?.reload?.();openDetail(id,returnSurface);worldSig="";renderAll();}});
@@ -16866,7 +16880,7 @@ window.PokeSendaDevMoneyInbox={check};if(document.readyState==='loading')documen
 </script>
 
 <style id="pkFloatingModeMainStyle">
-/* V36.59.8 · acceso discreto dentro del campo, fuera del HUD superior. */
+/* V36.59.9 · acceso discreto dentro del campo, fuera del HUD superior. */
 .pk-floating-mode-btn{position:absolute!important;right:12px!important;top:158px!important;z-index:31!important;width:32px!important;height:32px!important;min-width:32px!important;padding:0!important;border-radius:10px!important;border:1px solid rgba(117,153,184,.72)!important;background:linear-gradient(145deg,rgba(24,45,64,.86),rgba(11,24,36,.86))!important;color:#dcecff!important;font-size:15px!important;line-height:1!important;opacity:.72;box-shadow:0 5px 14px rgba(0,0,0,.34)!important;transition:opacity .15s ease,transform .15s ease,filter .15s ease;backdrop-filter:blur(2px)}
 .pk-floating-mode-btn:hover{opacity:1;transform:translateY(-1px);filter:brightness(1.14)}
 .pk-floating-mode-btn.pk-floating-active{opacity:1;border-color:#69c8f4!important;box-shadow:0 0 0 2px rgba(108,219,255,.26),0 0 16px rgba(86,186,255,.26)!important}
@@ -17001,7 +17015,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
-<!-- PokeSenda V36.59.8 · Resultado de Gimnasios: Cerrar arriba a la derecha y clic fuera vuelven directo al lobby/campamento en Kanto y Johto. El botón inferior Volver a Gimnasios conserva su función. -->
+<!-- PokeSenda V36.59.9 · Fichas Pokémon: Movimientos inmediatamente bajo Evolución, bloque MT simplificado y más intuitivo, texto redundante de Evolución retirado. Conserva cierre de resultados de Gimnasio al lobby. -->
 
 </body>
 </html>

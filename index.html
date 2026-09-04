@@ -7522,14 +7522,15 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
     {id:"incense_vendor",weight:16,icon:"🧿",title:"Vendedor de Inciensos",text:"Un mercader ambulante instaló un pequeño puesto junto a la ruta. Solo trae tres Inciensos distintos y no sabes cuándo volverás a verlo.",primary:"Ver mercancía",secondary:"Seguir"},
     {id:"mint_vendor",weight:0,icon:"🌿",title:"Vendedora de Mentas",text:"Una herbolaria instaló un pequeño puesto dentro de Cueva Rocosa. Solo trae tres Mentas distintas al azar y no sabes cuándo volverás a encontrarla.",primary:"Ver mercancía",secondary:"Seguir"}
   ];
-  const MINT_VENDOR_EVENT_CHANCE=.005;
+  const MINT_VENDOR_EVENT_CHANCE=.0075;
   function mintVendorUnlocked(){return state.currentRoute==="route2"&&Number(state.routes?.route1?.completions||0)>0;}
   function rollRouteEvent(){
     if(mintVendorUnlocked()&&!run?.mintVendorSeen&&Math.random()<MINT_VENDOR_EVENT_CHANCE){
       if(run)run.mintVendorSeen=true;
       return ROUTE_EVENTS.find(e=>e.id==="mint_vendor")||ROUTE_EVENTS[0];
     }
-    const list=ROUTE_EVENTS.filter(e=>e.id!=="mint_vendor"),total=list.reduce((s,e)=>s+e.weight,0);let r=Math.random()*total;for(const e of list){r-=e.weight;if(r<=0)return e;}return list[0]||ROUTE_EVENTS[0];
+    // V36.59.4 · Cueva Rocosa tiene su vendedor exclusivo de Mentas: el Vendedor de Inciensos no puede aparecer aquí.
+    const list=ROUTE_EVENTS.filter(e=>e.id!=="mint_vendor"&&!(state.currentRoute==="route2"&&e.id==="incense_vendor")),total=list.reduce((s,e)=>s+e.weight,0);let r=Math.random()*total;for(const e of list){r-=e.weight;if(r<=0)return e;}return list[0]||ROUTE_EVENTS[0];
   }
   function tryRouteEvent(){
     if(isInfiniteMode()||state.options.routeEvents===false)return false;
@@ -11965,7 +11966,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.59.2.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.59.4.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12104,7 +12105,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.59.2',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.59.4',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -13789,7 +13790,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.59.2';
+  const VERSION='V36.59.4';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -16921,7 +16922,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
-<!-- PokeSenda V36.59.2 · Catálogo Shiny Maestro 151 + Modo Ventana Flotante + Regalito DEV bloqueante. -->
+<!-- PokeSenda V36.59.4 · Vendedora de Mentas 0,75% + Cueva sin Inciensos + Catálogo Shiny Maestro 151 + Modo Ventana Flotante + Regalito DEV bloqueante. -->
 
 </body>
 </html>

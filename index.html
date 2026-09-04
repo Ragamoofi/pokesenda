@@ -2694,7 +2694,7 @@ body{letter-spacing:.08px}
 .pk-players-box{width:min(1280px,97vw)!important;max-height:94vh!important;overflow:auto!important;padding:18px!important;background:linear-gradient(180deg,#102b58,#091a36)!important;border:2px solid #587dbb!important}
 .pk-players-owner{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:12px 0;padding:13px 14px;border:1px solid #3d5d8e;border-radius:12px;background:#0a1931}
 .pk-players-owner>div:first-child{display:grid;gap:4px}.pk-players-owner b{font-size:12px}.pk-players-owner small{font-size:8.5px;line-height:1.5;color:#9fb2cc}.pk-owner-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.pk-players-toolbar{display:grid;grid-template-columns:minmax(220px,1fr) minmax(180px,240px) auto auto;gap:9px;align-items:center;margin:12px 0}
+.pk-players-toolbar{display:grid;grid-template-columns:minmax(220px,1fr) minmax(180px,240px) auto auto auto;gap:9px;align-items:center;margin:12px 0}
 .pk-players-toolbar input,.pk-players-toolbar select{min-height:43px;border:1px solid #496896;border-radius:9px;background:#0b1930;color:#edf4ff;padding:9px 11px;font-family:inherit;font-size:9.5px;outline:none}.pk-players-toolbar input:focus,.pk-players-toolbar select:focus{border-color:#80a9e8;box-shadow:0 0 0 2px #4e81c433}
 .pk-players-message{min-height:34px;padding:9px 11px;margin:9px 0;border-radius:9px;background:#0b172a;border:1px solid #344b70;color:#aebfd5;font-size:8.5px;line-height:1.4}.pk-players-message.ok{border-color:#3f8f63;color:#a7edbd;background:#0d2a1b}.pk-players-message.warn{border-color:#94712d;color:#ffe09a;background:#30260d}.pk-players-message.bad{border-color:#984747;color:#ffb6b6;background:#321313}
 .pk-players-list{display:grid;gap:8px}.pk-player-row{width:100%;display:grid;grid-template-columns:52px 64px minmax(200px,1.35fr) repeat(4,minmax(105px,.72fr)) 30px;gap:9px;align-items:center;border:1px solid #395888;border-radius:12px;background:linear-gradient(145deg,#11264b,#0b1b38);color:#eef4ff;padding:9px 11px;font-family:inherit;text-align:left;cursor:pointer;transition:transform .12s,border-color .12s,filter .12s}.pk-player-row:hover{transform:translateY(-1px);border-color:#79a3df;filter:brightness(1.06)}
@@ -2785,6 +2785,12 @@ body{letter-spacing:.08px}
 #pkGlobalInfiniteRoot #field.routeInfinite .hud{display:block}#pkGlobalInfiniteRoot .formation-combo.open .formation-combo-menu{display:block!important;z-index:1000}#pkGlobalInfiniteRoot .formation-slot{position:relative}
 #pkGlobalInfiniteRoot .mon-wrap,#pkGlobalInfiniteRoot .enemy-slot{cursor:pointer}#pkGlobalInfiniteRoot .summary{z-index:70}
 @media(max-width:1500px){#pkGlobalInfiniteRoot{overflow:auto}#pkGlobalInfiniteRoot>.game{height:auto;min-height:calc(100vh - 12px)}#pkGlobalInfiniteRoot .main{grid-template-columns:minmax(0,1fr) 430px;min-height:690px}#pkGlobalInfiniteRoot .right{height:auto;max-height:690px}}
+</style>
+
+<style id="pkV36582GlobalGiftStyle">
+.pk-global-toast{position:fixed!important;left:50%!important;top:88px!important;transform:translateX(-50%)!important;z-index:490500!important;border:1px solid #8f82d7!important;border-radius:999px!important;background:#111a32ee!important;color:#f4f1ff!important;padding:9px 14px!important;font-size:9px!important;font-weight:900!important;opacity:0!important;pointer-events:none!important;box-shadow:0 8px 28px #0009,0 0 20px #7f70c633!important;transition:.18s!important}.pk-global-toast.show{opacity:1!important;transform:translateX(-50%) translateY(-4px)!important}
+.pk-gift-box{width:min(760px,95vw)!important;max-height:92vh!important;overflow:auto!important;background:linear-gradient(180deg,#12264b,#09172e)!important;border:2px solid #5579b4!important}.pk-gift-id-card{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:11px;border:1px solid #3b5c8c;border-radius:11px;background:#0b1931;margin:10px 0}.pk-gift-id-card small{display:block;color:#95aac8;font-size:7px;margin-bottom:4px}.pk-gift-id-card code{font-size:10px;color:#dfeaff;word-break:break-all}.pk-gift-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pk-gift-card{border:1px solid #365784;border-radius:12px;background:#0b1830;padding:12px}.pk-gift-card h3{margin:0 0 5px;font-size:12px}.pk-gift-card p{font-size:7.5px;color:#9fb2ce;line-height:1.5}.pk-gift-card label{display:grid;gap:5px;margin:8px 0;font-size:7.5px;color:#b9c8dc}.pk-gift-card input,.pk-gift-card textarea{width:100%;box-sizing:border-box;background:#071326;border:1px solid #456794;color:#eef5ff;border-radius:8px;padding:9px;font-family:inherit;font-size:9px}.pk-gift-card textarea{min-height:105px;resize:vertical}.pk-gift-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.pk-gift-msg{min-height:36px;margin-top:10px;padding:9px 10px;border:1px solid #36527d;border-radius:9px;background:#09162a;color:#aebfd7;font-size:8px;line-height:1.45}.pk-gift-msg.ok{border-color:#41865e;background:#0c291b;color:#b0ebc1}.pk-gift-msg.bad{border-color:#914c55;background:#31161b;color:#ffc0c8}.pk-gift-msg.warn{border-color:#927439;background:#30270e;color:#ffe19a}.pk-gift-balance{display:inline-flex;align-items:center;gap:5px;border:1px solid #6f5c2b;background:#2b2413;border-radius:999px;padding:5px 8px;color:#ffdb78;font-size:8px;font-weight:900}
+@media(max-width:700px){.pk-gift-grid{grid-template-columns:1fr}.pk-gift-id-card{grid-template-columns:1fr}.pk-gift-box{width:97vw!important;padding:11px!important}}
 </style>
 </head>
 <body>
@@ -10818,6 +10824,19 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     grantGlobalMTTicket:(source="Expedición Infinita Global")=>{try{return !!grantMTGachaTicket(source,1);}catch(_){return false;}},
     shinyChance:()=>shinyCaptureChance(),
     canStartGlobal:()=>!run&&!gymBattle,
+    globalBusy:()=>({run:!!run,gym:!!gymBattle}),
+    abandonRunForGlobal:()=>{try{if(!run)return false;returnToMenu();return true;}catch(_){return false;}},
+    giftBalance:()=>Math.max(0,Math.floor(Number(state.pokedollars||0))),
+    giftLedger:()=>JSON.parse(JSON.stringify(state.socialGifts||{sent:[],redeemed:[]})),
+    applyGiftDelta:(delta,entry={})=>{try{
+      delta=Math.trunc(Number(delta)||0);if(!delta)return {ok:false,msg:"Cantidad inválida"};
+      state.socialGifts=state.socialGifts&&typeof state.socialGifts==="object"?state.socialGifts:{sent:[],redeemed:[]};
+      state.socialGifts.sent=Array.isArray(state.socialGifts.sent)?state.socialGifts.sent:[];state.socialGifts.redeemed=Array.isArray(state.socialGifts.redeemed)?state.socialGifts.redeemed:[];
+      const nonce=String(entry?.nonce||"");if(entry?.kind==="redeemed"&&nonce&&state.socialGifts.redeemed.some(x=>String(x?.nonce||"")===nonce))return {ok:false,msg:"Este regalo ya fue canjeado"};
+      const now=Math.max(0,Math.floor(Number(state.pokedollars||0))),next=now+delta;if(next<0)return {ok:false,msg:"Pokédólares insuficientes",balance:now};
+      state.pokedollars=next;const row={...entry,amount:Math.abs(delta),at:Date.now()};if(entry?.kind==="redeemed")state.socialGifts.redeemed.unshift(row);else if(entry?.kind==="sent")state.socialGifts.sent.unshift(row);
+      state.socialGifts.sent=state.socialGifts.sent.slice(0,100);state.socialGifts.redeemed=state.socialGifts.redeemed.slice(0,100);save();try{renderEverything();updateMenuInfo();}catch(_){}return {ok:true,balance:next};
+    }catch(e){return {ok:false,msg:e?.message||"No se pudo actualizar el saldo"};}},
     refresh:()=>{try{renderEverything();updateMenuInfo();}catch(_){}},
     summary:()=>({dex:pokedexDiscoveredCount(),dexList:[...new Set((state.dexSeen||[]).map(Number))],shinyDex:shinyDexCount(),shinyDexList:[...new Set((state.shinyDex||[]).map(Number))],badges:gymBadgeCount(),achievements:achievementPointsEarned(),owned:(state.owned||[]).length,infiniteBest:Number(state.infiniteExpedition?.bestDistance||0),route3Complete:Number(state.routes?.route3?.completions||0)>0})
   };
@@ -11892,7 +11911,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.58.1.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.58.2.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12031,7 +12050,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.58.1',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.58.2',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -13716,7 +13735,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.58.1';
+  const VERSION='V36.58.2';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -15268,6 +15287,10 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 window.PokeSendaJohtoBattleIsolated={
  start:startRun,stop:stopRun,openReward,continueReward,closeCenter,saveKey:SAVE,
  getState:()=>JSON.parse(JSON.stringify(js||{})),getRun:()=>run?JSON.parse(JSON.stringify(run)):null,getReward:()=>reward?JSON.parse(JSON.stringify(reward)):null,
+ globalBusy:()=>({run:!!run,gym:!!jGym}),abandonRunForGlobal:()=>{try{if(!run)return false;stopRun();return true;}catch(_){return false;}},
+ giftBalance:()=>{migrate();return Math.max(0,Math.floor(Number(js.money||0)));},
+ giftLedger:()=>{migrate();return JSON.parse(JSON.stringify(js.socialGifts||{sent:[],redeemed:[]}));},
+ applyGiftDelta:(delta,entry={})=>{try{migrate();delta=Math.trunc(Number(delta)||0);if(!delta)return {ok:false,msg:"Cantidad inválida"};js.socialGifts=js.socialGifts&&typeof js.socialGifts==="object"?js.socialGifts:{sent:[],redeemed:[]};js.socialGifts.sent=Array.isArray(js.socialGifts.sent)?js.socialGifts.sent:[];js.socialGifts.redeemed=Array.isArray(js.socialGifts.redeemed)?js.socialGifts.redeemed:[];const nonce=String(entry?.nonce||"");if(entry?.kind==="redeemed"&&nonce&&js.socialGifts.redeemed.some(x=>String(x?.nonce||"")===nonce))return {ok:false,msg:"Este regalo ya fue canjeado"};const now=Math.max(0,Math.floor(Number(js.money||0))),next=now+delta;if(next<0)return {ok:false,msg:"Pokédólares insuficientes",balance:now};js.money=next;const row={...entry,amount:Math.abs(delta),at:Date.now()};if(entry?.kind==="redeemed")js.socialGifts.redeemed.unshift(row);else if(entry?.kind==="sent")js.socialGifts.sent.unshift(row);js.socialGifts.sent=js.socialGifts.sent.slice(0,100);js.socialGifts.redeemed=js.socialGifts.redeemed.slice(0,100);save();try{render();window.PokeSendaJohtoRuntime?.showGame&&null;}catch(_){}return {ok:true,balance:next};}catch(e){return {ok:false,msg:e?.message||"No se pudo actualizar el saldo"};}},
  getPokemonView:id=>{migrate();const p=js.pokemon[id];if(!p)return null;return {p:JSON.parse(JSON.stringify(p)),stats:derived(p,id),moves:(DATA().movesets?.[id]||[]).map((m,i)=>({m:{...m},i,rank:Number(p.moveRanks?.[i]||0),unlocked:Number(m.unlockStage||0)<=stageIndex(id,p.dex)||m.kind==="support"})),inRun:!!run,alive:run?.team?.[id]?.alive??null,hp:run?.team?.[id]?.hp??null,maxHp:run?.team?.[id]?.maxHp??null};},
  getRarity:id=>familyRarity(id),
  getSpeciesInfo:d=>{migrate();return JSON.parse(JSON.stringify(species(d)));},
@@ -16475,7 +16498,7 @@ window.PokeSendaJohtoRuntime={open,close:closeRoot,showLobby,showGame,reopenProf
 })();
 </script>
 
-<!-- PokeSenda V36.58.1 · auditoría visual recuperada desde el punto de desvío · Johto -->
+<!-- PokeSenda V36.58.2 · auditoría visual recuperada desde el punto de desvío · Johto -->
 
 <style id="pkVisualAuditRecoveryV36581">
 /* Auditoría visual recuperada · estados interactivos Johto */
@@ -16629,6 +16652,40 @@ window.PokeSendaJohtoRuntime={open,close:closeRoot,showLobby,showGame,reopenProf
 @media(max-width:440px){#pkGlobalInfiniteRoot .field{height:455px!important;min-height:455px!important}}
 </style>
 
+
+<script id="pkCloudGiftsV36582Script">
+(()=>{
+'use strict';
+const LINK_KEY='pokesenda_beta1_cloud_link_v1',PREFIX='PSG1.',SALT='PokeSenda-Gift-Beta1-2026-v2';
+const $=id=>document.getElementById(id);
+function readJson(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(_){return null}}
+function link(){const v=readJson(LINK_KEY);return v&&v.slotId&&v.secret?v:null}
+function cloudId(){return String(link()?.slotId||'')}
+function validId(v){return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(v||'').trim())}
+function currentRegion(){const r=document.getElementById('pkRegionRuntimeRoot');return r&&!r.classList.contains('hidden')?'johto':'kanto'}
+function bridge(region){return region==='johto'?window.PokeSendaJohtoBattleIsolated:window.PokeSendaKantoGlobalBridge}
+function regionName(r){return r==='johto'?'Johto':'Kanto'}
+function b64uEncode(s){const bytes=new TextEncoder().encode(s);let bin='';for(const b of bytes)bin+=String.fromCharCode(b);return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function b64uDecode(s){let b=String(s||'').replace(/-/g,'+').replace(/_/g,'/');while(b.length%4)b+='=';const bin=atob(b),bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
+async function hash(s){if(globalThis.crypto?.subtle){const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('')}let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(16).padStart(8,'0')}
+function core(p){return JSON.stringify({v:p.v,from:p.from,to:p.to,region:p.region,amount:p.amount,nonce:p.nonce,ts:p.ts})}
+async function sign(p){return hash(core(p)+'|'+SALT)}
+async function parse(code){try{code=String(code||'').trim();if(!code.startsWith(PREFIX))throw new Error('Formato de regalo inválido');const o=JSON.parse(b64uDecode(code.slice(PREFIX.length)));if(o?.v!==2||!validId(o.from)||!validId(o.to)||!['kanto','johto'].includes(o.region)||!Number.isInteger(o.amount)||o.amount<=0||o.amount>10000000||!o.nonce||!o.sig)throw new Error('Datos del regalo inválidos');if((await sign(o))!==o.sig)throw new Error('El código fue modificado o está dañado');return o}catch(e){throw new Error(e?.message||'Código inválido')}}
+function msg(t,tone=''){const e=$('pkGiftMsg');if(!e)return;e.className='pk-gift-msg '+tone;e.textContent=t}
+function selectedRegion(){return $('pkGiftRegion')?.value==='johto'?'johto':'kanto'}
+function balance(region=selectedRegion()){return Number(bridge(region)?.giftBalance?.()||0)}
+function refresh(){const id=cloudId(),idEl=$('pkGiftMyCloudId'),bal=$('pkGiftBalance'),reg=selectedRegion();if(idEl)idEl.textContent=id||'Cloud Save no activado';if(bal)bal.textContent=regionName(reg)+' · ₽'+balance(reg).toLocaleString('es-CL');const create=$('pkGiftCreate');if(create)create.disabled=!id||!bridge(reg)?.applyGiftDelta;const redeem=$('pkGiftRedeem');if(redeem)redeem.disabled=!id}
+async function copy(text){try{await navigator.clipboard.writeText(text);msg('📋 Copiado al portapapeles.','ok');return}catch(_){}try{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();msg('📋 Copiado al portapapeles.','ok')}catch(_){msg('No se pudo copiar automáticamente. Selecciona el texto manualmente.','warn')}}
+async function createGift(){const me=cloudId(),to=String($('pkGiftTo')?.value||'').trim().toLowerCase(),amount=Math.floor(Number($('pkGiftAmount')?.value||0)),region=selectedRegion(),b=bridge(region);if(!me)return msg('Activa Cloud Save antes de crear regalos.','warn');if(!validId(to))return msg('Escribe el Cloud ID completo del destinatario.','bad');if(to===me.toLowerCase())return msg('No puedes enviarte un regalo a ti mismo.','bad');if(!Number.isFinite(amount)||amount<=0)return msg('Cantidad inválida.','bad');if(!b?.applyGiftDelta)return msg('La región seleccionada todavía no está disponible para regalos.','bad');if(amount>balance(region))return msg('No tienes suficientes Pokédólares en '+regionName(region)+'.','bad');const p={v:2,from:me.toLowerCase(),to,region,amount,nonce:(crypto.randomUUID?.()||String(Date.now())+'-'+Math.random().toString(16).slice(2)),ts:Date.now()};p.sig=await sign(p);const code=PREFIX+b64uEncode(JSON.stringify(p));const res=b.applyGiftDelta(-amount,{kind:'sent',nonce:p.nonce,to:p.to,region});if(!res?.ok)return msg(res?.msg||'No se pudo descontar el regalo.','bad');$('pkGiftCode').value=code;refresh();msg('✅ Regalo creado: ₽'+amount.toLocaleString('es-CL')+' de '+regionName(region)+'. Envía este código a su destinatario.','ok');try{await window.PKCloud?.sync?.()}catch(_){} }
+async function redeemGift(){const me=cloudId();if(!me)return msg('Activa Cloud Save antes de canjear regalos.','warn');let p;try{p=await parse($('pkGiftRedeemCode')?.value)}catch(e){return msg(e.message,'bad')}if(p.to.toLowerCase()!==me.toLowerCase())return msg('Este regalo pertenece a otro Cloud ID.','bad');const b=bridge(p.region);if(!b?.applyGiftDelta)return msg('No se pudo abrir la región '+regionName(p.region)+' para este regalo.','bad');const ledger=b.giftLedger?.()||{};if((ledger.redeemed||[]).some(x=>String(x?.nonce||'')===p.nonce))return msg('Este regalo ya fue canjeado en esta partida.','warn');const res=b.applyGiftDelta(p.amount,{kind:'redeemed',nonce:p.nonce,from:p.from,region:p.region});if(!res?.ok)return msg(res?.msg||'No se pudo canjear el regalo.','bad');$('pkGiftRedeemCode').value='';refresh();msg('🎁 Regalo canjeado: +₽'+p.amount.toLocaleString('es-CL')+' en '+regionName(p.region)+'.','ok');try{await window.PKCloud?.sync?.()}catch(_){} }
+function close(){$('pkGiftOverlay')?.classList.add('hidden')}
+function open(){ensureUI();const r=$('pkGiftRegion');if(r)r.value=currentRegion();refresh();msg('Elige la región, pega el Cloud ID del amigo y crea el regalo. El destinatario canjea el código PSG1 en su propia partida.');$('pkGiftOverlay')?.classList.remove('hidden')}
+function ensureUI(){if(!$('pkGiftOverlay')){const o=document.createElement('div');o.id='pkGiftOverlay';o.className='overlay hidden';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.innerHTML=`<div class="modal-box pk-gift-box" onclick="event.stopPropagation()"><div class="pokemon-detail-head"><div><h2>💸 Regalos entre Entrenadores</h2><div class="tiny muted">Entrega Pokédólares a un Cloud ID sin compartir ningún Cloud Secret.</div></div><div class="grow"></div><span id="pkGiftBalance" class="pk-gift-balance">₽0</span><button id="pkGiftClose" class="btn" type="button">Cerrar</button></div><div class="pk-gift-id-card"><div><small>TU CLOUD ID COMPLETO</small><code id="pkGiftMyCloudId">—</code></div><button id="pkGiftCopyId" class="btn" type="button">📋 Copiar ID</button></div><div class="pk-gift-grid"><section class="pk-gift-card"><h3>🎁 Crear regalo</h3><p>El dinero se descuenta al crear el código y queda ligado al Cloud ID indicado.</p><label>Región<select id="pkGiftRegion"><option value="kanto">Kanto</option><option value="johto">Johto</option></select></label><label>Cloud ID del amigo<input id="pkGiftTo" type="text" autocomplete="off" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"></label><label>Cantidad<input id="pkGiftAmount" type="number" min="1" step="1000" value="36000"></label><div class="pk-gift-actions"><button id="pkGiftCreate" class="btn primary" type="button">Crear regalo</button></div><label>Código para enviar<textarea id="pkGiftCode" readonly placeholder="Aquí aparecerá el código PSG1…"></textarea></label><button id="pkGiftCopyCode" class="btn" type="button">📋 Copiar regalo</button></section><section class="pk-gift-card"><h3>📥 Canjear regalo</h3><p>Pega un código PSG1 recibido. El código ya recuerda si el dinero pertenece a Kanto o Johto.</p><label>Código recibido<textarea id="pkGiftRedeemCode" placeholder="PSG1.…"></textarea></label><div class="pk-gift-actions"><button id="pkGiftRedeem" class="btn warn" type="button">Canjear Pokédólares</button></div><p>El Cloud ID identifica al destinatario; el Cloud Secret nunca se incluye en el regalo.</p></section></div><div id="pkGiftMsg" class="pk-gift-msg"></div></div>`;document.body.appendChild(o);$('pkGiftClose').onclick=close;o.onclick=e=>{if(e.target===o)close()};$('pkGiftCopyId').onclick=()=>copy(cloudId());$('pkGiftRegion').onchange=refresh;$('pkGiftCreate').onclick=createGift;$('pkGiftCopyCode').onclick=()=>copy($('pkGiftCode')?.value||'');$('pkGiftRedeem').onclick=redeemGift;}const players=$('pkPlayersOverlay');if(players&&!$('pkPlayersGiftOpen')){const toolbar=players.querySelector('.pk-players-toolbar');if(toolbar){const b=document.createElement('button');b.id='pkPlayersGiftOpen';b.className='btn';b.type='button';b.textContent='💸 Regalar ₽';b.onclick=open;toolbar.insertBefore(b,$('pkPlayersCount')||null);}}}
+window.PokeSendaGifts={open,refresh};
+function boot(){ensureUI();setInterval(ensureUI,1200)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();setTimeout(ensureUI,900);
+})();
+</script>
+
 <script id="pkGlobalInfiniteV36560Script">
 (()=>{
 "use strict";
@@ -16639,18 +16696,20 @@ function fresh(){return{v:1,bestDistance:0,totalRuns:0,bosses:0,claimedMilestone
 function load(){try{const s=JSON.parse(localStorage.getItem(SAVE)||"null")||fresh();s.claimedMilestones=Array.isArray(s.claimedMilestones)?s.claimedMilestones:[];s.formation=Array.isArray(s.formation)?s.formation:[];s.history=Array.isArray(s.history)?s.history.slice(0,10):[];return Object.assign(fresh(),s);}catch(_){return fresh();}}
 function save(){try{localStorage.setItem(SAVE,JSON.stringify(gs));}catch(_){}}
 function K(){return window.PokeSendaKantoGlobalBridge||null}function J(){return window.PokeSendaJohtoBattleIsolated||null}
-function unlocked(){return !!(K()?.infiniteUnlocked?.()||Number(J()?.getState?.()?.routes?.johto_route3?.completions||0)>0);}
+function unlocked(){const ki=K()?.infiniteState?.()||{},ks=K()?.summary?.()||{},jr=J()?.getState?.()?.routes?.johto_route3||{};return !!(K()?.infiniteUnlocked?.()||ks.route3Complete||Number(ki.bestDistance||0)>0||Number(ki.totalRuns||0)>0||Number(gs.bestDistance||0)>0||Number(gs.totalRuns||0)>0||Number(jr.completions||0)>0);}
 function canStart(){return unlocked()&&!!K()?.canStartGlobal?.()&&!J()?.getRun?.()&&!J()?.getGymBattle?.();}
+function regionalBusy(){const kb=K()?.globalBusy?.()||{run:!K()?.canStartGlobal?.(),gym:false},jb=J()?.globalBusy?.()||{run:!!J()?.getRun?.(),gym:!!J()?.getGymBattle?.()};return {kRun:!!kb.run,kGym:!!kb.gym,jRun:!!jb.run,jGym:!!jb.gym};}
+function clearRegionalRunsForGlobal(){const b=regionalBusy();if(b.kGym||b.jGym){toast("Termina primero el Gimnasio activo antes de entrar a la Infinita Global.");return false;}if(!b.kRun&&!b.jRun)return true;const names=[b.kRun?"Kanto":null,b.jRun?"Johto":null].filter(Boolean).join(" y ");if(!confirm("Hay una expedición regional activa en "+names+".\n\n¿Quieres terminarla y entrar a la Expedición Infinita Global?")){toast("La Infinita Global quedó en espera.");return false;}if(b.kRun)K()?.abandonRunForGlobal?.();if(b.jRun)J()?.abandonRunForGlobal?.();return !!K()?.canStartGlobal?.()&&!J()?.getRun?.()&&!J()?.getGymBattle?.();}
 function sprite(dex,shiny=false,back=false){const base="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/";return base+(back?(shiny?"back/shiny/":"back/"):(shiny?"shiny/":""))+Number(dex)+".gif";}
 function roster(){const arr=[...(K()?.roster?.()||[]),...(J()?.getGlobalRoster?.()||[])],map=new Map();for(const p of arr)if(p?.ref&&!map.has(p.ref))map.set(p.ref,p);return [...map.values()];}
 function rosterMap(){return new Map(roster().map(p=>[p.ref,p]));}
 function catalog(){const a=[...(K()?.enemyCatalog?.()||[]),...(J()?.getGlobalEnemyCatalog?.()||[])],m=new Map();for(const x of a){const key=x.region+":"+x.id;if(!m.has(key))m.set(key,{...x,ref:key});}return [...m.values()];}
 function rarityName(r){return RAR_NAMES[r]||r}function fmt(m){m=Math.max(0,Number(m)||0);return m>=1000?(m/1000).toFixed(2).replace(".",",")+" km":Math.floor(m).toLocaleString("es-CL")+" m";}
-function toast(t){let e=$("pkGlobalToast");if(!e){e=document.createElement("div");e.id="pkGlobalToast";e.className="pk-runtime-toast";root.appendChild(e);}e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),2100);}
+function toast(t){let e=document.getElementById("pkGlobalToast");if(!e){e=document.createElement("div");e.id="pkGlobalToast";e.className="pk-runtime-toast pk-global-toast";document.body.appendChild(e);}e.textContent=t;e.classList.add("show");clearTimeout(e._pkTimer);e._pkTimer=setTimeout(()=>e.classList.remove("show"),2600);}
 function clone(sel){const src=document.querySelector(sel);if(!src)throw new Error("Falta componente Kanto "+sel);const n=src.cloneNode(true);root.appendChild(n);return n;}
 function build(){if(root)return;root=document.createElement("div");root.id="pkGlobalInfiniteRoot";root.className="hidden";document.body.appendChild(root);game=clone("body > .game");reward=clone("body > #rewardOverlay");detail=clone("body > #pokemonDetailOverlay");root.addEventListener("click",e=>e.stopPropagation());root.addEventListener("pointerdown",e=>e.stopPropagation());prepareUI();}
 function hideOverlays(){reward?.classList.add("hidden");detail?.classList.add("hidden");}
-function open(from="kanto"){build();sourceReturn=from;if(!unlocked()){toast("Completa Costa Azul para desbloquear la Expedición Infinita");return;}if(!K()?.canStartGlobal?.()||J()?.getRun?.()||J()?.getGymBattle?.()){toast("Detén primero cualquier expedición o Gimnasio activo.");return;}ensureFormation();document.getElementById("pkRegionRuntimeRoot")?.classList.add("hidden");document.querySelector("body > .game")?.classList.add("pk-global-underlay-hidden");root.classList.remove("hidden");game.classList.remove("hidden");hideOverlays();render(true);}
+function open(from="kanto"){build();sourceReturn=from;if(!unlocked()){toast("🔒 La Infinita Global se desbloquea al completar Costa Azul en Kanto.");return;}if(!clearRegionalRunsForGlobal())return;ensureFormation();document.getElementById("pkRegionRuntimeRoot")?.classList.add("hidden");document.querySelector("body > .game")?.classList.add("pk-global-underlay-hidden");root.classList.remove("hidden");game.classList.remove("hidden");hideOverlays();render(true);if(!gs.formation.some(Boolean))toast("Elige al menos un Pokémon de Kanto o Johto en la Formación Global.");}
 function close(){if(run){if(!confirm("¿Salir de la Expedición Infinita Global? El intento actual terminará."))return;stopRun("Detenida");}hideOverlays();root.classList.add("hidden");document.querySelector("body > .game")?.classList.remove("pk-global-underlay-hidden");if(sourceReturn==="johto")window.PokeSendaJohtoRuntime?.showGame?.();else K()?.refresh?.();}
 function ensureFormation(){const map=rosterMap();gs.formation=gs.formation.filter(ref=>map.has(ref));const defaults=[...(K()?.currentFormation?.()||[]),...(J()?.getGlobalFormation?.()||[])];for(const ref of defaults)if(gs.formation.length<6&&map.has(ref)&&!gs.formation.includes(ref))gs.formation.push(ref);gs.formation=gs.formation.slice(0,6);save();}
 function prepareUI(){
@@ -16718,9 +16777,19 @@ function render(force=false){if(!root||root.classList.contains('hidden'))return;
 function openDetail(ref){const p=(run?.team?.[ref])||rosterMap().get(ref);if(!p)return;const stats=p.stats&&p.stats.maxHp?p.stats:p,moves=p.moves||[];$("pokemonDetailTitle",detail).textContent=p.name+' · '+(p.region==='kanto'?'Kanto':'Johto');$("pokemonDetailContent",detail).innerHTML='<div class="team-card"><div class="team-head"><img class="poke-img" src="'+sprite(p.dex,p.shiny)+'"><div class="team-title"><b>'+p.name+' · Nv.'+p.level+'</b><small>'+(p.types||stats.types||[]).join('/')+' · '+Math.round(stats.maxHp||p.maxHp||0)+' PS</small><span class="role-badge">'+rarityName(p.rarity)+'</span><div class="stars">'+'★'.repeat(Math.max(1,p.stars||1))+'</div></div></div><div class="moves-first-label">MOVIMIENTOS</div><div class="skills">'+moves.map(x=>'<div class="skill move-skill"><strong><span>'+x.m.name+'</span><span>R'+Math.max(1,x.rank||1)+'</span></strong><small>'+x.m.type+' · '+(x.m.kind==='attack'?'Potencia '+(x.m.power||'—'):'Support')+'</small></div>').join('')+'</div><div class="statline"><span>ATQ '+Number(stats.atk||p.atk||0).toFixed(1)+' · AT.ESP '+Number(stats.spAtk||p.spAtk||0).toFixed(1)+'</span><span>DEF '+Number(stats.def||p.def||0).toFixed(0)+' · DEF.ESP '+Number(stats.spDef||p.spDef||0).toFixed(0)+'</span></div></div>';detail.classList.remove('hidden');}
 function showSummary(title,text,button,retry){const s=$("summary",game);$("summaryTitle",game).textContent=title;$("summaryText",game).textContent=text;$("sumDistance",game).textContent=fmt(gs.lastRun?.distance||gs.bestDistance);$("sumCheckpoint",game).textContent='0 m';$("repeatBtn",game).textContent=button;$("summaryCloseBtn",game)?.classList.add('hidden');$("repeatBtn",game).onclick=()=>{s.classList.remove('show');if(retry)startRun();};s.classList.add('show');}
 function getState(){return JSON.parse(JSON.stringify(gs))}
-window.PokeSendaGlobalInfinite={open,close,unlocked,getState,saveKey:SAVE};
-function installKantoIntercept(){const rs=document.querySelector('body > .game #routeSelect');if(!rs||rs.dataset.globalInfiniteHook)return;rs.dataset.globalInfiniteHook='1';rs.addEventListener('change',e=>{if(e.target.value!=='infinite'||!unlocked())return;e.stopImmediatePropagation();e.preventDefault();open('kanto');K()?.refresh?.();},true);}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',installKantoIntercept,{once:true});else installKantoIntercept();setTimeout(installKantoIntercept,800);setTimeout(installKantoIntercept,2200);
+function syncEntryPoints(){
+  const isOpen=unlocked();
+  const krs=document.querySelector('body > .game #routeSelect');
+  const kopt=krs?[...krs.options].find(o=>o.value==='infinite'):null;
+  if(kopt&&isOpen){kopt.disabled=false;kopt.textContent='♾ Expedición Infinita · Global';}
+  const jrs=document.querySelector('#pkRegionRuntimeRoot .game #routeSelect');
+  const jopt=jrs?[...jrs.options].find(o=>o.value==='global_infinite'):null;
+  if(jopt){jopt.disabled=!isOpen;jopt.textContent=isOpen?'♾ Expedición Infinita · Global':'🔒 Expedición Infinita · completa Kanto';}
+}
+window.PokeSendaGlobalInfinite={open,close,unlocked,getState,saveKey:SAVE,syncEntryPoints,diagnose:()=>({unlocked:unlocked(),canStart:canStart(),busy:regionalBusy(),formation:[...gs.formation],roster:roster().length,bestDistance:Number(gs.bestDistance||0),totalRuns:Number(gs.totalRuns||0)} )};
+function installKantoIntercept(){syncEntryPoints();const rs=document.querySelector('body > .game #routeSelect');if(!rs)return;if(rs.dataset.globalInfiniteHook)return;rs.dataset.globalInfiniteHook='1';rs.addEventListener('change',e=>{if(e.target.value!=='infinite')return;e.stopImmediatePropagation();e.preventDefault();if(!unlocked()){toast('🔒 Completa Costa Azul para desbloquear la Infinita Global.');K()?.refresh?.();syncEntryPoints();return;}open('kanto');K()?.refresh?.();syncEntryPoints();},true);}
+function keepEntryPointsSynced(){syncEntryPoints();clearTimeout(keepEntryPointsSynced._t);keepEntryPointsSynced._t=setTimeout(keepEntryPointsSynced,2000);}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{installKantoIntercept();keepEntryPointsSynced();},{once:true});else{installKantoIntercept();keepEntryPointsSynced();}setTimeout(installKantoIntercept,800);setTimeout(installKantoIntercept,2200);
 })();
 </script>
 

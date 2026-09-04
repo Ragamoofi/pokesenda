@@ -2792,7 +2792,7 @@ body{letter-spacing:.08px}
 </style>
 
 <style id="pkPokemonDetailVisualV36597">
-/* V36.59.7 · Ficha Pokémon: jerarquía visual para Evolución, Objeto, MT y Movimientos. */
+/* V36.59.8 · Ficha Pokémon: jerarquía visual para Evolución, Objeto, MT y Movimientos. */
 #pokemonDetailContent .pk-detail-evolution-wrap,
 #pokemonDetailContent .pk-detail-module{
   position:relative;margin:12px 0;padding:12px;border-radius:14px;border:1px solid #40546c;
@@ -3597,7 +3597,7 @@ body{letter-spacing:.08px}
       </div>
       <div id="infoPanel" class="info-panel help-v3315 hidden" role="dialog" aria-label="Guía del Entrenador">
         <div class="info-panel-head">
-          <div><b>❔ Guía del Entrenador</b><small>Guía clara · V36.59.7 · empieza por lo esencial y busca detalles solo cuando los necesites</small></div>
+          <div><b>❔ Guía del Entrenador</b><small>Guía clara · V36.59.8 · empieza por lo esencial y busca detalles solo cuando los necesites</small></div>
           <div class="grow"></div><button id="infoCloseBtn" class="btn">Cerrar</button>
         </div>
         <div class="help-search-wrap">
@@ -10244,7 +10244,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
 <div id="gymResultOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="gymResultTitle">
   <div id="gymVictoryFx" class="gym-victory-fx" aria-hidden="true"></div>
   <div class="modal-box gym-result-box" onclick="event.stopPropagation()">
-    <button id="gymResultCloseTopBtn" class="btn gym-result-close-top" type="button" aria-label="Cerrar resultado del Gimnasio">Cerrar</button>
+    <button id="gymResultCloseTopBtn" class="btn gym-result-close-top" type="button" aria-label="Cerrar resultado y volver al lobby" title="Cerrar y volver al lobby">Cerrar</button>
     <div id="gymResultKicker" class="gym-result-kicker">Gimnasio de Kanto</div>
     <div id="gymResultBadge" class="gym-result-badge"></div>
     <h2 id="gymResultTitle">Resultado</h2>
@@ -10289,9 +10289,10 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     $("gymPlayerTrainer")?.addEventListener("click",e=>{e.stopPropagation();if(gymBattle)openPlayerProfile("gymBattle");});
     for(const id of ["pkTrainerMarker","pkTrainerBack"]){$(id)?.addEventListener("click",e=>{e.stopPropagation();openPlayerProfile("game");});}
     const closeGymResultToSelect=()=>{$("gymResultOverlay")?.classList.add("hidden");renderGymSelect();$("gymSelectOverlay")?.classList.remove("hidden");};
+    const closeGymResultToLobby=()=>{$("gymResultOverlay")?.classList.add("hidden");$("gymSelectOverlay")?.classList.add("hidden");try{renderEverything();}catch(_){};};
     $("gymResultContinueBtn")?.addEventListener("click",closeGymResultToSelect);
-    $("gymResultCloseTopBtn")?.addEventListener("click",closeGymResultToSelect);
-    $("gymResultOverlay")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeGymResultToSelect();});
+    $("gymResultCloseTopBtn")?.addEventListener("click",closeGymResultToLobby);
+    $("gymResultOverlay")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeGymResultToLobby();});
     $("gymResultProfileBtn")?.addEventListener("click",()=>{$("gymResultOverlay")?.classList.add("hidden");openPlayerProfile("gyms");});
     $("playerProfileCloseBtn")?.addEventListener("click",closePlayerProfile);
     $("gymSelectOverlay")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeGyms();});
@@ -12031,7 +12032,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.59.7.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.59.8.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12170,7 +12171,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.59.7',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.59.8',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -13855,7 +13856,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.59.7';
+  const VERSION='V36.59.8';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -16355,9 +16356,10 @@ function prepareGyms(){
   el("gymMonDetailCloseBtn",gymMonDetailOverlay).onclick=closeGymMonDetail;
   gymMonDetailOverlay.onclick=e=>{if(e.target===gymMonDetailOverlay)closeGymMonDetail();};
   const closeGymResultToSelect=()=>{gymResultOverlay.classList.add("hidden");openGyms("game");};
+  const closeGymResultToLobby=()=>{gymResultOverlay.classList.add("hidden");gymSelectOverlay?.classList.add("hidden");showGame();};
   el("gymResultContinueBtn",gymResultOverlay).onclick=closeGymResultToSelect;
-  el("gymResultCloseTopBtn",gymResultOverlay).onclick=closeGymResultToSelect;
-  gymResultOverlay.onclick=e=>{if(e.target===gymResultOverlay)closeGymResultToSelect();};
+  el("gymResultCloseTopBtn",gymResultOverlay).onclick=closeGymResultToLobby;
+  gymResultOverlay.onclick=e=>{if(e.target===gymResultOverlay)closeGymResultToLobby();};
   const profile=el("gymResultProfileBtn",gymResultOverlay);if(profile){profile.textContent="🏅 Ver Medallas";profile.onclick=()=>{gymResultOverlay.classList.add("hidden");openGyms("game");};}
 }
 function openGyms(from="game"){
@@ -16864,7 +16866,7 @@ window.PokeSendaDevMoneyInbox={check};if(document.readyState==='loading')documen
 </script>
 
 <style id="pkFloatingModeMainStyle">
-/* V36.59.7 · acceso discreto dentro del campo, fuera del HUD superior. */
+/* V36.59.8 · acceso discreto dentro del campo, fuera del HUD superior. */
 .pk-floating-mode-btn{position:absolute!important;right:12px!important;top:158px!important;z-index:31!important;width:32px!important;height:32px!important;min-width:32px!important;padding:0!important;border-radius:10px!important;border:1px solid rgba(117,153,184,.72)!important;background:linear-gradient(145deg,rgba(24,45,64,.86),rgba(11,24,36,.86))!important;color:#dcecff!important;font-size:15px!important;line-height:1!important;opacity:.72;box-shadow:0 5px 14px rgba(0,0,0,.34)!important;transition:opacity .15s ease,transform .15s ease,filter .15s ease;backdrop-filter:blur(2px)}
 .pk-floating-mode-btn:hover{opacity:1;transform:translateY(-1px);filter:brightness(1.14)}
 .pk-floating-mode-btn.pk-floating-active{opacity:1;border-color:#69c8f4!important;box-shadow:0 0 0 2px rgba(108,219,255,.26),0 0 16px rgba(86,186,255,.26)!important}
@@ -16999,7 +17001,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
-<!-- PokeSenda V36.59.7 · Resultado de Gimnasios accesible: Cerrar arriba a la derecha + clic fuera para volver a selección, Kanto y Johto. Conserva Ventana Flotante y ayuda de Eventos/Mentas. -->
+<!-- PokeSenda V36.59.8 · Resultado de Gimnasios: Cerrar arriba a la derecha y clic fuera vuelven directo al lobby/campamento en Kanto y Johto. El botón inferior Volver a Gimnasios conserva su función. -->
 
 </body>
 </html>

@@ -16672,12 +16672,12 @@ async function check(){
    if(!id||!['kanto','johto'].includes(region)||amount<=0)continue;
    const b=bridge(region);if(!b?.applyDevGrant)continue;
    const res=b.applyDevGrant(amount,{nonce:id,issuedAt:Date.parse(g.created_at||'')||Date.now(),note:String(g.note||'').slice(0,120)});
-   if(res?.ok||/ya fue canjeado|ya fue aplicado|duplic/i.test(String(res?.msg||''))){ack.push(id);if(res?.ok){applied.push({region,amount});if(region==='kanto')kantoTouched=true;}}
+   if(res?.ok||/ya fue canjeado|ya fue aplicado|duplic/i.test(String(res?.msg||''))){ack.push(id);if(res?.ok){applied.push({region,amount,note:String(g.note||'').trim().slice(0,120)});if(region==='kanto')kantoTouched=true;}}
   }
   if(ack.length){
    await rpc('pokesenda_ack_dev_money_grants',{p_slot_id:link.slotId,p_secret:link.secret,p_grant_ids:ack});
    if(kantoTouched){try{await window.PKCloud?.sync?.()}catch(_){}}
-   if(applied.length){const total=applied.reduce((n,x)=>n+x.amount,0),regions=[...new Set(applied.map(x=>x.region==='johto'?'Johto':'Kanto'))].join(' + ');safeToast(`🎁 Regalo DEV recibido · +₽${total.toLocaleString('es-CL')} · ${regions}`)}
+   if(applied.length){const total=applied.reduce((n,x)=>n+x.amount,0),regions=[...new Set(applied.map(x=>x.region==='johto'?'Johto':'Kanto'))].join(' + '),notes=[...new Set(applied.map(x=>String(x.note||'').trim()).filter(Boolean))];const noteText=notes.length?` · 💬 “${notes.join(' / ')}”`:'';safeToast(`🎁 Regalito recibido · +₽${total.toLocaleString('es-CL')} · ${regions}${noteText}`)}
   }
  }catch(e){console.warn('[DEV Money Inbox]',e?.message||e)}finally{busy=false}
 }

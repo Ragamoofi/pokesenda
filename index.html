@@ -7814,44 +7814,69 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     return weightedRewardPick(normalRewardWeightedPool(routeId,km,incenseType));
   }
 
-  // V36.15 · Protección anti-duplicado Shiny.
-  // La tirada Shiny mantiene exactamente su probabilidad original. Solo después de que
-  // el resultado YA es Shiny se comprueba si esa especie está registrada. Si lo está,
-  // se busca otra variante faltante dentro del mismo pool, priorizando la misma rareza.
-  function shinyProtectionPool(reward,incenseType=null){
-    if(reward?.infiniteGacha)return applyIncenseBiasPreserveRarity(infiniteGachaPool(reward.infiniteRates||infiniteRatesForMilestone(reward.infiniteMilestone,reward.infiniteFirstClear)),incenseType);
-    if(reward?.timedGacha)return applyIncenseBiasPreserveRarity(timedGachaPool(),incenseType);
-    return normalRewardWeightedPool(reward?.routeId||state.currentRoute,reward?.km||1,incenseType);
-  }
-  function shinyProtectionCaptureInfo(entry,reward){
-    if(!entry?.id||!FAMILIES[entry.id])return null;
-    if(reward?.infiniteGacha)return infiniteCaptureInfo(entry.id,reward.infiniteMilestone,entry.rarity);
-    const sourceRoute=reward?.timedGacha?(entry.sourceRoute||reward.routeId||state.currentRoute):(reward?.routeId||state.currentRoute);
-    return capturedStageInfo(entry.id,sourceRoute,reward?.km||10,entry.rarity);
-  }
-  function shinyProtectionCandidates(pool,reward,wantedRarity=null){
-    const owned=shinyDexSet(),out=[];
-    for(const entry of pool||[]){
-      if(wantedRarity&&entry.rarity!==wantedRarity)continue;
-      const attempts=(FAMILIES[entry.id]?.stages?.length||1)>1?96:1;
-      for(let i=0;i<attempts;i++){
-        const cap=shinyProtectionCaptureInfo(entry,reward);if(!cap?.stage)continue;
-        if(owned.has(Number(cap.stage.dex)))continue;
-        out.push({...entry,captureInfo:cap,_protectWeight:Math.max(0,Number(entry.weight)||0)/attempts});
+  // V36.59.1 · Catálogo Shiny Maestro de Kanto (#001–151).
+  // La probabilidad de que una tirada sea Shiny NO cambia. Cuando la tirada ya resultó Shiny,
+  // la especie/forma se resuelve desde un catálogo independiente que contiene las 151 formas
+  // de Kanto, incluidas evoluciones por nivel, piedra e intercambio. Se conserva primero la
+  // rareza de la tirada original para no romper el balance del Gachapón.
+  let KANTO_SHINY_MASTER_CACHE=null;
+  function kantoShinyMasterCatalog(){
+    if(KANTO_SHINY_MASTER_CACHE)return KANTO_SHINY_MASTER_CACHE.map(x=>({...x}));
+    const byDex=new Map(),standaloneEevee={134:"vaporeon",135:"jolteon",136:"flareon"};
+    for(const [id,fam] of Object.entries(FAMILIES)){
+      for(let stageIndex=0;stageIndex<(fam?.stages?.length||0);stageIndex++){
+        const stage=fam.stages[stageIndex],dex=Number(stage?.dex);if(!dex||dex<1||dex>151)continue;
+        // Vaporeon/Jolteon/Flareon son familias poseíbles independientes en el modelo actual.
+        if(standaloneEevee[dex]&&id!==standaloneEevee[dex])continue;
+        const candidate={id,stageIndex,dex,name:stage.name,rarity:rarityForStage(id,stageIndex)};
+        const prev=byDex.get(dex);
+        if(!prev||stageIndex===0)byDex.set(dex,candidate);
       }
+    }
+    KANTO_SHINY_MASTER_CACHE=[...byDex.values()].sort((a,b)=>a.dex-b.dex);
+    if(KANTO_SHINY_MASTER_CACHE.length!==151)console.warn(`[Shiny 151] Catálogo incompleto: ${KANTO_SHINY_MASTER_CACHE.length}/151`,KANTO_SHINY_MASTER_CACHE.map(x=>x.dex));
+    return KANTO_SHINY_MASTER_CACHE.map(x=>({...x}));
+  }
+  function shinyMasterCaptureInfo(entry,reward){
+    if(!entry?.id||!FAMILIES[entry.id])return null;
+    const fam=FAMILIES[entry.id],stageIndex=Math.max(0,Math.min((fam.stages?.length||1)-1,Number(entry.stageIndex)||0)),stage=fam.stages[stageIndex];
+    let level=1;
+    if(reward?.infiniteGacha)level=Number(infiniteCaptureInfo(entry.id,reward.infiniteMilestone,entry.rarity)?.level||1);
+    else{
+      const sourceRoute=reward?.timedGacha?(reward.routeId||state.currentRoute):(reward?.routeId||state.currentRoute);
+      level=captureLevelFor(sourceRoute,reward?.km||10,entry.rarity);
+    }
+    // Si es una evolución natural por nivel, nunca se entrega por debajo de su nivel evolutivo.
+    // Las formas por piedra/intercambio sí pueden aparecer directamente: justamente eso permite
+    // completar su skin Shiny aunque la línea del jugador ya haya evolucionado por otra vía.
+    if(stageIndex>0&&stage?.method==="level"&&Number.isFinite(Number(stage.level))&&Number(stage.level)<999)level=Math.max(level,Number(stage.level));
+    level=Math.max(1,Math.min(MAX_LEVEL,Math.round(level)));
+    return {level,stageIndex,stage};
+  }
+  function shinyMasterCandidates(reward,wantedRarity=null){
+    const owned=shinyDexSet(),out=[];
+    for(const entry of kantoShinyMasterCatalog()){
+      if(owned.has(entry.dex))continue;
+      if(wantedRarity&&entry.rarity!==wantedRarity)continue;
+      const cap=shinyMasterCaptureInfo(entry,reward);if(!cap?.stage)continue;
+      out.push({...entry,captureInfo:cap,weight:1,_protectWeight:wantedRarity?1:Math.max(.01,Number(GACHA_WEIGHT[entry.rarity]||1))});
     }
     return out;
   }
   function protectUniqueShiny(rolled,incenseType=null){
     if(!rolled?.shiny||!rolled.captureInfo?.stage||!pendingReward)return rolled;
-    const currentDex=Number(rolled.captureInfo.stage.dex),owned=shinyDexSet();if(!owned.has(currentDex))return rolled;
-    const pool=shinyProtectionPool(pendingReward,incenseType),wantedRarity=rolled.poolRarity||rolled.rarity;
-    let candidates=shinyProtectionCandidates(pool,pendingReward,wantedRarity),rarityFallback=false;
-    if(!candidates.length){candidates=shinyProtectionCandidates(pool,pendingReward,null);rarityFallback=true;}
-    if(!candidates.length){rolled.shiny=false;rolled.shinyProtectionExhausted=true;addLog(`✨ Protección Shiny: ${rolled.captureInfo.stage.name} ya estaba registrado y no quedan variantes Shiny nuevas en este pool. La captura continúa como normal.`);return rolled;}
+    const originalDex=Number(rolled.captureInfo.stage.dex),wantedRarity=rolled.poolRarity||rolled.rarity;
+    let candidates=shinyMasterCandidates(pendingReward,wantedRarity),rarityFallback=false;
+    if(!candidates.length){candidates=shinyMasterCandidates(pendingReward,null);rarityFallback=true;}
+    if(!candidates.length){
+      rolled.shiny=false;rolled.shinyProtectionExhausted=true;
+      addLog(`✨ Shiny Dex 151/151 completa: la tirada Shiny se convierte en captura normal porque ya posees todas las skins de Kanto.`);
+      return rolled;
+    }
     const picked=weightedRewardPick(candidates);if(!picked)return rolled;
-    const out={...picked,shiny:true,shinyProtected:true,shinyProtectedFromDex:currentDex};delete out._protectWeight;
-    addLog(`✨ Protección Shiny: se evitó repetir a ${rolled.captureInfo.stage.name} y la tirada se redirigió a ${out.captureInfo.stage.name}${rarityFallback?" · pool faltante":" · misma rareza"}.`);
+    const out={...rolled,id:picked.id,rarity:picked.rarity,poolRarity:wantedRarity,captureInfo:picked.captureInfo,shiny:true,shinyProtected:true,shinyProtectedFromDex:originalDex,shinyMaster151:true};
+    delete out._protectWeight;delete out.weight;delete out.dex;delete out.name;delete out.stageIndex;
+    if(Number(out.captureInfo?.stage?.dex)!==originalDex)addLog(`✨ Catálogo Shiny 151: la tirada se resolvió como ${out.captureInfo.stage.name} Shiny${rarityFallback?" · rareza alternativa":" · misma rareza"}.`);
     return out;
   }
 
@@ -7925,7 +7950,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     if(!st)return;
     $("shinyCelebrationImg").src=shinySpriteUrl(st.dex);$("shinyCelebrationImg").alt=`${st.name} Shiny`;
     $("shinyCelebrationName").textContent=`★ ${st.name} Shiny · Nv.${cap.level}`;
-    $("shinyCelebrationMessage").textContent=isNewVariant?`¡Una variante Shiny de ${st.name}! Quedó registrada para siempre en tu Pokédex y, si esta es tu forma actual, se equipó automáticamente. La protección Shiny evitará que esta misma especie vuelva a ocupar otra tirada Shiny.`:`¡${st.name} Shiny! Esta variante queda protegida contra futuras repeticiones Shiny dentro de los pools de captura.`;
+    $("shinyCelebrationMessage").textContent=isNewVariant?`¡Una variante Shiny de ${st.name}! Quedó registrada para siempre en tu Pokédex y, si esta es tu forma actual, se equipó automáticamente. El Catálogo Shiny 151 evitará repetir esta misma forma mientras te falten skins de Kanto.`:`¡${st.name} Shiny! Esta variante queda registrada en el Catálogo Shiny 151 y no volverá a ocupar otra tirada mientras te falten skins de Kanto.`;
     $("shinyCelebrationOverlay").classList.remove("hidden");
   }
 
@@ -11929,7 +11954,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.59.0.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.59.1.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12068,7 +12093,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.59.0',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.59.1',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -13753,7 +13778,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.59.0';
+  const VERSION='V36.59.1';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -16885,7 +16910,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
-<!-- PokeSenda V36.59.0 · Modo Ventana Flotante + Regalito DEV bloqueante. -->
+<!-- PokeSenda V36.59.1 · Catálogo Shiny Maestro 151 + Modo Ventana Flotante + Regalito DEV bloqueante. -->
 
 </body>
 </html>

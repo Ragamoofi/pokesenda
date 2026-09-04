@@ -2792,7 +2792,7 @@ body{letter-spacing:.08px}
 </style>
 
 <style id="pkPokemonDetailVisualV36597">
-/* V36.60.0 · Ficha Pokémon: jerarquía visual para Evolución, Objeto, MT y Movimientos. */
+/* V36.60.2 · Ficha Pokémon: jerarquía visual para Evolución, Objeto, MT y Movimientos. */
 #pokemonDetailContent .pk-detail-evolution-wrap,
 #pokemonDetailContent .pk-detail-module{
   position:relative;margin:12px 0;padding:12px;border-radius:14px;border:1px solid #40546c;
@@ -2861,6 +2861,19 @@ body{letter-spacing:.08px}
  #pokemonDetailContent .pk-detail-module-head,#pokemonDetailContent .pk-detail-section-title{align-items:flex-start}
  #pokemonDetailContent .pk-detail-module-badge{font-size:7.5px;padding:4px 6px}
 }
+
+/* V36.60.2 · Recompensa personal de Nv.60: un respec gratuito por Pokémon. */
+#pokemonDetailContent .pk-max-relearn-card{position:relative;display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center;margin:9px 0 11px;padding:10px 11px;border:1px solid #8c6bbc;border-radius:12px;background:radial-gradient(circle at 42px 50%,rgba(177,119,255,.20),transparent 90px),linear-gradient(145deg,#1c1830,#171d2c 62%,#21182e);box-shadow:inset 0 0 20px rgba(177,119,255,.055),0 6px 18px rgba(0,0,0,.14);overflow:hidden}
+#pokemonDetailContent .pk-max-relearn-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#bf8cff;box-shadow:0 0 12px rgba(191,140,255,.55)}
+#pokemonDetailContent .pk-max-relearn-card.consumed{border-color:#485363;background:linear-gradient(145deg,#141a23,#171c25);filter:saturate(.65)}
+#pokemonDetailContent .pk-max-relearn-card.consumed::before{background:#657080;box-shadow:none}
+#pokemonDetailContent .pk-max-relearn-orb{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#dbc5ff,#7040b4 48%,#25163d 72%);border:2px solid #cfa9ff;font-size:22px;line-height:1;box-shadow:0 0 16px rgba(183,125,255,.34),inset 0 0 8px rgba(255,255,255,.22)}
+#pokemonDetailContent .consumed .pk-max-relearn-orb{filter:grayscale(.65);opacity:.62;box-shadow:none}
+#pokemonDetailContent .pk-max-relearn-copy{min-width:0}.pk-max-relearn-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#pokemonDetailContent .pk-max-relearn-top b{font-size:11px;color:#f2e8ff}#pokemonDetailContent .pk-max-relearn-copy>small{display:block;margin-top:3px;color:#b7a9ca;font-size:8.5px;line-height:1.45}#pokemonDetailContent .pk-max-relearn-copy>em{display:block;margin-top:3px;color:#82798f;font-size:7.5px;font-style:normal}
+#pokemonDetailContent .pk-max-relearn-status{border:1px solid #8f6fbb;border-radius:999px;padding:2px 6px;background:#2b1d42;color:#ddc5ff;font-size:7px;font-weight:1000;letter-spacing:.45px}#pokemonDetailContent .pk-max-relearn-status.used{border-color:#56616f;background:#20262f;color:#9da7b4}
+#pokemonDetailContent .pk-max-relearn-btn{min-width:150px;border-color:#9b72cc!important;background:linear-gradient(180deg,#4d3472,#312448)!important;color:#f4eaff!important;font-size:8px!important;white-space:nowrap}#pokemonDetailContent .pk-max-relearn-btn:not(:disabled):hover{filter:brightness(1.15);transform:translateY(-1px)}
+@media(max-width:650px){#pokemonDetailContent .pk-max-relearn-card{grid-template-columns:38px minmax(0,1fr);gap:8px}#pokemonDetailContent .pk-max-relearn-orb{width:36px;height:36px;font-size:19px}#pokemonDetailContent .pk-max-relearn-btn{grid-column:1/-1;width:100%;min-width:0}}
 </style>
 
 </head>
@@ -3611,7 +3624,7 @@ body{letter-spacing:.08px}
       </div>
       <div id="infoPanel" class="info-panel help-v3315 hidden" role="dialog" aria-label="Guía del Entrenador">
         <div class="info-panel-head">
-          <div><b>❔ Guía del Entrenador</b><small>Guía clara · V36.60.0 · empieza por lo esencial y busca detalles solo cuando los necesites</small></div>
+          <div><b>❔ Guía del Entrenador</b><small>Guía clara · V36.60.2 · empieza por lo esencial y busca detalles solo cuando los necesites</small></div>
           <div class="grow"></div><button id="infoCloseBtn" class="btn">Cerrar</button>
         </div>
         <div class="help-search-wrap">
@@ -3661,7 +3674,7 @@ body{letter-spacing:.08px}
             <div class="help-mini-card"><b><span class="help-inline-icon achievement-menu-icon"></span>Logros</b><small>Hitos permanentes, dinero reclamable y el Camino a Maestro Pokémon. Un <b>punto verde</b> en el botón superior indica que hay una novedad o recompensa pendiente.</small></div>
             <div class="help-mini-card"><b><span class="help-inline-icon tree-menu-icon"></span>Árbol</b><small>Mejoras permanentes del Entrenador compradas con Pokédólares. Un <b>punto verde</b> te avisa cuando hay una mejora relevante disponible.</small></div>
             <div class="help-mini-card"><b><span class="help-inline-icon icon-gear">⚙</span>Menú / Opciones</b><small>La tuerca junto al nombre del juego abre el menú principal. Desde ahí entras a Opciones, Notas del parche y otras pantallas generales.</small></div>
-            <div class="help-mini-card"><b>⏱️ Motor de segundo plano</b><small>PokéSenda mide el <b>tiempo real</b> entre pulsos. Si Chrome ralentiza o congela temporalmente la pestaña, cuando el navegador vuelve a darle ejecución recupera el tiempo faltante simulando combates, drops, distancia, Centros y Auto-repetir a la velocidad ×1/×2/×4 elegida. No necesitas dejar la pestaña visible. Si aparece una decisión que requiere tu atención —por ejemplo una evolución o una recompensa especial— la recuperación se detiene correctamente en ese punto.</small></div><div class="help-mini-card"><b>▣ Ventana flotante</b><small>Ahora es <b>opcional</b>: sirve para ver y controlar PokéSenda mientras haces otra cosa. Muestra progreso, PS, dinero y velocidad y permite pausar o cambiar ×1/×2/×4. El farmeo de segundo plano ya no depende de mantener esta ventana abierta.</small></div>
+            <div class="help-mini-card"><b>⏱️ Motor de segundo plano</b><small>PokéSenda mide el <b>tiempo real</b> entre pulsos. Si Chrome ralentiza o congela temporalmente la pestaña, cuando el navegador vuelve a darle ejecución recupera el tiempo faltante en tandas cortas, sin bloquear la pantalla, simulando combates, drops, distancia, Centros y Auto-repetir a la velocidad ×1/×2/×4 elegida. No necesitas dejar la pestaña visible. Si aparece una decisión que requiere tu atención —por ejemplo una evolución o una recompensa especial— la recuperación se detiene correctamente en ese punto.</small></div><div class="help-mini-card"><b>▣ Ventana flotante</b><small>Ahora es <b>opcional</b>: sirve para ver y controlar PokéSenda mientras haces otra cosa. Muestra progreso, PS, dinero y velocidad y permite pausar o cambiar ×1/×2/×4. El farmeo de segundo plano ya no depende de mantener esta ventana abierta.</small></div>
           </div>
           <div class="help-tip help-good"><b>Importante:</b> en el HUD superior varios accesos son solo iconos: mochila, Pokédex, Caja, Logros, Árbol y Gimnasios. El Perfil ya no necesita un botón arriba: se abre haciendo clic en el sprite de tu Entrenador.</div>
           <div class="section-title">Comenzar / Pausar y Parar no hacen lo mismo</div>
@@ -4181,6 +4194,7 @@ body{letter-spacing:.08px}
     setTimeout(()=>$("pkConfirmOk")?.focus(),0);
     return new Promise(resolve=>{pkConfirmResolve=resolve;});
   }
+  window.PokeSendaGameConfirm=gameConfirm;
   const ROUTE101_MUSIC_SRC = $("bgMusic")?.getAttribute("src") || "";
   const MUSIC_TRACKS = {
     classic_menu:{name:"OP Red",sourceId:"menuMusic"},
@@ -5315,7 +5329,7 @@ body{letter-spacing:.08px}
   function freshPokemonProgress(level=1, rarity="common"){
     return {
       level,xp:0,skillPoints:Math.max(0,level-1),moveRanks:[1,0,0,1],
-      candies:0,stars:rarity==="legendary"?5:1,stageIndex:0,seenStages:[0],evolutionDeclinedAt:null,heldItem:null,tradeReady:false,tmId:null,tmSlot:2,tmLoadout:[null,null,null,null],shinyStages:[],shinyEquipped:false,nature:randomNatureKey()
+      candies:0,stars:rarity==="legendary"?5:1,stageIndex:0,seenStages:[0],evolutionDeclinedAt:null,heldItem:null,tradeReady:false,tmId:null,tmSlot:2,tmLoadout:[null,null,null,null],shinyStages:[],shinyEquipped:false,nature:randomNatureKey(),maxLevelRelearnUsed:false
     };
   }
   const TM_SLOT_DEFS=[
@@ -5606,7 +5620,7 @@ body{letter-spacing:.08px}
     return {refund,excessUnits};
   }
   const inventoryMigrationResult=normalizeInventoryStackLimits();
-  let run=null,loop=null,logs=[],lastRender=0,pendingReward=null,optionsReturn="menu",summaryMode="close",pkAutoRestartTransition=false,pkAutoRestartWallMs=0,pkFloatingDriver=false,pkBackgroundCatchingUp=false,pkBackgroundSaveDirty=false;
+  let run=null,loop=null,logs=[],lastRender=0,pendingReward=null,optionsReturn="menu",summaryMode="close",pkAutoRestartTransition=false,pkAutoRestartWallMs=0,pkFloatingDriver=false,pkBackgroundCatchingUp=false,pkBackgroundSaveDirty=false,pkBackgroundCarryReal=0,pkBackgroundDrainTimer=null,pkBackgroundRecoveredTotal=0,pkBackgroundDrainFaulted=false,pkBackgroundWasEligibleOnHide=false;
   let activeLogTab="general",pcBoxStatusFilter="all",pcBoxRarityFilter="all",pcBoxSort=["dex","name","level","stars","rarity","type","power"].includes(state.options?.pcBoxSort)?state.options.pcBoxSort:"dex",pcBoxSortDir=state.options?.pcBoxSortDir==="desc"?"desc":"asc",pokedexStatusFilter="all",pokedexRarityFilter="all",pokedexRouteFilter="all";
   let achievementReturn="game",achievementFilter="all",pendingAchievementTmMilestone=null,pendingAchievementTmSelection=null;
   let evolutionQueue=[],evolutionModalOpen=false,currentEvolution=null;
@@ -6342,6 +6356,7 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
       <div class="star-row"><span class="tiny muted">🍬 ${isEeveeEvolutionId(id)?`Eevee ${state.eeveeCandies||0}`:(p.candies||0)}${p.stars<5?` · Próx. ★: ${cost.toLocaleString("es-CL")}`:" · 5★ MAX"}</span><button class="star-upgrade" data-star="${id}" ${canStar?"":"disabled"}>Subir ★</button></div>
       ${natureCardHTML(id)}
       <section class="pk-detail-evolution-wrap"><div class="pk-detail-section-title"><span class="pk-detail-title-icon">🧬</span><div><b>Evolución</b></div></div>${evoHTML}${ready?`<button class="mini-btn evolve-now pk-detail-evolve-action" data-evolve="${id}">✨ Evolucionar ahora</button>`:""}</section>
+      ${maxLevelRelearnHTML(id)}
       <section class="pk-detail-module pk-detail-moves-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">⚔</span><div><b>Movimientos</b><small>Pulsa un movimiento para subir su rango.</small></div><span class="pk-detail-module-badge pk-detail-points-badge">${p.skillPoints} PTS</span></div><div class="skills">${moveButtons}</div></section>
       ${id==="eevee"||isEeveeEvolutionId(id)?`<div class="eevee-forms-box"><div class="eevee-forms-head"><b>🧬 Familia Eevee</b><small>${eeveeOwnedEvolutionCount()}/3 evoluciones en posesión · Eevee sin evolucionar: ${state.owned.includes("eevee")?"Sí":"No"} · 🍬 ${state.eeveeCandies||0}</small></div><div class="eevee-form-buttons">${[["eevee",133,"Eevee"],["vaporeon",134,"Vaporeon"],["jolteon",135,"Jolteon"],["flareon",136,"Flareon"]].map(([fid,dex,name])=>{const owned=state.owned.includes(fid),activeForm=fid===id;return `<button class="eevee-form-btn ${activeForm?"active":""}" disabled><img src="${spriteUrl(dex)}"><span>${owned?name:"???"}</span></button>`;}).join("")}</div><div class="tiny muted" style="margin-top:6px">Solo puedes tener un Eevee sin evolucionar a la vez. Mientras ese Eevee siga en posesión, cualquier Eevee adicional capturado se convierte en caramelos compartidos. Al evolucionarlo, vuelve a quedar libre el espacio para capturar otro Eevee y completar otra rama. Cuando tengas Vaporeon, Jolteon y Flareon, los Eevee posteriores seguirán dando caramelos para estrellas.</div></div>`:""}
       <section class="pk-detail-module pk-detail-item-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">🎒</span><div><b>Objeto equipado</b><small>Bonificación activa y cambio rápido de objeto.</small></div></div><div class="pk-detail-item-body">${heldItemInfoHTML(p.heldItem)}<div class="pk-detail-control"><label>CAMBIAR OBJETO</label><select class="held-select" data-held="${id}" ${canEditTeam()?"":"disabled"}>${itemOptionsForPokemon(id)}</select><small>${canEditTeam()?"El objeto anterior vuelve al inventario si hay espacio.":"Pausa la expedición para cambiar objetos."}</small></div></div></section>
@@ -6356,6 +6371,7 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
     content.querySelectorAll(".tm-slot-select").forEach(sel=>sel.addEventListener("change",()=>changeTM(sel.dataset.tmPokemon,Number(sel.dataset.tmSlot),sel.value||null)));
     content.querySelectorAll(".evolve-now").forEach(b=>b.addEventListener("click",()=>queueEvolution(b.dataset.evolve,true)));
     content.querySelectorAll(".evo-stone-quick").forEach(b=>b.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();openStoneEvolutionQuick(b.dataset.stoneEvolve,b.dataset.stoneItem);}));
+    content.querySelectorAll("[data-max-relearn]").forEach(b=>b.addEventListener("click",()=>useMaxLevelRelearnOrb(b.dataset.maxRelearn)));
     content.querySelectorAll(".move-skill").forEach(btn=>btn.addEventListener("click",()=>{const i=Number(btn.dataset.move),pp=state.progress[id],mv=movesFor(id)[i];if(!pp||!mv||pp.skillPoints<=0||(pp.stageIndex||0)<(mv.unlockStage||0))return;pp.moveRanks=pp.moveRanks||[1,0,0,1];if((pp.moveRanks[i]||0)>=25)return;if((pp.moveRanks[i]||0)<=0)pp.moveRanks[i]=1;else pp.moveRanks[i]++;pp.skillPoints--;addLog(`${ownedStage(id).name}: ${mv.name} sube a R${pp.moveRanks[i]}.`);save();renderCards();renderFormation();}));
   }
 
@@ -6749,6 +6765,27 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
     const ok=await gameConfirm({title:"Reiniciar movimientos",message:`Usarás 1 ${it.name} en ${st.name}.\n\nSe reiniciarán todos sus rangos de movimiento y recuperarás ${plan.refund} punto${plan.refund===1?"":"s"}.\n\nNivel, estrellas, evolución, MT y objeto equipado NO cambiarán.`,confirmText:"Usar Orbe",cancelText:"Cancelar",tone:"warning",symbol:"🔮"});if(!ok)return;
     p.moveRanks=plan.baseRanks.slice();p.skillPoints=Math.max(0,Number(p.skillPoints||0))+plan.refund;state.items[itemId]=Math.max(0,Number(state.items[itemId]||0)-1);if(state.items[itemId]<=0){delete state.items[itemId];selectedStoneItemId=null;}
     addLog(`🔮 ${it.name}: ${st.name} reinició sus movimientos y recuperó ${plan.refund} punto${plan.refund===1?"":"s"}.`);toast(`🔮 ${st.name}: +${plan.refund} puntos recuperados`);save();renderEverything();renderStoneDetail();
+  }
+
+  function maxLevelRelearnHTML(id){
+    const p=state.progress?.[id];if(!p||Number(p.level||0)<MAX_LEVEL)return "";
+    const plan=moveResetPlan(id),used=!!p.maxLevelRelearnUsed,editable=canEditTeam(),st=ownedStage(id);
+    const status=used?"USADO":"1 USO",statusClass=used?"used":"ready";
+    let message,button;
+    if(used){message="La oportunidad personal de reajuste de nivel máximo ya fue utilizada.";button='<button class="btn pk-max-relearn-btn" type="button" disabled>Orbe consumido</button>';}
+    else if(plan.refund<=0){message="Está desbloqueado. Invierte puntos y úsalo cuando quieras rehacer la build.";button='<button class="btn pk-max-relearn-btn" type="button" disabled>Sin puntos invertidos</button>';}
+    else if(!editable){message=`Puede devolverte ${plan.refund} punto${plan.refund===1?"":"s"}. Pausa la expedición para usarlo.`;button='<button class="btn pk-max-relearn-btn" type="button" disabled>Pausa para usar</button>';}
+    else{message=`Reinicia los rangos y recupera ${plan.refund} punto${plan.refund===1?"":"s"} para repartir de nuevo.`;button=`<button class="btn pk-max-relearn-btn" type="button" data-max-relearn="${id}">Reaprender · +${plan.refund} pts</button>`;}
+    return `<div class="pk-max-relearn-card ${used?"consumed":""}"><div class="pk-max-relearn-orb">🔮</div><div class="pk-max-relearn-copy"><div class="pk-max-relearn-top"><b>Orbe de Reaprendizaje Nv.60</b><span class="pk-max-relearn-status ${statusClass}">${status}</span></div><small>${message}</small><em>Personal de ${st.name} · no consume Orbes del Inventario.</em></div>${button}</div>`;
+  }
+  async function useMaxLevelRelearnOrb(pokemonId){
+    const p=state.progress?.[pokemonId],st=p?ownedStage(pokemonId):null;if(!p||!st||Number(p.level||0)<MAX_LEVEL)return;
+    if(p.maxLevelRelearnUsed){toast("Ese Orbe de Nv.60 ya fue utilizado");return;}
+    if(!canEditTeam()){toast("Pausa la expedición para reconfigurar movimientos");return;}
+    const plan=moveResetPlan(pokemonId);if(plan.refund<=0){toast(`${st.name} no tiene puntos invertidos para recuperar`);return;}
+    const ok=await gameConfirm({title:"Orbe de Reaprendizaje · Nv.60",message:`${st.name} consiguió esta oportunidad al alcanzar el nivel máximo.\n\nSe reiniciarán sus rangos de movimiento y recuperarás ${plan.refund} punto${plan.refund===1?"":"s"} para repartirlos otra vez.\n\nEste Orbe es personal, se usa una sola vez y NO consume el Orbe de Reaprendizaje del Inventario. Nivel, estrellas, evolución, MT, naturaleza y objeto equipado no cambian.`,confirmText:"Reaprender",cancelText:"Guardar Orbe",tone:"warning",symbol:"🔮"});if(!ok)return;
+    p.moveRanks=plan.baseRanks.slice();p.skillPoints=Math.max(0,Number(p.skillPoints||0))+plan.refund;p.maxLevelRelearnUsed=true;
+    refreshRunPokemonStats(pokemonId);addLog(`🔮 ${st.name} usó su Orbe personal de Nv.${MAX_LEVEL} y recuperó ${plan.refund} punto${plan.refund===1?"":"s"}.`);toast(`🔮 ${st.name}: build reiniciada · +${plan.refund} pts`);save();renderEverything();
   }
 
   function renderStoneDetail(){
@@ -7331,7 +7368,7 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
     }
   }
 
-  const PK_BG_VIRTUAL_REAL_STEP=.10,PK_BG_BATCH_REAL_SECONDS=180;
+  const PK_BG_VIRTUAL_REAL_STEP=.10,PK_BG_BATCH_REAL_SECONDS=30,PK_BG_CPU_SLICE_MS=10,PK_BG_MAX_BACKLOG_REAL=86400;
   function pkSimulationStep(dt,nowPerf=performance.now()){
     if(!run||run.rewardPending||run.paused||evolutionModalOpen)return false;
     sanitizeRunCombatState();reconcileRunLifeStates();
@@ -7370,49 +7407,92 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
   function pkBackgroundAutoReward(realBudget){
     if(!run?.rewardPending||!pendingReward?.autoResolved||!pendingReward?.result||pendingReward.animating)return {handled:false,spent:0,blocked:true};
     const rolled=pendingReward.result;if(rolled.shiny||rolled.rarity==="legendary")return {handled:false,spent:0,blocked:true};
-    const spent=Math.min(.10,realBudget);if(realBudget+1e-9<.10)return {handled:false,spent,blocked:true};
+    if(realBudget+1e-9<.10)return {handled:false,spent:0,blocked:false,needMore:true};
     closeReward();return {handled:true,spent:.10,blocked:false};
   }
+  function pkBackgroundBacklog(){
+    return Math.max(0,Math.min(PK_BG_MAX_BACKLOG_REAL,Math.max(finiteNumber(pkBackgroundCarryReal,0),run?finiteNumber(run.backgroundBacklogReal,0):0)));
+  }
+  function pkSetBackgroundBacklog(value){
+    const safe=Math.max(0,Math.min(PK_BG_MAX_BACKLOG_REAL,finiteNumber(value,0)));pkBackgroundCarryReal=safe;if(run)run.backgroundBacklogReal=safe;return safe;
+  }
+  function pkQueueBackgroundGap(seconds){
+    const add=Math.max(0,finiteNumber(seconds,0));if(add<=.0001)return pkBackgroundBacklog();pkBackgroundDrainFaulted=false;return pkSetBackgroundBacklog(pkBackgroundBacklog()+add);
+  }
+  function pkSafeBackgroundRender(){
+    if(document.hidden)return false;
+    try{renderEverything();return true;}catch(e){
+      console.error("PokéSenda · render de recuperación Kanto",e);
+      for(const fn of [renderTop,renderFormation,renderTeamWorld,renderEnemyTeam,renderRouteInfo]){try{fn();}catch(_){}}
+      return false;
+    }
+  }
+  function pkBackgroundCanAutoContinue(){
+    if(!run)return !!(pkAutoRestartTransition&&state.options.autoRepeat&&activeIds().length);
+    if(evolutionModalOpen)return false;
+    if(run.rewardPending){const r=pendingReward?.result;return !!(pendingReward?.autoResolved&&r&&!pendingReward.animating&&!r.shiny&&r.rarity!=="legendary");}
+    if(run.paused&&!run.centerPending&&!run.eventPending)return false;
+    return true;
+  }
+  function pkScheduleBackgroundDrain(delay=0){
+    if(pkBackgroundDrainFaulted||pkBackgroundDrainTimer||pkBackgroundCatchingUp||document.hidden||pkFloatingDriver)return;
+    if(pkBackgroundBacklog()<=.0001||!pkBackgroundCanAutoContinue())return;
+    pkBackgroundDrainTimer=setTimeout(()=>{pkBackgroundDrainTimer=null;pkProcessBackgroundGap(0);},Math.max(0,Number(delay)||0));
+  }
+  function pkFinishBackgroundRecoveryNotice(){
+    if(pkBackgroundRecoveredTotal<1||document.hidden)return;
+    const sec=pkBackgroundRecoveredTotal;pkBackgroundRecoveredTotal=0;toast(`⏱️ Segundo plano recuperado · ${sec<60?Math.round(sec)+" s":(sec/60).toFixed(sec<600?1:0).replace(".",",")+" min"}`);
+  }
   function pkProcessBackgroundGap(realGap){
-    if(!run&&!pkAutoRestartTransition)return 0;
-    let carry=run?Math.max(0,Number(run.backgroundBacklogReal||0)):0,remaining=Math.max(0,finiteNumber(realGap,0))+carry;
-    if(run)run.backgroundBacklogReal=0;if(remaining<=.0001)return 0;
-    const batch=Math.min(remaining,PK_BG_BATCH_REAL_SECONDS);remaining-=batch;let budget=batch,processed=0,blocked=false;
-    const prevAnim=state.options.animations,prevFloats=state.options.combatFloats;pkBackgroundCatchingUp=true;state.options.animations=false;state.options.combatFloats=false;
+    if(realGap>0)pkQueueBackgroundGap(realGap);
+    if(pkBackgroundDrainFaulted||(document.hidden&&!pkFloatingDriver))return 0;
+    let total=pkBackgroundBacklog();if(total<=.0001)return 0;
+    pkSetBackgroundBacklog(0);
+    const batch=Math.min(total,PK_BG_BATCH_REAL_SECONDS),tail=Math.max(0,total-batch);let budget=batch,processed=0,halted=false,terminal=false;
+    const prevAnim=state.options.animations,prevFloats=state.options.combatFloats,sliceStarted=performance.now();pkBackgroundCatchingUp=true;state.options.animations=false;state.options.combatFloats=false;
     try{
       while(budget>.0001){
+        if(performance.now()-sliceStarted>=PK_BG_CPU_SLICE_MS)break;
         if(!run){
-          if(pkAutoRestartTransition&&state.options.autoRepeat&&budget>=.30){budget-=.30;processed+=.30;startRun();if(run){run.wallTickMs=Date.now();continue;}}
-          blocked=true;break;
+          if(pkAutoRestartTransition&&state.options.autoRepeat&&activeIds().length){if(budget+.0001<.30)break;budget-=.30;processed+=.30;startRun();if(run){run.wallTickMs=Date.now();continue;}}
+          terminal=!pkAutoRestartTransition;halted=true;break;
         }
-        if(evolutionModalOpen){blocked=true;break;}
-        if(run.rewardPending){const ar=pkBackgroundAutoReward(budget);if(ar.spent){budget-=ar.spent;processed+=ar.spent;}if(ar.handled)continue;blocked=true;break;}
-        if(run.centerPending){const age=Math.max(0,(Date.now()-Number(run.centerPauseWallMs||Date.now()))/1000),need=Math.max(0,10-age),wait=Math.min(need,budget);budget-=wait;processed+=wait;if(wait+age>=9.999){closePokemonCenter(true);continue;}blocked=true;break;}
-        if(run.eventPending&&run.paused){const age=Math.max(0,(Date.now()-Number(run.eventPauseWallMs||Date.now()))/1000),need=Math.max(0,10-age),wait=Math.min(need,budget);budget-=wait;processed+=wait;if(wait+age>=9.999){handleRouteEventSecondary(true);continue;}blocked=true;break;}
-        if(run.paused){blocked=true;break;}
+        if(evolutionModalOpen){halted=true;break;}
+        if(run.rewardPending){const ar=pkBackgroundAutoReward(budget);if(ar.needMore)break;if(ar.spent){budget-=ar.spent;processed+=ar.spent;}if(ar.handled)continue;halted=true;break;}
+        if(run.centerPending){const age=Math.max(0,(Date.now()-Number(run.centerPauseWallMs||Date.now()))/1000),need=Math.max(0,10-age);if(need<=.001){closePokemonCenter(true);continue;}if(budget+.0001<need){if(tail+budget>=need)break;halted=true;break;}budget-=need;processed+=need;closePokemonCenter(true);continue;}
+        if(run.eventPending&&run.paused){const age=Math.max(0,(Date.now()-Number(run.eventPauseWallMs||Date.now()))/1000),need=Math.max(0,10-age);if(need<=.001){handleRouteEventSecondary(true);continue;}if(budget+.0001<need){if(tail+budget>=need)break;halted=true;break;}budget-=need;processed+=need;handleRouteEventSecondary(true);continue;}
+        if(run.paused){halted=true;break;}
         const realStep=Math.min(PK_BG_VIRTUAL_REAL_STEP,budget),speed=finitePositive(state.options.speed,1);pkSimulationStep(realStep*speed,performance.now());budget-=realStep;processed+=realStep;
       }
-      if(run&&!blocked)run.backgroundBacklogReal=Math.max(0,remaining+budget);else if(run)run.backgroundBacklogReal=0;
-    }finally{state.options.animations=prevAnim;state.options.combatFloats=prevFloats;pkBackgroundCatchingUp=false;pkFlushBackgroundState();}
-    if(run)run.lastTick=performance.now();
-    if(!document.hidden)renderEverything();
+      const leftover=Math.max(0,tail+budget);
+      if((run||pkAutoRestartTransition)&&leftover>.0001)pkSetBackgroundBacklog(leftover);else pkSetBackgroundBacklog(0);
+      if(terminal)pkSetBackgroundBacklog(0);
+      pkBackgroundRecoveredTotal+=processed;
+    }catch(e){
+      console.error("PokéSenda · fallo protegido en recuperación Kanto",e);pkBackgroundDrainFaulted=true;pkSetBackgroundBacklog(0);pkBackgroundRecoveredTotal=0;
+      try{sanitizeRunCombatState();reconcileRunLifeStates();}catch(_){}
+    }finally{
+      state.options.animations=prevAnim;state.options.combatFloats=prevFloats;pkBackgroundCatchingUp=false;pkFlushBackgroundState();
+    }
+    if(run){run.lastTick=performance.now();run.wallTickMs=Date.now();}
+    pkSafeBackgroundRender();
     if(!pkFloatingDriver&&run&&!run.paused&&!run.rewardPending&&!evolutionModalOpen&&!loop)loop=setInterval(tick,100);
-    if(processed>=1&&!document.hidden)toast(`⏱️ Segundo plano recuperado · ${processed<60?Math.round(processed)+" s":(processed/60).toFixed(processed<600?1:0).replace(".",",")+" min"}`);
+    const left=pkBackgroundBacklog();
+    if(left>.0001&&!halted&&!pkBackgroundDrainFaulted)pkScheduleBackgroundDrain(0);else if(left<=.0001)pkFinishBackgroundRecoveryNotice();
     return processed;
   }
   function tick(){
     if(!run)return;
     const wallNow=Date.now();
+    if(document.hidden&&!pkFloatingDriver)return;
     if(run.centerPending){const age=Math.max(0,(wallNow-Number(run.centerPauseWallMs||wallNow))/1000);if(age>=10){const extra=Math.max(0,age-10);closePokemonCenter(true);if(run&&extra>.001)pkProcessBackgroundGap(extra);}return;}
     if(run.eventPending&&run.paused){const age=Math.max(0,(wallNow-Number(run.eventPauseWallMs||wallNow))/1000);if(age>=10){const extra=Math.max(0,age-10);handleRouteEventSecondary(true);if(run&&extra>.001)pkProcessBackgroundGap(extra);}return;}
-    const wallLast=Number(run.wallTickMs||wallNow-100),realGap=Math.max(0,Math.min(86400,(wallNow-wallLast)/1000));run.wallTickMs=wallNow;
-    if(run.rewardPending&&pendingReward?.autoResolved&&(realGap>.35||document.hidden||Number(run.backgroundBacklogReal||0)>.001)){pkProcessBackgroundGap(realGap);return;}
-    if(run.paused||run.rewardPending||evolutionModalOpen){if(!run.eventPending)run.backgroundBacklogReal=0;return;}
-    const backlog=Math.max(0,Number(run.backgroundBacklogReal||0));
+    const wallLast=Number(run.wallTickMs||wallNow-100),realGap=Math.max(0,Math.min(PK_BG_MAX_BACKLOG_REAL,(wallNow-wallLast)/1000));run.wallTickMs=wallNow;
+    if(run.rewardPending&&pendingReward?.autoResolved&&(realGap>.35||pkBackgroundBacklog()>.001)){pkProcessBackgroundGap(realGap);return;}
+    if(run.paused||run.rewardPending||evolutionModalOpen)return;
+    const backlog=pkBackgroundBacklog();
     if(realGap>.35||backlog>.001){pkProcessBackgroundGap(realGap);return;}
-    const baseDt=Math.min(.25,realGap||.10),dt=baseDt*finitePositive(state.options.speed,1);run.lastTick=performance.now();
-    if(document.hidden){const pa=state.options.animations,pf=state.options.combatFloats;pkBackgroundCatchingUp=true;state.options.animations=false;state.options.combatFloats=false;try{pkSimulationStep(dt,run.lastTick);}finally{state.options.animations=pa;state.options.combatFloats=pf;pkBackgroundCatchingUp=false;}return;}
-    pkSimulationStep(dt,run.lastTick);
+    const baseDt=Math.min(.25,realGap||.10),dt=baseDt*finitePositive(state.options.speed,1);run.lastTick=performance.now();pkSimulationStep(dt,run.lastTick);
   }
 
   function unlockedMoves(id,kind){const p=state.progress[id],moves=movesFor(id);return moves.map((m,i)=>({m,i,rank:p.moveRanks?.[i]||0})).filter(x=>x.m.kind===kind&&(p.stageIndex||0)>=(x.m.unlockStage||0)&&(x.rank>0||x.m.kind==="support"));}
@@ -8269,7 +8349,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     while(p.level<MAX_LEVEL){
       const need=xpNeed(p.level);if(p.xp<need)break;p.xp-=need;p.level++;p.skillPoints++;changed=true;addLog(`${ownedStage(id).name} sube a Nv.${p.level} y gana 1 punto de movimiento.`);
       const n=nextEvolution(id);if(n){if(n.method==="trade"&&p.heldItem==="link_cable"){p.tradeReady=true;addLog(`🔗 El Cable de Intercambio de ${ownedStage(id).name} está listo.`);queueEvolution(id,false);}else if(n.method==="level"&&p.level===n.level)queueEvolution(id,false);}
-      if(p.level>=MAX_LEVEL){p.xp=0;break;}
+      if(p.level>=MAX_LEVEL){p.xp=0;if(!p.maxLevelRelearnUsed){addLog(`🔮 ${ownedStage(id).name} alcanzó Nv.${MAX_LEVEL}: Orbe de Reaprendizaje personal desbloqueado.`);if(!pkBackgroundCatchingUp)toast(`🔮 ${ownedStage(id).name}: Orbe de Reaprendizaje Nv.${MAX_LEVEL} desbloqueado`);}break;}
     }
     if(changed)refreshRunPokemonStats(id);
   }
@@ -10980,16 +11060,22 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   }
   document.addEventListener("visibilitychange",()=>{
     try{
-      if(!run){
-        if(!document.hidden&&pkAutoRestartTransition&&state.options.autoRepeat&&activeIds().length){const now=Date.now(),restartAt=Number(pkAutoRestartWallMs||now),extra=Math.max(0,(now-restartAt-300)/1000);startRun();if(run&&extra>.001)pkProcessBackgroundGap(extra);}
-        return;
+      if(document.hidden){
+        pkBackgroundWasEligibleOnHide=!!run&&(!run.paused||run.centerPending||run.eventPending)&&!evolutionModalOpen;
+        if(run)run.wallTickMs=Date.now();return;
       }
-      if(document.hidden){run.wallTickMs=Date.now();return;}
+      const paintThenDrain=seconds=>{pkSafeBackgroundRender();const go=()=>{if(seconds>.001)pkQueueBackgroundGap(seconds);pkScheduleBackgroundDrain(0);};if(typeof requestAnimationFrame==="function")requestAnimationFrame(()=>setTimeout(go,0));else setTimeout(go,0);};
+      if(!run){
+        if(pkAutoRestartTransition&&state.options.autoRepeat&&activeIds().length){const now=Date.now(),restartAt=Number(pkAutoRestartWallMs||now),extra=Math.max(0,(now-restartAt-300)/1000);startRun();paintThenDrain(extra);}
+        pkBackgroundWasEligibleOnHide=false;return;
+      }
       const now=Date.now();
-      if(run.centerPending){const age=(now-Number(run.centerPauseWallMs||now))/1000;if(age>=10){const extra=Math.max(0,age-10);closePokemonCenter(true);run.wallTickMs=now;if(extra>0)pkProcessBackgroundGap(extra);return;}}
-      if(run.eventPending&&run.paused){const age=(now-Number(run.eventPauseWallMs||now))/1000;if(age>=10){const extra=Math.max(0,age-10);handleRouteEventSecondary(true);if(run)run.wallTickMs=now;if(extra>0&&run)pkProcessBackgroundGap(extra);return;}}
-      const gap=Math.max(0,(now-Number(run.wallTickMs||now))/1000);run.wallTickMs=now;if(gap>.35||Number(run.backgroundBacklogReal||0)>0)pkProcessBackgroundGap(gap);else{pkFlushBackgroundState();renderEverything();}
-    }catch(e){console.error("PokéSenda · recuperación segundo plano Kanto",e);}
+      if(!pkBackgroundWasEligibleOnHide&&!run.centerPending&&!run.eventPending){run.wallTickMs=now;pkSetBackgroundBacklog(0);pkSafeBackgroundRender();return;}
+      pkBackgroundWasEligibleOnHide=false;
+      if(run.centerPending){const age=(now-Number(run.centerPauseWallMs||now))/1000;if(age>=10){const extra=Math.max(0,age-10);closePokemonCenter(true);if(run)run.wallTickMs=now;paintThenDrain(extra);return;}}
+      if(run.eventPending&&run.paused){const age=(now-Number(run.eventPauseWallMs||now))/1000;if(age>=10){const extra=Math.max(0,age-10);handleRouteEventSecondary(true);if(run)run.wallTickMs=now;paintThenDrain(extra);return;}}
+      const gap=Math.max(0,Math.min(PK_BG_MAX_BACKLOG_REAL,(now-Number(run.wallTickMs||now))/1000));run.wallTickMs=now;if(gap>.35||pkBackgroundBacklog()>.001)paintThenDrain(gap);else{pkFlushBackgroundState();pkSafeBackgroundRender();}
+    }catch(e){console.error("PokéSenda · recuperación segundo plano Kanto",e);pkBackgroundDrainFaulted=true;pkSetBackgroundBacklog(0);pkSafeBackgroundRender();}
   });
 
   window.PokeSendaKantoGlobalBridge={
@@ -11008,7 +11094,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     grantGlobalMTTicket:(source="Expedición Infinita")=>{try{return !!grantMTGachaTicket(source,1);}catch(_){return false;}},
     shinyChance:()=>shinyCaptureChance(),
     backgroundCatchUp:(seconds)=>{try{return pkProcessBackgroundGap(Math.max(0,Number(seconds)||0));}catch(_){return 0}},
-    backgroundStatus:()=>({active:!!run,paused:!!run?.paused,blocked:!!(run?.rewardPending||run?.centerPending||run?.eventPending||evolutionModalOpen),backlog:Number(run?.backgroundBacklogReal||0),wallTickMs:Number(run?.wallTickMs||0)}),
+    backgroundStatus:()=>({active:!!run,paused:!!run?.paused,blocked:!!(run?.rewardPending||run?.centerPending||run?.eventPending||evolutionModalOpen),backlog:pkBackgroundBacklog(),wallTickMs:Number(run?.wallTickMs||0)}),
     canStartGlobal:()=>!run&&!gymBattle,
     globalBusy:()=>({run:!!run,gym:!!gymBattle}),
     devPauseAll:()=>{try{const snap={run:!!run&&!run.paused,gym:!!gymBattle&&!gymBattle.paused};if(snap.run)pauseRun(false);if(snap.gym)gymSetPaused(true);return snap;}catch(_){return {run:false,gym:false}}},
@@ -12117,7 +12203,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   <button class="btn" type="button" data-mobile-more="menu">⚙ Menú</button>
 </div>
 
-<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.60.0.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
+<div id="pkMobileTip" class="pk-mobile-tip" role="status">📱 <b>PokéSenda · Versión móvil V36.60.2.</b> Interfaz táctil activa. Puedes jugar en vertical o girar el teléfono a horizontal para ampliar el combate.<button id="pkMobileTipClose" type="button" aria-label="Cerrar aviso">×</button></div>
 
 
 <style id="pkMobileV364047Extra">
@@ -12256,7 +12342,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function closeSaveTransfer(){transfer?.classList.add('hidden');if(fileInput)fileInput.value='';refreshModalState();}
   function buildPayload(){
     const snapshot=saveSnapshot();
-    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.60.0',exportedAt:new Date().toISOString(),data:snapshot};
+    return {format:'PokeSendaSave',formatVersion:1,gameVersion:'V36.60.2',exportedAt:new Date().toISOString(),data:snapshot};
   }
   function saveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `PokeSenda_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
   function payloadFile(){const blob=new Blob([JSON.stringify(buildPayload())],{type:'application/json'});return new File([blob],saveFileName(),{type:'application/json'});}
@@ -13941,7 +14027,7 @@ module.exports = QRCode;
   const BACKUP_KEY='pokesenda_beta1_backups_v1';
   const BUILD_MARK='pokesenda_beta1_backup_seen_v1';
   const CLOUD_KEY='pokesenda_beta1_cloud_link_v1';
-  const VERSION='V36.60.0';
+  const VERSION='V36.60.2';
   const BETA='BETA 1.0';
   const $=id=>document.getElementById(id);
   const toastSafe=m=>{try{if(typeof toast==='function')toast(m);else console.log(m);}catch(_){console.log(m);}};
@@ -14580,7 +14666,7 @@ function candyReward(rarity){
   return n;
 }
 
-let js=null,run=null,timer=null,reward=null,centerTimer=null,centerDeadline=0,floatingDriver=false,floatingAutoRestartPending=false,backgroundAutoRestartWallMs=0,backgroundCatchingUp=false,backgroundSaveDirty=false;
+let js=null,run=null,timer=null,reward=null,centerTimer=null,centerDeadline=0,floatingDriver=false,floatingAutoRestartPending=false,backgroundAutoRestartWallMs=0,backgroundCatchingUp=false,backgroundSaveDirty=false,backgroundCarryReal=0,backgroundDrainTimer=null,backgroundRecoveredTotal=0,backgroundDrainFaulted=false,backgroundWasEligibleOnHide=false;
 
 function load(){try{const x=JSON.parse(localStorage.getItem(SAVE)||"{}");return x&&typeof x==="object"?x:{};}catch(_){return {};}}
 function save(){if(backgroundCatchingUp){backgroundSaveDirty=true;return;}localStorage.setItem(SAVE,JSON.stringify(js));}
@@ -14609,7 +14695,7 @@ function canEquip(itemId,p){
 }
 function createPokemon(fid,level=1,starter=false,shiny=false,dexOverride=null){
   const f=fam(fid);if(!f)return null;const dex=Number(dexOverride||f.members?.[0]);if(!dex)return null;
-  const p={familyId:fid,dex,level:Math.max(1,level),xp:0,nature:randomNature(),copies:1,candies:0,friendship:70,shinyUnlocked:!!shiny,shinyEquipped:false,starter:!!starter,heldItem:null,stars:1,skillPoints:Math.max(0,Math.max(1,level)-1),moveRanks:[0,0,0,0],tmLoadout:[null,null,null,null]};
+  const p={familyId:fid,dex,level:Math.max(1,level),xp:0,nature:randomNature(),copies:1,candies:0,friendship:70,shinyUnlocked:!!shiny,shinyEquipped:false,starter:!!starter,heldItem:null,stars:1,skillPoints:Math.max(0,Math.max(1,level)-1),moveRanks:[0,0,0,0],tmLoadout:[null,null,null,null],maxLevelRelearnUsed:false};
   const stage=Math.max(0,(f.members||[]).indexOf(dex)),moves=DATA().movesets?.[fid]||[];
   moves.forEach((m,i)=>{if(i<4&&(m.kind==="support"||Number(m.unlockStage||0)<=stage))p.moveRanks[i]=1;});
   js.pokemon[fid]=p;if(!js.dex.includes(dex))js.dex.push(dex);return p;
@@ -14671,6 +14757,7 @@ function migrate(){
     p.candies=Math.max(0,Math.floor(Number(p.candies||0)));
     p.tmLoadout=Array.isArray(p.tmLoadout)?p.tmLoadout.slice(0,4):[null,null,null,null];while(p.tmLoadout.length<4)p.tmLoadout.push(null);
     p.friendship=Math.max(0,Math.min(255,Math.floor(Number(p.friendship??70))));
+    p.maxLevelRelearnUsed=!!p.maxLevelRelearnUsed;
   }
   let legacy=Array.isArray(js.formation)?js.formation:(Array.isArray(js.team)?js.team:[]);
   js.formation=Array(6).fill(null);legacy.filter(id=>js.pokemon[id]).slice(0,6).forEach((id,i)=>js.formation[i]=id);
@@ -14963,55 +15050,64 @@ function enemyAction(e){
   const area=Math.random()<.25,targets=area?ids: [ids[Math.floor(Math.random()*ids.length)]],m=e.move,cat=moveCategory(m),off=cat==="special"?e.stats.spAtk:e.stats.atk;
   for(const id of targets){const t=run.team[id],d=derivedFor(id);if(d.dodge&&Math.random()<d.dodge){log("✨ "+name(js.pokemon[id].dex)+" evita el ataque con su objeto.");continue;}const def=cat==="special"?d.spDef:d.def,stab=e.stats.types.includes(m.type)?1.2:1,mult=typeMult(m.type,d.types),areaF=area?.60:1,raw=off*idlePower(m.power)*stab*mult*defenseFactor(def)*areaF*(.92+Math.random()*.16)*(1-(d.reduction||0))*(1-(t.guard||0)),actual=Math.min(t.hp,Math.max(0,raw));t.hp-=raw;run.stats[id].damageTaken+=actual;maybeMoveStatus(m,t,e.uid);if(t.hp<=0){if(d.survive&&Math.random()<d.survive){t.hp=1;log("🎗️ "+name(js.pokemon[id].dex)+" resiste con 1 PS.");}else faint(id,"combate");}}
 }
-const J_BG_VIRTUAL_REAL_STEP=.10,J_BG_BATCH_REAL_SECONDS=180;
+const J_BG_VIRTUAL_REAL_STEP=.10,J_BG_BATCH_REAL_SECONDS=30,J_BG_CPU_SLICE_MS=10,J_BG_MAX_BACKLOG_REAL=86400;
 function johtoSimStep(dt){
-  if(!run||run.paused||run.rewardPending||run.centerPending)return false;
-  if(teamWiped()){failRun();return false;}processStatus(dt);if(!run)return false;processAutoPotion();
-  for(const t of Object.values(run.team)){if(t.guardTime>0){t.guardTime-=dt;if(t.guardTime<=0)t.guard=0;}if(t.hasteTime>0){t.hasteTime-=dt;if(t.hasteTime<=0)t.haste=0;}if(t.powerTime>0){t.powerTime-=dt;if(t.powerTime<=0)t.power=0;}if(t.autoPotionCooldown>0)t.autoPotionCooldown-=dt;}
+  if(!run||run.paused||run.rewardPending)return false;dt=Math.max(0,Number(dt)||0);if(dt<=0)return true;
+  if(teamWiped()){failRun();return false;}statusTick(dt);autoPotion();
   markCombatants();
-  for(const id of battleIds()){if(!run)break;const t=run.team[id];if(!t?.alive)continue;t.attackTimer-=dt;if(t.attackTimer<=0&&targetEnemy()){playerAction(id);if(!run)break;const d=derivedFor(id);t.attackTimer+=d.cd/(1+(t.haste||0))*(t.status?.type==="paralysis"?2:1);}}
-  if(!run)return false;
-  for(const e of livingEnemies()){e.attackTimer-=dt;if(e.attackTimer<=0){enemyAction(e);if(run&&e.alive)e.attackTimer+=e.stats.cd*(e.status?.type==="paralysis"?2:1);}}
-  if(run&&!livingEnemies().length&&!run.rewardPending&&!run.centerPending){run.spawnDelay-=dt;if(run.spawnDelay<=0)spawnRound();}
-  if(run&&teamWiped()){failRun();return false;}if(!backgroundCatchingUp)render();return !!run;
+  for(const id of battleIds()){
+    if(!run)break;const t=run.team[id];if(!t?.alive)continue;if(t.guardTime>0){t.guardTime-=dt;if(t.guardTime<=0)t.guard=0;}if(t.hasteTime>0){t.hasteTime-=dt;if(t.hasteTime<=0)t.haste=0;}if(t.powerTime>0){t.powerTime-=dt;if(t.powerTime<=0)t.power=0;}if((t.autoPotionCooldown||0)>0)t.autoPotionCooldown=Math.max(0,t.autoPotionCooldown-dt);t.attackTimer-=dt;const target=livingEnemies()[0];if(t.attackTimer<=0&&target){if(!blockedAction(t,name(js.pokemon[id]?.dex||0),true,id))pokemonAttack(id);if(!run)break;t.attackTimer+=derivedFor(id).cd/(1+(t.haste||0))*speedStatus(t);}
+  }
+  if(!run||run.paused||run.rewardPending)return false;
+  const enemies=livingEnemies();if(enemies.length){for(const e of enemies){if(!run)break;e.attackTimer-=dt;if(e.attackTimer<=0){if(!blockedAction(e,e.name,false,null))enemyAttack(e);if(run&&e.alive)e.attackTimer+=e.cd*speedStatus(e);if(run&&teamWiped())break;}}}else{run.spawnDelay-=dt;if(run.spawnDelay<=0)spawnRound();}
+  if(run&&!teamWiped())autoPotion();if(run&&teamWiped()){failRun();return false;}if(!backgroundCatchingUp)render();return !!run;
 }
 function johtoFlushBackground(){if(backgroundSaveDirty){backgroundSaveDirty=false;localStorage.setItem(SAVE,JSON.stringify(js));}if(!backgroundCatchingUp)render();}
 function johtoAutoResolveReward(realBudget){
   if(!run?.rewardPending||!js.options.autoOpen||!reward)return{handled:false,spent:0,blocked:true};
   let spent=0;
-  if(!reward.opened){if(realBudget<.35)return{handled:false,spent:realBudget,blocked:true};spent+=.35;reward.opened=true;const activeIncense=reward.incenseType||null;if(activeIncense){const iid=incenseItemId(activeIncense);if(Number(js.inventory?.[iid]||0)>0){js.inventory[iid]--;if(js.inventory[iid]<=0)delete js.inventory[iid];}else reward.incenseType=null;}const winner=rollReward(reward.km,reward.incenseType||null);reward.roll=winner;save();finalizeReward(winner);if(winner.shiny||winner.rar==="legendary")return{handled:false,spent,blocked:true};}
+  if(!reward.opened){if(realBudget<.35)return{handled:false,spent:0,blocked:false,needMore:true};spent+=.35;reward.opened=true;const activeIncense=reward.incenseType||null;if(activeIncense){const iid=incenseItemId(activeIncense);if(Number(js.inventory?.[iid]||0)>0){js.inventory[iid]--;if(js.inventory[iid]<=0)delete js.inventory[iid];}else reward.incenseType=null;}const winner=rollReward(reward.km,reward.incenseType||null);reward.roll=winner;save();finalizeReward(winner);if(winner.shiny||winner.rar==="legendary")return{handled:false,spent,blocked:true};}
   if(reward?.roll&&(reward.roll.shiny||reward.roll.rar==="legendary"))return{handled:false,spent,blocked:true};
-  const need=2.85;if(realBudget-spent<need)return{handled:false,spent:realBudget,blocked:true};spent+=need;continueReward();return{handled:true,spent,blocked:false};
+  const need=2.85;if(realBudget-spent<need)return{handled:false,spent,blocked:false,needMore:true};spent+=need;continueReward();return{handled:true,spent,blocked:false};
 }
+function johtoBackgroundBacklog(){return Math.max(0,Math.min(J_BG_MAX_BACKLOG_REAL,Math.max(Number(backgroundCarryReal)||0,run?Number(run.backgroundBacklogReal||0):0)));}
+function johtoSetBackgroundBacklog(value){const safe=Math.max(0,Math.min(J_BG_MAX_BACKLOG_REAL,Number(value)||0));backgroundCarryReal=safe;if(run)run.backgroundBacklogReal=safe;return safe;}
+function johtoQueueBackgroundGap(seconds){const add=Math.max(0,Number(seconds)||0);if(add<=.0001)return johtoBackgroundBacklog();backgroundDrainFaulted=false;return johtoSetBackgroundBacklog(johtoBackgroundBacklog()+add);}
+function johtoSafeBackgroundRender(){if(document.hidden)return false;try{render();window.PokeSendaJohtoRuntime?.renderAll?.();return true}catch(e){console.error("PokéSenda · render de recuperación Johto",e);try{window.PokeSendaJohtoRuntime?.showGame?.();window.PokeSendaJohtoRuntime?.renderAll?.();}catch(_){}return false;}}
+function johtoBackgroundCanAutoContinue(){if(!run)return !!(floatingAutoRestartPending&&js.options.autoRepeat);if(run.rewardPending){if(!js.options.autoOpen||!reward)return false;if(reward.roll&&(reward.roll.shiny||reward.roll.rar==="legendary"))return false;return true;}if(run.paused&&!run.centerPending&&!run.eventPending)return false;return true;}
+function johtoScheduleBackgroundDrain(delay=0){if(backgroundDrainFaulted||backgroundDrainTimer||backgroundCatchingUp||document.hidden||floatingDriver)return;if(johtoBackgroundBacklog()<=.0001||!johtoBackgroundCanAutoContinue())return;backgroundDrainTimer=setTimeout(()=>{backgroundDrainTimer=null;johtoProcessBackgroundGap(0);},Math.max(0,Number(delay)||0));}
+function johtoFinishBackgroundRecoveryNotice(){if(backgroundRecoveredTotal<1||document.hidden)return;const sec=backgroundRecoveredTotal;backgroundRecoveredTotal=0;window.PokeSendaJohtoRuntime?.backgroundRecovered?.(sec);}
 function johtoProcessBackgroundGap(realGap){
-  let carry=run?Math.max(0,Number(run.backgroundBacklogReal||0)):0,remaining=Math.max(0,Number(realGap)||0)+carry;if(run)run.backgroundBacklogReal=0;if(remaining<=.0001)return 0;
-  const batch=Math.min(remaining,J_BG_BATCH_REAL_SECONDS);remaining-=batch;let budget=batch,processed=0,blocked=false;backgroundCatchingUp=true;
+  if(realGap>0)johtoQueueBackgroundGap(realGap);if(backgroundDrainFaulted||(document.hidden&&!floatingDriver))return 0;
+  let total=johtoBackgroundBacklog();if(total<=.0001)return 0;johtoSetBackgroundBacklog(0);
+  const batch=Math.min(total,J_BG_BATCH_REAL_SECONDS),tail=Math.max(0,total-batch);let budget=batch,processed=0,halted=false,terminal=false;const sliceStarted=performance.now();backgroundCatchingUp=true;
   try{
     while(budget>.0001){
-      if(!run){if(floatingAutoRestartPending&&js.options.autoRepeat&&budget>=.01){budget-=.01;processed+=.01;startRun();if(run){run.wallTickMs=Date.now();continue;}}blocked=true;break;}
-      if(run.rewardPending){const ar=johtoAutoResolveReward(budget);if(ar.spent){budget-=ar.spent;processed+=ar.spent;}if(ar.handled)continue;blocked=true;break;}
-      if(run.centerPending){const age=Math.max(0,(Date.now()-Number(run.centerPauseWallMs||Date.now()))/1000),need=Math.max(0,10-age),wait=Math.min(need,budget);budget-=wait;processed+=wait;if(age+wait>=9.999){closeCenter();continue;}blocked=true;break;}
-      if(run.eventPending&&run.paused){const age=Math.max(0,(Date.now()-Number(run.eventPauseWallMs||Date.now()))/1000),need=Math.max(0,10-age),wait=Math.min(need,budget);budget-=wait;processed+=wait;if(age+wait>=9.999){resolveRouteEvent("ignore");continue;}blocked=true;break;}
-      if(run.paused){blocked=true;break;}
+      if(performance.now()-sliceStarted>=J_BG_CPU_SLICE_MS)break;
+      if(!run){if(floatingAutoRestartPending&&js.options.autoRepeat){if(budget+.0001<.01)break;budget-=.01;processed+=.01;startRun();if(run){run.wallTickMs=Date.now();continue;}}terminal=!floatingAutoRestartPending;halted=true;break;}
+      if(run.rewardPending){const ar=johtoAutoResolveReward(budget);if(ar.spent){budget-=ar.spent;processed+=ar.spent;}if(ar.needMore)break;if(ar.handled)continue;halted=true;break;}
+      if(run.centerPending){const age=Math.max(0,(Date.now()-Number(run.centerPauseWallMs||Date.now()))/1000),need=Math.max(0,10-age);if(need<=.001){closeCenter();continue;}if(budget+.0001<need){if(tail+budget>=need)break;halted=true;break;}budget-=need;processed+=need;closeCenter();continue;}
+      if(run.eventPending&&run.paused){const age=Math.max(0,(Date.now()-Number(run.eventPauseWallMs||Date.now()))/1000),need=Math.max(0,10-age);if(need<=.001){resolveRouteEvent("ignore");continue;}if(budget+.0001<need){if(tail+budget>=need)break;halted=true;break;}budget-=need;processed+=need;resolveRouteEvent("ignore");continue;}
+      if(run.paused){halted=true;break;}
       const realStep=Math.min(J_BG_VIRTUAL_REAL_STEP,budget);johtoSimStep(realStep*Math.max(1,Number(run.speed||js.options.battleSpeed||1)));budget-=realStep;processed+=realStep;
     }
-    if(run&&!blocked)run.backgroundBacklogReal=Math.max(0,remaining+budget);else if(run)run.backgroundBacklogReal=0;
-  }finally{backgroundCatchingUp=false;if(backgroundSaveDirty){backgroundSaveDirty=false;localStorage.setItem(SAVE,JSON.stringify(js));}if(!document.hidden)render();}
-  if(run)run.wallTickMs=Date.now();if(!floatingDriver&&run&&!run.paused&&!run.rewardPending&&!run.centerPending&&!timer)schedule();
-  if(processed>=1&&!document.hidden)window.PokeSendaJohtoRuntime?.backgroundRecovered?.(processed);
-  return processed;
+    const leftover=Math.max(0,tail+budget);if((run||floatingAutoRestartPending)&&leftover>.0001)johtoSetBackgroundBacklog(leftover);else johtoSetBackgroundBacklog(0);if(terminal)johtoSetBackgroundBacklog(0);backgroundRecoveredTotal+=processed;
+  }catch(e){console.error("PokéSenda · fallo protegido en recuperación Johto",e);backgroundDrainFaulted=true;johtoSetBackgroundBacklog(0);backgroundRecoveredTotal=0;}
+  finally{backgroundCatchingUp=false;if(backgroundSaveDirty){backgroundSaveDirty=false;localStorage.setItem(SAVE,JSON.stringify(js));}}
+  if(run)run.wallTickMs=Date.now();johtoSafeBackgroundRender();if(!floatingDriver&&run&&!run.paused&&!run.rewardPending&&!run.centerPending&&!timer)schedule();const left=johtoBackgroundBacklog();if(left>.0001&&!halted&&!backgroundDrainFaulted)johtoScheduleBackgroundDrain(0);else if(left<=.0001)johtoFinishBackgroundRecoveryNotice();return processed;
 }
 function tick(){
-  if(!run)return;const now=Date.now(),last=Number(run.wallTickMs||now-100),realGap=Math.max(0,Math.min(86400,(now-last)/1000));run.wallTickMs=now;
+  if(!run)return;const now=Date.now();if(document.hidden&&!floatingDriver)return;
   if(run.centerPending){const age=(now-Number(run.centerPauseWallMs||now))/1000;if(age>=10){const extra=Math.max(0,age-10);closeCenter();if(run&&extra>0)johtoProcessBackgroundGap(extra);}return;}
   if(run.eventPending&&run.paused){const age=(now-Number(run.eventPauseWallMs||now))/1000;if(age>=10){const extra=Math.max(0,age-10);resolveRouteEvent("ignore");if(run&&extra>0)johtoProcessBackgroundGap(extra);}return;}
-  if(run.paused||run.rewardPending){if(run.rewardPending&&js.options.autoOpen&&(realGap>.35||document.hidden))johtoProcessBackgroundGap(realGap);return;}
-  if(realGap>.35||Number(run.backgroundBacklogReal||0)>0){johtoProcessBackgroundGap(realGap);return;}
-  if(document.hidden){backgroundCatchingUp=true;try{johtoSimStep(.10*Math.max(1,Number(run.speed||1)));}finally{backgroundCatchingUp=false;}return;}
+  const last=Number(run.wallTickMs||now-100),realGap=Math.max(0,Math.min(J_BG_MAX_BACKLOG_REAL,(now-last)/1000));run.wallTickMs=now;
+  if(run.paused||run.rewardPending){if(run.rewardPending&&js.options.autoOpen&&(realGap>.35||johtoBackgroundBacklog()>.001))johtoProcessBackgroundGap(realGap);return;}
+  if(realGap>.35||johtoBackgroundBacklog()>.001){johtoProcessBackgroundGap(realGap);return;}
   johtoSimStep(.10*Math.max(1,Number(run.speed||1)));
 }
 function schedule(){clearInterval(timer);timer=null;if(run&&!floatingDriver)timer=setInterval(tick,100);}
 function queueAutoRestart(){floatingAutoRestartPending=true;backgroundAutoRestartWallMs=Date.now();if(floatingDriver)return;setTimeout(()=>{if(run||!floatingAutoRestartPending)return;const started=Number(backgroundAutoRestartWallMs||Date.now()),overdue=Math.max(0,(Date.now()-started)/1000);startRun();if(run&&overdue>.35)johtoProcessBackgroundGap(overdue);},0);}
+
 function log(s){if(!run)return;run.log=[s,...(run.log||[])].slice(0,24);if(backgroundCatchingUp)return;$("pkIsoBattleLog").innerHTML=run.log.map(x=>"• "+x).join("<br>");}
 function killEnemy(e,killer){
   if(!e?.alive)return;e.alive=false;e.hp=0;if(killer&&run.stats[killer])run.stats[killer].kos++;run.roundXp+=e.xp;run.defeated++;js.stats.defeated++;const heldMoney=Math.max(0,...battleIds().map(pid=>derivedFor(pid).moneyBonus||0)),money=Math.max(1,Math.round((2+e.level*.72)*(e.boss?5:1)*(1+.025*skillRank("f1")+(skillRank("f8") ? 0.10 : 0)+(skillRank("trainer") ? 0.03 : 0)+heldMoney)));js.money=(js.money||0)+money;run.earned+=money;rollHeldDrop();save();
@@ -15028,7 +15124,7 @@ function grantXp(id,amount){
   const p=js.pokemon[id];p.xp=(p.xp||0)+amount;p.friendship=Math.min(255,Number(p.friendship||70)+1);
   while(p.level<MAX_LEVEL&&p.xp>=xpNeed(p.level)){
     p.xp-=xpNeed(p.level);p.level++;p.skillPoints=Math.max(0,Number(p.skillPoints||0))+1;p.friendship=Math.min(255,Number(p.friendship||70)+2);
-    log(name(p.dex)+" sube a Nv."+p.level+" y gana 1 punto de movimiento.");tryLinearEvolution(id);
+    log(name(p.dex)+" sube a Nv."+p.level+" y gana 1 punto de movimiento.");if(p.level>=MAX_LEVEL&&!p.maxLevelRelearnUsed)log("🔮 "+name(p.dex)+": Orbe de Reaprendizaje personal de Nv."+MAX_LEVEL+" desbloqueado.");tryLinearEvolution(id);
   }
   tryLinearEvolution(id);
 }
@@ -15530,12 +15626,31 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 
 document.addEventListener("visibilitychange",()=>{
   try{
-    if(!run){if(!document.hidden&&floatingAutoRestartPending&&js.options.autoRepeat){const now=Date.now(),started=Number(backgroundAutoRestartWallMs||now),extra=Math.max(0,(now-started)/1000);startRun();if(run&&extra>.001)johtoProcessBackgroundGap(extra);}return;}if(document.hidden){run.wallTickMs=Date.now();return;}const now=Date.now();
-    if(run.centerPending){const age=(now-Number(run.centerPauseWallMs||now))/1000;if(age>=10){const extra=Math.max(0,age-10);closeCenter();if(run&&extra>0)johtoProcessBackgroundGap(extra);return;}}
-    if(run.eventPending&&run.paused){const age=(now-Number(run.eventPauseWallMs||now))/1000;if(age>=10){const extra=Math.max(0,age-10);resolveRouteEvent("ignore");if(run&&extra>0)johtoProcessBackgroundGap(extra);return;}}
-    const gap=Math.max(0,(now-Number(run.wallTickMs||now))/1000);run.wallTickMs=now;if(gap>.35||Number(run.backgroundBacklogReal||0)>0)johtoProcessBackgroundGap(gap);else{if(backgroundSaveDirty){backgroundSaveDirty=false;localStorage.setItem(SAVE,JSON.stringify(js));}render();}
-  }catch(e){console.error("PokéSenda · recuperación segundo plano Johto",e);}
+    if(document.hidden){backgroundWasEligibleOnHide=!!run&&(!run.paused||run.centerPending||run.eventPending);if(run)run.wallTickMs=Date.now();return;}
+    const paintThenDrain=seconds=>{johtoSafeBackgroundRender();const go=()=>{if(seconds>.001)johtoQueueBackgroundGap(seconds);johtoScheduleBackgroundDrain(0);};if(typeof requestAnimationFrame==="function")requestAnimationFrame(()=>setTimeout(go,0));else setTimeout(go,0);};
+    if(!run){if(floatingAutoRestartPending&&js.options.autoRepeat){const now=Date.now(),started=Number(backgroundAutoRestartWallMs||now),extra=Math.max(0,(now-started)/1000);startRun();paintThenDrain(extra);}backgroundWasEligibleOnHide=false;return;}
+    const now=Date.now();if(!backgroundWasEligibleOnHide&&!run.centerPending&&!run.eventPending){run.wallTickMs=now;johtoSetBackgroundBacklog(0);johtoSafeBackgroundRender();return;}backgroundWasEligibleOnHide=false;
+    if(run.centerPending){const age=(now-Number(run.centerPauseWallMs||now))/1000;if(age>=10){const extra=Math.max(0,age-10);closeCenter();paintThenDrain(extra);return;}}
+    if(run.eventPending&&run.paused){const age=(now-Number(run.eventPauseWallMs||now))/1000;if(age>=10){const extra=Math.max(0,age-10);resolveRouteEvent("ignore");paintThenDrain(extra);return;}}
+    const gap=Math.max(0,Math.min(J_BG_MAX_BACKLOG_REAL,(now-Number(run.wallTickMs||now))/1000));run.wallTickMs=now;if(gap>.35||johtoBackgroundBacklog()>.001)paintThenDrain(gap);else{if(backgroundSaveDirty){backgroundSaveDirty=false;localStorage.setItem(SAVE,JSON.stringify(js));}johtoSafeBackgroundRender();}
+  }catch(e){console.error("PokéSenda · recuperación segundo plano Johto",e);backgroundDrainFaulted=true;johtoSetBackgroundBacklog(0);johtoSafeBackgroundRender();}
 });
+
+function johtoMaxLevelRelearnPlan(id){
+  const p=js.pokemon?.[id];if(!p)return{refund:0,baseRanks:[1,0,0,1],oldRanks:[1,0,0,1]};
+  const oldRanks=Array.isArray(p.moveRanks)?p.moveRanks.slice(0,4):[1,0,0,1];while(oldRanks.length<4)oldRanks.push(0);
+  const stage=stageIndex(id,p.dex),moves=DATA().movesets?.[id]||[],load=tmLoadout(p);
+  const baseRanks=oldRanks.map((_,i)=>{if(load[i]&&tmDef(load[i])&&tmSlotAccepts(i,load[i]))return 1;const m=moves[i];return m&&(m.kind==="support"||Number(m.unlockStage||0)<=stage)?1:0;});
+  const refund=oldRanks.reduce((sum,r,i)=>sum+Math.max(0,Math.max(0,Number(r)||0)-baseRanks[i]),0);
+  return{refund,baseRanks,oldRanks};
+}
+function johtoUseMaxLevelRelearn(id){
+  migrate();const p=js.pokemon?.[id];if(!p||Number(p.level||0)<MAX_LEVEL)return{ok:false,msg:"Disponible al llegar a Nv.60."};
+  if(p.maxLevelRelearnUsed)return{ok:false,msg:"Ese Orbe personal ya fue utilizado."};
+  if(run&&!run.paused)return{ok:false,msg:"Pausa la expedición para reconfigurar movimientos."};
+  const plan=johtoMaxLevelRelearnPlan(id);if(plan.refund<=0)return{ok:false,msg:"No hay puntos invertidos para recuperar."};
+  p.moveRanks=plan.baseRanks.slice();p.skillPoints=Math.max(0,Number(p.skillPoints||0))+plan.refund;p.maxLevelRelearnUsed=true;if(run?.team?.[id])refreshCombatant(id);save();log("🔮 "+name(p.dex)+" usó su Orbe personal de Nv."+MAX_LEVEL+" y recuperó "+plan.refund+" punto"+(plan.refund===1?"":"s")+".");return{ok:true,refund:plan.refund};
+}
 
 window.PokeSendaJohtoBattleIsolated={
  start:startRun,stop:stopRun,openReward,continueReward,closeCenter,saveKey:SAVE,
@@ -15609,12 +15724,14 @@ window.PokeSendaJohtoBattleIsolated={
  getEvolutionOptions:id=>{migrate();return JSON.parse(JSON.stringify(evolutionOptions(id)));},
  declineEvolution:id=>{migrate();const p=js.pokemon?.[id];if(p)p.evolutionPromptLevel=Number(p.level||0);if(run)run.paused=false;save();return true;},
  setShiny:(id,on)=>{migrate();const p=js.pokemon[id];if(!p||!p.shinyUnlocked)return false;p.shinyEquipped=!!on;save();return true;},
+ getMaxLevelRelearn:id=>{migrate();const p=js.pokemon?.[id],plan=johtoMaxLevelRelearnPlan(id);return {unlocked:!!p&&Number(p.level||0)>=MAX_LEVEL,used:!!p?.maxLevelRelearnUsed,refund:plan.refund,canUse:!!p&&Number(p.level||0)>=MAX_LEVEL&&!p.maxLevelRelearnUsed&&plan.refund>0&&(!run||!!run.paused)};},
+ useMaxLevelRelearn:id=>johtoUseMaxLevelRelearn(id),
 
  upgradeMove:(id,i)=>{migrate();const p=js.pokemon[id],m=DATA().movesets?.[id]?.[Number(i)];if(!p||!m||Number(p.skillPoints||0)<=0)return false;const stage=stageIndex(id,p.dex);if(m.kind!=="support"&&Number(m.unlockStage||0)>stage)return false;p.moveRanks=Array.isArray(p.moveRanks)?p.moveRanks:[1,0,0,1];while(p.moveRanks.length<4)p.moveRanks.push(0);const rank=Math.max(1,Number(p.moveRanks[i]||1));if(rank>=25)return false;p.moveRanks[i]=rank+1;p.skillPoints--;save();return true;},
  reload:()=>{migrate();return JSON.parse(JSON.stringify(js||{}));},
  setSpeed:s=>{migrate();s=Number(s);if(![1,2,4].includes(s))return false;js.options.battleSpeed=s;if(run)run.speed=s;save();render();return true;},
  setOption:(k,v)=>{migrate();if(!["autoRepeat","autoPotion","autoOpen"].includes(k))return false;const need={autoOpen:"a2",autoRepeat:"a3",autoPotion:"a5"}[k];if(v&&need&&skillRank(need)<1)return false;js.options[k]=!!v;save();render();return true;},
- togglePause:()=>{if(!run||run.rewardPending||run.centerPending)return false;run.paused=!run.paused;if(!run.paused)run.wallTickMs=Date.now();else run.backgroundBacklogReal=0;render();return run.paused;},
+ togglePause:()=>{if(!run||run.rewardPending||run.centerPending)return false;run.paused=!run.paused;if(!run.paused)run.wallTickMs=Date.now();else johtoSetBackgroundBacklog(0);render();return run.paused;},
  setFarmCheckpoint:m=>{migrate();m=Number(m)||0;const rs=js.routes.johto_route1,allowed=[0,...POKEMON_CENTERS.filter(c=>(rs.centersSeen||[]).includes(c)||rs.completions>0)];if(!allowed.includes(m))return false;rs.farmCheckpoint=m;save();return true;},
  setFormation:(arr)=>{migrate();const unique=[];for(const id of Array.isArray(arr)?arr:[]){if(id&&js.pokemon[id]&&!unique.includes(id))unique.push(id);}
    if(run){if(!run.paused)return false;const allowed=new Set(run.partyIds||[]);if(unique.some(id=>!allowed.has(id))||unique.length!==allowed.size)return false;}
@@ -16730,10 +16847,13 @@ function openDetail(idOrDex,returnSurface=null){
   const heldDef=p.heldItem?itemDef(p.heldItem):null,tmLoad=Array.isArray(p.tmLoadout)?p.tmLoadout:[null,null,null,null],tmCap=Math.max(1,Number(B()?.tmCapacity?.(id)||1)),tmUsed=tmLoad.filter(Boolean).length;
   const heldVisual=heldDef?'<div class="held-item-info"><span class="held-item-info-icon">'+(heldDef.sprite?'<img src="'+heldDef.sprite+'" alt="">':(heldDef.icon||"🎒"))+'</span><div><b>'+heldDef.name+'</b><small>'+(heldDef.desc||"Objeto equipado en este Pokémon.")+'</small></div></div>':'<div class="held-item-info empty"><span class="held-item-info-icon">—</span><div><b>Sin objeto equipado</b><small>Este Pokémon no recibe bonificaciones de objeto.</small></div></div>';
   const tmCards=tmLoad.map((tmId,slot)=>tmId&&D().tms?.[tmId]?'<button class="pk-detail-tm-card occupied" data-j-detail-tm="'+tmId+'"><span class="pk-detail-tm-slot">'+tmSlotName(slot)+'</span><b>'+D().tms[tmId].name+'</b><small>Pulsa para cambiar</small></button>':'<button class="pk-detail-tm-card empty" disabled><span class="pk-detail-tm-slot">'+tmSlotName(slot)+'</span><b>'+(tmUsed>=tmCap?'Bloqueada':'Libre')+'</b></button>').join("");
+  const maxRelearn=Number(p.level||0)>=60?(B()?.getMaxLevelRelearn?.(id)||{unlocked:true,used:!!p.maxLevelRelearnUsed,refund:0,canUse:false}):null;
+  const maxRelearnHTML=maxRelearn?'<div class="pk-max-relearn-card '+(maxRelearn.used?'consumed':'')+'"><div class="pk-max-relearn-orb">🔮</div><div class="pk-max-relearn-copy"><div class="pk-max-relearn-top"><b>Orbe de Reaprendizaje Nv.60</b><span class="pk-max-relearn-status '+(maxRelearn.used?'used':'ready')+'">'+(maxRelearn.used?'USADO':'1 USO')+'</span></div><small>'+(maxRelearn.used?'La oportunidad personal de reajuste de nivel máximo ya fue utilizada.':maxRelearn.refund>0?'Reinicia los rangos y recupera '+maxRelearn.refund+' punto'+(maxRelearn.refund===1?'':'s')+' para repartir de nuevo.':'Está desbloqueado. Invierte puntos y úsalo cuando quieras rehacer la build.')+'</small><em>Personal de '+nameDex(p.dex)+' · no consume Orbes del Inventario.</em></div><button class="btn pk-max-relearn-btn" type="button" data-j-max-relearn="'+id+'" '+(maxRelearn.canUse?'':'disabled')+'>'+(maxRelearn.used?'Orbe consumido':maxRelearn.refund<=0?'Sin puntos invertidos':maxRelearn.canUse?'Reaprender · +'+maxRelearn.refund+' pts':'Pausa para usar')+'</button></div>':'';
   el("pokemonDetailTitle",detailOverlay).textContent=nameDex(p.dex);const ids=detailIds(),nav=ids.length>1;el("pokemonPrevBtn",detailOverlay).disabled=!nav;el("pokemonNextBtn",detailOverlay).disabled=!nav;
-  el("pokemonDetailContent",detailOverlay).innerHTML='<div class="team-card"><div class="team-head"><img class="poke-img" src="'+gif(p.dex,false,!!(p.shinyUnlocked&&p.shinyEquipped))+'"><div class="team-title"><b>'+nameDex(p.dex)+' · Nv.'+p.level+'</b><small>'+types.map(t=>TYPE_ES[t]||t).join("/")+' · '+Math.round(st.maxHp||0)+' PS</small><span class="role-badge">'+rarityName(rar)+' · '+natureName(p.nature)+'</span><div class="stars">'+starHTML(p.stars||1)+'</div><div class="party-status">'+(inFormation?"Equipo preparado":"Fuera de la formación")+'</div></div><span style="font-size:10px;color:var(--good);font-weight:900">'+Number(p.skillPoints||0)+' pts</span></div><div class="xpbar"><div class="xpfill" style="width:'+pct+'%"></div></div><div class="statline"><span>'+(p.level>=60?"Nivel máximo":Math.floor(p.xp||0)+" / "+need+" XP")+'</span><span>'+((1/Math.max(.25,Number(st.cd||1))).toFixed(2))+' atq/s</span></div><div class="star-row"><span class="tiny muted">🍬 '+Number(p.candies||0)+(p.stars<5?" · Próx. ★: "+cost.toLocaleString("es-CL"):" · 5★ MAX")+'</span><button class="star-upgrade" data-j-star="'+id+'" '+(canStar?"":"disabled")+'>Subir ★</button></div><div class="nature-card nature-card-textonly"><span class="nature-copy"><small>NATURALEZA</small><b>'+natureName(p.nature)+'</b><span class="nature-effect">Amistad: '+Number(p.friendship||0)+'/255</span></span>'+(totalOwnedMints()>0?'<button class="btn mini-btn" data-j-use-mint="'+id+'">🌿 Usar Menta</button>':'')+'</div><section class="pk-detail-evolution-wrap"><div class="pk-detail-section-title"><span class="pk-detail-title-icon">🧬</span><div><b>Evolución</b></div></div>'+evoHTML+'</section><section class="pk-detail-module pk-detail-moves-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">⚔</span><div><b>Movimientos</b><small>Pulsa un movimiento para subir su rango.</small></div><span class="pk-detail-module-badge pk-detail-points-badge">'+Number(p.skillPoints||0)+' PTS</span></div><div class="skills">'+moveButtons+'</div></section>'+(p.shinyUnlocked?'<div class="star-row"><span>✨ Variante Shiny desbloqueada</span><button class="mini-btn" data-j-shiny="'+id+'">'+(p.shinyEquipped?"Usar normal":"Equipar Shiny")+'</button></div>':'')+'<section class="pk-detail-module pk-detail-item-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">🎒</span><div><b>Objeto equipado</b><small>Bonificación activa y cambio rápido de objeto.</small></div></div><div class="pk-detail-item-body">'+heldVisual+'<div class="pk-detail-control"><label>CAMBIAR OBJETO</label><select class="held-item-select" data-j-held="'+id+'" '+(canEditTeam()?"":"disabled")+'>'+itemOptions+'</select><small>'+(canEditTeam()?"El objeto anterior vuelve al inventario si hay espacio.":"Pausa la expedición para cambiar objetos.")+'</small></div></div></section><section class="pk-detail-module pk-detail-tm-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">💿</span><div><b>Máquinas Técnicas</b><small>Capacidad según rareza.</small></div><span class="pk-detail-module-badge">'+tmUsed+'/'+tmCap+' EN USO</span></div><div class="pk-detail-tm-grid">'+tmCards+'</div></section><div class="statline"><span>PS '+Math.round(st.maxHp||0)+' · ATQ '+Number(st.atk||0).toFixed(1)+' · AT.ESP '+Number(st.spAtk||0).toFixed(1)+'</span><span>DEF '+Number(st.def||0).toFixed(0)+' · DEF.ESP '+Number(st.spDef||0).toFixed(0)+'</span></div></div>';
+  el("pokemonDetailContent",detailOverlay).innerHTML='<div class="team-card"><div class="team-head"><img class="poke-img" src="'+gif(p.dex,false,!!(p.shinyUnlocked&&p.shinyEquipped))+'"><div class="team-title"><b>'+nameDex(p.dex)+' · Nv.'+p.level+'</b><small>'+types.map(t=>TYPE_ES[t]||t).join("/")+' · '+Math.round(st.maxHp||0)+' PS</small><span class="role-badge">'+rarityName(rar)+' · '+natureName(p.nature)+'</span><div class="stars">'+starHTML(p.stars||1)+'</div><div class="party-status">'+(inFormation?"Equipo preparado":"Fuera de la formación")+'</div></div><span style="font-size:10px;color:var(--good);font-weight:900">'+Number(p.skillPoints||0)+' pts</span></div><div class="xpbar"><div class="xpfill" style="width:'+pct+'%"></div></div><div class="statline"><span>'+(p.level>=60?"Nivel máximo":Math.floor(p.xp||0)+" / "+need+" XP")+'</span><span>'+((1/Math.max(.25,Number(st.cd||1))).toFixed(2))+' atq/s</span></div><div class="star-row"><span class="tiny muted">🍬 '+Number(p.candies||0)+(p.stars<5?" · Próx. ★: "+cost.toLocaleString("es-CL"):" · 5★ MAX")+'</span><button class="star-upgrade" data-j-star="'+id+'" '+(canStar?"":"disabled")+'>Subir ★</button></div><div class="nature-card nature-card-textonly"><span class="nature-copy"><small>NATURALEZA</small><b>'+natureName(p.nature)+'</b><span class="nature-effect">Amistad: '+Number(p.friendship||0)+'/255</span></span>'+(totalOwnedMints()>0?'<button class="btn mini-btn" data-j-use-mint="'+id+'">🌿 Usar Menta</button>':'')+'</div><section class="pk-detail-evolution-wrap"><div class="pk-detail-section-title"><span class="pk-detail-title-icon">🧬</span><div><b>Evolución</b></div></div>'+evoHTML+'</section>'+maxRelearnHTML+'<section class="pk-detail-module pk-detail-moves-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">⚔</span><div><b>Movimientos</b><small>Pulsa un movimiento para subir su rango.</small></div><span class="pk-detail-module-badge pk-detail-points-badge">'+Number(p.skillPoints||0)+' PTS</span></div><div class="skills">'+moveButtons+'</div></section>'+(p.shinyUnlocked?'<div class="star-row"><span>✨ Variante Shiny desbloqueada</span><button class="mini-btn" data-j-shiny="'+id+'">'+(p.shinyEquipped?"Usar normal":"Equipar Shiny")+'</button></div>':'')+'<section class="pk-detail-module pk-detail-item-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">🎒</span><div><b>Objeto equipado</b><small>Bonificación activa y cambio rápido de objeto.</small></div></div><div class="pk-detail-item-body">'+heldVisual+'<div class="pk-detail-control"><label>CAMBIAR OBJETO</label><select class="held-item-select" data-j-held="'+id+'" '+(canEditTeam()?"":"disabled")+'>'+itemOptions+'</select><small>'+(canEditTeam()?"El objeto anterior vuelve al inventario si hay espacio.":"Pausa la expedición para cambiar objetos.")+'</small></div></div></section><section class="pk-detail-module pk-detail-tm-module"><div class="pk-detail-module-head"><span class="pk-detail-title-icon">💿</span><div><b>Máquinas Técnicas</b><small>Capacidad según rareza.</small></div><span class="pk-detail-module-badge">'+tmUsed+'/'+tmCap+' EN USO</span></div><div class="pk-detail-tm-grid">'+tmCards+'</div></section><div class="statline"><span>PS '+Math.round(st.maxHp||0)+' · ATQ '+Number(st.atk||0).toFixed(1)+' · AT.ESP '+Number(st.spAtk||0).toFixed(1)+'</span><span>DEF '+Number(st.def||0).toFixed(0)+' · DEF.ESP '+Number(st.spDef||0).toFixed(0)+'</span></div></div>';
   qa("[data-j-upgrade-move]",detailOverlay).forEach(btn=>btn.onclick=()=>{if(B()?.upgradeMove?.(id,Number(btn.dataset.jUpgradeMove))){B()?.reload?.();openDetail(id,returnSurface);formationSig="";renderAll();}});
   q("[data-j-star]",detailOverlay)?.addEventListener("click",()=>{if(B()?.upgradeStar?.(id)){B()?.reload?.();openDetail(id,returnSurface);formationSig="";worldSig="";renderAll();}});
+  q("[data-j-max-relearn]",detailOverlay)?.addEventListener("click",async()=>{const info=B()?.getMaxLevelRelearn?.(id);if(!info?.canUse){toast(info?.used?"Ese Orbe personal ya fue utilizado":info?.refund<=0?"No hay puntos invertidos para recuperar":"Pausa la expedición para reconfigurar movimientos");return;}let ok=true;const confirmFn=window.PokeSendaGameConfirm;if(typeof confirmFn==="function")ok=await confirmFn({title:"Orbe de Reaprendizaje · Nv.60",message:nameDex(p.dex)+" consiguió esta oportunidad al alcanzar el nivel máximo.\n\nSe reiniciarán sus rangos y recuperarás "+info.refund+" punto"+(info.refund===1?"":"s")+" para repartirlos otra vez.\n\nEs un uso personal y no consume Orbes del Inventario. Nivel, estrellas, evolución, MT, naturaleza y objeto equipado no cambian.",confirmText:"Reaprender",cancelText:"Guardar Orbe",tone:"warning",symbol:"🔮"});if(!ok)return;const res=B()?.useMaxLevelRelearn?.(id);if(!res?.ok){toast(res?.msg||"No se pudo usar el Orbe");return;}B()?.reload?.();toast("🔮 "+nameDex(p.dex)+": build reiniciada · +"+res.refund+" pts");openDetail(id,returnSurface);formationSig="";worldSig="";renderAll();});
   q("[data-j-shiny]",detailOverlay)?.addEventListener("click",()=>{if(B()?.setShiny?.(id,!p.shinyEquipped)){B()?.reload?.();openDetail(id,returnSurface);worldSig="";renderAll();}});
   qa("[data-j-evolve]",detailOverlay).forEach(btn=>btn.onclick=()=>openEvolutionOverlay(id,Number(btn.dataset.jEvolve),false));q("[data-j-use-mint]",detailOverlay)?.addEventListener("click",()=>openMintUseOverlay(id));q("[data-j-held]",detailOverlay)?.addEventListener("change",e=>{const res=B()?.setHeldItem?.(id,e.target.value||null);if(!res?.ok)toast(res?.msg||"No se pudo cambiar el objeto");B()?.reload?.();openDetail(id,returnSurface);formationSig="";worldSig="";renderAll();});qa("[data-j-detail-tm]",detailOverlay).forEach(btn=>btn.onclick=()=>{detailOverlay.classList.add("hidden");openTMEquip(btn.dataset.jDetailTm);});
   detailOverlay.classList.remove("hidden");
@@ -16998,7 +17118,7 @@ window.PokeSendaDevMoneyInbox={check};if(document.readyState==='loading')documen
 </script>
 
 <style id="pkFloatingModeMainStyle">
-/* V36.60.0 · acceso discreto dentro del campo, fuera del HUD superior. */
+/* V36.60.2 · acceso discreto dentro del campo, fuera del HUD superior. */
 .pk-floating-mode-btn{position:absolute!important;right:12px!important;top:158px!important;z-index:31!important;width:32px!important;height:32px!important;min-width:32px!important;padding:0!important;border-radius:10px!important;border:1px solid rgba(117,153,184,.72)!important;background:linear-gradient(145deg,rgba(24,45,64,.86),rgba(11,24,36,.86))!important;color:#dcecff!important;font-size:15px!important;line-height:1!important;opacity:.72;box-shadow:0 5px 14px rgba(0,0,0,.34)!important;transition:opacity .15s ease,transform .15s ease,filter .15s ease;backdrop-filter:blur(2px)}
 .pk-floating-mode-btn:hover{opacity:1;transform:translateY(-1px);filter:brightness(1.14)}
 .pk-floating-mode-btn.pk-floating-active{opacity:1;border-color:#69c8f4!important;box-shadow:0 0 0 2px rgba(108,219,255,.26),0 0 16px rgba(86,186,255,.26)!important}
@@ -17133,7 +17253,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
-<!-- PokeSenda V36.60.0 · Motor híbrido de segundo plano: recupera tiempo real perdido por throttling de Chrome en Kanto y Johto, respeta x1/x2/x4, centros/eventos temporizados y Auto-repetir. Ventana flotante queda como visor opcional. Conserva fichas limpias y cierre de Gimnasio al lobby. -->
+<!-- PokeSenda V36.60.2 · Motor de segundo plano cooperativo: la recuperación se procesa en cortes breves que ceden el hilo al navegador, pinta la interfaz antes del catch-up y protege el render ante errores. Mantiene Orbe personal Nv.60, fichas limpias y Ventana flotante opcional. -->
 
 </body>
 </html>

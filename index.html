@@ -15794,7 +15794,7 @@ window.PokeSendaJohtoBattleIsolated={
 
 
 <style id="pkJohtoRegionRuntimeStyle">
-/* V36.62.1 · Candidata estable de paridad Kanto → Johto. Contenedor regional Johto. El chrome compartido NO redefine Kanto:
+/* V36.62.2 · Candidata estable de paridad Kanto → Johto. Contenedor regional Johto. El chrome compartido NO redefine Kanto:
    botones, tarjetas, tipografía, HUD y medidas heredan directamente la producción actual. */
 #pkRegionRuntimeRoot{
   position:fixed;inset:0;z-index:460000;display:flex;align-items:flex-start;justify-content:center;
@@ -16910,15 +16910,39 @@ function jGymRoleMult(entity,slot){return B()?.getGymRoleMult?.(entity,slot)||{a
 function jGymStats(){return B()?.getGymStatsTemplate?.()||{damage:0,healing:0,taken:0,kos:0,crits:0,superEffective:0,deaths:0};}
 function jGymLeaderImg(g){return "https://play.pokemonshowdown.com/sprites/trainers/"+g.portrait+".png";}
 function jGymFormatTime(sec){sec=Math.max(0,Number(sec)||0);const m=Math.floor(sec/60),s=Math.floor(sec%60),cs=Math.floor((sec-Math.floor(sec))*100);return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")+"."+String(cs).padStart(2,"0");}
+function johtoBadgeDataUri(svg){return "data:image/svg+xml;utf8,"+encodeURIComponent(String(svg||"").split("\n").join("").trim());}
+function johtoBadgeSvg(opts){
+  const bg=opts.bg||"#1a2230",stroke=opts.stroke||"#e9d487",fill=opts.fill||"#f0c85a",fill2=opts.fill2||fill,shape=opts.shape||"",detail=opts.detail||"";
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" shape-rendering="geometricPrecision">
+    <defs>
+      <radialGradient id="bg" cx="32" cy="18" r="34" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#ffffff" stop-opacity=".28"/>
+        <stop offset="1" stop-color="${bg}" stop-opacity="1"/>
+      </radialGradient>
+      <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="${fill2}"/>
+        <stop offset="1" stop-color="${fill}"/>
+      </linearGradient>
+      <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".45"/>
+      </filter>
+    </defs>
+    <circle cx="32" cy="32" r="30" fill="url(#bg)" stroke="${stroke}" stroke-width="2"/>
+    <g filter="url(#shadow)">
+      <g fill="url(#metal)" stroke="${stroke}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">${shape}</g>
+      <g fill="none" stroke="#fff7cf" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" opacity=".9">${detail}</g>
+    </g>
+  </svg>`;
+}
 const JOHTO_BADGE_SPRITES={
- falkner:"https://archives.bulbagarden.net/media/upload/3/3a/HGSS_Zephyr_Badge.png",
- bugsy:"https://archives.bulbagarden.net/media/upload/2/27/HGSS_Hive_Badge.png",
- whitney:"https://archives.bulbagarden.net/media/upload/4/4c/HGSS_Plain_Badge.png",
- morty:"https://archives.bulbagarden.net/media/upload/8/8b/HGSS_Fog_Badge.png",
- chuck:"https://archives.bulbagarden.net/media/upload/d/d6/HGSS_Storm_Badge.png",
- jasmine:"https://archives.bulbagarden.net/media/upload/6/6b/HGSS_Mineral_Badge.png",
- pryce:"https://archives.bulbagarden.net/media/upload/2/20/HGSS_Glacier_Badge.png",
- clair:"https://archives.bulbagarden.net/media/upload/6/69/HGSS_Rising_Badge.png"
+ falkner:johtoBadgeDataUri(johtoBadgeSvg({bg:"#0f2336",stroke:"#abd6ff",fill:"#74c3ff",fill2:"#d4efff",shape:`<path d="M14 35c10-14 20-19 36-20-4 8-9 13-16 18l11 5c-12 4-22 6-31 7 2-3 4-6 7-10l-7 0z"/>`,detail:`<path d="M21 32c8-7 16-11 25-13"/><path d="M24 39c8-1 14-3 22-6"/>`})),
+ bugsy:johtoBadgeDataUri(johtoBadgeSvg({bg:"#1f2616",stroke:"#d7ef89",fill:"#98d84a",fill2:"#f4ffb7",shape:`<path d="M32 13l14 8v16l-14 8-14-8V21z"/><path d="M32 20l7 4v8l-7 4-7-4v-8z"/>`,detail:`<path d="M18 29h10"/><path d="M36 29h10"/><path d="M32 12v8"/><path d="M32 44v8"/>`})),
+ whitney:johtoBadgeDataUri(johtoBadgeSvg({bg:"#33182a",stroke:"#ffd1ea",fill:"#ff86c8",fill2:"#ffd8ef",shape:`<path d="M32 46s-15-9-15-19c0-5 4-9 9-9 3 0 5 1 6 4 1-3 3-4 6-4 5 0 9 4 9 9 0 10-15 19-15 19z"/>`,detail:`<path d="M24 25c2-2 4-3 8-3"/>`})),
+ morty:johtoBadgeDataUri(johtoBadgeSvg({bg:"#1f1938",stroke:"#d8c9ff",fill:"#9a7cff",fill2:"#efe7ff",shape:`<path d="M32 13c9 7 15 15 15 23 0 8-7 14-15 14s-15-6-15-14c0-8 6-16 15-23z"/>`,detail:`<path d="M24 34c2-6 9-11 16-13"/><path d="M22 40c5 3 15 3 20 0"/>`})),
+ chuck:johtoBadgeDataUri(johtoBadgeSvg({bg:"#13263a",stroke:"#bce7ff",fill:"#58b9ff",fill2:"#d8f3ff",shape:`<path d="M18 36c8-14 17-17 28-19-3 7-6 12-11 16l9 2c-6 6-16 10-26 12 1-4 2-7 4-11l-4 0z"/>`,detail:`<path d="M24 31c6-4 11-7 18-9"/><path d="M28 39c5-1 9-2 14-4"/>`})),
+ jasmine:johtoBadgeDataUri(johtoBadgeSvg({bg:"#252934",stroke:"#f3f6ff",fill:"#bcc7d8",fill2:"#ffffff",shape:`<path d="M32 13l15 19-15 19-15-19z"/>`,detail:`<path d="M32 17v30"/><path d="M23 32h18"/>`})),
+ pryce:johtoBadgeDataUri(johtoBadgeSvg({bg:"#142a36",stroke:"#d9f8ff",fill:"#8be7ff",fill2:"#effcff",shape:`<path d="M32 14l4 10 10-4-4 10 10 4-10 4 4 10-10-4-4 10-4-10-10 4 4-10-10-4 10-4-4-10 10 4z"/>`,detail:`<path d="M32 20v24"/><path d="M20 32h24"/>`})),
+ clair:johtoBadgeDataUri(johtoBadgeSvg({bg:"#341814",stroke:"#ffd0b8",fill:"#ff8c64",fill2:"#ffe1d4",shape:`<path d="M18 43c7-18 17-26 28-30-1 8-5 14-10 20l10 3c-9 6-17 9-28 10z"/>`,detail:`<path d="M28 26c5-4 9-7 14-9"/><path d="M24 38c7-1 12-2 18-4"/>`}))
 };
 function jGymBadgeUrl(id){return JOHTO_BADGE_SPRITES[id]||"";}
 function jGymBadgeHTML(id,cls="gym-badge-mini"){const g=jGymDefs()[id],src=jGymBadgeUrl(id);return '<span class="'+cls+'" style="--badge:'+(g?.color||"#aaa")+'" title="'+htmlSafe(g?.badge||"Medalla")+'">'+(src?'<img src="'+src+'" alt="'+htmlSafe(g?.badge||"Medalla")+'">':htmlSafe(g?.icon||"🏅"))+'</span>';}
@@ -17536,7 +17560,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 
 <style id="pkJohtoRegionalIdentityV36621">
-/* V36.62.1 · Identidad visual regional Johto · pase 1
+/* V36.62.2 · Identidad visual regional Johto · pase 1
    Solo cambia acentos cromáticos. No modifica geometría, tamaños ni colores semánticos. */
 #pkRegionRuntimeRoot{
   --johto-gold:#d8b35a;

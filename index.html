@@ -15772,6 +15772,7 @@ window.PokeSendaJohtoBattleIsolated={
  premiumEnsureUnlocked:()=>premiumEnsureUnlocked(),
  premiumPhase:now=>{migrate();return premiumPhase(Number(now)||Date.now());},
  premiumState:()=>{migrate();return JSON.parse(JSON.stringify({timedGacha:js.timedGacha,premiumStats:js.premiumStats,achievements:js.achievements,money:js.money,unlocked:premiumUnlocked()}));},
+ premiumSetClock:serverMs=>{migrate();serverMs=Number(serverMs);if(!Number.isFinite(serverMs))return false;js.timedGacha=js.timedGacha||{};js.timedGacha.lastTrustedMs=serverMs;js.timedGacha.clockOffsetMs=serverMs-Date.now();save();return true;},
  premiumPrepare:(source,now)=>premiumPrepare(source,Number(now)||Date.now()),
  premiumRoulette:roll=>premiumRoulette(roll),
  premiumCapture:(source,roll,now)=>premiumCapture(source,roll,Number(now)||Date.now()),
@@ -15996,6 +15997,12 @@ function build(){if(root)return;root=document.createElement("div");root.id="pkRe
   // Solo se regionalizan datos/textos; no se eliminan controles generales para que la interfaz permanezca 1:1.
   menu=cloneNode("body > #mainMenu");game=cloneNode("body > .game");starter=cloneNode("body > #starterOverlay");regionOverlay=cloneNode("body > #regionSelectOverlay");checkpointOverlay=cloneNode("body > #checkpointSelectOverlay");centerOverlay=cloneNode("body > #centerOverlay");rewardOverlay=cloneNode("body > #rewardOverlay");lootPanel=cloneNode("body > #lootPanel");pokedexOverlay=cloneNode("body > #pokedexOverlay");boxOverlay=cloneNode("body > #pcBoxOverlay");pcSwapOverlay=cloneNode("body > #pcSwapOverlay");detailOverlay=cloneNode("body > #pokemonDetailOverlay");skillTreeOverlay=cloneNode("body > #skillTreeOverlay");optionsOverlay=cloneNode("body > #optionsOverlay");mtGachaOverlay=cloneNode("body > #mtGachaOverlay");tmEquipOverlay=cloneNode("body > #tmEquipOverlay");achievementsOverlay=cloneNode("body > #achievementsOverlay");achievementTmChoiceOverlay=cloneNode("body > #achievementTmChoiceOverlay");routeEventOverlay=cloneNode("body > #routeEventOverlay");gymSelectOverlay=cloneNode("body > #gymSelectOverlay");gymBattleOverlay=cloneNode("body > #gymBattleOverlay");gymPotionOverlay=cloneNode("body > #gymPotionOverlay");gymMonDetailOverlay=cloneNode("body > #gymMonDetailOverlay");gymResultOverlay=cloneNode("body > #gymResultOverlay");playerProfileOverlay=cloneNode("body > #playerProfileOverlay");evolutionOverlay=cloneNode("body > #evolutionOverlay");dexLoreOverlay=cloneNode("body > #dexLoreOverlay");enemyDetailOverlay=cloneNode("body > #enemyDetailOverlay");itemEquipOverlay=cloneNode("body > #itemEquipOverlay");incenseVendorOverlay=cloneNode("body > #incenseVendorOverlay");incenseInventoryOverlay=cloneNode("body > #incenseInventoryOverlay");mintVendorOverlay=cloneNode("body > #mintVendorOverlay");mintInventoryOverlay=cloneNode("body > #mintInventoryOverlay");mintUseOverlay=cloneNode("body > #mintUseOverlay");legendaryCelebrationOverlay=cloneNode("body > #legendaryCelebrationOverlay");shinyCelebrationOverlay=cloneNode("body > #shinyCelebrationOverlay");patchNotesOverlay=cloneNode("body > #patchNotesOverlay");uxWhyOverlay=cloneNode("body > #uxWhyOverlay");uxCompareOverlay=cloneNode("body > #uxCompareOverlay");exitOverlay=cloneNode("body > #exitOverlay");firstWelcomeOverlay=cloneNode("body > #pkFirstWelcomeOverlay");achievementCornerPop=cloneNode("body > #achievementCornerPop");evolutionPopEl=cloneNode("body > #evolutionPop");mobileDock=cloneNode("body > #pkMobileDock");mobileMore=cloneNode("body > #pkMobileMore");mobileTip=cloneNode("body > #pkMobileTip");saveTransferOverlay=cloneNode("body > #saveTransferOverlay");backupOverlay=cloneNode("body > #pkBackupOverlay");diagnosticOverlay=cloneNode("body > #pkDiagnosticOverlay");cloudOverlay=cloneNode("body > #pkCloudOverlay");cloudConflictOverlay=cloneNode("body > #pkCloudConflictOverlay");casinoOverlay=cloneNode("body > #pkCasinoOverlay");
   const toastEl=document.createElement("div");toastEl.id="pkRuntimeToast";toastEl.className="toast pk-runtime-toast";root.appendChild(toastEl);
+  // V36.64.3 · El Gachapón Premium de Kanto actualiza [data-tg-*] globalmente cada segundo.
+  // Al clonar la UI, esos selectores alcanzaban Johto y alternaban visualmente entre ambos saves.
+  // Renombramos SOLO los atributos del root regional para aislar por completo ambos temporizadores.
+  for(const key of ["fill","time","status","buy","claim"]){
+    qa(`[data-tg-${key}]`,root).forEach(node=>{node.setAttribute(`data-j-tg-${key}`,node.getAttribute(`data-tg-${key}`)||"");node.removeAttribute(`data-tg-${key}`);});
+  }
   root.addEventListener("click",e=>e.stopPropagation());root.addEventListener("pointerdown",e=>e.stopPropagation());
   prepareMenu();prepareStarter();prepareRegionSelector();prepareGame();prepareCheckpoint();prepareCenter();prepareReward();prepareInventory();preparePokedex();prepareBox();prepareDetail();prepareSkillTree();prepareOptions();prepareMT();prepareAchievements();prepareRouteEvents();prepareGyms();prepareRegionalProfile();prepareEvolution();prepareDexLore();prepareEnemyDetail();prepareItemEquip();prepareMaterials();prepareCelebrations();preparePatchNotes();prepareWhyOverlay();prepareCompareOverlay();prepareExitOverlay();prepareAchievementCorner();prepareEvolutionPop();prepareHelpContext();prepareFormationMini();prepareFirstWelcome();prepareMobileParity();prepareRegionalSystemOverlays();
 }
@@ -16012,7 +16019,7 @@ function prepareMenu(){
   q(".pk-johto-runtime-tag",menu)?.remove();q(".pk-johto-dev-tools",menu)?.remove();
   const box=q(".menu-box",menu),logo=q(".menu-logo",menu),sub=q(".menu-sub",menu);
   if(logo)logo.textContent="PokéSenda";
-  if(sub)sub.textContent="BETA 1.0 · Cloud Save · Móvil · Johto";
+  if(sub)sub.textContent="BETA 1.0 · Móvil · Johto · Prelanzamiento";
   const play=el("menuPlayBtn",menu);if(play){play.textContent="Jugar";play.onclick=showGame;}
   const opt=el("menuOptionsBtn",menu);if(opt){opt.textContent="Opciones";opt.onclick=openOptions;}
   const prof=el("menuProfileBtn",menu);if(prof){prof.disabled=false;prof.textContent="Perfil";prof.onclick=()=>openRegionalProfile("menu");}
@@ -16022,7 +16029,7 @@ function prepareMenu(){
   // el mismo texto, badge e historial que Kanto y solo reconecta sus controles.
   const patch=el("menuPatchNotesBtn",menu);if(patch)patch.onclick=openPatchNotes;
   const quick=el("menuPatchQuickBtn",menu);if(quick)quick.onclick=openPatchNotes;
-  qa("[data-tg-claim]",menu).forEach(x=>x.onclick=claimPremiumGacha);qa("[data-tg-buy]",menu).forEach(x=>x.onclick=buyPremiumGacha);
+  qa("[data-j-tg-claim]",menu).forEach(x=>x.onclick=claimPremiumGacha);qa("[data-j-tg-buy]",menu).forEach(x=>x.onclick=buyPremiumGacha);
   const exit=el("menuExitBtn",menu);if(exit){exit.textContent="Salir";exit.onclick=openExitOverlay;}
 }
 function renderMenu(){const s=read(),info=el("menuSaveInfo",menu);if(info)info.textContent=(s.dex?.length||0)+" especies · ₽"+Math.floor(s.money||0).toLocaleString("es-CL")+" · "+JOHTO_ROUTE_ORDER.reduce((n,id)=>n+Number(s.routes?.[id]?.completions||0),0)+" rutas completas";}
@@ -16064,7 +16071,7 @@ function prepareGame(){
   qa("[data-log-tab]",game).forEach(b=>b.onclick=()=>setJLogTab(b.dataset.logTab));setJLogTab("general");
 
   const tg=q(".timed-gacha-label",game);if(tg)tg.innerHTML='<span class="tg-orb">🔮</span> Gachapon Premium · gratis cada 8h';
-  qa("[data-tg-claim]",root).forEach(x=>x.onclick=claimPremiumGacha);qa("[data-tg-buy]",root).forEach(x=>x.onclick=buyPremiumGacha);
+  qa("[data-j-tg-claim]",root).forEach(x=>x.onclick=claimPremiumGacha);qa("[data-j-tg-buy]",root).forEach(x=>x.onclick=buyPremiumGacha);
   updatePremiumUI();if(!premiumUiTimer)premiumUiTimer=setInterval(()=>{if(!root?.classList.contains("hidden"))updatePremiumUI();},1000);
   game.addEventListener("click",e=>{const mon=e.target.closest?.("[data-j-pokemon]");if(mon)openDetail(mon.dataset.jPokemon);});
 }
@@ -16103,26 +16110,26 @@ function prepareMobileParity(){
 
 function addParitySafety(scope,text){if(!scope)return;let box=q(".pk-j-parity-safe",scope);if(!box){box=document.createElement("div");box.className="pk-j-parity-safe";const host=q(".modal-box",scope)||scope;const head=host.firstElementChild;head?.insertAdjacentElement("afterend",box);}box.innerHTML='<b>🛡️ Johto protegido</b><br>'+text;}
 function parityNoticeHandler(tool){return e=>{e?.preventDefault?.();e?.stopPropagation?.();johtoSaveToolNotice(tool);};}
-function refreshJohtoDiagnostic(){if(!diagnosticOverlay)return;const s=read(),raw=localStorage.getItem(SAVE)||"",r=B()?.getRun?.();const info={version:"V36.64.1",region:"Johto",saveKey:SAVE,saveBytes:new Blob([raw]).size,pokemonOwned:Object.keys(s.pokemon||{}).length,pokedexRegistered:(s.dex||[]).length,shinyForms:Object.values(s.pokemon||{}).filter(p=>p?.shinyUnlocked).length,money:Math.floor(Number(s.money)||0),starter:s.starter||null,formation:(s.formation||[]).filter(Boolean),currentRoute:s.currentRoute||"johto_route1",routes:Object.fromEntries(JOHTO_ROUTE_ORDER.map(id=>[id,{completions:Number(s.routes?.[id]?.completions||0),bestDistance:Number(s.routes?.[id]?.bestDistance||0),checkpoint:Number(s.routes?.[id]?.farmCheckpoint??s.routes?.[id]?.checkpoint??0)}])),run:r?{distance:Math.floor(Number(r.distance)||0),paused:!!r.paused,speed:Number(r.speed||1),wave:Number(r.wave||0)}:null,note:"Diagnóstico regional. No incluye secretos Cloud ni datos privados de Kanto."};const out=el("pkDiagnosticOutput",diagnosticOverlay);if(out)out.value=JSON.stringify(info,null,2);}
+function refreshJohtoDiagnostic(){if(!diagnosticOverlay)return;const s=read(),raw=localStorage.getItem(SAVE)||"",r=B()?.getRun?.();const info={version:"V36.64.4",region:"Johto",saveKey:SAVE,saveBytes:new Blob([raw]).size,pokemonOwned:Object.keys(s.pokemon||{}).length,pokedexRegistered:(s.dex||[]).length,shinyForms:Object.values(s.pokemon||{}).filter(p=>p?.shinyUnlocked).length,money:Math.floor(Number(s.money)||0),starter:s.starter||null,formation:(s.formation||[]).filter(Boolean),currentRoute:s.currentRoute||"johto_route1",routes:Object.fromEntries(JOHTO_ROUTE_ORDER.map(id=>[id,{completions:Number(s.routes?.[id]?.completions||0),bestDistance:Number(s.routes?.[id]?.bestDistance||0),checkpoint:Number(s.routes?.[id]?.farmCheckpoint??s.routes?.[id]?.checkpoint??0)}])),run:r?{distance:Math.floor(Number(r.distance)||0),paused:!!r.paused,speed:Number(r.speed||1),wave:Number(r.wave||0)}:null,note:"Diagnóstico regional. No incluye secretos Cloud ni datos privados de Kanto."};const out=el("pkDiagnosticOutput",diagnosticOverlay);if(out)out.value=JSON.stringify(info,null,2);}
 const JOHTO_BACKUP_KEY="pokesenda_johto_backups_v1";
 function johtoSaveSummary(s=read()){
   const name=String(s?.trainerAvatar?.name||s?.trainerName||"Entrenador"),owned=Object.keys(s?.pokemon||{}).length,money=Math.floor(Number(s?.money||0)).toLocaleString("es-CL"),routes=JOHTO_ROUTE_ORDER.reduce((n,id)=>n+Number(s?.routes?.[id]?.completions||0),0);
   return `${name} · ${owned} Pokémon · ₽${money} · ${routes} rutas completadas`;
 }
-function johtoTransferPayload(){return{format:"PokeSendaJohtoSave",formatVersion:1,region:"johto",gameVersion:"V36.64.1",exportedAt:new Date().toISOString(),data:read()};}
+function johtoTransferPayload(){return{format:"PokeSendaJohtoSave",formatVersion:1,region:"johto",gameVersion:"V36.64.4",exportedAt:new Date().toISOString(),data:read()};}
 function johtoSaveFileName(){const d=new Date(),pad=n=>String(n).padStart(2,"0");return `PokeSenda_Johto_Save_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}.pokesenda`;}
 function johtoPayloadFile(){return new File([JSON.stringify(johtoTransferPayload())],johtoSaveFileName(),{type:"application/json"});}
 function johtoDownloadSave(){try{const file=johtoPayloadFile(),url=URL.createObjectURL(file),a=document.createElement("a");a.href=url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);toast("💾 Partida de Johto exportada");refreshJohtoTransferStatus();return true;}catch(_){toast("No se pudo exportar la partida de Johto");return false;}}
 async function johtoShareSave(){try{const file=johtoPayloadFile();if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]})))await navigator.share({title:"Partida de PokéSenda · Johto",text:"Respaldo de mi campaña de Johto",files:[file]});else johtoDownloadSave();return true;}catch(e){if(e?.name!=="AbortError")toast("No se pudo compartir el respaldo");return false;}}
 function readJohtoBackups(){try{const a=JSON.parse(localStorage.getItem(JOHTO_BACKUP_KEY)||"[]");return Array.isArray(a)?a:[];}catch(_){return[];}}
 function writeJohtoBackups(a){try{localStorage.setItem(JOHTO_BACKUP_KEY,JSON.stringify(a.slice(0,3)));return true;}catch(_){try{localStorage.setItem(JOHTO_BACKUP_KEY,JSON.stringify(a.slice(0,2)));return true;}catch(__){return false;}}}
-function createJohtoBackup(reason="Respaldo manual",silent=false){try{const raw=localStorage.getItem(SAVE);if(!raw)return false;const list=readJohtoBackups();if(list[0]?.raw===raw){if(!silent)toast("🛡️ La partida actual de Johto ya está respaldada");renderJohtoBackups();return true;}const item={createdAt:new Date().toISOString(),reason:String(reason).slice(0,120),gameVersion:"V36.64.1",raw},ok=writeJohtoBackups([item,...list]);if(!silent)toast(ok?"🛡️ Respaldo Johto creado":"No se pudo crear el respaldo Johto");renderJohtoBackups();return ok;}catch(_){if(!silent)toast("No se pudo crear el respaldo Johto");return false;}}
+function createJohtoBackup(reason="Respaldo manual",silent=false){try{const raw=localStorage.getItem(SAVE);if(!raw)return false;const list=readJohtoBackups();if(list[0]?.raw===raw){if(!silent)toast("🛡️ La partida actual de Johto ya está respaldada");renderJohtoBackups();return true;}const item={createdAt:new Date().toISOString(),reason:String(reason).slice(0,120),gameVersion:"V36.64.4",raw},ok=writeJohtoBackups([item,...list]);if(!silent)toast(ok?"🛡️ Respaldo Johto creado":"No se pudo crear el respaldo Johto");renderJohtoBackups();return ok;}catch(_){if(!silent)toast("No se pudo crear el respaldo Johto");return false;}}
 async function johtoConfirmAction(title,message,confirmText="Confirmar"){
   const fn=window.PokeSendaGameConfirm||window.gameConfirm;if(typeof fn==="function")try{return await fn({title,message,confirmText,cancelText:"Cancelar",tone:"danger",symbol:"🛡️"});}catch(_){}
   return window.confirm(message);
 }
 function renderJohtoBackups(){if(!backupOverlay)return;const box=el("pkBackupList",backupOverlay),list=readJohtoBackups();if(!box)return;if(!list.length){box.innerHTML='<div class="pk-backup-empty">Todavía no hay respaldos locales de Johto. Puedes crear uno manualmente antes de una importación o cambio importante.</div>';return;}box.innerHTML=list.map((x,i)=>{let summary="Partida Johto";try{summary=johtoSaveSummary(JSON.parse(x.raw));}catch(_){}return '<div class="pk-backup-card"><div><b>'+htmlSafe(new Date(x.createdAt).toLocaleString("es-CL"))+'</b><span>'+htmlSafe(summary)+'</span><small>'+htmlSafe(x.reason||"Respaldo")+' · '+htmlSafe(x.gameVersion||"")+'</small></div><button class="btn" type="button" data-j-backup-restore="'+i+'">Restaurar</button></div>';}).join("");qa("[data-j-backup-restore]",box).forEach(b=>b.onclick=()=>restoreJohtoBackup(Number(b.dataset.jBackupRestore)));}
-async function restoreJohtoBackup(index){const list=readJohtoBackups(),item=list[index];if(!item?.raw)return;let summary="Partida Johto";try{summary=johtoSaveSummary(JSON.parse(item.raw));}catch(_){}const ok=await johtoConfirmAction("Restaurar respaldo · Johto","Se reemplazará solamente la campaña de Johto por el respaldo del "+new Date(item.createdAt).toLocaleString("es-CL")+".\n\n"+summary+"\n\nKanto no se modificará.","Restaurar Johto");if(!ok)return;try{const current=localStorage.getItem(SAVE);if(current&&current!==item.raw)writeJohtoBackups([{createdAt:new Date().toISOString(),reason:"Antes de restaurar otro respaldo",gameVersion:"V36.64.1",raw:current},...list]);B()?.stop?.(true);localStorage.setItem(SAVE,item.raw);B()?.reload?.();backupOverlay.classList.add("hidden");showLobby();toast("✅ Respaldo de Johto restaurado");}catch(_){toast("No se pudo restaurar el respaldo Johto");}}
+async function restoreJohtoBackup(index){const list=readJohtoBackups(),item=list[index];if(!item?.raw)return;let summary="Partida Johto";try{summary=johtoSaveSummary(JSON.parse(item.raw));}catch(_){}const ok=await johtoConfirmAction("Restaurar respaldo · Johto","Se reemplazará solamente la campaña de Johto por el respaldo del "+new Date(item.createdAt).toLocaleString("es-CL")+".\n\n"+summary+"\n\nKanto no se modificará.","Restaurar Johto");if(!ok)return;try{const current=localStorage.getItem(SAVE);if(current&&current!==item.raw)writeJohtoBackups([{createdAt:new Date().toISOString(),reason:"Antes de restaurar otro respaldo",gameVersion:"V36.64.4",raw:current},...list]);B()?.stop?.(true);localStorage.setItem(SAVE,item.raw);B()?.reload?.();backupOverlay.classList.add("hidden");showLobby();toast("✅ Respaldo de Johto restaurado");}catch(_){toast("No se pudo restaurar el respaldo Johto");}}
 function refreshJohtoTransferStatus(){if(!saveTransferOverlay)return;const status=el("saveTransferStatus",saveTransferOverlay);if(status)status.innerHTML='<b>Partida local de Johto:</b> '+htmlSafe(johtoSaveSummary())+'<br><small>Exportar/importar afecta solamente al save regional de Johto. Kanto permanece intacto.</small>';}
 async function importJohtoText(rawText,fileName="respaldo"){let parsed;try{parsed=JSON.parse(rawText);}catch(_){toast("El archivo no contiene un save válido");return false;}if(parsed?.format==="PokeSendaSave"||parsed?.region==="kanto"){toast("Ese archivo corresponde a Kanto. No se importó en Johto.");return false;}const candidate=parsed?.format==="PokeSendaJohtoSave"?parsed.data:parsed;if(!candidate||typeof candidate!=="object"||Array.isArray(candidate)||!candidate.routes||!candidate.pokemon||!Array.isArray(candidate.formation)||!["j_chikorita","j_cyndaquil","j_totodile"].includes(candidate.starter)){toast("El archivo no parece ser una partida válida de Johto");return false;}const ok=await johtoConfirmAction("Importar partida · Johto","Se reemplazará solamente el progreso de Johto por:\n\n"+johtoSaveSummary(candidate)+"\n\nArchivo: "+fileName+"\n\nKanto no se modificará.","Importar Johto");if(!ok)return false;try{createJohtoBackup("Antes de importar "+fileName,true);B()?.stop?.(true);localStorage.setItem(SAVE,JSON.stringify(candidate));B()?.reload?.();saveTransferOverlay.classList.add("hidden");showLobby();toast("✅ Partida de Johto importada");return true;}catch(_){toast("No se pudo guardar la partida importada");return false;}}
 function openJohtoTransferParity(){if(!saveTransferOverlay)return;refreshJohtoTransferStatus();saveTransferOverlay.classList.remove("hidden");}
@@ -16257,7 +16264,7 @@ function renderTop(s,r){
   el("distance",game).textContent=Math.floor(dist).toLocaleString("es-CL")+" m / 10.000 m";el("bestDistance",game).textContent=((rs.bestDistance||0)/1000).toFixed(2).replace(".",",")+" km";el("objectiveFill",game).style.width=Math.min(100,dist/10000*100)+"%";el("routeHudName",game).textContent=routeInfo.name;el("nextBoss",game).textContent=dist>=10000?"final":Math.min(10,Math.floor(dist/1000)+1)+" km";
   const routeSel=el("routeSelect",game);if(routeSel){const defs=D().routes||{};routeSel.innerHTML=JOHTO_ROUTE_ORDER.map(id=>{const rd=defs[id]||{},unlocked=(routeInfo.unlocked||[]).includes(id);return '<option value="'+id+'" '+(unlocked?'':'disabled')+'>'+ (unlocked?'':'🔒 ') +(rd.name||id)+(unlocked?'':' · completa la ruta anterior')+'</option>';}).join("");routeSel.value=routeInfo.id;routeSel.disabled=!!r;}
   const field=el("field",game);field.classList.remove("route1","route2","route3","routeInfinite");
-  if(r){field.classList.remove("pk-lobby-mode");field.classList.add(routeInfo.className||"route1");q(".hud",game)?.classList.remove("hidden");}
+  if(r){field.classList.remove("pk-lobby-mode");field.classList.add(routeInfo.className||"route1");johtoClearLobbyChrome(field);q(".hud",game)?.classList.remove("hidden");}
   else{field.classList.add(routeInfo.className||"route1","pk-lobby-mode");q(".hud",game)?.classList.add("hidden");}
   const start=el("startBtn",game),stop=el("stopRunBtn",game);if(start){if(r){start.textContent=r.paused?"▶ Continuar expedición":"⏸ Pausar expedición";start.disabled=!!r.rewardPending;start.title=r.paused?"Continuar la expedición desde el punto pausado":"Pausar la expedición sin terminarla; podrás reordenar el equipo iniciado y cambiar objetos/MT";}else{start.textContent="Comenzar expedición";start.disabled=!(s.formation||[]).some(Boolean);start.title=cp?"Comenzar expedición desde "+cp.toLocaleString("es-CL")+" m":"Comenzar expedición desde 0 m";}start.classList.toggle("with-ball-icon",!r);start.classList.toggle("run-paused",!!r?.paused);start.classList.toggle("run-running",!!r&&!r.paused);}
   if(stop)stop.disabled=!r||!!r.rewardPending;
@@ -16345,11 +16352,19 @@ let johtoLobbySpeechTimer=null,johtoLobbyEasterTimer=null,johtoLobbyWasRun=false
 function johtoLobbyPhrase(id){const s=read(),p=s.pokemon?.[id],nm=p?nameDex(p.dex):"Tu Pokémon",types=p?(species(p.dex).types||[]):[],lines=[];if(types.includes("flying"))lines.push(nm+" observa el sendero desde una posición elevada.");if(types.includes("water"))lines.push(nm+" parece escuchar el agua a lo lejos.");if(types.includes("grass"))lines.push(nm+" disfruta del aire tranquilo del campamento.");lines.push(nm+" mira el camino como si ya estuviera pensando en la próxima aventura.");lines.push(nm+" se mueve un poco mientras espera la salida.");if(p?.heldItem){const it=itemDef(p.heldItem);if(it)lines.push(nm+" parece cuidar especialmente su "+it.name+".");}return lines[Math.floor(Math.random()*lines.length)];}
 function johtoLobbyShowSpeech(team,w,id,field){el('pkLobbySpeech',field)?.remove();clearTimeout(johtoLobbySpeechTimer);const fr=field.getBoundingClientRect(),wr=w.getBoundingClientRect(),b=document.createElement('div');b.id='pkLobbySpeech';b.innerHTML=htmlSafe(johtoLobbyPhrase(id))+'<small>Clic otra vez para abrir su ficha</small>';b.style.left=(wr.left-fr.left+wr.width*.5)+'px';b.style.top=(wr.top-fr.top+6)+'px';field.appendChild(b);johtoLobbySpeechTimer=setTimeout(()=>b.remove(),3300);}
 function johtoLobbyBindTalk(team,field){if(team.dataset.pkJLobbyTalkBound)return;team.dataset.pkJLobbyTalkBound='1';team.addEventListener('click',e=>{if(B()?.getRun?.()||!field.classList.contains('pk-lobby-mode'))return;const w=e.target.closest('.mon-wrap[data-j-world-id]');if(!w||!team.contains(w))return;const id=w.dataset.jWorldId;if(!id)return;const now=Date.now(),until=Number(w.dataset.pkJTalkUntil||0);if(now>until){w.dataset.pkJTalkUntil=String(now+3400);e.preventDefault();e.stopImmediatePropagation();johtoLobbyShowSpeech(team,w,id,field);}else{w.dataset.pkJTalkUntil='0';el('pkLobbySpeech',field)?.remove();}},true);}
-function johtoLobbyEnsureAmbient(field){let a=el('pkLobbyAmbient',field);if(!a){a=document.createElement('div');a.id='pkLobbyAmbient';a.innerHTML='<span class="pk-lobby-smoke s1"></span><span class="pk-lobby-smoke s2"></span><span class="pk-lobby-smoke s3"></span><span class="pk-lobby-leaf l1">🍃</span><span class="pk-lobby-leaf l2">🍂</span><span class="pk-lobby-leaf l3">🍃</span><span class="pk-lobby-butterfly b1">🦋</span><span class="pk-lobby-butterfly b2">🦋</span>';field.appendChild(a);}let b=el('pkLobbyBanner',field);if(!b){b=document.createElement('div');b.id='pkLobbyBanner';b.className='pk-lobby-banner';field.appendChild(b);}b.textContent='Campamento base · equipo listo para la próxima expedición';b.classList.remove('hidden');}
+function johtoLobbyEnsureAmbient(field){let a=el('pkLobbyAmbient',field);if(!a){a=document.createElement('div');a.id='pkLobbyAmbient';a.innerHTML='<span class="pk-lobby-smoke s1"></span><span class="pk-lobby-smoke s2"></span><span class="pk-lobby-smoke s3"></span><span class="pk-lobby-leaf l1">🍃</span><span class="pk-lobby-leaf l2">🍂</span><span class="pk-lobby-leaf l3">🍃</span><span class="pk-lobby-butterfly b1">🦋</span><span class="pk-lobby-butterfly b2">🦋</span>';field.appendChild(a);}a.classList.remove('hidden');let b=el('pkLobbyBanner',field);if(!b){b=document.createElement('div');b.id='pkLobbyBanner';b.className='pk-lobby-banner';field.appendChild(b);}b.textContent='Campamento base · equipo listo para la próxima expedición';b.classList.remove('hidden');}
 function johtoLobbyRollEaster(field){clearTimeout(johtoLobbyEasterTimer);el('pkLobbyEasterEgg',field)?.remove();if(Math.random()>=.04)return;const pool=[161,163,172,175,187,190],dex=pool[Math.floor(Math.random()*pool.length)],e=document.createElement('div');e.id='pkLobbyEasterEgg';e.style.left=(20+Math.random()*26).toFixed(1)+'%';e.style.bottom=(44+Math.random()*10).toFixed(1)+'%';e.innerHTML='<img src="'+johtoUiSprite(dex)+'" alt="Easter egg">';field.appendChild(e);johtoLobbyEasterTimer=setTimeout(()=>e.remove(),14000);}
 function johtoLobbyShowReturn(field){el('pkLobbyReturnToast',field)?.remove();const t=document.createElement('div');t.id='pkLobbyReturnToast';t.textContent='🏕 Expedición finalizada · el equipo ha regresado al campamento';field.appendChild(t);setTimeout(()=>t.remove(),3300);}
 function johtoLobbyEnter(team,field){johtoLobbyEnsureAmbient(field);johtoLobbyBindTalk(team,field);if(field.dataset.pkJLobbyEntered!=='1'){field.dataset.pkJLobbyEntered='1';johtoLobbyRollEaster(field);if(johtoLobbyWasRun){johtoLobbyShowReturn(field);johtoLobbyWasRun=false;}}}
-function johtoLobbyLeave(field){johtoLobbyWasRun=true;field.dataset.pkJLobbyEntered='0';clearTimeout(johtoLobbySpeechTimer);clearTimeout(johtoLobbyEasterTimer);el('pkLobbySpeech',field)?.remove();el('pkLobbyEasterEgg',field)?.remove();}
+function johtoClearLobbyChrome(field){
+  if(!field)return;
+  clearTimeout(johtoLobbySpeechTimer);clearTimeout(johtoLobbyEasterTimer);
+  el('pkLobbySpeech',field)?.remove();el('pkLobbyEasterEgg',field)?.remove();el('pkLobbyReturnToast',field)?.remove();
+  const banner=el('pkLobbyBanner',field),ambient=el('pkLobbyAmbient',field);
+  if(banner){banner.classList.add('hidden');banner.setAttribute('aria-hidden','true');}
+  if(ambient){ambient.classList.add('hidden');ambient.setAttribute('aria-hidden','true');}
+}
+function johtoLobbyLeave(field){johtoLobbyWasRun=true;field.dataset.pkJLobbyEntered='0';johtoClearLobbyChrome(field);}
 const JOHTO_AFFINITY_ICON_URLS={
   normal:"https://archives.bulbagarden.net/media/upload/thumb/a/ae/Normal_icon.png/20px-Normal_icon.png",
   fire:"https://archives.bulbagarden.net/media/upload/thumb/5/5e/Fire_icon.png/20px-Fire_icon.png",
@@ -16409,6 +16424,7 @@ function johtoUpdateTeamCountLayout(line){
   });
 }
 function renderWorld(s,r){
+  const field=el("field",game);if(r)johtoClearLobbyChrome(field);
   const team=el("teamLine",game),enemy=el("enemyTeamLine",game);team.innerHTML="";enemy.innerHTML="";team.classList.remove("pk-team-one","pk-team-two","pk-team-three");
   renderJohtoExpeditionAffinityHud(s,r);
   if(!r){
@@ -16631,7 +16647,7 @@ async function syncPremiumClock(force=false){
   for(const [name,url] of [["TimeAPI","https://timeapi.io/api/Time/current/zone?timeZone=UTC"],["WorldTimeAPI","https://worldtimeapi.org/api/timezone/Etc/UTC"]]){try{serverMs=await premiumFetchOnlineTime(url);if(Number.isFinite(serverMs)){source=name;break;}}catch(_){}}
   if(Number.isFinite(serverMs)){
     premiumClock={verified:true,serverMs,perfMs:performance.now(),syncing:false,lastAttempt:Date.now(),source};
-    const s=read();s.timedGacha=s.timedGacha||{};s.timedGacha.lastTrustedMs=serverMs;s.timedGacha.clockOffsetMs=serverMs-Date.now();write(s);B()?.reload?.();B()?.premiumEnsureUnlocked?.();updatePremiumUI();return true;
+    B()?.premiumSetClock?.(serverMs);B()?.premiumEnsureUnlocked?.();updatePremiumUI();return true;
   }
   premiumClock.syncing=false;updatePremiumUI();return false;
 }
@@ -16642,11 +16658,11 @@ function premiumBlocked(){
 function updatePremiumUI(){
   if(!game)return;const unlocked=!!B()?.premiumUnlocked?.();if(unlocked)B()?.premiumEnsureUnlocked?.();
   const trusted=unlocked?premiumTrustedNow():null,now=trusted??premiumApproxNow(),phase=B()?.premiumPhase?.(now)||{kind:"locked",progress:0,remaining:B()?.premiumIntervalMs||28800000},verified=!!trusted,ps=B()?.premiumState?.()||{},tg=ps.timedGacha||{},cost=Number(B()?.premiumBuyCost||250000),canAfford=Number(ps.money||0)>=cost;
-  qa("[data-tg-fill]",root).forEach(x=>x.style.width=(Math.round(Number(phase.progress||0)*1000)/10)+"%");
-  qa("[data-tg-time]",root).forEach(x=>x.textContent=phase.kind==="locked"?"🔒 Bloqueado":phase.kind==="pending"?"Recompensa pendiente":phase.kind==="ready"?(phase.gift?"¡Regalo listo!":"¡Gachapon listo!"):phase.kind==="charging"?premiumFormatDuration(phase.remaining):"Verificando...");
-  qa("[data-tg-status]",root).forEach(x=>{x.classList.toggle("online",verified);x.classList.toggle("warn",phase.kind==="locked"||!verified||phase.kind==="ready");x.textContent=phase.kind==="locked"?"Desbloquea Gachapon Programado en Automatización.":phase.kind==="pending"?"Tu Gachapon Premium ya fue reservado.":phase.kind==="ready"&&phase.gift?"Regalo de desbloqueo listo · sin espera.":verified?"Hora online ✓ · "+premiumClock.source+" · Pool Premium · 0% Comunes":"Hora online sin verificar · conecta Internet para sincronizar/reclamar";});
-  qa("[data-tg-claim]",root).forEach(btn=>{btn.classList.toggle("ready",phase.kind==="ready"&&(phase.gift||verified));btn.classList.toggle("pending",phase.kind==="pending");if(phase.kind==="locked"){btn.disabled=true;btn.textContent="🔒 Bloqueado";}else if(phase.kind==="pending"){btn.disabled=false;btn.textContent="Abrir Gachapon";}else if(phase.kind==="ready"){btn.disabled=!(phase.gift||verified);btn.textContent=phase.gift?"🎁 Abrir regalo":verified?"🎁 Reclamar":"Verificar hora";}else{btn.disabled=true;btn.textContent="Cargando...";}});
-  const boughtPending=!!tg.purchasedPending;qa("[data-tg-buy]",root).forEach(btn=>{btn.classList.toggle("pending",boughtPending);if(!unlocked){btn.disabled=true;btn.textContent="🔒 Compra bloqueada";btn.title="Desbloquea Gachapon Programado en Automatización";}else if(boughtPending){btn.disabled=false;btn.textContent="🎁 Abrir comprado";btn.title="Ya pagaste este Gachapon Premium.";}else{btn.disabled=!canAfford;btn.textContent="Comprar ₽"+cost.toLocaleString("es-CL");btn.title=canAfford?"Compra una tirada Premium inmediata. No afecta el contador gratuito de 8 horas.":"Necesitas ₽"+cost.toLocaleString("es-CL");}});
+  qa("[data-j-tg-fill]",root).forEach(x=>x.style.width=(Math.round(Number(phase.progress||0)*1000)/10)+"%");
+  qa("[data-j-tg-time]",root).forEach(x=>x.textContent=phase.kind==="locked"?"🔒 Bloqueado":phase.kind==="pending"?"Recompensa pendiente":phase.kind==="ready"?(phase.gift?"¡Regalo listo!":"¡Gachapon listo!"):phase.kind==="charging"?premiumFormatDuration(phase.remaining):"Verificando...");
+  qa("[data-j-tg-status]",root).forEach(x=>{x.classList.toggle("online",verified);x.classList.toggle("warn",phase.kind==="locked"||!verified||phase.kind==="ready");x.textContent=phase.kind==="locked"?"Desbloquea Gachapon Programado en Automatización.":phase.kind==="pending"?"Tu Gachapon Premium ya fue reservado.":phase.kind==="ready"&&phase.gift?"Regalo de desbloqueo listo · sin espera.":verified?"Hora online ✓ · "+premiumClock.source+" · Pool Premium · 0% Comunes":"Hora online sin verificar · conecta Internet para sincronizar/reclamar";});
+  qa("[data-j-tg-claim]",root).forEach(btn=>{btn.classList.toggle("ready",phase.kind==="ready"&&(phase.gift||verified));btn.classList.toggle("pending",phase.kind==="pending");if(phase.kind==="locked"){btn.disabled=true;btn.textContent="🔒 Bloqueado";}else if(phase.kind==="pending"){btn.disabled=false;btn.textContent="Abrir Gachapon";}else if(phase.kind==="ready"){btn.disabled=!(phase.gift||verified);btn.textContent=phase.gift?"🎁 Abrir regalo":verified?"🎁 Reclamar":"Verificar hora";}else{btn.disabled=true;btn.textContent="Cargando...";}});
+  const boughtPending=!!tg.purchasedPending;qa("[data-j-tg-buy]",root).forEach(btn=>{btn.classList.toggle("pending",boughtPending);if(!unlocked){btn.disabled=true;btn.textContent="🔒 Compra bloqueada";btn.title="Desbloquea Gachapon Programado en Automatización";}else if(boughtPending){btn.disabled=false;btn.textContent="🎁 Abrir comprado";btn.title="Ya pagaste este Gachapon Premium.";}else{btn.disabled=!canAfford;btn.textContent="Comprar ₽"+cost.toLocaleString("es-CL");btn.title=canAfford?"Compra una tirada Premium inmediata. No afecta el contador gratuito de 8 horas.":"Necesitas ₽"+cost.toLocaleString("es-CL");}});
   if(phase.kind==="ready"&&(phase.gift||verified)&&!premiumReadyNotified){premiumReadyNotified=true;toast(phase.gift?"🔮 ¡Gachapon desbloqueado! Tienes 1 regalo listo":"🔮 Gachapon de 8 horas listo");}if(phase.kind!=="ready")premiumReadyNotified=false;
 }
 async function claimPremiumGacha(){
@@ -16993,39 +17009,17 @@ function jGymRoleMult(entity,slot){return B()?.getGymRoleMult?.(entity,slot)||{a
 function jGymStats(){return B()?.getGymStatsTemplate?.()||{damage:0,healing:0,taken:0,kos:0,crits:0,superEffective:0,deaths:0};}
 function jGymLeaderImg(g){return "https://play.pokemonshowdown.com/sprites/trainers/"+g.portrait+".png";}
 function jGymFormatTime(sec){sec=Math.max(0,Number(sec)||0);const m=Math.floor(sec/60),s=Math.floor(sec%60),cs=Math.floor((sec-Math.floor(sec))*100);return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")+"."+String(cs).padStart(2,"0");}
-function johtoBadgeDataUri(svg){return "data:image/svg+xml;utf8,"+encodeURIComponent(String(svg||"").split("\n").join("").trim());}
-function johtoBadgeSvg(opts){
-  const bg=opts.bg||"#1a2230",stroke=opts.stroke||"#e9d487",fill=opts.fill||"#f0c85a",fill2=opts.fill2||fill,shape=opts.shape||"",detail=opts.detail||"";
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" shape-rendering="geometricPrecision">
-    <defs>
-      <radialGradient id="bg" cx="32" cy="18" r="34" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="#ffffff" stop-opacity=".28"/>
-        <stop offset="1" stop-color="${bg}" stop-opacity="1"/>
-      </radialGradient>
-      <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="${fill2}"/>
-        <stop offset="1" stop-color="${fill}"/>
-      </linearGradient>
-      <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
-        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".45"/>
-      </filter>
-    </defs>
-    <circle cx="32" cy="32" r="30" fill="url(#bg)" stroke="${stroke}" stroke-width="2"/>
-    <g filter="url(#shadow)">
-      <g fill="url(#metal)" stroke="${stroke}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">${shape}</g>
-      <g fill="none" stroke="#fff7cf" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" opacity=".9">${detail}</g>
-    </g>
-  </svg>`;
-}
+/* V36.64.3 · Sprites oficiales HGSS de las 8 medallas Johto.
+   Fuentes verificadas en Bulbagarden Archives; Kanto permanece intacto. */
 const JOHTO_BADGE_SPRITES={
- falkner:johtoBadgeDataUri(johtoBadgeSvg({bg:"#0f2336",stroke:"#abd6ff",fill:"#74c3ff",fill2:"#d4efff",shape:`<path d="M14 35c10-14 20-19 36-20-4 8-9 13-16 18l11 5c-12 4-22 6-31 7 2-3 4-6 7-10l-7 0z"/>`,detail:`<path d="M21 32c8-7 16-11 25-13"/><path d="M24 39c8-1 14-3 22-6"/>`})),
- bugsy:johtoBadgeDataUri(johtoBadgeSvg({bg:"#1f2616",stroke:"#d7ef89",fill:"#98d84a",fill2:"#f4ffb7",shape:`<path d="M32 13l14 8v16l-14 8-14-8V21z"/><path d="M32 20l7 4v8l-7 4-7-4v-8z"/>`,detail:`<path d="M18 29h10"/><path d="M36 29h10"/><path d="M32 12v8"/><path d="M32 44v8"/>`})),
- whitney:johtoBadgeDataUri(johtoBadgeSvg({bg:"#33182a",stroke:"#ffd1ea",fill:"#ff86c8",fill2:"#ffd8ef",shape:`<path d="M32 46s-15-9-15-19c0-5 4-9 9-9 3 0 5 1 6 4 1-3 3-4 6-4 5 0 9 4 9 9 0 10-15 19-15 19z"/>`,detail:`<path d="M24 25c2-2 4-3 8-3"/>`})),
- morty:johtoBadgeDataUri(johtoBadgeSvg({bg:"#1f1938",stroke:"#d8c9ff",fill:"#9a7cff",fill2:"#efe7ff",shape:`<path d="M32 13c9 7 15 15 15 23 0 8-7 14-15 14s-15-6-15-14c0-8 6-16 15-23z"/>`,detail:`<path d="M24 34c2-6 9-11 16-13"/><path d="M22 40c5 3 15 3 20 0"/>`})),
- chuck:johtoBadgeDataUri(johtoBadgeSvg({bg:"#13263a",stroke:"#bce7ff",fill:"#58b9ff",fill2:"#d8f3ff",shape:`<path d="M18 36c8-14 17-17 28-19-3 7-6 12-11 16l9 2c-6 6-16 10-26 12 1-4 2-7 4-11l-4 0z"/>`,detail:`<path d="M24 31c6-4 11-7 18-9"/><path d="M28 39c5-1 9-2 14-4"/>`})),
- jasmine:johtoBadgeDataUri(johtoBadgeSvg({bg:"#252934",stroke:"#f3f6ff",fill:"#bcc7d8",fill2:"#ffffff",shape:`<path d="M32 13l15 19-15 19-15-19z"/>`,detail:`<path d="M32 17v30"/><path d="M23 32h18"/>`})),
- pryce:johtoBadgeDataUri(johtoBadgeSvg({bg:"#142a36",stroke:"#d9f8ff",fill:"#8be7ff",fill2:"#effcff",shape:`<path d="M32 14l4 10 10-4-4 10 10 4-10 4 4 10-10-4-4 10-4-10-10 4 4-10-10-4 10-4-4-10 10 4z"/>`,detail:`<path d="M32 20v24"/><path d="M20 32h24"/>`})),
- clair:johtoBadgeDataUri(johtoBadgeSvg({bg:"#341814",stroke:"#ffd0b8",fill:"#ff8c64",fill2:"#ffe1d4",shape:`<path d="M18 43c7-18 17-26 28-30-1 8-5 14-10 20l10 3c-9 6-17 9-28 10z"/>`,detail:`<path d="M28 26c5-4 9-7 14-9"/><path d="M24 38c7-1 12-2 18-4"/>`}))
+ falkner:"https://archives.bulbagarden.net/media/upload/3/3a/HGSS_Zephyr_Badge.png",
+ bugsy:"https://archives.bulbagarden.net/media/upload/2/27/HGSS_Hive_Badge.png",
+ whitney:"https://archives.bulbagarden.net/media/upload/4/4c/HGSS_Plain_Badge.png",
+ morty:"https://archives.bulbagarden.net/media/upload/8/8b/HGSS_Fog_Badge.png",
+ chuck:"https://archives.bulbagarden.net/media/upload/d/d6/HGSS_Storm_Badge.png",
+ jasmine:"https://archives.bulbagarden.net/media/upload/6/6b/HGSS_Mineral_Badge.png",
+ pryce:"https://archives.bulbagarden.net/media/upload/2/20/HGSS_Glacier_Badge.png",
+ clair:"https://archives.bulbagarden.net/media/upload/6/69/HGSS_Rising_Badge.png"
 };
 function jGymBadgeUrl(id){return JOHTO_BADGE_SPRITES[id]||"";}
 function jGymBadgeHTML(id,cls="gym-badge-mini"){const g=jGymDefs()[id],src=jGymBadgeUrl(id);return '<span class="'+cls+'" style="--badge:'+(g?.color||"#aaa")+'" title="'+htmlSafe(g?.badge||"Medalla")+'">'+(src?'<img src="'+src+'" alt="'+htmlSafe(g?.badge||"Medalla")+'">':htmlSafe(g?.icon||"🏅"))+'</span>';}
@@ -17303,7 +17297,7 @@ function nextCelebration(){legendaryCelebrationOverlay?.classList.add("hidden");
 
 function preparePokedex(){
   if(!pokedexOverlay)return;el("pokedexCloseBtn",pokedexOverlay).onclick=()=>pokedexOverlay.classList.add("hidden");pokedexOverlay.onclick=e=>{if(e.target===pokedexOverlay)pokedexOverlay.classList.add("hidden");};const rf=el("pokedexRouteFilters",pokedexOverlay);if(rf){rf.classList.remove("hidden");const labels={route1:["Pradera","Pokémon del pool de Pradera Ámbar"],route2:["Bosque","Pokémon del pool de Bosque Ancestral"],route3:["Senda","Pokémon del pool de Senda Plateada"]};qa("[data-dex-route]",rf).forEach(b=>{const key=b.dataset.dexRoute;if(labels[key]){const count=q("b",b);b.title=labels[key][1];b.childNodes[0].nodeValue=labels[key][0]+" ";if(count)count.textContent="0/0";}});}
-  const w=q(".pokedex-welcome span",pokedexOverlay);if(w)w.textContent="Pokédex regional de Johto · misma interfaz de producción de Kanto.";
+  const w=q(".pokedex-welcome span",pokedexOverlay);if(w)w.textContent="Pokédex regional de Johto · registra las 131 especies disponibles en esta campaña.";
   el("pokedexSearch",pokedexOverlay).oninput=renderPokedex;qa("[data-dex-status]",pokedexOverlay).forEach(b=>b.onclick=()=>{pokedexFilter=b.dataset.dexStatus;renderPokedex();});qa("[data-dex-rarity]",pokedexOverlay).forEach(b=>b.onclick=()=>{pokedexOverlay.dataset.rarity=b.dataset.dexRarity||"all";renderPokedex();});qa("[data-dex-route]",pokedexOverlay).forEach(b=>b.onclick=()=>{pokedexRouteFilter=b.dataset.dexRoute||"all";renderPokedex();});
 }
 function johtoFamilyRoutes(fid){const out=[];for(const key of ["route1","route2","route3"]){const r=D().routes?.["johto_"+key];if(!r)continue;const pool=Object.values(r.gachaByRarity||{}).flat();if(pool.includes(fid)||(r.bosses||[]).includes(fid)||r.finalBoss===fid)out.push(key);}return out;}
@@ -17555,7 +17549,155 @@ function buildDoc(w){
  <div class="mid"><div id="pkfTeam" class="team"></div><div class="stats"><div class="stat"><b id="pkfMoney">₽0</b><small>Dinero</small></div><div class="stat"><b id="pkfRound">0</b><small>Oleada</small></div><div class="stat"><b id="pkfEnemies">0</b><small>Rivales</small></div><div class="stat"><b id="pkfSpeedStat">×1</b><small>Velocidad</small></div></div></div>
  <div><div class="controls"><button class="speed" data-pkf-speed="1">×1</button><button class="speed" data-pkf-speed="2">×2</button><button class="speed" data-pkf-speed="4">×4</button><button id="pkfPause" class="pause">⏸ Pausar</button><button id="pkfFocus" class="focus">↗ Juego</button><button id="pkfClose" class="close">×</button></div><div id="pkfCompat" class="compat"></div></div>
  <div id="pkfNotice" class="notice"><div><b id="pkfNoticeTitle">PokéSenda necesita atención</b><span id="pkfNoticeText"></span><button id="pkfNoticeFocus">Volver al juego</button></div></div>
- </div></body></html>`);d.close();
+ </div>
+<style id="pkJohtoOfficialBadgeSpritesV36643">
+#pkRegionRuntimeRoot .gym-badge-mini img,
+#pkRegionRuntimeRoot .profile-badge-medal img,
+#pkRegionRuntimeRoot .gym-result-badge img,
+#pkRegionRuntimeRoot .pk-public-badge img{
+  image-rendering:pixelated!important;
+  image-rendering:crisp-edges!important;
+  object-fit:contain!important;
+}
+#pkRegionRuntimeRoot .gym-badge-mini img{width:32px!important;height:32px!important;}
+#pkRegionRuntimeRoot .profile-badge-medal img{width:44px!important;height:44px!important;}
+#pkRegionRuntimeRoot .gym-result-badge img{width:68px!important;height:68px!important;}
+</style>
+
+
+<style id="pkJohtoRegionalIdentityV36644FinalChrome">
+/* V36.64.4 · Cierre de identidad Johto.
+   Solo cambia chrome/superficies neutrales del runtime regional. Colores semánticos
+   (tipos, rarezas, PS, estados, Shiny, peligro) permanecen intactos. */
+#pkRegionRuntimeRoot{
+  --j44-bg:#111813;--j44-panel:#1b251d;--j44-panel2:#222d22;
+  --j44-olive:#56623a;--j44-olive2:#39462f;--j44-gold:#d8b35a;
+  --j44-gold-hi:#f0d58a;--j44-line:#6f6847;--j44-muted:#b9bdad;
+}
+#pkRegionRuntimeRoot .overlay{
+  background:radial-gradient(circle at 50% 24%,rgba(51,63,42,.96),rgba(8,13,10,.975) 62%)!important;
+}
+#pkRegionRuntimeRoot .game{border-color:#756b43!important;box-shadow:0 25px 80px rgba(0,0,0,.48),0 0 0 1px rgba(216,179,90,.08) inset!important}
+#pkRegionRuntimeRoot .top{background:linear-gradient(180deg,#20291f,#171f19)!important;border-bottom-color:#726743!important}
+#pkRegionRuntimeRoot .right{background:linear-gradient(180deg,#19231b,#141c17)!important}
+#pkRegionRuntimeRoot .route-select{background:#182219!important;border-color:#686248!important;color:#f0ead5!important}
+#pkRegionRuntimeRoot .route-select:focus{border-color:#c49e50!important;box-shadow:0 0 0 2px rgba(216,179,90,.12)!important}
+
+/* Ventanas que no usan .modal-box y antes podían conservar azul Kanto. */
+#pkRegionRuntimeRoot .summary-box,
+#pkRegionRuntimeRoot .reward-box,
+#pkRegionRuntimeRoot .evo-card,
+#pkRegionRuntimeRoot .center-card,
+#pkRegionRuntimeRoot .loot-panel,
+#pkRegionRuntimeRoot .info-panel,
+#pkRegionRuntimeRoot .patch-notes-modal,
+#pkRegionRuntimeRoot .pokemon-detail-modal,
+#pkRegionRuntimeRoot .enemy-detail-modal,
+#pkRegionRuntimeRoot .dex-lore-modal,
+#pkRegionRuntimeRoot .tree-modal,
+#pkRegionRuntimeRoot .achievement-modal,
+#pkRegionRuntimeRoot .achievement-tm-modal,
+#pkRegionRuntimeRoot .incense-vendor-box,
+#pkRegionRuntimeRoot .route-event-box{
+  background:linear-gradient(180deg,#1d281f,#141d17)!important;
+  border-color:#746b46!important;
+  box-shadow:0 28px 90px rgba(0,0,0,.6),0 0 0 1px rgba(216,179,90,.055) inset!important;
+}
+#pkRegionRuntimeRoot .summary-box h2,
+#pkRegionRuntimeRoot .modal-box h2,
+#pkRegionRuntimeRoot .info-panel-head b,
+#pkRegionRuntimeRoot .loot-panel-head b,
+#pkRegionRuntimeRoot .patch-notes-head h2{color:#f2ead2!important}
+#pkRegionRuntimeRoot .section-title{color:#c7bd91!important}
+
+/* Cabeceras / toolbars pegajosos y superficies de navegación. */
+#pkRegionRuntimeRoot .info-panel-head,
+#pkRegionRuntimeRoot .help-search-wrap,
+#pkRegionRuntimeRoot .help-v3315 .help-tabs,
+#pkRegionRuntimeRoot .patch-notes-head{
+  background:rgba(22,31,24,.988)!important;
+  border-color:#5d5c40!important;
+}
+#pkRegionRuntimeRoot .loot-panel-head{
+  background:linear-gradient(90deg,#4b5732,#293126 58%,#463a24)!important;
+  border-bottom:1px solid #8a7542!important;
+}
+
+/* Botones de navegación que tenían skins particulares azules/marrones de Kanto. */
+#pkRegionRuntimeRoot .top-nav .btn,
+#pkRegionRuntimeRoot .pokedex-btn,
+#pkRegionRuntimeRoot .loot-btn,
+#pkRegionRuntimeRoot .achievement-btn,
+#pkRegionRuntimeRoot .tree-btn,
+#pkRegionRuntimeRoot .gym-hud-btn,
+#pkRegionRuntimeRoot .icon-only-btn:not(.danger){
+  background:linear-gradient(180deg,#3b4931,#273329)!important;
+  border-color:#6e704e!important;
+  color:#f0efe3!important;
+}
+#pkRegionRuntimeRoot .top-nav .btn:hover,
+#pkRegionRuntimeRoot .pokedex-btn:hover,
+#pkRegionRuntimeRoot .loot-btn:hover,
+#pkRegionRuntimeRoot .achievement-btn:hover,
+#pkRegionRuntimeRoot .tree-btn:hover,
+#pkRegionRuntimeRoot .gym-hud-btn:hover{filter:brightness(1.13)!important}
+
+/* Resultados/resúmenes/listados neutrales. */
+#pkRegionRuntimeRoot .metric,
+#pkRegionRuntimeRoot .drop-metric,
+#pkRegionRuntimeRoot .infinite-record-metric,
+#pkRegionRuntimeRoot .run-stat-row:not(.header),
+#pkRegionRuntimeRoot .item-run-row:not(.header),
+#pkRegionRuntimeRoot .achievement-metric,
+#pkRegionRuntimeRoot .help-now-card,
+#pkRegionRuntimeRoot .help-faq,
+#pkRegionRuntimeRoot .help-search-results,
+#pkRegionRuntimeRoot .help-search-hit,
+#pkRegionRuntimeRoot .tm-loadout-summary,
+#pkRegionRuntimeRoot .tm-rarity-rule{
+  background:#172019!important;
+  border-color:#555c43!important;
+}
+#pkRegionRuntimeRoot .run-stat-row.header,
+#pkRegionRuntimeRoot .item-run-row.header,
+#pkRegionRuntimeRoot .item-run-title,
+#pkRegionRuntimeRoot .run-summary-title{
+  background:#20291f!important;
+  border-color:#5a5b40!important;
+  color:#d8cfaa!important;
+}
+
+/* Panel de menú Johto: la imagen de fondo se reemplazará en la tanda de arte,
+   pero el cuadro y la capa de lectura ya quedan regionalizados. */
+#pkRegionRuntimeRoot #mainMenu .menu-box{
+  background:linear-gradient(180deg,rgba(28,38,30,.965),rgba(18,25,20,.975))!important;
+  border-color:#7b7047!important;
+  box-shadow:0 35px 100px rgba(0,0,0,.6),0 0 0 1px rgba(216,179,90,.07) inset!important;
+}
+#pkRegionRuntimeRoot #mainMenu::after{
+  background:radial-gradient(circle at 50% 46%,rgba(76,86,49,.04) 0 28%,rgba(18,29,20,.22) 70%,rgba(7,12,9,.52) 100%)!important;
+}
+#pkRegionRuntimeRoot .menu-patch-card,
+#pkRegionRuntimeRoot .menu-timed-gacha{background:linear-gradient(135deg,#1e2a20,#191f1a)!important;border-color:#5e6246!important}
+
+/* Barras/scroll neutrales: elimina el último brillo azul sin tocar XP/PS/tipos. */
+#pkRegionRuntimeRoot .loot-panel,
+#pkRegionRuntimeRoot .info-panel,
+#pkRegionRuntimeRoot .modal-box,
+#pkRegionRuntimeRoot .summary-box{scrollbar-color:#77734d #141c17!important}
+#pkRegionRuntimeRoot .formation-search-count,
+#pkRegionRuntimeRoot .tree-zoom-label{background:#1c251e!important;border-color:#595e45!important;color:#d5d5c7!important}
+
+/* Campamento: defensa visual adicional. Una run activa elimina pk-lobby-mode por JS;
+   si un observer tardío intenta mostrar nodos de lobby, quedan ocultos fuera del modo lobby. */
+#pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #pkLobbyBanner,
+#pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #pkLobbyAmbient,
+#pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #pkLobbySpeech,
+#pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #pkLobbyReturnToast,
+#pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #pkLobbyEasterEgg{display:none!important}
+</style>
+
+</body></html>`);d.close();
  d.querySelectorAll('[data-pkf-speed]').forEach(b=>b.onclick=()=>setSpeed(Number(b.dataset.pkfSpeed)));
  d.getElementById('pkfPause').onclick=togglePause;
  d.getElementById('pkfFocus').onclick=focusGame;
@@ -17643,7 +17785,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 
 <style id="pkJohtoRegionalIdentityV36621">
-/* V36.64.1 · Prelanzamiento Johto bloqueado para pruebas: tres rutas públicas, viaje Kanto ↔ Johto, saves regionales separados,
+/* V36.64.3 · Prelanzamiento Johto bloqueado para pruebas: tres rutas públicas, viaje Kanto ↔ Johto, saves regionales separados,
    Gimnasios/medallas funcionales, identidad dorado-plata y herramientas locales de respaldo/transferencia. */
 /* V36.63.0 · Identidad visual regional Johto · pase 1
    Solo cambia acentos cromáticos. No modifica geometría, tamaños ni colores semánticos. */
@@ -17789,6 +17931,229 @@ body > #regionSelectOverlay #regionJohtoCard.available .region-state-badge{backg
 body > #regionSelectOverlay #regionJohtoCard.available .region-card-name span{color:#d9b65e}
 body > #regionSelectOverlay #regionJohtoCard.available .region-lock{border-color:#8e713b;background:rgba(49,39,20,.72)}
 body > #regionSelectOverlay #regionJohtoCard.available .region-feature-row span{border-color:#5d5036;color:#d7c9a5}
+</style>
+
+<style id="pkJohtoRegionalIdentityV36642FullChrome">
+/* V36.64.3 · Identidad Johto total · pase 3.
+   Extiende dorado + verde oliva a TODO el chrome neutral de Johto.
+   No pisa colores semánticos: tipos, rarezas, PS, estados, Shiny ni peligro. */
+#pkRegionRuntimeRoot{
+  --bg:#111713;
+  --panel:#1b241d;
+  --panel2:#242e25;
+  --line:#5f6248;
+  --text:#f1f0e7;
+  --muted:#b8b9a8;
+  --johto-olive:#56623a;
+  --johto-olive-deep:#293426;
+  --johto-olive-soft:#3c4830;
+  --johto-gold:#d8b35a;
+  --johto-gold-hi:#f0d58a;
+  --johto-silver:#bfc5bd;
+  --johto-edge:#6f6847;
+}
+#pkRegionRuntimeRoot .overlay{background:radial-gradient(circle at 50% 24%,rgba(67,80,48,.94),rgba(7,12,9,.975) 62%)!important}
+#pkRegionRuntimeRoot .overlay>.modal-box,
+#pkRegionRuntimeRoot .overlay>.center-card,
+#pkRegionRuntimeRoot .overlay>.menu-box,
+#pkRegionRuntimeRoot .evo-overlay>.evo-card,
+#pkRegionRuntimeRoot #lootPanel,
+#pkRegionRuntimeRoot .info-panel,
+#pkRegionRuntimeRoot .pk-window{
+  background:linear-gradient(180deg,#1e281f,#171e19)!important;
+  border-color:#706845!important;
+  box-shadow:0 26px 78px rgba(0,0,0,.58),inset 0 1px 0 rgba(240,213,138,.045)!important;
+}
+#pkRegionRuntimeRoot .pk-window-header,
+#pkRegionRuntimeRoot .loot-panel-head,
+#pkRegionRuntimeRoot .patch-notes-head,
+#pkRegionRuntimeRoot .info-panel-head,
+#pkRegionRuntimeRoot .region-select-head,
+#pkRegionRuntimeRoot .pk-cloud-head{
+  background:linear-gradient(90deg,#4a542f,#292f24 58%,#3a3322)!important;
+  border-color:#857443!important;
+  color:#fff3cf!important;
+}
+#pkRegionRuntimeRoot .pk-window-header{border-bottom-color:#9a8144!important}
+#pkRegionRuntimeRoot .pk-window-header b,
+#pkRegionRuntimeRoot .loot-panel-head b,
+#pkRegionRuntimeRoot .info-panel-head b,
+#pkRegionRuntimeRoot .patch-notes-head h2{color:#fff1c5!important}
+#pkRegionRuntimeRoot .card:not(.damage-card),
+#pkRegionRuntimeRoot .team-card,
+#pkRegionRuntimeRoot .roster-card,
+#pkRegionRuntimeRoot .formation-slot,
+#pkRegionRuntimeRoot .dex-card,
+#pkRegionRuntimeRoot .pc-box-card,
+#pkRegionRuntimeRoot .achievement-card,
+#pkRegionRuntimeRoot .achievement-road-card,
+#pkRegionRuntimeRoot .gym-card,
+#pkRegionRuntimeRoot .profile-section,
+#pkRegionRuntimeRoot .profile-stat,
+#pkRegionRuntimeRoot .profile-badge,
+#pkRegionRuntimeRoot .league-member,
+#pkRegionRuntimeRoot .option-row,
+#pkRegionRuntimeRoot .help-mini-card,
+#pkRegionRuntimeRoot .tutorial-step,
+#pkRegionRuntimeRoot .help-callout,
+#pkRegionRuntimeRoot .checkpoint-choice,
+#pkRegionRuntimeRoot .tm-slot-cell,
+#pkRegionRuntimeRoot .tm-card,
+#pkRegionRuntimeRoot .loot-slot,
+#pkRegionRuntimeRoot .item-card{
+  background-color:#1b251d!important;
+  border-color:#565a40!important;
+}
+#pkRegionRuntimeRoot .formation-slot.active-slot,
+#pkRegionRuntimeRoot .gym-card.completed,
+#pkRegionRuntimeRoot .achievement-card.unlocked,
+#pkRegionRuntimeRoot .achievement-road-card.ready{border-color:#a88b48!important}
+#pkRegionRuntimeRoot .player-profile-hero{background:linear-gradient(135deg,#3e4b2d,#202b22 58%,#3c3320)!important;border-color:#8d7844!important}
+#pkRegionRuntimeRoot .profile-quick-stat,
+#pkRegionRuntimeRoot .gym-summary-stat,
+#pkRegionRuntimeRoot .gym-card-roster,
+#pkRegionRuntimeRoot .gym-rule-footer{background:#182219!important;border-color:#536043!important}
+#pkRegionRuntimeRoot .gym-card{background:linear-gradient(180deg,#263126,#182019)!important}
+#pkRegionRuntimeRoot .gym-card-portrait{background:#141c16!important;border-color:#5e6546!important}
+#pkRegionRuntimeRoot .gym-card-meta{color:#d8c98f!important}
+#pkRegionRuntimeRoot .achievement-road{background:linear-gradient(145deg,#2a2b1c,#192019)!important;border-color:#74623b!important}
+#pkRegionRuntimeRoot .achievement-overall>div,
+#pkRegionRuntimeRoot .achievement-road-progress>div{background:linear-gradient(90deg,#667343,#d8b35a)!important}
+#pkRegionRuntimeRoot .inventory-tabs,
+#pkRegionRuntimeRoot .achievement-tabs,
+#pkRegionRuntimeRoot .help-tabs{background:#151d17!important;border-color:#53573e!important}
+#pkRegionRuntimeRoot .inventory-tab,
+#pkRegionRuntimeRoot .achievement-tab,
+#pkRegionRuntimeRoot .help-tab{background:#202a21!important;border-color:#555b43!important;color:#c5c7b8!important}
+#pkRegionRuntimeRoot .inventory-tab.active,
+#pkRegionRuntimeRoot .achievement-tab.active,
+#pkRegionRuntimeRoot .help-tab.active{background:linear-gradient(180deg,#5b6339,#3b432d)!important;border-color:#b2924c!important;color:#fff3cd!important}
+#pkRegionRuntimeRoot input:not([type="range"]),
+#pkRegionRuntimeRoot select,
+#pkRegionRuntimeRoot textarea,
+#pkRegionRuntimeRoot .formation-combo-input{background:#121a14!important;border-color:#586047!important;color:#eff0e7!important}
+#pkRegionRuntimeRoot input:focus,
+#pkRegionRuntimeRoot select:focus,
+#pkRegionRuntimeRoot textarea:focus{border-color:#b08e48!important;box-shadow:0 0 0 2px rgba(216,179,90,.11)!important;outline:none!important}
+#pkRegionRuntimeRoot .btn:not(.danger),
+#pkRegionRuntimeRoot .mini-btn:not(.danger){background:linear-gradient(180deg,#39452f,#283228)!important;border-color:#626a4d!important;color:#eeefe5!important}
+#pkRegionRuntimeRoot .btn.primary{background:linear-gradient(180deg,#6c7743,#4a5633)!important;border-color:#b4934c!important;color:#fff5d8!important}
+#pkRegionRuntimeRoot .btn.warn{background:linear-gradient(180deg,#725c2e,#4c4027)!important;border-color:#b38e45!important;color:#ffe8ad!important}
+#pkRegionRuntimeRoot .btn:not(:disabled):not(.danger):hover,
+#pkRegionRuntimeRoot .mini-btn:not(:disabled):hover{filter:brightness(1.12)!important}
+#pkRegionRuntimeRoot .timed-gacha-strip,
+#pkRegionRuntimeRoot .menu-timed-gacha{background:linear-gradient(90deg,#1a241b,#24291e)!important;border-color:#68613f!important}
+#pkRegionRuntimeRoot .timed-gacha-progress{background:#111812!important;border-color:#5a6045!important}
+#pkRegionRuntimeRoot .timed-gacha-fill{background:linear-gradient(90deg,#6d7c45,#d8b35a,#f0d58a)!important}
+#pkRegionRuntimeRoot .timed-gacha-status.online{color:#a9dd86!important}
+#pkRegionRuntimeRoot .timed-gacha-status.warn{color:#efd486!important}
+#pkRegionRuntimeRoot .pk-mobile-dock,
+#pkRegionRuntimeRoot .pk-mobile-more-box{background:rgba(24,31,25,.975)!important;border-color:#716844!important}
+#pkRegionRuntimeRoot .poe-tree-scroll{border-color:#626647!important;background:radial-gradient(circle at center,#252d22 0,#151d18 52%,#0d120f 100%)!important}
+#pkRegionRuntimeRoot .pk-j-parity-safe{background:#1b281d!important;border-color:#67704d!important;border-left-color:#d8b35a!important;color:#c9cbbd!important}
+#pkRegionRuntimeRoot .route-event-timer,
+#pkRegionRuntimeRoot .run-summary,
+#pkRegionRuntimeRoot .item-run-summary{border-color:#5a5d43!important;background:#151d17!important}
+</style>
+
+<style id="pkJohtoRegionalIdentityV36642DeepNeutral">
+/* V36.64.3 · Pase profundo: elimina restos azules de Kanto en superficies neutrales. */
+#pkRegionRuntimeRoot #pokedexOverlay .modal-box,
+#pkRegionRuntimeRoot #pcBoxOverlay .modal-box,
+#pkRegionRuntimeRoot #pcSwapOverlay .modal-box,
+#pkRegionRuntimeRoot #achievementsOverlay .modal-box,
+#pkRegionRuntimeRoot #gymSelectOverlay .modal-box,
+#pkRegionRuntimeRoot #gymBattleOverlay .modal-box,
+#pkRegionRuntimeRoot #gymPotionOverlay .modal-box,
+#pkRegionRuntimeRoot #gymMonDetailOverlay .modal-box,
+#pkRegionRuntimeRoot #gymResultOverlay .modal-box,
+#pkRegionRuntimeRoot #skillTreeOverlay .modal-box,
+#pkRegionRuntimeRoot #optionsOverlay .modal-box,
+#pkRegionRuntimeRoot #playerProfileOverlay .modal-box,
+#pkRegionRuntimeRoot #pokemonDetailOverlay .modal-box,
+#pkRegionRuntimeRoot #enemyDetailOverlay .modal-box,
+#pkRegionRuntimeRoot #mtGachaOverlay .modal-box,
+#pkRegionRuntimeRoot #tmEquipOverlay .modal-box,
+#pkRegionRuntimeRoot #achievementTmChoiceOverlay .modal-box,
+#pkRegionRuntimeRoot #routeEventOverlay .modal-box,
+#pkRegionRuntimeRoot #dexLoreOverlay .modal-box,
+#pkRegionRuntimeRoot #itemEquipOverlay .modal-box,
+#pkRegionRuntimeRoot #incenseVendorOverlay .modal-box,
+#pkRegionRuntimeRoot #incenseInventoryOverlay .modal-box,
+#pkRegionRuntimeRoot #mintVendorOverlay .modal-box,
+#pkRegionRuntimeRoot #mintInventoryOverlay .modal-box,
+#pkRegionRuntimeRoot #mintUseOverlay .modal-box,
+#pkRegionRuntimeRoot #patchNotesOverlay .modal-box,
+#pkRegionRuntimeRoot #uxWhyOverlay .modal-box,
+#pkRegionRuntimeRoot #uxCompareOverlay .modal-box,
+#pkRegionRuntimeRoot #saveTransferOverlay .modal-box,
+#pkRegionRuntimeRoot #pkBackupOverlay .modal-box,
+#pkRegionRuntimeRoot #pkDiagnosticOverlay .modal-box,
+#pkRegionRuntimeRoot #pkCloudOverlay .modal-box,
+#pkRegionRuntimeRoot #pkCasinoOverlay .modal-box{
+  background:linear-gradient(180deg,#1d271f,#151d18)!important;
+  border-color:#706845!important;
+}
+#pkRegionRuntimeRoot .card:not(.gym-result-box),
+#pkRegionRuntimeRoot .formation-slot,
+#pkRegionRuntimeRoot .team-card,
+#pkRegionRuntimeRoot .roster-card,
+#pkRegionRuntimeRoot .dex-card,
+#pkRegionRuntimeRoot .pc-box-card,
+#pkRegionRuntimeRoot .achievement-card,
+#pkRegionRuntimeRoot .achievement-road-card,
+#pkRegionRuntimeRoot .profile-section,
+#pkRegionRuntimeRoot .profile-stat,
+#pkRegionRuntimeRoot .profile-badge,
+#pkRegionRuntimeRoot .league-member,
+#pkRegionRuntimeRoot .option-row,
+#pkRegionRuntimeRoot .help-mini-card,
+#pkRegionRuntimeRoot .tutorial-step,
+#pkRegionRuntimeRoot .help-callout,
+#pkRegionRuntimeRoot .checkpoint-choice,
+#pkRegionRuntimeRoot .tm-slot-cell,
+#pkRegionRuntimeRoot .tm-card,
+#pkRegionRuntimeRoot .loot-slot,
+#pkRegionRuntimeRoot .item-card,
+#pkRegionRuntimeRoot .loot-detail,
+#pkRegionRuntimeRoot .inventory-footer-block,
+#pkRegionRuntimeRoot .tm-mini-card,
+#pkRegionRuntimeRoot .matchup-box,
+#pkRegionRuntimeRoot .combat-stat,
+#pkRegionRuntimeRoot .db-stat,
+#pkRegionRuntimeRoot .damage-card,
+#pkRegionRuntimeRoot .log{
+  background:linear-gradient(180deg,#202a22,#171f19)!important;
+  border-color:#555a40!important;
+}
+#pkRegionRuntimeRoot .formation-slot.active-slot{background:linear-gradient(180deg,#273326,#1b241d)!important;border-color:#a88b48!important}
+#pkRegionRuntimeRoot .formation-slot.reserve-slot{background:linear-gradient(180deg,#222c23,#181f1a)!important;border-color:#626349!important}
+#pkRegionRuntimeRoot .formation-slot.reserve-slot.bench-guard,
+#pkRegionRuntimeRoot .formation-slot.reserve-slot.bench-striker,
+#pkRegionRuntimeRoot .formation-slot.reserve-slot.bench-support{border-left-color:#8f814f!important}
+#pkRegionRuntimeRoot .formation-empty-visual{color:#a5a78f!important;border-color:#5d6049!important}
+#pkRegionRuntimeRoot .party-lock-note{color:#d4c58e!important;border-color:#6b5f3d!important;background:#252419!important}
+#pkRegionRuntimeRoot .filter-chip:not([class*="rarity-"]):not(.dex-new-filter),
+#pkRegionRuntimeRoot .log-tab,
+#pkRegionRuntimeRoot .damage-tab{background:#202a21!important;border-color:#596047!important;color:#c8caba!important}
+#pkRegionRuntimeRoot .filter-chip.active:not([class*="rarity-"]):not(.dex-new-filter),
+#pkRegionRuntimeRoot .log-tab.active,
+#pkRegionRuntimeRoot .damage-tab.active{background:linear-gradient(180deg,#5a6339,#3b442e)!important;border-color:#aa8c49!important;color:#fff3d1!important;box-shadow:inset 0 0 0 1px rgba(240,213,138,.06)!important}
+#pkRegionRuntimeRoot .pokedex-route-filters .dex-route-route.active,
+#pkRegionRuntimeRoot .pokedex-route-filters .dex-route-cave.active,
+#pkRegionRuntimeRoot .pokedex-route-filters .dex-route-coast.active{border-color:#b0904b!important;box-shadow:0 0 0 1px rgba(216,179,90,.12) inset!important}
+#pkRegionRuntimeRoot .pill:not(.shiny-count-pill){background:#242a21!important;border-color:#5d6048!important;color:#bfc2b2!important}
+#pkRegionRuntimeRoot .pill:not(.shiny-count-pill) b{color:#ead187!important}
+#pkRegionRuntimeRoot .pokedex-welcome,
+#pkRegionRuntimeRoot .database-note,
+#pkRegionRuntimeRoot .help-hero{background:linear-gradient(135deg,#263127,#1a221c)!important;border-color:#60644a!important}
+#pkRegionRuntimeRoot .help-search,
+#pkRegionRuntimeRoot .formation-search{background:#111914!important;border-color:#596047!important}
+#pkRegionRuntimeRoot .loot-panel-head{background:linear-gradient(90deg,#4a542f,#292f24 58%,#3a3322)!important;border-bottom-color:#8a7542!important}
+#pkRegionRuntimeRoot .log{scrollbar-color:#77734d #151d17!important;color:#c4c8b9!important}
+#pkRegionRuntimeRoot .damage-bar{background:#111812!important;border-color:#4e563f!important}
+#pkRegionRuntimeRoot .xpbar,
+#pkRegionRuntimeRoot .timebar{background:#101713!important;border-color:#555b45!important}
 </style>
 </body>
 </html>

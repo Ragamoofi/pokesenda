@@ -7441,7 +7441,15 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
     run.roundCombatants=Array.isArray(run.roundCombatants)?run.roundCombatants:[];
     for(const id of ids||[])if(id&&run.team?.[id]?.alive&&!run.roundCombatants.includes(id))run.roundCombatants.push(id);
   }
-  function showXpPop(id,amount){if(pkBackgroundCatchingUp)return;const avatar=$("avatar-"+id);if(!avatar)return;const pop=document.createElement("div");pop.className="xp-float";pop.textContent=`+${amount} XP`;avatar.appendChild(pop);setTimeout(()=>pop.remove(),1300);}
+  const pkXpFloatLastAt=new Map();
+  function showXpPop(id,amount){
+    if(pkBackgroundCatchingUp)return;const avatar=$("avatar-"+id);if(!avatar)return;
+    // Feedback visual, no lógica: a x2/x4 varias rondas pueden terminar antes de que desaparezca el popup anterior.
+    // Máximo uno por Pokémon cada 1,5 s reales y nunca se apilan nodos .xp-float.
+    const now=performance.now(),last=Number(pkXpFloatLastAt.get(id)||0);if(now-last<1500)return;pkXpFloatLastAt.set(id,now);
+    avatar.querySelectorAll(":scope > .xp-float").forEach(x=>x.remove());
+    const pop=document.createElement("div");pop.className="xp-float";pop.textContent=`+${amount} XP`;avatar.appendChild(pop);setTimeout(()=>pop.remove(),1300);
+  }
   function awardRoundXp(isBoss=false){
     if(!run)return;
     const ids=(run.partyIds||[]).filter(id=>state.progress[id]&&run.team[id]?.alive);
@@ -16346,7 +16354,7 @@ const JOHTO_MUSIC_TRACKS={
   littleroot:{name:"Littleroot Town",sourceId:"musicLittlerootSource"}
 };
 const JOHTO_MUSIC_KEYS=Object.keys(JOHTO_MUSIC_TRACKS);
-let johtoMusicBound=false,johtoMusicSessionStarted=false,kantoMusicSuspended=false;
+let johtoMusicBound=false,johtoMusicSessionStarted=false,johtoIntroPlaying=false,johtoIntroFinished=false,kantoMusicSuspended=false;
 function johtoGlobalVolume(id,fallback){const x=document.querySelector("body > #optionsOverlay #"+CSS.escape(id)),v=Number(x?.value);return Number.isFinite(v)?Math.max(0,Math.min(1,v/100)):fallback;}
 function johtoMusicVolume(){return johtoGlobalVolume("musicVolumeRange",.22);}
 function johtoSfxVolume(){return johtoGlobalVolume("sfxVolumeRange",.60);}
@@ -16362,8 +16370,11 @@ function johtoSuspendKantoMusic(){
   if(!kantoMusicSuspended)kantoMusicSuspended=true;
   for(const id of ["introMusic","bgMusic","menuMusic"]){const a=document.querySelector("body > #"+id);try{a?.pause?.();}catch(_){ }}
 }
-function johtoSetMusicTrack(key,playNow=true,reset=true){
-  const audio=document.querySelector("body > #johtoBgMusic");if(!audio)return;key=JOHTO_MUSIC_TRACKS[key]?key:JOHTO_MUSIC_KEYS[0];const src=johtoMusicSource(key);if(!src)return;
+function johtoSetMusicTrack(key,playNow=true,reset=true,force=false){
+  const audio=document.querySelector("body > #johtoBgMusic");if(!audio)return;
+  // El tema de entrada posee el reproductor hasta su evento real `ended`. Ningún menú ni selector puede cortarlo.
+  if(johtoIntroPlaying&&!force)return;
+  key=JOHTO_MUSIC_TRACKS[key]?key:JOHTO_MUSIC_KEYS[0];const src=johtoMusicSource(key);if(!src)return;
   if(audio.dataset.trackKey!==key){audio.pause();audio.src=src;audio.dataset.trackKey=key;try{audio.currentTime=0;}catch(_){ }audio.load();}
   else if(reset){try{audio.currentTime=0;}catch(_){ }}
   audio.loop=false;audio.muted=false;audio.volume=johtoMusicVolume();johtoStoreTrack(key);
@@ -16371,26 +16382,45 @@ function johtoSetMusicTrack(key,playNow=true,reset=true){
 }
 function johtoPlayIntro(){
   const audio=document.querySelector("body > #johtoBgMusic");if(!audio)return;
+  johtoIntroPlaying=true;johtoIntroFinished=false;
   audio.pause();audio.src=JOHTO_INTRO_MUSIC.src;audio.dataset.trackKey=JOHTO_INTRO_MUSIC.key;audio.loop=false;audio.muted=false;audio.volume=johtoMusicVolume();
-  try{audio.currentTime=0;}catch(_){ }audio.load();if(audio.volume>0)audio.play().catch(()=>{});
+  try{audio.currentTime=0;}catch(_){ }audio.load();
+  if(audio.volume>0)audio.play().catch(()=>{
+    // Si el navegador exige interacción, conservamos el tema de entrada pendiente: jamás saltamos a Route 101 por un play() rechazado.
+    const resume=()=>{if(johtoIntroPlaying&&root&&!root.classList.contains("hidden")&&audio.paused&&audio.volume>0)audio.play().catch(()=>{});};
+    root?.addEventListener("pointerdown",resume,{once:true,capture:true});
+  });
 }
 function johtoAdvanceMusicPlaylist(){
   const audio=document.querySelector("body > #johtoBgMusic"),cur=audio?.dataset.trackKey||"";
-  if(cur===JOHTO_INTRO_MUSIC.key){johtoSetMusicTrack(JOHTO_MUSIC_KEYS[0],true,true);return;}
-  const idx=JOHTO_MUSIC_KEYS.indexOf(cur),next=JOHTO_MUSIC_KEYS[(idx>=0?idx+1:0)%JOHTO_MUSIC_KEYS.length];johtoSetMusicTrack(next,true,true);
+  if(cur===JOHTO_INTRO_MUSIC.key||johtoIntroPlaying){
+    johtoIntroPlaying=false;johtoIntroFinished=true;
+    johtoSetMusicTrack(JOHTO_MUSIC_KEYS[0],true,true,true);
+    if(optionsOverlay&&!optionsOverlay.classList.contains("hidden"))renderOptions();
+    return;
+  }
+  const idx=JOHTO_MUSIC_KEYS.indexOf(cur),next=JOHTO_MUSIC_KEYS[(idx>=0?idx+1:0)%JOHTO_MUSIC_KEYS.length];johtoSetMusicTrack(next,true,true,true);
 }
 function johtoBindMusic(){
   if(johtoMusicBound)return;johtoMusicBound=true;const audio=document.querySelector("body > #johtoBgMusic");if(!audio)return;
-  audio.loop=false;audio.addEventListener("ended",johtoAdvanceMusicPlaylist);audio.addEventListener("error",()=>{if(root&&!root.classList.contains("hidden"))setTimeout(johtoAdvanceMusicPlaylist,0);});
+  audio.loop=false;audio.addEventListener("ended",johtoAdvanceMusicPlaylist);audio.addEventListener("error",()=>{
+    if(!root||root.classList.contains("hidden"))return;
+    // Un fallo al cargar el tema de entrada NO debe hacer arrancar Route 101. Así detectamos un asset faltante en vez de ocultar el problema.
+    if(audio.dataset.trackKey===JOHTO_INTRO_MUSIC.key||johtoIntroPlaying){johtoIntroPlaying=true;console.error("PokéSenda · no se pudo cargar el tema de entrada Johto:",JOHTO_INTRO_MUSIC.src);toast("⚠️ Falta cargar el tema Pokémon Johto en assets/embedded");return;}
+    setTimeout(johtoAdvanceMusicPlaylist,0);
+  });
 }
 function johtoSyncMusicVolume(){const audio=document.querySelector("body > #johtoBgMusic");if(!audio)return;audio.volume=johtoMusicVolume();if(audio.volume<=0){audio.pause();return;}if(root&&!root.classList.contains("hidden")&&audio.paused)audio.play().catch(()=>{});}
 function johtoStartMusic(){
   johtoBindMusic();johtoSuspendKantoMusic();const audio=document.querySelector("body > #johtoBgMusic");if(!audio)return;
-  if(!johtoMusicSessionStarted){johtoMusicSessionStarted=true;johtoPlayIntro();return;}
-  audio.volume=johtoMusicVolume();audio.muted=false;if(audio.volume>0&&audio.paused)audio.play().catch(()=>{});
+  if(!johtoMusicSessionStarted){johtoMusicSessionStarted=true;johtoIntroPlaying=false;johtoIntroFinished=false;johtoPlayIntro();return;}
+  audio.volume=johtoMusicVolume();audio.muted=false;
+  // Navegar entre menú, perfil, opciones y juego regional nunca sustituye el tema de entrada.
+  if(johtoIntroPlaying&&audio.dataset.trackKey!==JOHTO_INTRO_MUSIC.key){johtoPlayIntro();return;}
+  if(audio.volume>0&&audio.paused)audio.play().catch(()=>{});
 }
 function johtoStopMusicAndRestoreKanto(){
-  const ja=document.querySelector("body > #johtoBgMusic");try{ja?.pause?.();if(ja)ja.currentTime=0;}catch(_){ }johtoMusicSessionStarted=false;kantoMusicSuspended=false;
+  const ja=document.querySelector("body > #johtoBgMusic");try{ja?.pause?.();if(ja)ja.currentTime=0;}catch(_){ }johtoMusicSessionStarted=false;johtoIntroPlaying=false;johtoIntroFinished=false;kantoMusicSuspended=false;
   const vol=johtoMusicVolume(),intro=document.querySelector("body > #introMusic"),bg=document.querySelector("body > #bgMusic");if(vol<=0)return;
   const introActive=!!intro&&!intro.ended&&intro.dataset.pkIntroDone!=="1";if(introActive){intro.muted=false;intro.volume=Math.max(0,Math.min(1,vol*.78));intro.play?.().catch?.(()=>{});}else if(bg){bg.muted=false;bg.volume=vol;bg.play?.().catch?.(()=>{});}
 }
@@ -17270,7 +17300,7 @@ function prepareOptions(){
   qa("[data-speed]",optionsOverlay).forEach(b=>b.onclick=()=>{B()?.setSpeed?.(Number(b.dataset.speed));renderOptions();renderAll();});
   for(const [id,key] of [["animationsToggle","animations"],["combatFloatsToggle","combatFloats"],["confirmStopToggle","confirmStop"],["routeEventsToggle","routeEvents"]]){const x=el(id,optionsOverlay);if(x)x.onchange=()=>{B()?.setPlainOption?.(key,!!x.checked);renderOptions();};}
   const fs=el("fullscreenBtn",optionsOverlay);if(fs)fs.onclick=()=>{document.fullscreenElement?document.exitFullscreen?.():document.documentElement.requestFullscreen?.();};
-  const mv=el("musicVolumeRange",optionsOverlay),mt=el("musicTrackSelect",optionsOverlay),sv=el("sfxVolumeRange",optionsOverlay);if(mv){mv.disabled=false;mv.oninput=()=>{bridgeOriginalOption("musicVolumeRange","input",mv.value);johtoSuspendKantoMusic();johtoSyncMusicVolume();renderOptions();};}if(mt){mt.disabled=false;mt.innerHTML=johtoMusicOptionsHTML();mt.onchange=()=>{johtoSetMusicTrack(mt.value,true,true);renderOptions();};}if(sv){sv.disabled=false;sv.oninput=()=>{bridgeOriginalOption("sfxVolumeRange","input",sv.value);renderOptions();};}
+  const mv=el("musicVolumeRange",optionsOverlay),mt=el("musicTrackSelect",optionsOverlay),sv=el("sfxVolumeRange",optionsOverlay);if(mv){mv.disabled=false;mv.oninput=()=>{bridgeOriginalOption("musicVolumeRange","input",mv.value);johtoSuspendKantoMusic();johtoSyncMusicVolume();renderOptions();};}if(mt){mt.disabled=johtoIntroPlaying;mt.innerHTML=johtoMusicOptionsHTML();mt.title=johtoIntroPlaying?"Disponible cuando termine Pokémon Johto":"";mt.onchange=()=>{if(johtoIntroPlaying){toast("🎵 Pokémon Johto terminará primero");renderOptions();return;}johtoSetMusicTrack(mt.value,true,true);renderOptions();};}if(sv){sv.disabled=false;sv.oninput=()=>{bridgeOriginalOption("sfxVolumeRange","input",sv.value);renderOptions();};}
   const cloud=el("optionsCloudSaveBtn",optionsOverlay);if(cloud){cloud.disabled=false;cloud.title="Cloud Save · Johto próximamente";cloud.onclick=openJohtoCloudParity;}
   const transfer=el("optionsTransferSaveBtn",optionsOverlay);if(transfer){transfer.disabled=false;transfer.title="Exportar o importar solamente la campaña de Johto";transfer.onclick=openJohtoTransferParity;}
   const backups=el("optionsBackupsBtn",optionsOverlay);if(backups){backups.disabled=false;backups.title="Respaldos locales exclusivos de Johto";backups.onclick=openJohtoBackupsParity;}
@@ -17279,7 +17309,7 @@ function prepareOptions(){
 function renderOptions(){
   const s=read();qa("[data-speed]",optionsOverlay).forEach(b=>b.classList.toggle("active",Number(b.dataset.speed)===Number(s.options?.battleSpeed||1)));
   for(const [id,key] of [["animationsToggle","animations"],["combatFloatsToggle","combatFloats"],["confirmStopToggle","confirmStop"],["routeEventsToggle","routeEvents"]]){const x=el(id,optionsOverlay);if(x)x.checked=s.options?.[key]!==false;}
-  for(const id of ["musicVolumeRange","sfxVolumeRange"]){const orig=document.querySelector("body > #optionsOverlay #"+CSS.escape(id)),x=el(id,optionsOverlay);if(orig&&x)x.value=orig.value;}const mt=el("musicTrackSelect",optionsOverlay);if(mt){if(!mt.options.length)mt.innerHTML=johtoMusicOptionsHTML();mt.value=johtoTrackKey();}const mv=el("musicVolumeValue",optionsOverlay),sv=el("sfxVolumeValue",optionsOverlay);if(mv&&el("musicVolumeRange",optionsOverlay))mv.textContent=el("musicVolumeRange",optionsOverlay).value+"%";if(sv&&el("sfxVolumeRange",optionsOverlay))sv.textContent=el("sfxVolumeRange",optionsOverlay).value+"%";
+  for(const id of ["musicVolumeRange","sfxVolumeRange"]){const orig=document.querySelector("body > #optionsOverlay #"+CSS.escape(id)),x=el(id,optionsOverlay);if(orig&&x)x.value=orig.value;}const mt=el("musicTrackSelect",optionsOverlay);if(mt){if(!mt.options.length)mt.innerHTML=johtoMusicOptionsHTML();mt.value=johtoTrackKey();mt.disabled=johtoIntroPlaying;mt.title=johtoIntroPlaying?"Disponible cuando termine Pokémon Johto":"";}const mv=el("musicVolumeValue",optionsOverlay),sv=el("sfxVolumeValue",optionsOverlay);if(mv&&el("musicVolumeRange",optionsOverlay))mv.textContent=el("musicVolumeRange",optionsOverlay).value+"%";if(sv&&el("sfxVolumeRange",optionsOverlay))sv.textContent=el("sfxVolumeRange",optionsOverlay).value+"%";
 }
 function openOptions(){renderOptions();optionsOverlay.classList.remove("hidden");}
 function prepareMT(){

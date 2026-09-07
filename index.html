@@ -3013,6 +3013,20 @@ body .formation-slot.ko-slot:after{content:"KO";position:absolute;right:7px;top:
 body .formation-slot.ko-slot .formation-pokemon img{filter:grayscale(.12) sepia(1) saturate(7.5) hue-rotate(315deg) brightness(.82) contrast(1.28) drop-shadow(0 0 7px rgba(255,35,45,.75)) drop-shadow(0 5px 5px rgba(0,0,0,.62))!important;opacity:.74!important}
 body .formation-slot.ko-slot .formation-pokemon b,body .formation-slot.ko-slot [data-pk-form-hp],#pkRegionRuntimeRoot .formation-slot.ko-slot [data-j-form-hp]{color:#ff9a9f!important;text-shadow:0 1px 2px #590008!important}
 </style>
+
+<style id="pkControlActiveContrastV3665">
+/* Estado activo inequívoco para Automatización y Velocidad. */
+.auto-btn.active,.speed-btn.active,.quick-speed-btn.active{
+  background:linear-gradient(180deg,#36a866,#176b3d)!important;border-color:#a7ffbf!important;color:#fff!important;
+  box-shadow:0 0 0 2px rgba(167,255,191,.30),0 0 18px rgba(55,225,118,.52),inset 0 0 11px rgba(255,255,255,.13)!important;
+  filter:saturate(1.22) brightness(1.09)!important;transform:translateY(-1px);font-weight:900!important;
+}
+#pkRegionRuntimeRoot .auto-btn.active,#pkRegionRuntimeRoot .speed-btn.active,#pkRegionRuntimeRoot .quick-speed-btn.active{
+  background:linear-gradient(180deg,#86752f,#4d5421)!important;border-color:#f5d96c!important;color:#fff8c6!important;
+  box-shadow:0 0 0 2px rgba(245,217,108,.26),0 0 18px rgba(212,182,67,.46),inset 0 0 11px rgba(255,244,177,.12)!important;
+}
+#pkRegionRuntimeRoot .auto-btn.active::after{content:" · ON";font-size:.82em;letter-spacing:.04em}
+</style>
 </head>
 <body>
 
@@ -15553,7 +15567,7 @@ function tick(){
   const baseDt=Math.min(.25,realGap||.10);johtoSimStep(baseDt*Math.max(1,Number(run.speed||1)));
 }
 function schedule(){clearInterval(timer);timer=null;if(run&&!floatingDriver)timer=setInterval(tick,100);}
-function queueAutoRestart(){floatingAutoRestartPending=true;backgroundAutoRestartWallMs=Date.now();if(floatingDriver)return;setTimeout(()=>{if(run||!floatingAutoRestartPending)return;const started=Number(backgroundAutoRestartWallMs||Date.now()),overdue=Math.max(0,(Date.now()-started)/1000);startRun();if(run&&overdue>.35)johtoProcessBackgroundGap(overdue);},0);}
+function queueAutoRestart(){floatingAutoRestartPending=true;backgroundAutoRestartWallMs=Date.now();if(floatingDriver)return;setTimeout(()=>{if(run||!floatingAutoRestartPending)return;if(!js.options.autoRepeat||skillRank("a3")<1||!formationIds().length){floatingAutoRestartPending=false;backgroundAutoRestartWallMs=0;return;}const started=Number(backgroundAutoRestartWallMs||Date.now()),overdue=Math.max(0,(Date.now()-started)/1000);startRun();if(run&&overdue>.35)johtoProcessBackgroundGap(overdue);},0);}
 
 function log(s){if(!run)return;run.log=[s,...(run.log||[])].slice(0,24);if(backgroundCatchingUp)return;$("pkIsoBattleLog").innerHTML=run.log.map(x=>"• "+x).join("<br>");}
 function killEnemy(e,killer){if(!e?.alive)return;e.alive=false;e.hp=0;if(killer&&run.stats[killer])run.stats[killer].kos++;run.roundXp+=e.xp;run.defeated++;js.stats.defeated++;const moneyPairs=battleIds().map(pid=>[pid,Number(derivedFor(pid).moneyBonus||0)]).sort((a,b)=>b[1]-a[1]),moneyHolder=moneyPairs[0]?.[0]||null,heldMoney=moneyPairs[0]?.[1]||0,baseMult=1+.025*skillRank("f1")+(skillRank("f8") ? 0.10 : 0)+(skillRank("trainer") ? 0.03 : 0),repeatMult=Number(currentRouteState()?.completions||0)>0?(e.boss?.50:.35):1,unit=(2+e.level*.72)*(e.boss?5:1)*repeatMult,baseMoney=Math.max(1,Math.round(unit*baseMult)),money=Math.max(1,Math.round(unit*(baseMult+heldMoney)));js.money=(js.money||0)+money;run.earned+=money;if(moneyHolder&&heldMoney>0){const itemId=js.pokemon?.[moneyHolder]?.heldItem,item=currentItem(js.pokemon?.[moneyHolder]);if(itemId&&item?.money)recordItemContribution(moneyHolder,itemId,"moneyBonus",Math.max(0,money-baseMoney));}tryHeldItemDrop(e);save();if(livingEnemies().length)return;awardRoundXp(e.boss);if(run.eventBattle){completeEventBattle();return;}if(e.boss)completeBoss();else{rollPotion();rollEvolution();finishNormalRound();}}
@@ -15678,11 +15692,20 @@ function captureDex(fid,level){
   const natural=johtoNaturalCaptureDexes(fid,level);if(natural.length<=1)return Number(natural[0]||fam(fid)?.members?.[0]||152);
   const highest=natural[natural.length-1],r=Math.random();if(r<.34)return Number(natural[0]);if(natural.length>=3&&r<.52)return Number(natural[natural.length-2]);if(r<.86)return Number(highest);return Number(natural[Math.floor(Math.random()*natural.length)]);
 }
+function johtoAutoOpenReward(){
+  if(!reward||reward.opened||!js.options.autoOpen||skillRank("a2")<1)return false;
+  reward.opened=true;
+  const incenseType=reward.incenseType||null;
+  if(incenseType){const iid=incenseItemId(incenseType);if(Number(js.inventory?.[iid]||0)>0){js.inventory[iid]--;if(js.inventory[iid]<=0)delete js.inventory[iid];}else reward.incenseType=null;}
+  const activeIncense=reward.incenseType||null,winner=rollReward(reward.km,activeIncense);reward.roll=winner;save();
+  log("⚡ Auto Poké Ball: "+name(winner.dex)+" Nv."+winner.level+" capturado automáticamente.");
+  finalizeReward(winner);return true;
+}
 function showReward(km){
   reward={km,roll:null,opened:false};
-  if(window.PokeSendaJohtoRuntime?.onRewardReady){window.PokeSendaJohtoRuntime.onRewardReady(km);if(js.options.autoOpen&&skillRank("a2")>=1)setTimeout(openReward,350);return;}
+  if(window.PokeSendaJohtoRuntime?.onRewardReady){window.PokeSendaJohtoRuntime.onRewardReady(km);if(js.options.autoOpen&&skillRank("a2")>=1)setTimeout(johtoAutoOpenReward,90);return;}
   document.querySelectorAll("#pkIsoJohtoRoot .pk-iso-panel").forEach(x=>x.classList.add("hidden"));$("pkIsoBattleReward").classList.remove("hidden");$("pkIsoRewardKicker").textContent="🎰 GACHAPON · KM "+km;$("pkIsoRewardTitle").textContent=km===10?"Jefe final derrotado":"Jefe del km "+km+" derrotado";$("pkIsoRewardSubtitle").textContent="Como en Kanto, cada jefe de kilómetro protege una recompensa.";$("pkIsoRewardClosed").classList.remove("hidden");$("pkIsoRouletteWrap").classList.add("hidden");$("pkIsoBattleRewardCard").classList.add("hidden");$("pkIsoBattleRewardContinue").classList.add("hidden");$("pkIsoRouletteStrip").style.transform="translateX(0)";
-  if(js.options.autoOpen)setTimeout(openReward,350);
+  if(js.options.autoOpen&&skillRank("a2")>=1)setTimeout(johtoAutoOpenReward,90);
 }
 function openReward(){
   if(!reward||reward.opened)return;
@@ -15722,14 +15745,17 @@ function continueReward(){
   run.spawnDelay=.9;openBattle();render();
 }
 function completeRoute(){
-  const rid=currentRouteId(),rs=currentRouteState(),firstCasinoUnlock=rid==="johto_route2"&&Number(rs.completions||0)===0;rs.completions++;if(rid==="johto_route2")ensureJohtoCasinoState().unlocked=true;rs.bestDistance=MAX_DISTANCE;if(rs.farmCheckpoint===null||rs.farmCheckpoint===undefined||rs.farmCheckpoint==="auto")rs.farmCheckpoint=0;rs.checkpoint=routeStartPoint();
+  const rid=currentRouteId(),rs=currentRouteState(),beforeCompletions=Number(rs.completions||0),casinoBefore=!!ensureJohtoCasinoState().unlocked;
+  rs.completions=beforeCompletions+1;
+  let casinoJustUnlocked=false;if(rid==="johto_route2"){const c=ensureJohtoCasinoState();casinoJustUnlocked=!casinoBefore||beforeCompletions===0;c.unlocked=true;}
+  rs.bestDistance=MAX_DISTANCE;if(rs.farmCheckpoint===null||rs.farmCheckpoint===undefined||rs.farmCheckpoint==="auto")rs.farmCheckpoint=0;rs.checkpoint=routeStartPoint();
   const fullFromZero=Number(run?.startDistance||0)===0;if(fullFromZero&&!johtoMtGachaPoolCompleted())js.mtGacha.tickets=Math.max(0,Number(js.mtGacha.tickets||0))+1;
   const idx=JOHTO_ROUTE_ORDER.indexOf(rid),next=JOHTO_ROUTE_ORDER[idx+1];let unlockedNext=null;
   if(next&&!js.unlockedRoutes.includes(next)){js.unlockedRoutes.push(next);unlockedNext={id:next,name:DATA().routes?.[next]?.name||next};}
-  pushHistory("Completada",MAX_DISTANCE,{mtTicket:fullFromZero});save();const auto=js.options.autoRepeat;run=null;
+  pushHistory("Completada",MAX_DISTANCE,{mtTicket:fullFromZero});save();const auto=!!js.options.autoRepeat&&skillRank("a3")>=1&&formationIds().length>0;run=null;
   if(unlockedNext)window.PokeSendaJohtoRuntime?.onRouteUnlocked?.(unlockedNext);
-  if(firstCasinoUnlock)window.PokeSendaJohtoRuntime?.onCasinoUnlocked?.();
-  if(auto){queueAutoRestart();return;}if(window.PokeSendaJohtoRuntime?.showLobby)window.PokeSendaJohtoRuntime.showLobby();else API()?.open?.();
+  if(casinoJustUnlocked)window.PokeSendaJohtoRuntime?.onCasinoUnlocked?.();
+  if(auto){queueAutoRestart();return;}if(window.PokeSendaJohtoRuntime?.showGame)window.PokeSendaJohtoRuntime.showGame();else if(window.PokeSendaJohtoRuntime?.showLobby)window.PokeSendaJohtoRuntime.showLobby();else API()?.open?.();
 }
 function rollPotion(){
   const mult=1+.05*skillRank("f10");if(Math.random()>=currentDropProfile().potionDropChance*mult)return;
@@ -16091,7 +16117,7 @@ function startRun(){
 }
 function openBattle(){if(window.PokeSendaJohtoRuntime?.showGame){window.PokeSendaJohtoRuntime.showGame();return;}document.querySelectorAll("#pkIsoJohtoRoot .pk-iso-panel").forEach(x=>x.classList.add("hidden"));$("pkIsoJohtoRoot").classList.remove("hidden");$("pkIsoBattle").classList.remove("hidden");}
 function failRun(){
-  clearInterval(timer);timer=null;const rs=currentRouteState();rs.deaths++;rs.bestDistance=Math.max(rs.bestDistance,run.distance);const failedDistance=Math.floor(run.distance),failedCheckpoint=routeStartPoint(),summary=johtoRunSummarySnapshot("defeat",failedDistance,failedCheckpoint);pushHistory("Derrota",run.distance);save();const auto=js.options.autoRepeat;
+  clearInterval(timer);timer=null;const rs=currentRouteState();rs.deaths++;rs.bestDistance=Math.max(rs.bestDistance,run.distance);const failedDistance=Math.floor(run.distance),failedCheckpoint=routeStartPoint(),summary=johtoRunSummarySnapshot("defeat",failedDistance,failedCheckpoint);pushHistory("Derrota",run.distance);save();const auto=!!js.options.autoRepeat&&skillRank("a3")>=1&&formationIds().length>0;
   if(auto){run=null;queueAutoRestart();return;}
   if(window.PokeSendaJohtoRuntime?.onRunFailed){run=null;window.PokeSendaJohtoRuntime.onRunFailed(failedDistance,failedCheckpoint,summary);return;}
   $("pkIsoRunEndText").textContent="Llegaste a "+failedDistance+" m. La siguiente expedición partirá desde "+failedCheckpoint+" m.";$("pkIsoRunEnd").classList.remove("hidden");
@@ -16758,7 +16784,7 @@ function prepareGame(){
   updatePremiumUI();if(!premiumUiTimer)premiumUiTimer=setInterval(()=>{if(!root?.classList.contains("hidden"))updatePremiumUI();},1000);
   game.addEventListener("click",e=>{const mon=e.target.closest?.("[data-j-pokemon]");if(mon)openDetail(mon.dataset.jPokemon);});
 }
-function toggleOpt(k){const s=B()?.getState?.()||read(),v=!s.options?.[k];B()?.setOption?.(k,v);renderAll();}
+function toggleOpt(k){const s=B()?.getState?.()||read(),v=!s.options?.[k],ok=B()?.setOption?.(k,v),labels={autoOpen:"Auto Poké Ball",autoRepeat:"Auto-repetir",autoPotion:"Auto-Poción"};if(ok)toast((v?"✓ ":"○ ")+(labels[k]||k)+" "+(v?"ACTIVADO":"desactivado"));else if(v)toast("🔒 "+(labels[k]||k)+" todavía no está desbloqueado en el Árbol.");renderAll();}
 function raiseGlobalOverlay(id){const ov=document.getElementById(id);if(!ov)return null;ov.style.zIndex="480100";return ov;}
 function openGlobalCloudFromJohto(){const ov=raiseGlobalOverlay("pkCloudOverlay");raiseGlobalOverlay("pkCloudConflictOverlay");if(!window.PKCloud?.open||!ov)return toast("Cloud Save no está disponible en esta carga.");window.PKCloud.open();}
 function openSharedTrainerCreator(){
@@ -17278,13 +17304,12 @@ function onCenterClose(){centerOverlay.classList.add("hidden");showGame();}
 function prepareReward(){if(!rewardOverlay)return;el("openChestBtn",rewardOverlay).onclick=()=>premiumSession?revealPremiumReward():B()?.openReward?.();el("rewardContinueBtn",rewardOverlay).onclick=()=>premiumSession?closePremiumReward():B()?.continueReward?.();const sel=el("gachaIncenseSelect",rewardOverlay);if(sel)sel.onchange=()=>{const type=sel.value||null;if(!B()?.setRewardIncense?.(type)){sel.value="";}renderRewardIncense();};}
 function onRewardReady(km){el("rewardBox",rewardOverlay)?.classList.remove("pk-premium-reward");rewardOverlay.classList.remove("hidden");const ri=B()?.getCurrentRouteInfo?.()||{name:"Johto"};el("rewardTitle",rewardOverlay).textContent=km===10?"Recompensa final de "+ri.name:"Recompensa del km "+km;el("rewardSubtitle",rewardOverlay).textContent="La Poké Ball contiene una tirada aleatoria del pool real de esta zona.";el("closedChest",rewardOverlay).style.display="block";el("rouletteWrap",rewardOverlay).style.display="none";el("rewardResult",rewardOverlay).style.display="none";el("openChestBtn",rewardOverlay).textContent="Capturar";const lg=q(".reward-legend",rewardOverlay);if(lg)lg.textContent="Al pulsar Capturar comienza la ruleta. El Incienso seleccionado se consume en ese momento.";renderRewardIncense();johtoPlayKantoSfx("gachaponWeySfx");}
 function onRouteUnlocked(info){
-  const name=String(info?.name||"Nueva ruta");toast("🗺️ NUEVA RUTA · "+name+" desbloqueada");johtoNotifyUnlock(name+" desbloqueada","Ya puedes continuar tu aventura en "+name+" desde el selector de rutas.","🗺️");
-  try{renderTop();renderAll();renderJohtoCasinoParity();}catch(_){}
+  const name=String(info?.name||"Nueva ruta");johtoNotifyUnlock(name+" desbloqueada","Ya puedes continuar tu aventura en "+name+" desde el selector de rutas.","🗺️");
+  try{B()?.reload?.();renderTop();renderAll();renderJohtoCasinoParity();}catch(_){}
 }
 function onCasinoUnlocked(){
-  toast("🎰 CASINO TRIGAL · DESBLOQUEADO");
   johtoNotifyUnlock("Casino Trigal desbloqueado","Completaste Bosque Ancestral. El Casino de Ciudad Trigal ya está disponible con Blackjack y Ruleta europea.","🎰");
-  try{renderTop();renderAll();renderJohtoCasinoParity();}catch(_){}
+  try{B()?.reload?.();renderTop();renderAll();renderJohtoCasinoParity();}catch(_){}
 }
 function onRewardRoll(entries,winner){
   el("closedChest",rewardOverlay).style.display="none";
@@ -17839,14 +17864,8 @@ function johtoNotifyUnlock(title,text,icon="🔓"){
 }
 function johtoPumpUnlockQueue(){
   if(johtoUnlockShowing||!johtoUnlockQueue.length)return;
-  johtoUnlockShowing=true;
-  let host=document.getElementById("pkUnlockNoticeHost");
-  if(!host){host=document.createElement("div");host.id="pkUnlockNoticeHost";document.body.appendChild(host);}
-  const data=johtoUnlockQueue.shift(),card=document.createElement("div");
-  card.className="pk-unlock-notice";
-  card.innerHTML='<div class="pk-unlock-icon">'+htmlSafe(data.icon)+'</div><div class="pk-unlock-copy"><small>NUEVO DESBLOQUEO</small><b>'+htmlSafe(data.title)+'</b><span>'+htmlSafe(data.text)+'</span></div>';
-  host.appendChild(card);
-  setTimeout(()=>{card.classList.add("out");setTimeout(()=>{card.remove();johtoUnlockShowing=false;johtoPumpUnlockQueue();},300);},4700);
+  johtoUnlockShowing=true;const data=johtoUnlockQueue.shift();
+  setTimeout(()=>{try{window.alert(data.icon+" "+data.title+"\n\n"+data.text);}finally{johtoUnlockShowing=false;johtoPumpUnlockQueue();}},40);
 }
 function johtoGymOfficialText(host,kind,text){
   if(!host)return;const img=document.createElement("img");img.className="gym-official-icon "+kind;img.alt="Gimnasio";img.src=JOHTO_GYM_SIGN_PRIMARY;img.onerror=()=>{if(img.dataset.fallbackTried)return;img.dataset.fallbackTried="1";img.src=JOHTO_GYM_SIGN_FALLBACK;};host.replaceChildren(img,document.createTextNode(text));host.dataset.gymOfficialSprite="1";if(kind==="title")host.classList.add("gym-official-title");if(kind==="tab")host.classList.add("gym-kicker-with-icon");}

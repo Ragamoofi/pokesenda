@@ -3006,6 +3006,13 @@ body{letter-spacing:.08px}
 /* V36.64.15 · GIF Pokémon: la única animación del sprite es la contenida en el propio GIF. */
 #formationControls .formation-pokemon>img,#formationControls .formation-combo-option>img,#pcBoxGrid .pc-card>img,#pokedexGrid .dex-card>img,.pk-ball-strip .pk-strip-sprite,.pk-iso-battler>img,.pk-iso-enemy-card>img{animation:none!important;animation-duration:0s!important;transition:none!important;}
 </style>
+
+<style id="pkFormationKoStrongRedFix">
+body .formation-slot.ko-slot{position:relative!important;border:2px solid #ff3434!important;background:linear-gradient(145deg,rgba(132,18,24,.94),rgba(49,7,12,.98))!important;box-shadow:inset 0 0 30px rgba(255,25,32,.30),0 0 0 1px rgba(255,94,94,.34),0 0 16px rgba(220,0,20,.28)!important}
+body .formation-slot.ko-slot:after{content:"KO";position:absolute;right:7px;top:25px;z-index:20;pointer-events:none;padding:3px 6px;border-radius:999px;background:#b60012;border:1px solid #ff7b84;color:#fff;font-size:8px;font-weight:1000;letter-spacing:.7px;text-shadow:0 1px 2px #500}
+body .formation-slot.ko-slot .formation-pokemon img{filter:grayscale(.12) sepia(1) saturate(7.5) hue-rotate(315deg) brightness(.82) contrast(1.28) drop-shadow(0 0 7px rgba(255,35,45,.75)) drop-shadow(0 5px 5px rgba(0,0,0,.62))!important;opacity:.74!important}
+body .formation-slot.ko-slot .formation-pokemon b,body .formation-slot.ko-slot [data-pk-form-hp],#pkRegionRuntimeRoot .formation-slot.ko-slot [data-j-form-hp]{color:#ff9a9f!important;text-shadow:0 1px 2px #590008!important}
+</style>
 </head>
 <body>
 
@@ -15160,6 +15167,7 @@ function migrate(){
   if(js.starter&&!js.formation.some(Boolean))js.formation[0]=js.starter;
   js.shinyDex=[...new Set((js.shinyDex||[]).map(Number).filter(d=>d>=1&&d<=251))].sort((a,b)=>a-b);
   if(johtoMtGachaPoolCompleted()){const retired=Math.max(0,Math.floor(Number(js.mtGacha?.tickets||0)));if(retired>0){js.mtGacha.tickets=0;js.money=(js.money||0)+retired*5000;}}
+  ensureJohtoCasinoState();
   save();
 }
 function formationIds(){return js.formation.filter(Boolean);}
@@ -15677,9 +15685,25 @@ function showReward(km){
   if(js.options.autoOpen)setTimeout(openReward,350);
 }
 function openReward(){
-  if(!reward||reward.opened)return;reward.opened=true;const incenseType=reward.incenseType||null;if(incenseType){const iid=incenseItemId(incenseType);if(Number(js.inventory?.[iid]||0)>0){js.inventory[iid]--;if(js.inventory[iid]<=0)delete js.inventory[iid];}else reward.incenseType=null;}const activeIncense=reward.incenseType||null,winner=rollReward(reward.km,activeIncense),entries=[];for(let i=0;i<12;i++)entries.push(rollReward(reward.km,activeIncense));entries.push(winner);for(let i=0;i<6;i++)entries.push(rollReward(reward.km,activeIncense));reward.roll=winner;save();
-  if(window.PokeSendaJohtoRuntime?.onRewardRoll){window.PokeSendaJohtoRuntime.onRewardRoll(entries,winner);setTimeout(()=>finalizeReward(winner),1750);return;}
-  $("pkIsoRewardClosed").classList.add("hidden");$("pkIsoRouletteWrap").classList.remove("hidden");const strip=$("pkIsoRouletteStrip");strip.innerHTML=entries.map((x,i)=>'<div class="pk-iso-roll-entry '+(i===12?"winner":"")+'"><img src="'+gif(x.dex,false,x.shiny)+'"><b>'+name(x.dex)+'</b><small>'+x.rar+'</small></div>').join("");requestAnimationFrame(()=>{const target=12*94-($("pkIsoRouletteWrap").clientWidth/2-44);strip.style.transition="transform 1.6s cubic-bezier(.12,.72,.18,1)";strip.style.transform="translateX(-"+Math.max(0,target)+"px)";});setTimeout(()=>finalizeReward(winner),1750);
+  if(!reward||reward.opened)return;
+  reward.opened=true;
+  const incenseType=reward.incenseType||null;
+  if(incenseType){const iid=incenseItemId(incenseType);if(Number(js.inventory?.[iid]||0)>0){js.inventory[iid]--;if(js.inventory[iid]<=0)delete js.inventory[iid];}else reward.incenseType=null;}
+  const activeIncense=reward.incenseType||null,winner=rollReward(reward.km,activeIncense),before=92,after=30,entries=[];
+  for(let i=0;i<before;i++)entries.push(rollReward(reward.km,activeIncense));
+  entries.push({...winner,winner:true});
+  for(let i=0;i<after;i++)entries.push(rollReward(reward.km,activeIncense));
+  const order={common:0,uncommon:1,rare:2,epic:3,legendary:4};
+  if(Math.random()<.68){
+    const better=entries.map((x,i)=>({x,i})).filter(o=>o.i!==before&&order[o.x?.rar]>order[winner.rar]);
+    if(better.length){const pickBait=better[Math.floor(Math.random()*better.length)].x,offset=[-2,-1,1,2][Math.floor(Math.random()*4)],idx=before+offset;if(idx>=0&&idx<entries.length)entries[idx]={...pickBait,bait:true};}
+  }
+  reward.roll=winner;save();
+  if(window.PokeSendaJohtoRuntime?.onRewardRoll){window.PokeSendaJohtoRuntime.onRewardRoll(entries,winner);setTimeout(()=>finalizeReward(winner),5800);return;}
+  $("pkIsoRewardClosed").classList.add("hidden");$("pkIsoRouletteWrap").classList.remove("hidden");const strip=$("pkIsoRouletteStrip"),wrap=$("pkIsoRouletteWrap");
+  strip.innerHTML=entries.map((x,i)=>'<div class="pk-iso-roll-entry '+(i===before?'winner ':'')+(x.bait?'bait-card':'')+'"><img src="'+gif(x.dex,false,x.shiny)+'"><b>'+name(x.dex)+'</b><small>'+x.rar+'</small></div>').join("");
+  requestAnimationFrame(()=>{const cardW=88,gap=6,startOffset=wrap.clientWidth/2-cardW/2,targetOffset=wrap.clientWidth/2-(before*(cardW+gap)+cardW/2),fastOffset=targetOffset+2350;strip.style.transition="none";strip.style.transform='translateX('+startOffset+'px)';requestAnimationFrame(()=>{strip.style.transition="transform 3.35s linear";strip.style.transform='translateX('+fastOffset+'px)';setTimeout(()=>{strip.style.transition="transform 2.35s cubic-bezier(.08,.70,.10,1)";strip.style.transform='translateX('+targetOffset+'px)';},3350);});});
+  setTimeout(()=>finalizeReward(winner),5800);
 }
 function finalizeReward(r){
   let p=js.pokemon[r.fid],fresh=false,candies=0,promoted=null;
@@ -15698,7 +15722,7 @@ function continueReward(){
   run.spawnDelay=.9;openBattle();render();
 }
 function completeRoute(){
-  const rid=currentRouteId(),rs=currentRouteState(),firstCasinoUnlock=rid==="johto_route2"&&Number(rs.completions||0)===0;rs.completions++;rs.bestDistance=MAX_DISTANCE;if(rs.farmCheckpoint===null||rs.farmCheckpoint===undefined||rs.farmCheckpoint==="auto")rs.farmCheckpoint=0;rs.checkpoint=routeStartPoint();
+  const rid=currentRouteId(),rs=currentRouteState(),firstCasinoUnlock=rid==="johto_route2"&&Number(rs.completions||0)===0;rs.completions++;if(rid==="johto_route2")ensureJohtoCasinoState().unlocked=true;rs.bestDistance=MAX_DISTANCE;if(rs.farmCheckpoint===null||rs.farmCheckpoint===undefined||rs.farmCheckpoint==="auto")rs.farmCheckpoint=0;rs.checkpoint=routeStartPoint();
   const fullFromZero=Number(run?.startDistance||0)===0;if(fullFromZero&&!johtoMtGachaPoolCompleted())js.mtGacha.tickets=Math.max(0,Number(js.mtGacha.tickets||0))+1;
   const idx=JOHTO_ROUTE_ORDER.indexOf(rid),next=JOHTO_ROUTE_ORDER[idx+1];let unlockedNext=null;
   if(next&&!js.unlockedRoutes.includes(next)){js.unlockedRoutes.push(next);unlockedNext={id:next,name:DATA().routes?.[next]?.name||next};}
@@ -15995,9 +16019,11 @@ function jGymTick(){
 function jGymStart(id){
   migrate();if(run||jGym||!jGymUnlocked(id))return {ok:false,msg:run?"Detén la expedición actual para desafiar un Gimnasio.":"Gimnasio no disponible."};
   const seen=new Set(),entries=(js.formation||[]).slice(0,6).map((pid,formationIndex)=>({pid,formationIndex})).filter(x=>x.pid&&js.pokemon[x.pid]&&!seen.has(x.pid)&&(seen.add(x.pid),true));if(entries.length<3)return {ok:false,msg:"Necesitas al menos 3 Pokémon en la Formación."};
-  const g=jGymDef(id);js.gyms.attempts[id]=Number(js.gyms.attempts[id]||0)+1;save();const player=entries.map(x=>jGymPlayerEntity(x.pid,x.formationIndex));
-  jGym={gymId:id,player,enemy:g.roster.map(([dex,lv],i)=>jGymEnemyEntity(dex,lv,id,i)),playerSlots:jGymInitialPlayerSlots(player),enemySlots:[0,1,2],elapsed:0,lastTick:performance.now(),paused:false,finished:false,logs:[],playerFaints:0,enemyFaints:0,pulse:4,potionUses:0,result:null};
-  jGymLog("🏛 Comienza el desafío contra "+g.leader+".");jGymLog("🔥 6 vs 6 · el AS del Líder es un JEFE de dos fases.");jGymLog("📜 "+g.rule);clearInterval(jGymTimer);jGymTimer=setInterval(jGymTick,80);window.PokeSendaJohtoRuntime?.onGymStarted?.();return {ok:true};
+  const g=jGymDef(id),previousBattleSpeed=[1,2,4].includes(Number(js.options?.battleSpeed))?Number(js.options.battleSpeed):1;
+  js.gyms.attempts[id]=Number(js.gyms.attempts[id]||0)+1;js.options.battleSpeed=1;save();
+  const player=entries.map(x=>jGymPlayerEntity(x.pid,x.formationIndex));
+  jGym={gymId:id,player,enemy:g.roster.map(([dex,lv],i)=>jGymEnemyEntity(dex,lv,id,i)),playerSlots:jGymInitialPlayerSlots(player),enemySlots:[0,1,2],elapsed:0,lastTick:performance.now(),paused:false,finished:false,logs:[],playerFaints:0,enemyFaints:0,pulse:4,potionUses:0,result:null,speed:1,previousBattleSpeed};
+  jGymLog("🏛 Comienza el desafío contra "+g.leader+".");jGymLog("🔒 Velocidad del desafío fijada en x1.");jGymLog("🔥 6 vs 6 · el AS del Líder es un JEFE de dos fases.");jGymLog("📜 "+g.rule);clearInterval(jGymTimer);jGymTimer=setInterval(jGymTick,80);window.PokeSendaJohtoRuntime?.onGymStarted?.();return {ok:true};
 }
 function jGymPause(v=null){if(!jGym||jGym.finished)return false;jGym.paused=v==null?!jGym.paused:!!v;jGym.lastTick=performance.now();window.PokeSendaJohtoRuntime?.onGymRender?.();return jGym.paused;}
 function jGymPotionItems(){return ["hyper_potion","super_potion","potion","full_heal"].filter(id=>Number(js.inventory?.[id]||0)>0);}
@@ -16021,6 +16047,7 @@ function jGymFinish(win,{forfeit=false}={}){
     }
     js.gyms.leagueUnlocked=jGymBadgeCount()>=8;
   }
+  js.options.battleSpeed=[1,2,4].includes(Number(battle.previousBattleSpeed))?Number(battle.previousBattleSpeed):1;
   save();battle.result={win,first,money,tickets,tm:g.tm,tmNew,forfeit,badgeCount:jGymBadgeCount()};window.PokeSendaJohtoRuntime?.onGymFinished?.(JSON.parse(JSON.stringify(battle)));jGym=null;
 }
 function ensureGymAchievementState(){
@@ -16163,9 +16190,14 @@ function johtoGrantMTGachaTicket(count=1){migrate();if(johtoMtGachaPoolCompleted
 
 /* Casino Trigal · economía regional aislada, misma base de reglas que Kanto. */
 function ensureJohtoCasinoState(){
-  js.casino=js.casino&&typeof js.casino==="object"?js.casino:{};js.casino.chips=Math.max(0,Math.floor(Number(js.casino.chips)||0));js.casino.stats=Object.assign({blackjackHands:0,blackjackWins:0,blackjackPushes:0,blackjackNet:0,rouletteSpins:0,rouletteWins:0,rouletteNet:0,totalWagered:0,biggestWin:0,allTimeNet:0},js.casino.stats||{});js.casino.rouletteHistory=(Array.isArray(js.casino.rouletteHistory)?js.casino.rouletteHistory:[]).map(x=>Math.max(0,Math.min(36,Math.floor(Number(typeof x==="object"?x.n:x)||0)))).slice(0,18);return js.casino;
+  js.casino=js.casino&&typeof js.casino==="object"?js.casino:{};
+  js.casino.unlocked=!!js.casino.unlocked||Number(js.routes?.johto_route2?.completions||0)>0;
+  js.casino.chips=Math.max(0,Math.floor(Number(js.casino.chips)||0));
+  js.casino.stats=Object.assign({blackjackHands:0,blackjackWins:0,blackjackPushes:0,blackjackNet:0,rouletteSpins:0,rouletteWins:0,rouletteNet:0,totalWagered:0,biggestWin:0,allTimeNet:0},js.casino.stats||{});
+  js.casino.rouletteHistory=(Array.isArray(js.casino.rouletteHistory)?js.casino.rouletteHistory:[]).map(x=>Math.max(0,Math.min(36,Math.floor(Number(typeof x==="object"?x.n:x)||0)))).slice(0,18);
+  return js.casino;
 }
-function johtoCasinoUnlocked(){migrate();return Number(js.routes?.johto_route2?.completions||0)>0;}
+function johtoCasinoUnlocked(){migrate();return !!ensureJohtoCasinoState().unlocked;}
 function johtoCasinoMaxBet(){migrate();if(Number(js.gyms?.badges?.length||0)>=8)return 250000;if(Number(js.routes?.johto_route3?.completions||0)>0)return 75000;return 25000;}
 function johtoCasinoInfo(){migrate();const c=ensureJohtoCasinoState();return JSON.parse(JSON.stringify({unlocked:johtoCasinoUnlocked(),maxBet:johtoCasinoMaxBet(),money:Math.max(0,Math.floor(Number(js.money)||0)),chips:c.chips,stats:c.stats,rouletteHistory:c.rouletteHistory}));}
 function johtoCasinoDeposit(amount){migrate();if(!johtoCasinoUnlocked())return{ok:false,msg:"Completa Bosque Ancestral para desbloquear el Casino Trigal."};amount=Math.max(0,Math.floor(Number(amount)||0));if(amount<1000)return{ok:false,msg:"Ingreso mínimo: ₽1.000"};if(amount>Number(js.money||0))return{ok:false,msg:"No tienes suficientes Pokédólares"};const c=ensureJohtoCasinoState();js.money-=amount;c.chips+=amount;save();return{ok:true,...johtoCasinoInfo()};}
@@ -16177,7 +16209,7 @@ function johtoCasinoResolve(game,wager,payout,rouletteNumber=null){migrate();if(
 function johtoQaStopActivities(){
   floatingAutoRestartPending=false;backgroundAutoRestartWallMs=0;backgroundCarryReal=0;clearTimeout(backgroundDrainTimer);backgroundDrainTimer=null;
   if(run){clearInterval(timer);timer=null;clearInterval(centerTimer);centerTimer=null;run=null;reward=null;}
-  if(jGym){clearInterval(jGymTimer);jGymTimer=null;jGym=null;}
+  if(jGym){const prev=[1,2,4].includes(Number(jGym.previousBattleSpeed))?Number(jGym.previousBattleSpeed):1;clearInterval(jGymTimer);jGymTimer=null;js.options.battleSpeed=prev;jGym=null;save();}
   return true;
 }
 function johtoQaCatalog(){
@@ -16314,7 +16346,7 @@ window.PokeSendaJohtoBattleIsolated={
 
  upgradeMove:(id,i)=>{migrate();const p=js.pokemon[id],m=DATA().movesets?.[id]?.[Number(i)];if(!p||!m||Number(p.skillPoints||0)<=0)return false;const stage=stageIndex(id,p.dex);if(m.kind!=="support"&&Number(m.unlockStage||0)>stage)return false;p.moveRanks=Array.isArray(p.moveRanks)?p.moveRanks:[1,0,0,1];while(p.moveRanks.length<4)p.moveRanks.push(0);const rank=Math.max(1,Number(p.moveRanks[i]||1));if(rank>=25)return false;p.moveRanks[i]=rank+1;p.skillPoints--;save();return true;},
  reload:()=>{migrate();return JSON.parse(JSON.stringify(js||{}));},
- setSpeed:s=>{migrate();s=Number(s);if(![1,2,4].includes(s))return false;js.options.battleSpeed=s;if(run)run.speed=s;save();render();return true;},
+ setSpeed:s=>{migrate();s=Number(s);if(jGym||![1,2,4].includes(s))return false;js.options.battleSpeed=s;if(run)run.speed=s;save();render();return true;},
  setOption:(k,v)=>{migrate();if(!["autoRepeat","autoPotion","autoOpen"].includes(k))return false;const need={autoOpen:"a2",autoRepeat:"a3",autoPotion:"a5"}[k];if(v&&need&&skillRank(need)<1)return false;js.options[k]=!!v;save();render();return true;},
  togglePause:()=>{if(!run||run.rewardPending||run.centerPending)return false;run.paused=!run.paused;if(!run.paused)run.wallTickMs=Date.now();else johtoSetBackgroundBacklog(0);render();return run.paused;},
  getCurrentRoute:()=>{migrate();return currentRouteId();},
@@ -16803,7 +16835,18 @@ function jCasinoResolve(game,wager,payout,n=null){const r=B()?.casinoResolve?.(g
 function jCasinoCard(){const ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"],suits=["♠","♥","♦","♣"];return{r:ranks[jCasinoRand(ranks.length)],s:suits[jCasinoRand(4)]};}
 function jCasinoHandValue(cards){let total=0,aces=0;for(const c of cards){if(c.r==="A"){total+=11;aces++;}else if(["J","Q","K"].includes(c.r))total+=10;else total+=Number(c.r);}while(total>21&&aces){total-=10;aces--;}return{total,soft:aces>0};}
 function jCasinoCardHtml(c,hidden=false){if(hidden)return'<span class="pk-playing-card back">?</span>';return'<span class="pk-playing-card '+(["♥","♦"].includes(c.s)?"red":"")+'">'+c.r+c.s+'</span>';}
-function jCasinoRenderBetbars(){if(!casinoOverlay)return;const max=Number(jCasinoInfo().maxBet)||25000,opts=[1000,5000,10000,25000,50000,75000,150000,250000].filter(v=>v<=max),html='<span>Ficha:</span>'+opts.map(v=>'<button type="button" class="btn pk-chip-pick chip-tier-'+jCasinoChipTier(v)+' '+(jCasinoBet===v?'selected':'')+'" data-casino-bet="'+v+'" title="Ficha '+jCasinoFmt(v)+'">'+jCasinoChipLabel(v)+'</button>').join('')+'<input class="pk-casino-bet-custom" type="number" min="1000" step="1000" max="'+max+'" value="'+jCasinoBet+'" aria-label="Valor personalizado de ficha">';for(const id of ["pkBjBetbar","pkRouletteBetbar"]){const n=el(id,casinoOverlay);if(n)n.innerHTML=html;}}
+function jCasinoRenderBetbars(){
+  if(!casinoOverlay)return;
+  const max=Number(jCasinoInfo().maxBet)||25000;
+  jCasinoBet=jCasinoClampBet(jCasinoBet);
+  const opts=[1000,5000,10000,25000,50000,75000,150000,250000].filter(v=>v<=max),
+        html='<span>Ficha:</span>'+opts.map(v=>'<button type="button" class="btn pk-chip-pick chip-tier-'+jCasinoChipTier(v)+' '+(jCasinoBet===v?'selected':'')+'" data-casino-bet="'+v+'" title="Ficha '+jCasinoFmt(v)+'">'+jCasinoChipLabel(v)+'</button>').join('')+'<input class="pk-casino-bet-custom" type="number" min="1000" step="1000" max="'+max+'" value="'+jCasinoBet+'" aria-label="Valor personalizado de ficha">';
+  for(const id of ["pkBjBetbar","pkRouletteBetbar"]){
+    const n=el(id,casinoOverlay);if(!n)continue;n.innerHTML=html;
+    qa("[data-casino-bet]",n).forEach(b=>{b.onclick=e=>{e.preventDefault();e.stopPropagation();if(!jCasinoBusy)jCasinoSetBet(Number(b.dataset.casinoBet));};});
+    const custom=q(".pk-casino-bet-custom",n);if(custom)custom.onchange=e=>{e.stopPropagation();if(!jCasinoBusy)jCasinoSetBet(custom.value);};
+  }
+}
 function jCasinoBjMessage(text,cls=""){const n=el("pkBjResult",casinoOverlay);if(n){n.textContent=text;n.className="pk-casino-result "+cls;}}
 function jCasinoRenderBj(){if(!casinoOverlay)return;const pc=el("pkBjPlayerCards",casinoOverlay);if(!pc)return;const g=jBj;if(!g){pc.innerHTML="";el("pkBjDealerCards",casinoOverlay).innerHTML="";el("pkBjPlayerScore",casinoOverlay).textContent="0";el("pkBjDealerScore",casinoOverlay).textContent="0";return;}const pv=jCasinoHandValue(g.player),dv=jCasinoHandValue(g.dealer);pc.innerHTML=g.player.map(c=>jCasinoCardHtml(c)).join("");el("pkBjDealerCards",casinoOverlay).innerHTML=g.dealer.map((c,i)=>jCasinoCardHtml(c,!g.finished&&i===1)).join("");el("pkBjPlayerScore",casinoOverlay).textContent=pv.total;el("pkBjDealerScore",casinoOverlay).textContent=g.finished?dv.total:jCasinoHandValue([g.dealer[0]]).total;const info=jCasinoInfo(),hit=el("pkBjHit",casinoOverlay),stand=el("pkBjStand",casinoOverlay),dbl=el("pkBjDouble",casinoOverlay),deal=el("pkBjDeal",casinoOverlay);if(hit)hit.disabled=g.finished;if(stand)stand.disabled=g.finished;if(dbl)dbl.disabled=g.finished||g.player.length!==2||Number(info.chips||0)<g.bet||g.bet*2>Number(info.maxBet||25000);if(deal)deal.disabled=!g.finished;}
 function jCasinoBjResolve(payout,label){const g=jBj;if(!g||g.finished)return;g.finished=true;const net=payout-g.totalBet,r=jCasinoResolve("blackjack",g.totalBet,payout);renderJohtoCasinoParity();jCasinoBjMessage(label+" · "+jCasinoSigned(net),net>0?"win":net<0?"loss":"push");try{renderAll();}catch(_){}}
@@ -16963,7 +17006,7 @@ function renderTop(s,r){
   qa("[data-speed]",game).forEach(b=>b.classList.toggle("active",Number(b.dataset.speed)===(s.options?.battleSpeed||1)));
   const locks={autoOpen:["a2","Auto Poké Ball"],autoRepeat:["a3","Auto-repetir"],autoPotion:["a5","Auto-Poción"]};
   for(const [opt,[node,label]] of Object.entries(locks)){const id=opt==="autoOpen"?"autoOpenBtn":opt==="autoRepeat"?"autoRepeatBtn":"autoPotionBtn",b=el(id,game),unlocked=Number(s.skillTree?.[node]||0)>=1;b.disabled=!unlocked;b.classList.toggle("active",unlocked&&!!s.options?.[opt]);if(opt==="autoRepeat")b.title=unlocked?"Repetir automáticamente al caer":"Se desbloquea en el Árbol";else if(opt==="autoOpen")b.title=unlocked?"Abrir recompensas automáticamente en rutas normales":"Se desbloquea en el Árbol";else{const tier=Number(s.skillTree?.a7||0)>=1?"Hiperpoción":Number(s.skillTree?.a6||0)>=1?"Superpoción":"Poción";b.title=unlocked?`Auto-Poción: ${tier} · activa a ≤10% PS`:"Se desbloquea en el Árbol";}}
-  const casinoHud=el("casinoHudBtn",game),casinoOpen=Number(s.routes?.johto_route2?.completions||0)>0;if(casinoHud){casinoHud.classList.toggle("pk-casino-locked",!casinoOpen);casinoHud.setAttribute("aria-disabled",casinoOpen?"false":"true");casinoHud.title=casinoOpen?"Casino Trigal · Blackjack y Ruleta":"Casino Trigal · se desbloquea al completar Bosque Ancestral";}
+  const casinoHud=el("casinoHudBtn",game),casinoOpen=!!(s.casino?.unlocked||Number(s.routes?.johto_route2?.completions||0)>0);if(casinoHud){casinoHud.classList.toggle("pk-casino-locked",!casinoOpen);casinoHud.setAttribute("aria-disabled",casinoOpen?"false":"true");casinoHud.title=casinoOpen?"Casino Trigal · Blackjack y Ruleta":"Casino Trigal · se desbloquea al completar Bosque Ancestral";}
   const paused=el("pausedBanner",game);if(paused)paused.classList.toggle("show",!!r?.paused&&!r.rewardPending);
   for(const c of CENTERS){const mk=el("centerMark"+c,game);if(mk){mk.classList.remove("hidden");mk.classList.toggle("visited",(rs.centersSeen||[]).includes(c));}}
   const trainerHost=q(".pk-trainer-back",game),snap=window.PokeSendaPublicProfileBridge?.snapshot?.(),tv=window.PokeSendaPublicProfileBridge?.trainerVisual?.(snap?.trainerId||"red",r&&!r.paused?"back":"front");let clone=q("img",trainerHost);if(!clone&&trainerHost&&tv?.src){trainerHost.innerHTML='<img alt="Entrenador">';clone=q("img",trainerHost);}if(clone&&tv?.src){const ts=Number(tv?.scale)||1;clone.src=tv.src;clone.dataset.pkCustomFacing=r&&!r.paused?"back":"front";clone.style.height=Math.round(200*ts)+"px";clone.style.width="auto";clone.style.transform="";trainerHost?.style.removeProperty("--pk-j-trainer-scale");}
@@ -17244,13 +17287,16 @@ function onCasinoUnlocked(){
   try{renderTop();renderAll();renderJohtoCasinoParity();}catch(_){}
 }
 function onRewardRoll(entries,winner){
-  el("closedChest",rewardOverlay).style.display="none";const wrap=el("rouletteWrap",rewardOverlay),strip=el("rouletteStrip",rewardOverlay),targetIndex=Math.max(0,entries.length?Math.min(entries.length-1,12):0);
+  el("closedChest",rewardOverlay).style.display="none";
+  const wrap=el("rouletteWrap",rewardOverlay),strip=el("rouletteStrip",rewardOverlay);
+  let targetIndex=entries.findIndex(x=>x?.winner);if(targetIndex<0)targetIndex=Math.max(0,Math.min(entries.length-1,92));
+  rewardOverlay.dataset.jRewardTarget=String(targetIndex);
   wrap.classList.add("show");wrap.style.display="block";strip.style.transition="none";strip.style.transform="translateX(0px)";
-  strip.innerHTML=entries.map(x=>'<div class="roulette-card '+String(x.rar||"common")+'"><img src="'+johtoUiSprite(x.dex,!!x.shiny)+'" alt="'+nameDex(x.dex)+'"><small>'+(x.shiny?'✨ ':'')+nameDex(x.dex)+'</small></div>').join("");
-  requestAnimationFrame(()=>{const cardW=96,gap=10,startOffset=wrap.clientWidth/2-cardW/2,targetOffset=wrap.clientWidth/2-(targetIndex*(cardW+gap)+cardW/2);strip.style.transform='translateX('+startOffset+'px)';requestAnimationFrame(()=>{strip.style.transition='transform 1.6s cubic-bezier(.12,.72,.18,1)';strip.style.transform='translateX('+targetOffset+'px)';});});
+  strip.innerHTML=entries.map(x=>'<div class="roulette-card '+String(x.rar||"common")+' '+(x.bait?'bait-card':'')+'"><img src="'+johtoUiSprite(x.dex,!!x.shiny)+'" alt="'+nameDex(x.dex)+'"><small>'+(x.shiny?'✨ ':'')+nameDex(x.dex)+'</small></div>').join("");
+  requestAnimationFrame(()=>{const cardW=96,gap=10,startOffset=wrap.clientWidth/2-cardW/2,targetOffset=wrap.clientWidth/2-(targetIndex*(cardW+gap)+cardW/2),fastOffset=targetOffset+2350;strip.style.transform='translateX('+startOffset+'px)';requestAnimationFrame(()=>{strip.style.transition="transform 3.35s linear";strip.style.transform='translateX('+fastOffset+'px)';setTimeout(()=>{strip.style.transition="transform 2.35s cubic-bezier(.08,.70,.10,1)";strip.style.transform='translateX('+targetOffset+'px)';},3350);});});
 }
 function onRewardFinalized(res){
-  const r=res.roll,p=res.pokemon,strip=el("rouletteStrip",rewardOverlay);strip?.children?.[12]?.classList?.add("winner");
+  const r=res.roll,p=res.pokemon,strip=el("rouletteStrip",rewardOverlay),targetIndex=Math.max(0,Number(rewardOverlay.dataset.jRewardTarget||92));strip?.children?.[targetIndex]?.classList?.add("winner");
   const wrap=el("rouletteWrap",rewardOverlay);wrap?.classList.remove("show");if(wrap)wrap.style.display="none";
   const rr=el("rewardResult",rewardOverlay);rr.style.display="block";rr.classList.add("show","prize-show");
   const img=el("rewardImg",rewardOverlay);img.className=String(r.rar||"common")+'-glow';img.src=johtoUiSprite(r.dex,!!r.shiny);img.alt=(r.shiny?'✨ ':'')+nameDex(r.dex);
@@ -17410,14 +17456,14 @@ function openPremiumReward(roll,source,returnAchievements=false){
 function revealPremiumReward(){
   if(!premiumSession||premiumSession.opened)return;premiumSession.opened=true;el("openChestBtn",rewardOverlay).disabled=true;
   const data=B()?.premiumRoulette?.(premiumSession.roll);if(!data?.entries?.length)return;
-  el("closedChest",rewardOverlay).style.display="none";const wrap=el("rouletteWrap",rewardOverlay),strip=el("rouletteStrip",rewardOverlay),targetIndex=Number(data.targetIndex||92);wrap.classList.add("show");wrap.style.display="block";strip.style.transition="none";strip.style.transform="translateX(0px)";
+  el("closedChest",rewardOverlay).style.display="none";const wrap=el("rouletteWrap",rewardOverlay),strip=el("rouletteStrip",rewardOverlay),targetIndex=Number(data.targetIndex||92);premiumSession.targetIndex=targetIndex;wrap.classList.add("show");wrap.style.display="block";strip.style.transition="none";strip.style.transform="translateX(0px)";
   strip.innerHTML=data.entries.map(x=>'<div class="roulette-card '+String(x.rar||"common")+' '+(x.bait?'bait-card':'')+'"><img src="'+johtoUiSprite(x.dex,!!x.shiny)+'" alt="'+nameDex(x.dex)+'"><small>'+(x.shiny?'✨ ':'')+nameDex(x.dex)+'</small></div>').join("");
-  requestAnimationFrame(()=>{const cardW=96,gap=10,startOffset=wrap.clientWidth/2-cardW/2,targetOffset=wrap.clientWidth/2-(targetIndex*(cardW+gap)+cardW/2);strip.style.transform='translateX('+startOffset+'px)';requestAnimationFrame(()=>{strip.style.transition='transform 3.9s cubic-bezier(.08,.70,.14,1)';strip.style.transform='translateX('+targetOffset+'px)';});});
-  setTimeout(finalizePremiumReward,4050);
+  requestAnimationFrame(()=>{const cardW=96,gap=10,startOffset=wrap.clientWidth/2-cardW/2,targetOffset=wrap.clientWidth/2-(targetIndex*(cardW+gap)+cardW/2),fastOffset=targetOffset+2350;strip.style.transform='translateX('+startOffset+'px)';requestAnimationFrame(()=>{strip.style.transition="transform 3.35s linear";strip.style.transform='translateX('+fastOffset+'px)';setTimeout(()=>{strip.style.transition="transform 2.35s cubic-bezier(.08,.70,.10,1)";strip.style.transform='translateX('+targetOffset+'px)';},3350);});});
+  setTimeout(finalizePremiumReward,5800);
 }
 function finalizePremiumReward(){
   if(!premiumSession)return;const now=premiumTrustedNow()??premiumApproxNow(),res=B()?.premiumCapture?.(premiumSession.source,premiumSession.roll,now);if(!res?.ok){toast(res?.msg||"No se pudo registrar la recompensa Premium.");premiumSession.opened=false;return;}
-  const r=res.roll,p=res.pokemon,strip=el("rouletteStrip",rewardOverlay),targetIndex=Number(premiumSession.roll?.targetIndex||92);strip?.children?.[targetIndex]?.classList?.add("winner");
+  const r=res.roll,p=res.pokemon,strip=el("rouletteStrip",rewardOverlay),targetIndex=Number(premiumSession.targetIndex||92);strip?.children?.[targetIndex]?.classList?.add("winner");
   const wrap=el("rouletteWrap",rewardOverlay);wrap?.classList.remove("show");if(wrap)wrap.style.display="none";const rr=el("rewardResult",rewardOverlay);rr.style.display="block";rr.classList.add("show","prize-show");
   const img=el("rewardImg",rewardOverlay);img.className=String(r.rar||"common")+'-glow';img.src=johtoUiSprite(r.dex,!!r.shiny);img.alt=(r.shiny?'✨ ':'')+nameDex(r.dex);
   el("rewardRarity",rewardOverlay).innerHTML=rarityBadge(r.rar);el("rewardName",rewardOverlay).textContent=(r.shiny?"✨ ":"")+nameDex(r.dex)+" · Nv."+r.level;el("rewardStars",rewardOverlay).innerHTML=starHTML(p.stars||1);el("rewardNote",rewardOverlay).textContent=(res.fresh?"Nueva familia obtenida":"Duplicado · +"+Number(res.candies||0)+" caramelos · copia "+p.copies)+" · "+premiumSourceTitle(premiumSession.source).replace(/[💎🏆✨🔮]/g,"").trim();

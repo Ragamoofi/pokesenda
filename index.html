@@ -6053,7 +6053,7 @@ body .formation-slot.ko-slot .formation-pokemon b,body .formation-slot.ko-slot [
     const items=Object.values(itemStats).filter(s=>s?.pokemonId&&s?.itemId).map(s=>{const mon=team.find(x=>x.id===s.pokemonId),it=ITEMS[s.itemId];return{pokemonId:s.pokemonId,pokemonName:mon?.name||s.pokemonId,itemId:s.itemId,itemName:it?.name||s.itemId,damage:Number(s.damage||0),healing:Number(s.healing||0),mitigated:Number(s.mitigated||0),survivals:Number(s.survivals||0),slowProcs:Number(s.slowProcs||0),slowSeconds:Number(s.slowSeconds||0),xpBonus:Number(s.xpBonus||0)};});
     const totals=team.reduce((a,x)=>{a.damage+=x.stats.damage;a.healing+=x.stats.healing;a.damageTaken+=x.stats.damageTaken;a.kos+=x.stats.kos;return a;},{damage:0,healing:0,damageTaken:0,kos:0});
     const previousBest=infinite?Math.max(0,Number(state.infiniteExpedition?.bestDistance||0)):0;
-    return{ts:Date.now(),routeId,routeName,infinite,result,distance:reached,checkpoint:Math.max(0,Number((checkpoint??(infinite?0:routeStartPoint()))||0)),duration:Math.max(0,Number(r.elapsed||0)),rounds:Math.max(0,Number(r.roundIndex||0)),events:Math.max(0,Number(r.eventCount||0)),numericRepairs:Math.max(0,Number(r.numericRepairs||0)),newRecord:!!(infinite&&reached>previousBest),team,items,totals};
+    return{ts:Date.now(),routeId,routeName,infinite,result,distance:reached,checkpoint:Math.max(0,Number((checkpoint??(infinite?0:routeStartPoint()))||0)),duration:Math.max(0,Number(r.elapsed||0)),rounds:Math.max(0,Number(r.roundIndex||0)),events:Math.max(0,Number(r.eventCount||0)),numericRepairs:Math.max(0,Number(r.numericRepairs||0)),pauseCount:Math.max(0,Number(r.pauseCount||0)),pauseHpCorrections:Math.max(0,Number(r.pauseHpCorrections||0)),pauseHpPrevented:Math.max(0,Number(r.pauseHpPrevented||0)),newRecord:!!(infinite&&reached>previousBest),team,items,totals};
   }
   function updateExpeditionHistoryCount(){if($("expeditionHistoryCount"))$("expeditionHistoryCount").textContent=String((state.expeditionHistory||[]).length);}
   function historyItemUtility(it){const bits=[];if(Number(it.survivals||0)>0)bits.push(`${it.survivals} muerte${it.survivals===1?"":"s"} evitada${it.survivals===1?"":"s"}`);if(Number(it.slowProcs||0)>0)bits.push(`${it.slowProcs} retrasos · ${Number(it.slowSeconds||0).toFixed(1)} s`);if(Number(it.xpBonus||0)>0)bits.push(`+${Math.round(it.xpBonus).toLocaleString("es-CL")} XP`);return bits.join(" · ")||"aporte pasivo";}
@@ -6339,6 +6339,7 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
     const ratio=clampFinite(oldHp/oldMax,0,1,old.alive?1/d.maxHp:0);
     old.maxHp=d.maxHp;old.hp=Math.max(old.alive?1:0,Math.min(d.maxHp,ratio*d.maxHp));
     if(!Number.isFinite(old.hp))old.hp=old.alive?1:0;
+    if(run?.paused&&run.pauseHpBaseline)run.pauseHpBaseline=pkPauseHpSnapshot();
   }
 
   function pkFormationStableKey(){
@@ -7038,7 +7039,7 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
     box.querySelectorAll("[data-sell-item]").forEach(btn=>btn.addEventListener("click",()=>sellInventoryItem(btn.dataset.sellItem,btn.dataset.sellQty)));
   }
   function useConsumableOnPokemon(itemId,pokemonId){
-    const it=ITEMS[itemId],t=run?.team[pokemonId];if(!it?.consumable||!t||!t.alive||(state.items[itemId]||0)<=0)return;let did=false,msg=[];if(it.healPct&&t.hp<t.maxHp){const before=t.hp,heal=t.maxHp*it.healPct*(1+.05*skillRank("e10"));t.hp=Math.min(t.maxHp,t.hp+heal);msg.push(`+${Math.ceil(t.hp-before)} PS`);did=true;}if(it.curesStatus&&(t.status?.type||(t.confusionTurns||0)>0)){clearBattleStatus(t);msg.push("estado curado");did=true;}if(!did){toast("Ese Pokémon no necesita ese objeto");return;}state.items[itemId]=Math.max(0,(state.items[itemId]||0)-1);if(state.items[itemId]<=0)delete state.items[itemId];addLog(`${it.icon} ${it.name}: ${ownedStage(pokemonId).name} · ${msg.join(" · ")}.`);toast(`${it.name} → ${msg.join(" · ")}`);save();renderTeamWorld();renderFormation();renderCards();renderInventory();renderPotionInventory();
+    const it=ITEMS[itemId],t=run?.team[pokemonId];if(!it?.consumable||!t||!t.alive||(state.items[itemId]||0)<=0)return;let did=false,msg=[];if(it.healPct&&t.hp<t.maxHp){const before=t.hp,heal=t.maxHp*it.healPct*(1+.05*skillRank("e10"));t.hp=Math.min(t.maxHp,t.hp+heal);msg.push(`+${Math.ceil(t.hp-before)} PS`);did=true;}if(it.curesStatus&&(t.status?.type||(t.confusionTurns||0)>0)){clearBattleStatus(t);msg.push("estado curado");did=true;}if(!did){toast("Ese Pokémon no necesita ese objeto");return;}state.items[itemId]=Math.max(0,(state.items[itemId]||0)-1);if(state.items[itemId]<=0)delete state.items[itemId];addLog(`${it.icon} ${it.name}: ${ownedStage(pokemonId).name} · ${msg.join(" · ")}.`);toast(`${it.name} → ${msg.join(" · ")}`);if(run?.paused&&run.pauseHpBaseline)run.pauseHpBaseline=pkPauseHpSnapshot();save();renderTeamWorld();renderFormation();renderCards();renderInventory();renderPotionInventory();
   }
 
   let tmInventoryTypeFilter="all";
@@ -7508,7 +7509,7 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
     $("summary").classList.remove("show");$("fxLayer").innerHTML="";logs=[];
     const start=routeStartPoint(),team={},partyIds=activeIds().slice(0,6);
     for(const id of partyIds){const d=derived(id),maxHp=finitePositive(d.maxHp,1);team[id]={id,hp:maxHp,maxHp,attackTimer:.25+Math.random()*.35,alive:true,tempReduction:0,tempReductionTime:0,powerBuff:0,powerBuffTime:0,haste:0,hasteTime:0,status:null,statusTick:3,confusionTurns:0,autoPotionCooldown:0};}
-    run={elapsed:0,distance:start,checkpoint:start,farmStart:start,partyIds,lockedPartyIds:[...partyIds],team,teamArchive:{...team},damageDone:Object.fromEntries(partyIds.map(id=>[id,0])),stats:Object.fromEntries(partyIds.map(id=>[id,{damage:0,healing:0,damageTaken:0,crits:0,superEffective:0,kos:0,deaths:0,supports:0}])),itemStats:{},enemies:[],spawnDelay:0,roundIndex:0,lastTick:performance.now(),wallTickMs:Date.now(),backgroundBacklogReal:0,failed:false,completed:false,pendingBoss:false,bossActive:false,rewardPending:false,paused:false,pausedByOptions:false,centersVisited:isInfiniteMode()?[]:POKEMON_CENTERS.filter(c=>c<=start),centerPending:false,pendingCenterAfterReward:null,roundXp:0,roundCombatants:[],centerBuffRounds:0,eventCooldown:2,eventCount:0,eventBattle:null,eventPending:null,mintVendorSeen:false,infinite:isInfiniteMode(),numericRepairs:0};lastDamageReport={};lastItemRunStats=null;
+    run={elapsed:0,distance:start,checkpoint:start,farmStart:start,partyIds,lockedPartyIds:[...partyIds],team,teamArchive:{...team},damageDone:Object.fromEntries(partyIds.map(id=>[id,0])),stats:Object.fromEntries(partyIds.map(id=>[id,{damage:0,healing:0,damageTaken:0,crits:0,superEffective:0,kos:0,deaths:0,supports:0}])),itemStats:{},enemies:[],spawnDelay:0,roundIndex:0,lastTick:performance.now(),wallTickMs:Date.now(),backgroundBacklogReal:0,failed:false,completed:false,pendingBoss:false,bossActive:false,rewardPending:false,paused:false,pausedByOptions:false,centersVisited:isInfiniteMode()?[]:POKEMON_CENTERS.filter(c=>c<=start),centerPending:false,pendingCenterAfterReward:null,roundXp:0,roundCombatants:[],centerBuffRounds:0,eventCooldown:2,eventCount:0,eventBattle:null,eventPending:null,mintVendorSeen:false,infinite:isInfiniteMode(),numericRepairs:0,pauseCount:0,pauseHpCorrections:0,pauseHpPrevented:0};lastDamageReport={};lastItemRunStats=null;
     pkAutoRestartTransition=false;pkAutoRestartWallMs=0;
     if(isInfiniteMode()){state.infiniteExpedition.totalRuns=(state.infiniteExpedition.totalRuns||0)+1;state.infiniteExpedition.checkpoint=0;save();}
     for(const id of partyIds)touchRunItem(id);
@@ -7516,17 +7517,40 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
     renderEverything();spawnRound();if(!pkFloatingDriver&&!pkBackgroundCatchingUp)loop=setInterval(tick,100);
   }
 
+  // V36.64.x · Integridad de pausa: pausar/reanudar jamás puede curar ni revivir.
+  // La instantánea se toma justo antes de cada transición. Curaciones legítimas hechas
+  // mientras la run ya está pausada quedan incluidas en la instantánea de reanudación.
+  function pkPauseHpSnapshot(r=run){
+    if(!r)return null;const snap={};for(const [id,t] of Object.entries(r.team||{})){if(!t)continue;snap[id]={hp:Math.max(0,finiteNumber(t.hp,0)),maxHp:Math.max(1,finitePositive(t.maxHp,1)),alive:!!t.alive};}return snap;
+  }
+  function pkPauseIntegrityState(){
+    const a=state.pauseIntegrity||(state.pauseIntegrity={version:1,totalPauses:0,preventedHealEvents:0,preventedHp:0,lastAt:0});return a;
+  }
+  function pkGuardPauseHp(snapshot,phase="pause"){
+    if(!run||!snapshot)return 0;let prevented=0,events=0;
+    for(const [id,before] of Object.entries(snapshot)){const t=run.team?.[id];if(!t)continue;
+      if(!before.alive){if(t.alive||Number(t.hp)>0){prevented+=Math.max(0,Number(t.hp)||0);t.alive=false;t.hp=0;events++;}continue;}
+      const ceiling=Math.max(0,Math.min(Number(t.maxHp)||before.maxHp,before.hp));
+      if(Number(t.hp)>ceiling+.001){prevented+=Number(t.hp)-ceiling;t.hp=ceiling;events++;}
+    }
+    if(events){run.pauseHpCorrections=(run.pauseHpCorrections||0)+events;run.pauseHpPrevented=(run.pauseHpPrevented||0)+prevented;const a=pkPauseIntegrityState();a.preventedHealEvents+=events;a.preventedHp+=prevented;a.lastAt=Date.now();console.warn(`PokéSenda · integridad de pausa (${phase}): se bloquearon ${events} restauraciones de PS (${Math.round(prevented)} PS).`);}
+    return events;
+  }
   function pauseRun(logIt=true){
-    if(!run||run.paused)return;stopLoop();run.paused=true;if(logIt)addLog(`⏸ Pausa en ${formatMeters(run.distance)}. Puedes organizar equipo y objetos.`);renderEverything();
+    if(!run||run.paused)return;const hpBefore=pkPauseHpSnapshot();stopLoop();run.paused=true;run.pauseHpBaseline=hpBefore;run.pauseCount=(run.pauseCount||0)+1;const a=pkPauseIntegrityState();a.totalPauses++;a.lastAt=Date.now();if(logIt)addLog(`⏸ Pausa en ${formatMeters(run.distance)}. Puedes organizar equipo y objetos.`);renderEverything();if(pkGuardPauseHp(hpBefore,"pause")){renderTeamWorld();renderFormation();renderCards();}save();
   }
   function resumeRun(logIt=true){
-    if(!run||!run.paused||evolutionModalOpen)return;sanitizeRunCombatState();reconcileRunLifeStates();if(!run||run.rewardPending)return;pruneDefeatedRunEnemies();run.paused=false;syncRunTeam();run.lastTick=performance.now();run.wallTickMs=Date.now();stopLoop();if(!pkFloatingDriver&&!pkBackgroundCatchingUp)loop=setInterval(tick,100);if(logIt)addLog(`▶ Expedición reanudada desde ${formatMeters(run.distance)}.`);renderEverything();
+    if(!run||!run.paused||evolutionModalOpen)return;const hpBefore=run.pauseHpBaseline||pkPauseHpSnapshot();sanitizeRunCombatState();reconcileRunLifeStates();if(!run||run.rewardPending)return;pruneDefeatedRunEnemies();run.paused=false;syncRunTeam();pkGuardPauseHp(hpBefore,"resume");run.pauseHpBaseline=null;run.lastTick=performance.now();run.wallTickMs=Date.now();stopLoop();if(!pkFloatingDriver&&!pkBackgroundCatchingUp)loop=setInterval(tick,100);if(logIt)addLog(`▶ Expedición reanudada desde ${formatMeters(run.distance)}.`);renderEverything();
   }
   function togglePause(){if(!run)return;run.paused?resumeRun():pauseRun();}
 
   function livingEnemies(){return run?run.enemies.filter(e=>e.alive&&e.hp>0):[];}
   function playerTarget(){return livingEnemies()[0]||null;}
-  function teamWiped(){return !!run&&Object.values(run.team).every(t=>!t.alive);}
+  // V36.64.x · Integridad de pausa Johto: ninguna transición de pausa puede curar/revivir.
+function johtoPauseHpSnapshot(){if(!run)return null;const snap={};for(const [id,t] of Object.entries(run.team||{})){if(t)snap[id]={hp:Math.max(0,Number(t.hp)||0),maxHp:Math.max(1,Number(t.maxHp)||1),alive:!!t.alive};}return snap;}
+function johtoPauseIntegrityState(){const a=js.pauseIntegrity||(js.pauseIntegrity={version:1,totalPauses:0,preventedHealEvents:0,preventedHp:0,lastAt:0});return a;}
+function johtoGuardPauseHp(snapshot,phase="pause"){if(!run||!snapshot)return 0;let events=0,prevented=0;for(const [id,before] of Object.entries(snapshot)){const t=run.team?.[id];if(!t)continue;if(!before.alive){if(t.alive||Number(t.hp)>0){prevented+=Math.max(0,Number(t.hp)||0);t.alive=false;t.hp=0;events++;}continue;}const ceiling=Math.max(0,Math.min(Number(t.maxHp)||before.maxHp,before.hp));if(Number(t.hp)>ceiling+.001){prevented+=Number(t.hp)-ceiling;t.hp=ceiling;events++;}}if(events){run.pauseHpCorrections=(run.pauseHpCorrections||0)+events;run.pauseHpPrevented=(run.pauseHpPrevented||0)+prevented;const a=johtoPauseIntegrityState();a.preventedHealEvents+=events;a.preventedHp+=prevented;a.lastAt=Date.now();console.warn(`PokéSenda Johto · integridad de pausa (${phase}): se bloquearon ${events} restauraciones de PS (${Math.round(prevented)} PS).`);}return events;}
+function teamWiped(){return !!run&&Object.values(run.team).every(t=>!t.alive);}
   function firstLivingFrontline(){return battleIds()[0]||null;}
 
   const AUTO_POTION_THRESHOLD=.10;
@@ -11402,6 +11426,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     floatingSetSpeed:(s)=>{try{s=Number(s);if(![1,2,4].includes(s))return false;state.options.speed=s;save();renderEverything();return true}catch(_){return false}},
     floatingTogglePause:()=>{try{if(!run||run.rewardPending||evolutionModalOpen)return null;togglePause();return !!run?.paused}catch(_){return null}},
     floatingStart:()=>{try{if(!run)startRun();return !!run}catch(_){return false}},
+    pauseIntegrity:()=>JSON.parse(JSON.stringify(state.pauseIntegrity||{version:1,totalPauses:0,preventedHealEvents:0,preventedHp:0,lastAt:0})),
     summary:()=>({dex:pokedexDiscoveredCount(),dexList:[...new Set((state.dexSeen||[]).map(Number))],shinyDex:shinyDexCount(),shinyDexList:[...new Set((state.shinyDex||[]).map(Number))],badges:gymBadgeCount(),achievements:achievementPointsEarned(),owned:(state.owned||[]).length,infiniteBest:Number(state.infiniteExpedition?.bestDistance||0),route3Complete:Number(state.routes?.route3?.completions||0)>0})
   };
     })();
@@ -15490,6 +15515,7 @@ function refreshCombatant(id){
   const t=run?.team?.[id],p=js.pokemon?.[id];if(!t||!p)return false;
   const oldMax=Math.max(1,Number(t.maxHp)||1),oldHp=Math.max(0,Number(t.hp)||0),ratio=Math.max(0,Math.min(1,oldHp/oldMax)),d=derived(p,id);
   t.maxHp=Math.max(1,Number(d.maxHp)||1);t.hp=t.alive?Math.max(1,Math.min(t.maxHp,t.maxHp*ratio)):0;
+  if(run?.paused&&run.pauseHpBaseline)run.pauseHpBaseline=johtoPauseHpSnapshot();
   return true;
 }
 function teamWiped(){return !!run&&Object.values(run.team).every(t=>!t.alive);}
@@ -16127,19 +16153,19 @@ function johtoRunSummarySnapshot(result,distance,checkpoint){
     return {id,dex:Number(p.dex||0),name:name(p.dex||0),level:Number(p.level||1),stars:Number(p.stars||1),shiny:!!(p.shinyUnlocked&&p.shinyEquipped),heldItem:p.heldItem||null,heldItemName:p.heldItem?(materialItemDef(p.heldItem)?.name||p.heldItem):null,role:role==null?(index<3?roles[index]||"Reserva":"Reserva"):(roles[role]||"Reserva"),stats:{damage:Number(st.damage||0),healing:Number(st.healing||0),damageTaken:Number(st.damageTaken||0),crits:Number(st.crits||0),superEffective:Number(st.superEffective||0),kos:Number(st.kos||0),deaths:Number(st.deaths||0)}};
   });
   const totals=party.reduce((a,p)=>{a.damage+=p.stats.damage;a.healing+=p.stats.healing;a.damageTaken+=p.stats.damageTaken;a.kos+=p.stats.kos;a.deaths+=p.stats.deaths;return a;},{damage:0,healing:0,damageTaken:0,kos:0,deaths:0}),itemStats=snapshotJohtoItemStats();
-  return {result:String(result||"stopped"),route:currentRouteDef().name,distance:Math.max(0,Number(distance??run.distance)||0),checkpoint:Math.max(0,Number(checkpoint)||0),rounds:Number(run.roundIndex||0),defeated:Number(run.defeated||0),earned:Number(run.earned||0),items:Number(run.items||0),duration:Math.max(0,Date.now()-Number(run.startedAt||Date.now())),party,itemStats,totals};
+  return {result:String(result||"stopped"),route:currentRouteDef().name,distance:Math.max(0,Number(distance??run.distance)||0),checkpoint:Math.max(0,Number(checkpoint)||0),rounds:Number(run.roundIndex||0),defeated:Number(run.defeated||0),earned:Number(run.earned||0),items:Number(run.items||0),duration:Math.max(0,Date.now()-Number(run.startedAt||Date.now())),pauseCount:Number(run.pauseCount||0),pauseHpCorrections:Number(run.pauseHpCorrections||0),pauseHpPrevented:Number(run.pauseHpPrevented||0),party,itemStats,totals};
 }
 
 function pushHistory(result,distance,extra={}){
   js.expeditionHistory=Array.isArray(js.expeditionHistory)?js.expeditionHistory:[];
   const stats=run?.stats||{},party=(run?.partyIds||[]).map(id=>{const p=js.pokemon[id]||{};return{id,dex:p.dex||0,name:name(p.dex||0),level:p.level||1,heldItem:p.heldItem||null,heldItemName:p.heldItem?(materialItemDef(p.heldItem)?.name||p.heldItem):null,damage:Math.round(stats[id]?.damage||0),taken:Math.round(stats[id]?.damageTaken||0),healing:Math.round(stats[id]?.healing||0),kos:stats[id]?.kos||0};}),itemStats=snapshotJohtoItemStats();
-  js.expeditionHistory.unshift({id:Date.now()+"_"+Math.random().toString(36).slice(2,7),at:new Date().toISOString(),route:currentRouteDef().name,routeId:currentRouteId(),result,distance:Math.floor(distance||0),startDistance:run?.startDistance||0,rounds:run?.roundIndex||0,defeated:run?.defeated||0,money:run?.earned||0,items:run?.items||0,party,itemStats,...extra});
+  js.expeditionHistory.unshift({id:Date.now()+"_"+Math.random().toString(36).slice(2,7),at:new Date().toISOString(),route:currentRouteDef().name,routeId:currentRouteId(),result,distance:Math.floor(distance||0),startDistance:run?.startDistance||0,rounds:run?.roundIndex||0,defeated:run?.defeated||0,money:run?.earned||0,items:run?.items||0,pauseCount:Number(run?.pauseCount||0),pauseHpCorrections:Number(run?.pauseHpCorrections||0),pauseHpPrevented:Number(run?.pauseHpPrevented||0),party,itemStats,...extra});
   js.expeditionHistory=js.expeditionHistory.slice(0,10);save();
 }
 function startRun(){
   migrate();floatingAutoRestartPending=false;backgroundAutoRestartWallMs=0;if(run)return;const ids=formationIds().slice(0,6);if(!ids.length)return;const start=routeStartPoint(),team={};
   for(const id of ids){const d=derived(js.pokemon[id]);team[id]={familyId:id,ownerId:id,hp:d.maxHp,maxHp:d.maxHp,alive:true,attackTimer:.25+Math.random()*.35,status:null,statusTick:3,confusion:0,guard:0,guardTime:0,haste:0,hasteTime:0,power:0,powerTime:0,autoPotionCooldown:0};}
-  run={routeId:currentRouteId(),distance:start,startDistance:start,startedAt:Date.now(),wallTickMs:Date.now(),backgroundBacklogReal:0,eventPauseWallMs:0,centerPauseWallMs:0,partyIds:ids,team,enemies:[],roundIndex:0,roundXp:0,roundCombatants:[],pendingBoss:false,bossActive:false,rewardPending:false,centerPending:false,centerBuffRounds:0,eventPending:null,eventBattle:null,eventCooldown:2,eventCount:0,incenseVendorOffers:null,incenseVendorBought:null,mintVendorOffers:null,mintVendorBought:null,mintVendorSeen:false,paused:false,centersVisited:POKEMON_CENTERS.filter(c=>c<=start),spawnDelay:0,defeated:0,earned:0,items:0,log:[],speed:js.options.battleSpeed,stats:Object.fromEntries(ids.map(id=>[id,{damage:0,healing:0,damageTaken:0,crits:0,superEffective:0,kos:0,deaths:0}])),itemStats:{}};for(const id of ids)touchRunItem(id);
+  run={routeId:currentRouteId(),distance:start,startDistance:start,startedAt:Date.now(),wallTickMs:Date.now(),backgroundBacklogReal:0,eventPauseWallMs:0,centerPauseWallMs:0,partyIds:ids,team,enemies:[],roundIndex:0,roundXp:0,roundCombatants:[],pendingBoss:false,bossActive:false,rewardPending:false,centerPending:false,centerBuffRounds:0,eventPending:null,eventBattle:null,eventCooldown:2,eventCount:0,incenseVendorOffers:null,incenseVendorBought:null,mintVendorOffers:null,mintVendorBought:null,mintVendorSeen:false,paused:false,centersVisited:POKEMON_CENTERS.filter(c=>c<=start),spawnDelay:0,defeated:0,earned:0,items:0,log:[],speed:js.options.battleSpeed,stats:Object.fromEntries(ids.map(id=>[id,{damage:0,healing:0,damageTaken:0,crits:0,superEffective:0,kos:0,deaths:0}])),itemStats:{},pauseCount:0,pauseHpCorrections:0,pauseHpPrevented:0};for(const id of ids)touchRunItem(id);
   js.stats.runs++;save();$("pkIsoRunEnd").classList.add("hidden");$("pkIsoCenterOverlay").classList.add("hidden");openBattle();log(currentRouteDef().name+": expedición iniciada desde "+start+" m con "+ids.length+" Pokémon.");spawnRound();schedule();render();
 }
 function openBattle(){if(window.PokeSendaJohtoRuntime?.showGame){window.PokeSendaJohtoRuntime.showGame();return;}document.querySelectorAll("#pkIsoJohtoRoot .pk-iso-panel").forEach(x=>x.classList.add("hidden"));$("pkIsoJohtoRoot").classList.remove("hidden");$("pkIsoBattle").classList.remove("hidden");}
@@ -16401,7 +16427,7 @@ window.PokeSendaJohtoBattleIsolated={
  reload:()=>{migrate();return JSON.parse(JSON.stringify(js||{}));},
  setSpeed:s=>{migrate();s=Number(s);if(jGym||![1,2,4].includes(s))return false;js.options.battleSpeed=s;if(run)run.speed=s;save();render();return true;},
  setOption:(k,v)=>{migrate();if(!["autoRepeat","autoPotion","autoOpen"].includes(k))return false;const need={autoOpen:"a2",autoRepeat:"a3",autoPotion:"a5"}[k];if(v&&need&&skillRank(need)<1)return false;js.options[k]=!!v;save();render();return true;},
- togglePause:()=>{if(!run||run.rewardPending||run.centerPending)return false;run.paused=!run.paused;if(!run.paused)run.wallTickMs=Date.now();else johtoSetBackgroundBacklog(0);render();return run.paused;},
+ togglePause:()=>{if(!run||run.rewardPending||run.centerPending)return false;const wasPaused=!!run.paused,hpBefore=wasPaused?(run.pauseHpBaseline||johtoPauseHpSnapshot()):johtoPauseHpSnapshot();run.paused=!run.paused;if(!run.paused){run.wallTickMs=Date.now();}else{johtoSetBackgroundBacklog(0);run.pauseHpBaseline=hpBefore;run.pauseCount=(run.pauseCount||0)+1;const a=johtoPauseIntegrityState();a.totalPauses++;a.lastAt=Date.now();}render();if(johtoGuardPauseHp(hpBefore,wasPaused?"resume":"pause"))render();if(wasPaused)run.pauseHpBaseline=null;save();return run.paused;},
  getCurrentRoute:()=>{migrate();return currentRouteId();},
  getCurrentRouteInfo:()=>{migrate();const id=currentRouteId(),r=currentRouteDef(),s=currentRouteState();return JSON.parse(JSON.stringify({id,name:r.name,description:r.description,sectors:r.sectors,recommended:r.recommended,finalBossLevel:r.finalBossLevel,className:routeClass(id),state:s,unlocked:[...js.unlockedRoutes]}));},
  setCurrentRoute:id=>{migrate();if(run||jGym||!JOHTO_ROUTE_ORDER.includes(id)||!routeUnlocked(id))return false;js.currentRoute=id;save();return true;},
@@ -16411,7 +16437,8 @@ window.PokeSendaJohtoBattleIsolated={
    js.formation=Array(6).fill(null);unique.slice(0,6).forEach((id,i)=>js.formation[i]=id);if(run)run.partyIds=unique.slice();save();return true;},
  setHeldItem:(id,itemId)=>equipHeldItem(id,itemId),
  getEnemyView:uid=>{migrate();return enemyView(uid);},
- usePotion:(itemId,id)=>{migrate();const it=materialItemDef(itemId),t=run?.team?.[id],p=js.pokemon?.[id];if(!it?.consumable||!t||!p||!t.alive||Number(js.inventory?.[itemId]||0)<=0)return{ok:false,msg:"No puedes usar ese objeto ahora."};let did=false,heal=0,cured=false;if(it.healPct&&t.hp<t.maxHp){const before=t.hp,healMult=1+.05*skillRank("e10");t.hp=Math.min(t.maxHp,t.hp+t.maxHp*it.healPct*healMult);heal=Math.max(0,Math.ceil(t.hp-before));did=heal>0;}if(it.curesStatus&&(t.status?.type||(t.confusion||0)>0)){t.status=null;t.statusTick=3;t.confusion=0;cured=true;did=true;}if(!did)return{ok:false,msg:"Ese Pokémon no necesita ese objeto."};js.inventory[itemId]=Math.max(0,Number(js.inventory[itemId]||0)-1);if(js.inventory[itemId]<=0)delete js.inventory[itemId];save();return{ok:true,heal,cured,left:Number(js.inventory?.[itemId]||0),name:name(p.dex)};},
+ usePotion:(itemId,id)=>{migrate();const it=materialItemDef(itemId),t=run?.team?.[id],p=js.pokemon?.[id];if(!it?.consumable||!t||!p||!t.alive||Number(js.inventory?.[itemId]||0)<=0)return{ok:false,msg:"No puedes usar ese objeto ahora."};let did=false,heal=0,cured=false;if(it.healPct&&t.hp<t.maxHp){const before=t.hp,healMult=1+.05*skillRank("e10");t.hp=Math.min(t.maxHp,t.hp+t.maxHp*it.healPct*healMult);heal=Math.max(0,Math.ceil(t.hp-before));did=heal>0;}if(it.curesStatus&&(t.status?.type||(t.confusion||0)>0)){t.status=null;t.statusTick=3;t.confusion=0;cured=true;did=true;}if(!did)return{ok:false,msg:"Ese Pokémon no necesita ese objeto."};js.inventory[itemId]=Math.max(0,Number(js.inventory[itemId]||0)-1);if(js.inventory[itemId]<=0)delete js.inventory[itemId];if(run?.paused&&run.pauseHpBaseline)run.pauseHpBaseline=johtoPauseHpSnapshot();save();return{ok:true,heal,cured,left:Number(js.inventory?.[itemId]||0),name:name(p.dex)};},
+ getPauseIntegrity:()=>{migrate();return JSON.parse(JSON.stringify(js.pauseIntegrity||{version:1,totalPauses:0,preventedHealEvents:0,preventedHp:0,lastAt:0}));},
  getMaterialState:()=>{migrate();return JSON.parse(JSON.stringify({inventory:js.inventory,mints:js.mints,masterMints:js.masterMints,itemUnread:js.itemUnread,money:js.money,natures:EXTRA.natures,incenseTypes:INCENSE_TYPES}));},
  clearItemUnread:id=>{migrate();js.itemUnread=(js.itemUnread||[]).filter(x=>x!==id);save();return true;},
  useMint:(id,natureKey,master=false)=>useMint(id,natureKey,!!master),

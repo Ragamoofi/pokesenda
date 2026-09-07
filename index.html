@@ -6069,6 +6069,7 @@ body{letter-spacing:.08px}
     state=freshState();state.options.musicVolume=keepMusicVolume;state.options.musicTrack=MUSIC_TRACKS[keepMusicTrack]?keepMusicTrack:"classic_menu";state.options.musicPlaylist=true;state.options.sfxVolume=keepSfxVolume;state.starter=id;startMusic();state.owned=[id];state.progress[id]=freshPokemonProgress(1,"rare");state.progress[id].moveRanks=baseMovesFor(id).map(m=>(m.kind==="support"||(m.unlockStage||0)<=0)?1:0);state.formation=[id,null,null,null,null,null];state.dexSeen=Array.isArray(state.dexSeen)?state.dexSeen:[];if(!state.dexSeen.includes(FAMILIES[id].stages[0].dex))state.dexSeen.push(FAMILIES[id].stages[0].dex);markDexUnread(FAMILIES[id].stages[0].dex);
     save();$("starterOverlay").classList.add("hidden");$("mainMenu").classList.add("hidden");
     logs=[];addLog(`${ownedStage(id).name} será tu primer compañero.`);renderEverything();
+    try{setTimeout(()=>window.PokeSendaPlayers?.autoJoin?.(),0);}catch(_){}
   }
 
   function updateFullscreenOptionButton(){
@@ -9345,6 +9346,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     state.trainerAvatar={...pkDraft,name};
     save();pkRenderTrainers();pkCloseCreator();
     if(pkCreatorFirstTime){
+      try{setTimeout(()=>window.PokeSendaPlayers?.autoJoin?.(),0);}catch(_){}
       if(!state.starter)$("starterOverlay").classList.remove("hidden");
       else{renderEverything();}
     }else{
@@ -9364,6 +9366,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function pkOnPlay(){
     $("mainMenu").classList.add("hidden");
     startMusic();
+    try{window.PokeSendaPlayers?.autoJoin?.();}catch(_){}
     if(!state.trainerAvatar){pkOpenCreator(true);return;}
     if(!state.starter&&!state.pokesendaWelcomeSeen&&pkShowFirstWelcome())return;
     if(!state.starter)$("starterOverlay").classList.remove("hidden");else renderEverything();
@@ -9749,6 +9752,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     state.trainerAvatar={name,trainerId:def.id,gender:def.gender};
     save();pkRenderTrainers();pkCloseCreator();
     if(pkCreatorFirstTime){
+      try{setTimeout(()=>window.PokeSendaPlayers?.autoJoin?.(),0);}catch(_){}
       if(!state.starter&&!state.pokesendaWelcomeSeen&&pkShowFirstWelcome())return;
       if(!state.starter)$("starterOverlay").classList.remove("hidden");
       else renderEverything();
@@ -13860,7 +13864,7 @@ module.exports = QRCode;
   const SESSION_PULL='pokesenda_cloud_pulled_v364048';
   const SESSION_LINK='pokesenda_cloud_linked_v364048';
   const $=id=>document.getElementById(id);
-  let busy=false, conflict=null, syncTimer=null, pollTimer=null, suppressSaveWatch=false, lastStatus='';
+  let busy=false, conflict=null, syncTimer=null, pollTimer=null, suppressSaveWatch=false, lastStatus='', ensureLinkPromise=null;
 
   function nowIso(){return new Date().toISOString();}
   function randomHex(bytes=32){
@@ -13945,6 +13949,28 @@ module.exports = QRCode;
   async function remoteUpdate(link,local,expectedRevision){
     const out=await rpc('pokesenda_update_cloud_save',{p_slot_id:link.slotId,p_secret:link.secret,p_save_data:local.data,p_expected_revision:Number(expectedRevision),p_device_name:deviceName()});
     const row=firstRow(out);return row?{ok:!!row.ok,revision:Number(row.revision||0),updatedAt:row.updated_at||null}:null;
+  }
+  async function ensureLink({silent=true}={}){
+    const existing=readLink();if(existing)return existing;
+    if(ensureLinkPromise)return ensureLinkPromise;
+    const initialLocal=getLocal();if(!initialLocal||!initialLocal.data?.starter)return null;
+    const task=(async()=>{
+      let waited=0;while(busy&&waited<5000){await new Promise(r=>setTimeout(r,100));waited+=100;}
+      const linked=readLink();if(linked)return linked;if(busy)return null;
+      busy=true;if(!silent)setStatus('Creando tu identidad online…','loading');
+      try{
+        const local=getLocal()||initialLocal,link=await remoteCreate(local);
+        updateUI();
+        if(!silent)setStatus('✅ Identidad online creada.','ok');
+        return link;
+      }catch(e){
+        if(!silent)setStatus('No se pudo crear la identidad online: '+friendlyError(e),'error');
+        console.warn('PokéSenda Online · no se pudo crear identidad automática:',e);
+        return null;
+      }finally{busy=false;}
+    })();
+    ensureLinkPromise=task;
+    try{return await task;}finally{if(ensureLinkPromise===task)ensureLinkPromise=null;}
   }
 
   function connectionCode(link=readLink()){
@@ -14122,7 +14148,7 @@ module.exports = QRCode;
   document.addEventListener('visibilitychange',()=>{});
   pollTimer=null;
 
-  window.PKCloud={open,sync:()=>syncNow({manual:true}),showQR,connectionCode};
+  window.PKCloud={open,sync:()=>syncNow({manual:true}),showQR,connectionCode,ensureLink:()=>ensureLink({silent:true})};
   installButtons();bootHash();
   setTimeout(()=>{if(readLink())setStatus('🛡️ Modo rescate activo: Cloud Save automático está pausado hasta que confirmes tu Kanto.','warn');},1400);
   try{if(sessionStorage.getItem(SESSION_PULL)){sessionStorage.removeItem(SESSION_PULL);setTimeout(()=>toastMsg('☁️ Partida más reciente cargada desde la nube'),800);}if(sessionStorage.getItem(SESSION_LINK)){sessionStorage.removeItem(SESSION_LINK);}}catch(_){}
@@ -14320,6 +14346,7 @@ module.exports = QRCode;
   const SUPABASE_KEY='sb_publishable_Y7aNyG3ggvVxBa6GwGvpsw_eAWhjWwO';
   const CLOUD_LINK_KEY='pokesenda_beta1_cloud_link_v1';
   const PUBLIC_CFG_KEY='pokesenda_beta1_public_profile_v1';
+  const AUTO_SESSION_KEY='pokesenda_beta1_online_session_v1';
   const $=id=>document.getElementById(id);
   let profiles=[];
   let busy=false,externalReturn=null;
@@ -14329,6 +14356,8 @@ module.exports = QRCode;
   function readCloud(){const v=readJson(CLOUD_LINK_KEY);return v&&v.slotId&&v.secret?v:null;}
   function readCfg(){const v=readJson(PUBLIC_CFG_KEY);return v&&typeof v==='object'?v:{enabled:false};}
   function writeCfg(v){try{localStorage.setItem(PUBLIC_CFG_KEY,JSON.stringify(v));}catch(_){} renderOwner();}
+  function markAutoSession(){try{sessionStorage.setItem(AUTO_SESSION_KEY,'1');}catch(_){}}
+  function autoSessionStarted(){try{return sessionStorage.getItem(AUTO_SESSION_KEY)==='1';}catch(_){return false;}}
   function fmtMeters(v){try{return typeof formatMeters==='function'?formatMeters(Number(v)||0):`${((Number(v)||0)/1000).toFixed(2)} km`;}catch(_){return `${Math.round(Number(v)||0)} m`;}}
   function relTime(iso){
     if(!iso)return 'sin fecha';
@@ -14395,22 +14424,36 @@ function sig(p){
     const host=$('pkPlayersOwner');if(!host)return;
     const link=readCloud(),cfg=readCfg(),snap=profileSnapshot();
     if(!snap){host.innerHTML='<div><b>⏳ Cargando tu Perfil de Entrenador</b><small>PokéSenda está preparando tus datos públicos…</small></div>';const tries=Number(host.dataset.profileRetry||0);if(tries<8){host.dataset.profileRetry=String(tries+1);setTimeout(()=>{try{renderOwner();}catch(_){}},300);}else{host.innerHTML='<div><b>⚠️ No se pudo leer el Perfil</b><small>Actualiza la página con Ctrl + F5. Si continúa, abre Perfil y vuelve a Jugadores.</small></div>';}return;}host.dataset.profileRetry='0';
-    if(!link){host.innerHTML='<div><b>☁️ Activa Cloud Save para aparecer</b><small>La identidad Cloud permite que solo tú puedas actualizar u ocultar tu perfil público.</small></div><button id="pkPlayersGoCloud" class="btn" type="button">Abrir Cloud Save</button>'; $('pkPlayersGoCloud')?.addEventListener('click',()=>{closePlayers(false);try{window.PKCloud?.open?.();}catch(_){}});return;}
-    host.innerHTML=cfg.enabled?`<div><b>🟢 Tu perfil está publicado</b><small>Se actualiza automáticamente mientras juegas. Solo se comparte tu resumen público, nunca el save ni la clave Cloud.</small></div><div class="pk-owner-actions"><button id="pkPlayersPublish" class="btn" type="button">↻ Actualizar ahora</button><button id="pkPlayersUnpublish" class="btn danger" type="button">Ocultar perfil</button></div>`:`<div><b>👥 Comunidad de Entrenadores</b><small>Publica tu progreso para que tus amigos puedan compararlo. No se comparte Pokédólares, inventario, Cloud Secret ni partida completa.</small></div><button id="pkPlayersPublish" class="btn primary" type="button">Publicar mi perfil</button>`;
+    if(!link){host.innerHTML='<div><b>🌐 Perfil online automático</b><small>Al pulsar “Comenzar aventura” PokéSenda crea tu identidad online y publica tu resumen automáticamente. Nunca comparte tu save ni tu clave privada.</small></div><button id="pkPlayersConnectNow" class="btn" type="button">↻ Conectar ahora</button>'; $('pkPlayersConnectNow')?.addEventListener('click',()=>autoJoinCommunity({preload:true,manual:true}));return;}
+    host.innerHTML=`<div><b>🟢 Perfil online automático</b><small>Ya formas parte de la Comunidad. Tu resumen se actualiza solo mientras juegas; nunca se comparte tu save, Pokédólares, inventario ni clave Cloud.</small></div><div class="pk-owner-actions"><button id="pkPlayersPublish" class="btn" type="button">↻ Actualizar ahora</button></div>`;
     $('pkPlayersPublish')?.addEventListener('click',()=>publishProfile(true));
-    $('pkPlayersUnpublish')?.addEventListener('click',unpublishProfile);
   }
   async function publishProfile(manual=false){
     if(busy)return false;const link=readCloud(),snap=profileSnapshot();if(!link){if(manual)setMsg('Activa Cloud Save antes de publicar tu perfil.','warn');return false;}if(!snap)return false;
-    const cfg=readCfg(),hash=sig(snap);if(!manual&&cfg.enabled&&cfg.lastHash===hash)return true;
+    const cfg=readCfg(),hash=sig(snap);if(!manual&&cfg.publicId&&cfg.lastHash===hash)return true;
     busy=true;if(manual)setMsg('Publicando tu perfil…');
     try{
       const out=await rpc('pokesenda_publish_public_profile',{p_slot_id:link.slotId,p_secret:link.secret,p_profile:snap});
       const row=Array.isArray(out)?out[0]:out;if(!row?.public_id)throw new Error('Supabase no devolvió el perfil público.');
       writeCfg({enabled:true,publicId:row.public_id,lastHash:hash,lastPublishedAt:row.updated_at||new Date().toISOString()});
-      if(manual){setMsg('Perfil publicado y actualizado correctamente.','ok');await loadProfiles(false);}
+      if(manual){setMsg('Perfil online actualizado correctamente.','ok');await loadProfiles(false);}
       return true;
     }catch(e){if(manual)setMsg(String(e?.message||e).includes('Could not find')?'Falta instalar la tabla de Jugadores en Supabase. Ejecuta el SQL del parche una sola vez.':`No se pudo publicar: ${e?.message||e}`,'bad');return false;}finally{busy=false;renderOwner();}
+  }
+  async function autoJoinCommunity({preload=true,manual=false}={}){
+    markAutoSession();
+    let link=readCloud();
+    if(!link){
+      try{link=await window.PKCloud?.ensureLink?.();}catch(e){console.warn('PokéSenda Online · identidad automática:',e);}
+      if(!link){if(manual)setMsg('No se pudo crear la identidad online. Revisa tu conexión e inténtalo otra vez.','warn');return false;}
+    }
+    let snap=profileSnapshot();
+    for(let i=0;!snap&&i<12;i++){await new Promise(r=>setTimeout(r,250));snap=profileSnapshot();}
+    if(!snap){if(manual)setMsg('El Perfil todavía se está preparando. Inténtalo otra vez en unos segundos.','warn');return false;}
+    const ok=await publishProfile(false);
+    if(ok&&preload){try{await loadProfiles(false);}catch(_){}}
+    if(manual&&ok)setMsg('✅ Perfil conectado automáticamente a la Comunidad.','ok');
+    return ok;
   }
   async function unpublishProfile(){
     if(busy)return;const link=readCloud();if(!link)return;busy=true;setMsg('Ocultando tu perfil…');
@@ -14451,12 +14494,12 @@ function sig(p){
   function ensureUI(){
     const close=$('playerProfileCloseBtn');if(close&&!$('playersOpenBtn')){const b=document.createElement('button');b.id='playersOpenBtn';b.className='btn';b.type='button';b.textContent='👥 Jugadores';close.insertAdjacentElement('beforebegin',b);b.addEventListener('click',openPlayers);}
     if(!$('pkPlayersOverlay')){
-      const o=document.createElement('div');o.id='pkPlayersOverlay';o.className='overlay hidden';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.innerHTML=`<div class="modal-box pk-players-box" onclick="event.stopPropagation()"><div class="pokemon-detail-head"><div><h2>👥 Comunidad de Entrenadores</h2><div class="tiny muted">Compara el progreso público de tus amigos sin compartir sus partidas.</div></div><div class="grow"></div><button id="pkPlayersClose" class="btn" type="button">Cerrar</button></div><div id="pkPlayersListView"><div id="pkPlayersOwner" class="pk-players-owner"></div><div class="pk-players-toolbar"><input id="pkPlayersSearch" type="search" placeholder="Buscar entrenador…" aria-label="Buscar entrenador"><select id="pkPlayersSort" aria-label="Ordenar jugadores"><option value="badges">🏅 Medallas</option><option value="infinite">♾ Récord Infinita</option><option value="dex">📘 Pokédex</option><option value="achievements">🏆 Logros</option><option value="team">⚔️ Nivel de equipo</option></select><button id="pkPlayersRefresh" class="btn" type="button">↻ Actualizar</button><span id="pkPlayersCount" class="pill">0 jugadores</span></div><div id="pkPlayersMessage" class="pk-players-message">Los perfiles aparecen cuando cada jugador decide publicarlos.</div><div id="pkPlayersList" class="pk-players-list"></div></div><div id="pkPlayerDetailView" class="hidden"></div></div>`;document.body.appendChild(o);
+      const o=document.createElement('div');o.id='pkPlayersOverlay';o.className='overlay hidden';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.innerHTML=`<div class="modal-box pk-players-box" onclick="event.stopPropagation()"><div class="pokemon-detail-head"><div><h2>👥 Comunidad de Entrenadores</h2><div class="tiny muted">Compara el progreso público de tus amigos sin compartir sus partidas.</div></div><div class="grow"></div><button id="pkPlayersClose" class="btn" type="button">Cerrar</button></div><div id="pkPlayersListView"><div id="pkPlayersOwner" class="pk-players-owner"></div><div class="pk-players-toolbar"><input id="pkPlayersSearch" type="search" placeholder="Buscar entrenador…" aria-label="Buscar entrenador"><select id="pkPlayersSort" aria-label="Ordenar jugadores"><option value="badges">🏅 Medallas</option><option value="infinite">♾ Récord Infinita</option><option value="dex">📘 Pokédex</option><option value="achievements">🏆 Logros</option><option value="team">⚔️ Nivel de equipo</option></select><button id="pkPlayersRefresh" class="btn" type="button">↻ Actualizar</button><span id="pkPlayersCount" class="pill">0 jugadores</span></div><div id="pkPlayersMessage" class="pk-players-message">Los perfiles se conectan automáticamente cuando cada Entrenador comienza su aventura.</div><div id="pkPlayersList" class="pk-players-list"></div></div><div id="pkPlayerDetailView" class="hidden"></div></div>`;document.body.appendChild(o);
       $('pkPlayersClose')?.addEventListener('click',()=>closePlayers(true));o.addEventListener('click',e=>{if(e.target===o)closePlayers(true);});$('pkPlayersRefresh')?.addEventListener('click',()=>loadProfiles(true));$('pkPlayersSearch')?.addEventListener('input',renderList);$('pkPlayersSort')?.addEventListener('change',renderList);
     }
   }
-  window.PokeSendaPlayers={open:openPlayers,close:closePlayers,refresh:()=>loadProfiles(true),publish:()=>publishProfile(true)};
-  function autoTick(){const cfg=readCfg();if(cfg.enabled&&document.visibilityState==='visible')publishProfile(false);}
+  window.PokeSendaPlayers={open:openPlayers,close:closePlayers,refresh:()=>loadProfiles(true),publish:()=>publishProfile(true),autoJoin:(opts={})=>autoJoinCommunity(opts)};
+  function autoTick(){if(!autoSessionStarted()||document.visibilityState!=='visible')return;autoJoinCommunity({preload:false});}
   function boot(){ensureUI();renderOwner();setTimeout(autoTick,5000);setInterval(autoTick,60000);}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
   setTimeout(ensureUI,1000);setTimeout(ensureUI,2500);
@@ -16236,7 +16279,7 @@ function prepareMenu(){
 }
 function renderMenu(){const s=read(),info=el("menuSaveInfo",menu);if(info)info.textContent=(s.dex?.length||0)+" especies · ₽"+Math.floor(s.money||0).toLocaleString("es-CL")+" · "+JOHTO_ROUTE_ORDER.reduce((n,id)=>n+Number(s.routes?.[id]?.completions||0),0)+" rutas completas";}
 function prepareStarter(){if(!starter)return;const h=q("h2",starter);if(h)h.textContent="Elige tu primer compañero de Johto";const p=q("p",starter);if(p)p.textContent="Tu campaña de Johto comienza desde cero. El progreso de cada región se conserva al viajar.";const buttons=qa("[data-starter]",starter),defs=[{id:"j_cyndaquil",dex:155,name:"Cyndaquil",desc:"Fuego · ofensivo y rápido"},{id:"j_totodile",dex:158,name:"Totodile",desc:"Agua · resistente y físico"},{id:"j_chikorita",dex:152,name:"Chikorita",desc:"Planta · equilibrada y soporte"}];buttons.forEach((b,i)=>{const d=defs[i];if(!d)return;b.dataset.jStarter=d.id;delete b.dataset.starter;const img=q("img",b);if(img)img.src=johtoUiSprite(d.dex);const strong=q("b",b),small=q("small",b);if(strong)strong.textContent=d.name;if(small)small.textContent=d.desc;b.onclick=()=>chooseStarter(d.id,d.dex);});}
-function chooseStarter(id,dex){let s=read();s.starter=id;s.dex=Array.isArray(s.dex)?s.dex:[];s.pokemon=s.pokemon&&typeof s.pokemon==="object"?s.pokemon:{};s.formation=Array.isArray(s.formation)?s.formation:Array(6).fill(null);if(!s.pokemon[id])s.pokemon[id]={familyId:id,dex,level:1,xp:0,nature:["firme","seria","alegre","modesta","cauta"][Math.floor(Math.random()*5)],copies:1,shinyUnlocked:false,starter:true,heldItem:null,stars:1};if(!s.dex.includes(dex))s.dex.push(dex);if(!s.formation.some(Boolean))s.formation[0]=id;write(s);B()?.reload?.();showLobby();}
+function chooseStarter(id,dex){let s=read();s.starter=id;s.dex=Array.isArray(s.dex)?s.dex:[];s.pokemon=s.pokemon&&typeof s.pokemon==="object"?s.pokemon:{};s.formation=Array.isArray(s.formation)?s.formation:Array(6).fill(null);if(!s.pokemon[id])s.pokemon[id]={familyId:id,dex,level:1,xp:0,nature:["firme","seria","alegre","modesta","cauta"][Math.floor(Math.random()*5)],copies:1,shinyUnlocked:false,starter:true,heldItem:null,stars:1};if(!s.dex.includes(dex))s.dex.push(dex);if(!s.formation.some(Boolean))s.formation[0]=id;write(s);B()?.reload?.();showLobby();try{setTimeout(()=>window.PokeSendaPlayers?.autoJoin?.({preload:false}),0);}catch(_){}}
 function prepareGame(){
   if(!game)return;
   game.style.removeProperty("width");game.style.removeProperty("height");

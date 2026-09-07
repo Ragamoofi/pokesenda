@@ -2980,6 +2980,7 @@ body{letter-spacing:.08px}
 <audio id="musicLittlerootSource" preload="none" src="assets/embedded/927e20f81bf365f6.mp3"></audio>
 <audio id="introMusic" autoplay playsinline preload="auto" src="assets/embedded/b1d2ea360141e551.mp3"></audio>
 <audio id="menuMusic" playsinline preload="auto" src="assets/embedded/5e90102d6b480ea5.mp3"></audio>
+<audio id="johtoBgMusic" playsinline preload="auto"></audio>
 <script id="menuMusicEarlyBoot">
 (()=>{
   const audio=document.getElementById("introMusic");
@@ -15608,7 +15609,7 @@ function johtoInventorySlotsFor(items,kind="main"){return Object.entries(items||
 function johtoCanStoreItem(id,amount=1){if(!materialItemDef(id))return false;const add=Math.max(0,Number(amount)||0),have=Math.max(0,Number(js.inventory?.[id]||0)),kind=johtoInventoryKindFor(id);if(kind==="potions")return true;if(have+add>J_ITEM_STACK_MAX)return false;if(have>0)return true;return johtoInventorySlotsFor(js.inventory,kind)<johtoInventoryCapacity(kind);}
 function johtoCanSwapHeldItems(oldItem,newItem){const test={...(js.inventory||{})};if(oldItem)test[oldItem]=Math.max(0,Number(test[oldItem]||0))+1;if(newItem)test[newItem]=Math.max(0,Number(test[newItem]||0)-1);for(const [id,qtyRaw] of Object.entries(test)){const qty=Math.max(0,Number(qtyRaw)||0);if(qty>0&&!johtoIsPotionItem(id)&&qty>J_ITEM_STACK_MAX)return false;}return johtoInventorySlotsFor(test,"main")<=johtoInventoryCapacity("main")&&johtoInventorySlotsFor(test,"stones")<=johtoInventoryCapacity("stones");}
 function grantItem(id){
-  if(!johtoCanStoreItem(id,1))return false;js.inventory[id]=Math.max(0,Number(js.inventory?.[id]||0))+1;markJohtoItemSeen(id);if(run)run.items++;save();return true;
+  if(!johtoCanStoreItem(id,1))return false;js.inventory[id]=Math.max(0,Number(js.inventory?.[id]||0))+1;markJohtoItemSeen(id);if(run)run.items++;if(!["potion","super_potion","hyper_potion","full_heal"].includes(id))window.PokeSendaJohtoRuntime?.playSfx?.("itemFoundSfx");save();return true;
 }
 function processAutoPotion(){
   if(!js.options.autoPotion||skillRank("a5")<1||!run)return;
@@ -16201,6 +16202,59 @@ const JOHTO_ROUTE_ORDER=["johto_route1","johto_route2","johto_route3"];
 const CROSS_NAMES={25:"Pikachu",26:"Raichu",35:"Clefairy",36:"Clefable",39:"Jigglypuff",40:"Wigglytuff",41:"Zubat",42:"Golbat",43:"Oddish",44:"Gloom",45:"Vileplume",60:"Poliwag",61:"Poliwhirl",62:"Poliwrath",79:"Slowpoke",80:"Slowbro",95:"Onix",106:"Hitmonlee",107:"Hitmonchan",113:"Chansey",116:"Horsea",117:"Seadra",123:"Scyther",124:"Jynx",125:"Electabuzz",126:"Magmar",133:"Eevee",134:"Vaporeon",135:"Jolteon",136:"Flareon",137:"Porygon"};
 const read=()=>{try{return JSON.parse(localStorage.getItem(SAVE)||"{}");}catch(_){return {};}};
 const write=s=>localStorage.setItem(SAVE,JSON.stringify(s));
+
+// V36.64.15 · Audio regional Johto: mismo flujo continuo de Kanto, con tema propio primero.
+// La pista OP Red del menú Kanto queda EXCLUIDA de Johto por diseño.
+const JOHTO_ROUTE101_MUSIC_SRC=document.querySelector("body > #bgMusic")?.getAttribute("src")||"assets/embedded/abc32edd4bd00249.mp3";
+const JOHTO_MUSIC_TRACKS={
+  johto_menu:{name:"Pokémon Johto",src:"assets/embedded/a7e231ce83f1e66d.mp3"},
+  route101:{name:"Route 101",src:JOHTO_ROUTE101_MUSIC_SRC},
+  bills_house:{name:"To Bill's House",sourceId:"musicBillsSource"},
+  route1:{name:"Route 1",sourceId:"musicRoute1Source"},
+  driftveil:{name:"Driftveil City",sourceId:"musicDriftveilSource"},
+  littleroot:{name:"Littleroot Town",sourceId:"musicLittlerootSource"}
+};
+const JOHTO_MUSIC_KEYS=Object.keys(JOHTO_MUSIC_TRACKS);
+let johtoMusicBound=false,johtoMusicSessionStarted=false,kantoMusicSuspended=false;
+function johtoGlobalVolume(id,fallback){const x=document.querySelector("body > #optionsOverlay #"+CSS.escape(id)),v=Number(x?.value);return Number.isFinite(v)?Math.max(0,Math.min(1,v/100)):fallback;}
+function johtoMusicVolume(){return johtoGlobalVolume("musicVolumeRange",.22);}
+function johtoSfxVolume(){return johtoGlobalVolume("sfxVolumeRange",.60);}
+function johtoPlayKantoSfx(id){
+  const audio=document.querySelector("body > #"+CSS.escape(id));if(!audio)return false;
+  audio.volume=johtoSfxVolume();try{audio.pause();audio.currentTime=0;}catch(_){ }
+  if(audio.volume>0)audio.play?.().catch?.(()=>{});return true;
+}
+function johtoMusicSource(key){const def=JOHTO_MUSIC_TRACKS[key];if(!def)return"";if(def.src)return def.src;return def.sourceId?(document.querySelector("body > #"+CSS.escape(def.sourceId))?.getAttribute("src")||""):"";}
+function johtoTrackKey(){const s=read(),key=String(s.options?.musicTrack||"");return JOHTO_MUSIC_TRACKS[key]?key:"johto_menu";}
+function johtoStoreTrack(key){if(!JOHTO_MUSIC_TRACKS[key])key="johto_menu";const s=read();s.options=s.options&&typeof s.options==="object"?s.options:{};s.options.musicTrack=key;write(s);return key;}
+function johtoSuspendKantoMusic(){
+  kantoMusicSuspended=true;
+  for(const id of ["introMusic","bgMusic","menuMusic"]){const a=document.querySelector("body > #"+id);try{a?.pause?.();}catch(_){ }}
+}
+function johtoSetMusicTrack(key,playNow=true,reset=true){
+  const audio=document.querySelector("body > #johtoBgMusic");if(!audio)return;key=JOHTO_MUSIC_TRACKS[key]?key:"johto_menu";const src=johtoMusicSource(key);if(!src)return;
+  if(audio.dataset.trackKey!==key){audio.pause();audio.src=src;audio.dataset.trackKey=key;try{audio.currentTime=0;}catch(_){ }audio.load();}
+  else if(reset){try{audio.currentTime=0;}catch(_){ }}
+  audio.loop=false;audio.muted=false;audio.volume=johtoMusicVolume();johtoStoreTrack(key);
+  if(playNow&&audio.volume>0)audio.play().catch(()=>{});
+}
+function johtoAdvanceMusicPlaylist(){const cur=document.querySelector("body > #johtoBgMusic")?.dataset.trackKey||johtoTrackKey(),idx=Math.max(0,JOHTO_MUSIC_KEYS.indexOf(cur)),next=JOHTO_MUSIC_KEYS[(idx+1)%JOHTO_MUSIC_KEYS.length];johtoSetMusicTrack(next,true,true);}
+function johtoBindMusic(){
+  if(johtoMusicBound)return;johtoMusicBound=true;const audio=document.querySelector("body > #johtoBgMusic");if(!audio)return;
+  audio.loop=false;audio.addEventListener("ended",johtoAdvanceMusicPlaylist);audio.addEventListener("error",()=>{if(root&&!root.classList.contains("hidden"))setTimeout(johtoAdvanceMusicPlaylist,0);});
+}
+function johtoSyncMusicVolume(){const audio=document.querySelector("body > #johtoBgMusic");if(!audio)return;audio.volume=johtoMusicVolume();if(audio.volume<=0){audio.pause();return;}if(root&&!root.classList.contains("hidden")&&audio.paused)audio.play().catch(()=>{});}
+function johtoStartMusic(){
+  johtoBindMusic();johtoSuspendKantoMusic();const audio=document.querySelector("body > #johtoBgMusic");if(!audio)return;
+  if(!johtoMusicSessionStarted){johtoMusicSessionStarted=true;johtoSetMusicTrack(johtoTrackKey(),true,false);return;}
+  audio.volume=johtoMusicVolume();audio.muted=false;if(audio.volume>0&&audio.paused)audio.play().catch(()=>{});
+}
+function johtoStopMusicAndRestoreKanto(){
+  const ja=document.querySelector("body > #johtoBgMusic");try{ja?.pause?.();}catch(_){ }kantoMusicSuspended=false;
+  const vol=johtoMusicVolume(),intro=document.querySelector("body > #introMusic"),bg=document.querySelector("body > #bgMusic");if(vol<=0)return;
+  const introActive=!!intro&&!intro.ended&&intro.dataset.pkIntroDone!=="1";if(introActive){intro.muted=false;intro.volume=Math.max(0,Math.min(1,vol*.78));intro.play?.().catch?.(()=>{});}else if(bg){bg.muted=false;bg.volume=vol;bg.play?.().catch?.(()=>{});}
+}
+function johtoMusicOptionsHTML(){return JOHTO_MUSIC_KEYS.map(k=>'<option value="'+k+'">'+JOHTO_MUSIC_TRACKS[k].name+'</option>').join("");}
 const q=(sel,scope=root)=>scope?.querySelector(sel)||null,el=(id,scope=root)=>q("#"+CSS.escape(id),scope),qa=(sel,scope=root)=>[...(scope?.querySelectorAll(sel)||[])];
 const STATIC_SPRITE="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
 const spriteUrl=dex=>STATIC_SPRITE+Number(dex)+".png";
@@ -16296,8 +16350,8 @@ function build(){if(root)return;root=document.createElement("div");root.id="pkRe
   prepareMenu();prepareStarter();prepareRegionSelector();prepareGame();prepareCheckpoint();prepareCenter();prepareReward();prepareInventory();preparePokedex();prepareBox();prepareDetail();prepareSkillTree();prepareOptions();prepareMT();prepareAchievements();prepareRouteEvents();prepareGyms();prepareRegionalProfile();prepareEvolution();prepareDexLore();prepareEnemyDetail();prepareItemEquip();prepareMaterials();prepareCelebrations();preparePatchNotes();prepareWhyOverlay();prepareCompareOverlay();prepareExitOverlay();prepareAchievementCorner();prepareEvolutionPop();prepareHelpContext();prepareFormationMini();prepareFirstWelcome();prepareMobileParity();prepareRegionalSystemOverlays();
 }
 function hideViews(){[menu,game,starter,regionOverlay,checkpointOverlay,centerOverlay,rewardOverlay,lootPanel,pokedexOverlay,boxOverlay,pcSwapOverlay,detailOverlay,skillTreeOverlay,optionsOverlay,mtGachaOverlay,tmEquipOverlay,achievementsOverlay,achievementTmChoiceOverlay,routeEventOverlay,gymSelectOverlay,gymBattleOverlay,gymPotionOverlay,gymMonDetailOverlay,gymResultOverlay,playerProfileOverlay,evolutionOverlay,dexLoreOverlay,enemyDetailOverlay,itemEquipOverlay,incenseVendorOverlay,incenseInventoryOverlay,mintVendorOverlay,mintInventoryOverlay,mintUseOverlay,legendaryCelebrationOverlay,shinyCelebrationOverlay,patchNotesOverlay,uxWhyOverlay,uxCompareOverlay,exitOverlay,firstWelcomeOverlay,saveTransferOverlay,backupOverlay,diagnosticOverlay,cloudOverlay,cloudConflictOverlay,casinoOverlay].forEach(x=>x?.classList.add("hidden"));}
-function openRoot(){build();document.getElementById("pkIsoJohtoRoot")?.classList.add("hidden");root.classList.remove("hidden");}
-function closeRoot(){if(B()?.getRun?.())B()?.stop?.(true);hideViews();root.classList.add("hidden");currentView="kanto";document.body?.classList.remove("pk-mobile-modal-open");}
+function openRoot(){build();document.getElementById("pkIsoJohtoRoot")?.classList.add("hidden");root.classList.remove("hidden");johtoStartMusic();}
+function closeRoot(){if(B()?.getRun?.())B()?.stop?.(true);hideViews();root.classList.add("hidden");currentView="kanto";document.body?.classList.remove("pk-mobile-modal-open");johtoStopMusicAndRestoreKanto();}
 function showStarter(){openRoot();hideViews();starter.classList.remove("hidden");currentView="starter";syncMobileParity();}
 function showLobby(){openRoot();hideViews();menu.classList.remove("hidden");currentView="menu";renderMenu();syncMobileParity();}
 function showGame(){openRoot();hideViews();game.classList.remove("hidden");currentView="game";formationSig="";worldSig="";renderAll();updatePremiumUI();syncMobileParity();if(B()?.premiumUnlocked?.())syncPremiumClock(false);}
@@ -16462,9 +16516,9 @@ let jComparePending=null,jAchievementCornerTimer=null;
 function prepareExitOverlay(){if(!exitOverlay)return;const back=el("exitBackBtn",exitOverlay);if(back)back.onclick=()=>{exitOverlay.classList.add("hidden");showLobby();};exitOverlay.onclick=e=>{if(e.target===exitOverlay){exitOverlay.classList.add("hidden");showLobby();}};}
 function openExitOverlay(){if(!exitOverlay)return;try{B()?.reload?.();}catch(_){}menu?.classList.add("hidden");exitOverlay.classList.remove("hidden");}
 function prepareAchievementCorner(){if(achievementCornerPop)achievementCornerPop.classList.remove("show");}
-function showAchievementCorner(defs=[]){if(!achievementCornerPop||!defs.length)return;const title=el("achievementCornerTitle",achievementCornerPop),sub=el("achievementCornerSub",achievementCornerPop),n=defs.length;if(title)title.textContent=n>1?"¡"+n+" logros desbloqueados!":(defs[0]?.title||"Nuevo logro");if(sub)sub.textContent=n>1?"Abre el panel de Logros para revisarlos todos.":(defs[0]?.desc||"Revisa tu progreso en el panel de Logros.");achievementCornerPop.classList.remove("show");if(jAchievementCornerTimer)clearTimeout(jAchievementCornerTimer);try{const a=document.querySelector("body > #achievementUnlockSfx");if(a){a.volume=.6;a.currentTime=0;a.play?.().catch?.(()=>{});}}catch(_){}requestAnimationFrame(()=>achievementCornerPop.classList.add("show"));jAchievementCornerTimer=setTimeout(()=>{achievementCornerPop?.classList.remove("show");jAchievementCornerTimer=null;},2400);}
+function showAchievementCorner(defs=[]){if(!achievementCornerPop||!defs.length)return;const title=el("achievementCornerTitle",achievementCornerPop),sub=el("achievementCornerSub",achievementCornerPop),n=defs.length;if(title)title.textContent=n>1?"¡"+n+" logros desbloqueados!":(defs[0]?.title||"Nuevo logro");if(sub)sub.textContent=n>1?"Abre el panel de Logros para revisarlos todos.":(defs[0]?.desc||"Revisa tu progreso en el panel de Logros.");achievementCornerPop.classList.remove("show");if(jAchievementCornerTimer)clearTimeout(jAchievementCornerTimer);johtoPlayKantoSfx("achievementUnlockSfx");requestAnimationFrame(()=>achievementCornerPop.classList.add("show"));jAchievementCornerTimer=setTimeout(()=>{achievementCornerPop?.classList.remove("show");jAchievementCornerTimer=null;},2400);}
 function prepareEvolutionPop(){if(evolutionPopEl)evolutionPopEl.classList.remove("show");}
-function showEvolutionPop(text){if(!evolutionPopEl)return;evolutionPopEl.textContent="✨ "+text;evolutionPopEl.classList.add("show");clearTimeout(showEvolutionPop._t);showEvolutionPop._t=setTimeout(()=>evolutionPopEl?.classList.remove("show"),2200);try{const a=document.querySelector("body > #evolveSfx");if(a){a.volume=.6;a.currentTime=0;a.play?.().catch?.(()=>{});}}catch(_){}}
+function showEvolutionPop(text){if(!evolutionPopEl)return;evolutionPopEl.textContent="✨ "+text;evolutionPopEl.classList.add("show");clearTimeout(showEvolutionPop._t);showEvolutionPop._t=setTimeout(()=>evolutionPopEl?.classList.remove("show"),2200);johtoPlayKantoSfx("evolveSfx");}
 function prepareCompareOverlay(){if(!uxCompareOverlay)return;const close=()=>closeCompareOverlay(true);el("uxCompareClose",uxCompareOverlay)?.addEventListener("click",close);el("uxCompareCancel",uxCompareOverlay)?.addEventListener("click",close);uxCompareOverlay.onclick=e=>{if(e.target===uxCompareOverlay)close();};el("uxCompareConfirm",uxCompareOverlay)?.addEventListener("click",()=>{const p=jComparePending;jComparePending=null;uxCompareOverlay.classList.add("hidden");try{p?.onConfirm?.();}catch(err){console.error(err);toast("No se pudo aplicar el cambio");}});}
 function closeCompareOverlay(cancel=true){if(!uxCompareOverlay||uxCompareOverlay.classList.contains("hidden"))return;uxCompareOverlay.classList.add("hidden");const p=jComparePending;jComparePending=null;if(cancel)try{p?.onCancel?.();}catch(_){}}
 function htmlSafe(x){return String(x??"").replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
@@ -16827,7 +16881,7 @@ function onCenterOpen(m,deadline){centerOverlay.classList.remove("hidden");el("c
 function onCenterTick(left){el("centerTimerText",centerOverlay).textContent=(left/1000).toFixed(1)+" s";el("centerTimerFill",centerOverlay).style.width=Math.max(0,left/10000*100)+"%";}
 function onCenterClose(){centerOverlay.classList.add("hidden");showGame();}
 function prepareReward(){if(!rewardOverlay)return;el("openChestBtn",rewardOverlay).onclick=()=>premiumSession?revealPremiumReward():B()?.openReward?.();el("rewardContinueBtn",rewardOverlay).onclick=()=>premiumSession?closePremiumReward():B()?.continueReward?.();const sel=el("gachaIncenseSelect",rewardOverlay);if(sel)sel.onchange=()=>{const type=sel.value||null;if(!B()?.setRewardIncense?.(type)){sel.value="";}renderRewardIncense();};}
-function onRewardReady(km){el("rewardBox",rewardOverlay)?.classList.remove("pk-premium-reward");rewardOverlay.classList.remove("hidden");const ri=B()?.getCurrentRouteInfo?.()||{name:"Johto"};el("rewardTitle",rewardOverlay).textContent=km===10?"Recompensa final de "+ri.name:"Recompensa del km "+km;el("rewardSubtitle",rewardOverlay).textContent="La Poké Ball contiene una tirada aleatoria del pool real de esta zona.";el("closedChest",rewardOverlay).style.display="block";el("rouletteWrap",rewardOverlay).style.display="none";el("rewardResult",rewardOverlay).style.display="none";el("openChestBtn",rewardOverlay).textContent="Capturar";const lg=q(".reward-legend",rewardOverlay);if(lg)lg.textContent="Al pulsar Capturar comienza la ruleta. El Incienso seleccionado se consume en ese momento.";renderRewardIncense();}
+function onRewardReady(km){el("rewardBox",rewardOverlay)?.classList.remove("pk-premium-reward");rewardOverlay.classList.remove("hidden");const ri=B()?.getCurrentRouteInfo?.()||{name:"Johto"};el("rewardTitle",rewardOverlay).textContent=km===10?"Recompensa final de "+ri.name:"Recompensa del km "+km;el("rewardSubtitle",rewardOverlay).textContent="La Poké Ball contiene una tirada aleatoria del pool real de esta zona.";el("closedChest",rewardOverlay).style.display="block";el("rouletteWrap",rewardOverlay).style.display="none";el("rewardResult",rewardOverlay).style.display="none";el("openChestBtn",rewardOverlay).textContent="Capturar";const lg=q(".reward-legend",rewardOverlay);if(lg)lg.textContent="Al pulsar Capturar comienza la ruleta. El Incienso seleccionado se consume en ese momento.";renderRewardIncense();johtoPlayKantoSfx("gachaponWeySfx");}
 function onRouteUnlocked(info){
   const name=String(info?.name||"Nueva ruta");toast("🗺️ NUEVA RUTA · "+name+" desbloqueada");
   try{renderTop();renderAll();}catch(_){}
@@ -16993,7 +17047,7 @@ function openPremiumReward(roll,source,returnAchievements=false){
   premiumSession={roll:{...roll},source,opened:false,returnAchievements,resumeRun:premiumResumeRun};
   const box=el("rewardBox",rewardOverlay);box?.classList.remove("pk-premium-reward");if(box)box.dataset.premiumSource=source||"free";
   el("gachaIncensePanel",rewardOverlay)?.classList.add("hidden");rewardOverlay.classList.remove("hidden");el("rewardTitle",rewardOverlay).textContent=premiumSourceTitle(source);const sub=el("rewardSubtitle",rewardOverlay);if(sub)sub.textContent=source==="shinyAchievement"?"Premio único de Logros · usa el pool Premium de Johto y garantiza una variante Shiny en esta apertura.":"Pool premium de Johto · 0% Común · 22% Poco común · 48% Raro · 28% Épico · 2% Legendario.";
-  el("closedChest",rewardOverlay).style.display="block";el("rouletteWrap",rewardOverlay).style.display="none";el("rewardResult",rewardOverlay).style.display="none";el("openChestBtn",rewardOverlay).disabled=false;el("openChestBtn",rewardOverlay).textContent=source==="shinyAchievement"?"Abrir Ticket Shiny":"Abrir Gachapón Premium";const lg=q(".reward-legend",rewardOverlay);if(lg)lg.textContent=source==="shinyAchievement"?"El Ticket garantiza la variante Shiny; la especie se decide en la ruleta.":"La ruleta usa exclusivamente el pool Premium y no consume Inciensos.";
+  el("closedChest",rewardOverlay).style.display="block";el("rouletteWrap",rewardOverlay).style.display="none";el("rewardResult",rewardOverlay).style.display="none";el("openChestBtn",rewardOverlay).disabled=false;el("openChestBtn",rewardOverlay).textContent=source==="shinyAchievement"?"Abrir Ticket Shiny":"Abrir Gachapón Premium";const lg=q(".reward-legend",rewardOverlay);if(lg)lg.textContent=source==="shinyAchievement"?"El Ticket garantiza la variante Shiny; la especie se decide en la ruleta.":"La ruleta usa exclusivamente el pool Premium y no consume Inciensos.";johtoPlayKantoSfx("gachaponWeySfx");
 }
 function revealPremiumReward(){
   if(!premiumSession||premiumSession.opened)return;premiumSession.opened=true;el("openChestBtn",rewardOverlay).disabled=true;
@@ -17026,7 +17080,7 @@ function prepareOptions(){
   qa("[data-speed]",optionsOverlay).forEach(b=>b.onclick=()=>{B()?.setSpeed?.(Number(b.dataset.speed));renderOptions();renderAll();});
   for(const [id,key] of [["animationsToggle","animations"],["combatFloatsToggle","combatFloats"],["confirmStopToggle","confirmStop"],["routeEventsToggle","routeEvents"]]){const x=el(id,optionsOverlay);if(x)x.onchange=()=>{B()?.setPlainOption?.(key,!!x.checked);renderOptions();};}
   const fs=el("fullscreenBtn",optionsOverlay);if(fs)fs.onclick=()=>{document.fullscreenElement?document.exitFullscreen?.():document.documentElement.requestFullscreen?.();};
-  const mv=el("musicVolumeRange",optionsOverlay),mt=el("musicTrackSelect",optionsOverlay),sv=el("sfxVolumeRange",optionsOverlay);if(mv){mv.disabled=false;mv.oninput=()=>{bridgeOriginalOption("musicVolumeRange","input",mv.value);renderOptions();};}if(mt){mt.disabled=false;mt.onchange=()=>{bridgeOriginalOption("musicTrackSelect","change",mt.value);renderOptions();};}if(sv){sv.disabled=false;sv.oninput=()=>{bridgeOriginalOption("sfxVolumeRange","input",sv.value);renderOptions();};}
+  const mv=el("musicVolumeRange",optionsOverlay),mt=el("musicTrackSelect",optionsOverlay),sv=el("sfxVolumeRange",optionsOverlay);if(mv){mv.disabled=false;mv.oninput=()=>{bridgeOriginalOption("musicVolumeRange","input",mv.value);johtoSuspendKantoMusic();johtoSyncMusicVolume();renderOptions();};}if(mt){mt.disabled=false;mt.innerHTML=johtoMusicOptionsHTML();mt.onchange=()=>{johtoSetMusicTrack(mt.value,true,true);renderOptions();};}if(sv){sv.disabled=false;sv.oninput=()=>{bridgeOriginalOption("sfxVolumeRange","input",sv.value);renderOptions();};}
   const cloud=el("optionsCloudSaveBtn",optionsOverlay);if(cloud){cloud.disabled=false;cloud.title="Cloud Save · Johto próximamente";cloud.onclick=openJohtoCloudParity;}
   const transfer=el("optionsTransferSaveBtn",optionsOverlay);if(transfer){transfer.disabled=false;transfer.title="Exportar o importar solamente la campaña de Johto";transfer.onclick=openJohtoTransferParity;}
   const backups=el("optionsBackupsBtn",optionsOverlay);if(backups){backups.disabled=false;backups.title="Respaldos locales exclusivos de Johto";backups.onclick=openJohtoBackupsParity;}
@@ -17035,7 +17089,7 @@ function prepareOptions(){
 function renderOptions(){
   const s=read();qa("[data-speed]",optionsOverlay).forEach(b=>b.classList.toggle("active",Number(b.dataset.speed)===Number(s.options?.battleSpeed||1)));
   for(const [id,key] of [["animationsToggle","animations"],["combatFloatsToggle","combatFloats"],["confirmStopToggle","confirmStop"],["routeEventsToggle","routeEvents"]]){const x=el(id,optionsOverlay);if(x)x.checked=s.options?.[key]!==false;}
-  for(const id of ["musicVolumeRange","musicTrackSelect","sfxVolumeRange"]){const orig=document.querySelector("body > #optionsOverlay #"+CSS.escape(id)),x=el(id,optionsOverlay);if(orig&&x)x.value=orig.value;}const mv=el("musicVolumeValue",optionsOverlay),sv=el("sfxVolumeValue",optionsOverlay);if(mv&&el("musicVolumeRange",optionsOverlay))mv.textContent=el("musicVolumeRange",optionsOverlay).value+"%";if(sv&&el("sfxVolumeRange",optionsOverlay))sv.textContent=el("sfxVolumeRange",optionsOverlay).value+"%";
+  for(const id of ["musicVolumeRange","sfxVolumeRange"]){const orig=document.querySelector("body > #optionsOverlay #"+CSS.escape(id)),x=el(id,optionsOverlay);if(orig&&x)x.value=orig.value;}const mt=el("musicTrackSelect",optionsOverlay);if(mt){if(!mt.options.length)mt.innerHTML=johtoMusicOptionsHTML();mt.value=johtoTrackKey();}const mv=el("musicVolumeValue",optionsOverlay),sv=el("sfxVolumeValue",optionsOverlay);if(mv&&el("musicVolumeRange",optionsOverlay))mv.textContent=el("musicVolumeRange",optionsOverlay).value+"%";if(sv&&el("sfxVolumeRange",optionsOverlay))sv.textContent=el("sfxVolumeRange",optionsOverlay).value+"%";
 }
 function openOptions(){renderOptions();optionsOverlay.classList.remove("hidden");}
 function prepareMT(){
@@ -17725,7 +17779,7 @@ function johtoFxCenter(node,field){if(!node||!field)return null;const r=node.get
 function johtoSpawnFloat(node,text,cls="",color=""){const s=read();if(s.options?.combatFloats===false||!node)return;const layer=el("fxLayer",game),field=el("field",game),p=johtoFxCenter(node,field);if(!layer||!p||layer.childElementCount>40)return;const n=document.createElement("span");n.className="pk-dmg"+(cls?" "+cls:"");if(color)n.style.color=color;n.textContent=text;n.style.left=Math.round(p.x+(Math.random()*20-10))+"px";n.style.top=Math.round(p.y-15+Math.random()*8)+"px";layer.appendChild(n);setTimeout(()=>n.remove(),950);}
 function johtoProjectile(source,target,type,delay=0){const s=read();if(s.options?.animations===false||!source||!target)return;const layer=el("fxLayer",game),field=el("field",game),a=johtoFxCenter(source,field),b=johtoFxCenter(target,field);if(!layer||!a||!b)return;const icons={normal:"✦",fire:"🔥",water:"💧",electric:"⚡",grass:"🍃",ice:"❄",fighting:"✹",poison:"☠",ground:"◆",flying:"➶",psychic:"✧",bug:"✣",rock:"●",ghost:"◈",dragon:"✦",dark:"◆",steel:"✦",fairy:"✧"},n=document.createElement("div");n.className="fx-projectile";n.textContent=icons[type]||"✦";n.style.left=(a.x-12)+"px";n.style.top=(a.y-12)+"px";layer.appendChild(n);const dx=b.x-a.x,dy=b.y-a.y,anim=n.animate([{transform:"translate(0,0) scale(.7)",opacity:0},{transform:"translate(0,0) scale(1)",opacity:1,offset:.12},{transform:`translate(${dx}px,${dy}px) scale(1.15)`,opacity:1,offset:.86},{transform:`translate(${dx}px,${dy}px) scale(.7)`,opacity:0}],{duration:300,delay,easing:"cubic-bezier(.25,.8,.25,1)"});anim.onfinish=()=>n.remove();}
 function johtoBattleFx(ev){try{if(!ev||currentView!=="game")return;const s=read(),field=el("field",game);if(!field)return;const ally=id=>q('[data-j-world-id="'+CSS.escape(String(id))+'"] .mon',game),enemy=uid=>q('[data-j-enemy-uid="'+CSS.escape(String(uid))+'"] .enemy',game);if(ev.kind==="attack"&&s.options?.animations!==false){const src=ev.side==="player"?ally(ev.sourceId):enemy(ev.sourceUid),targets=ev.side==="player"?(ev.targetUids||[]).map(enemy):(ev.targetIds||[]).map(ally);targets.filter(Boolean).forEach((t,i)=>johtoProjectile(src,t,ev.moveType,i*28));}else if(ev.kind==="hit"){const node=ev.side==="player"?ally(ev.targetId):enemy(ev.targetUid);let cls=ev.crit?"crit":ev.status==="burn"?"burn":ev.status==="poison"?"poison":Number(ev.eff)>1.01?"super":Number(ev.eff)<.99?"resist":"",color=TYPE_COLOR[ev.moveType]||"#fff";johtoSpawnFloat(node,"-"+Math.max(1,Math.ceil(Number(ev.amount)||0)),cls,color);if(s.options?.animations!==false&&node){node.classList.remove("hit-react");void node.offsetWidth;node.classList.add("hit-react");setTimeout(()=>node.classList.remove("hit-react"),300);}}else if(ev.kind==="heal")johtoSpawnFloat(ally(ev.targetId),"+"+Math.max(1,Math.ceil(Number(ev.amount)||0)),"heal");else if(ev.kind==="miss"){const node=ev.targetUid?enemy(ev.targetUid):ally(ev.targetId);johtoSpawnFloat(node,"FALLO","resist");}else if(ev.kind==="immune")johtoSpawnFloat(ally(ev.targetId),"INMUNE","resist");}catch(_){}}
-window.PokeSendaJohtoRuntime={open,close:closeRoot,onBattleFx:johtoBattleFx,onGymFx:johtoGymFx,showLobby,showGame,reopenProfile:reopenRegionalProfile,el:id=>el(id),renderAll,checkAchievements,updatePremiumUI,syncPremiumClock,onCenterOpen,onCenterTick,onCenterClose,onRewardReady,onRouteUnlocked,onRewardRoll,onRewardFinalized,onRewardClose,onRunFailed,onRunStopped,onTMCompatChanged,onRouteEvent,onRouteEventClosed,onIncenseVendorOpen,onMintVendorOpen,onEvolutionReady,onGymStarted,onGymRender,onGymFinished,backgroundRecovered:sec=>{try{toast(`⏱️ Segundo plano recuperado · ${sec<60?Math.round(sec)+" s":(sec/60).toFixed(sec<600?1:0).replace(".",",")+" min"}`);renderAll();return true}catch(_){return false}},floatingUiPulse:()=>{try{if(routeEventTimer)updateRouteEventTimer();return true}catch(_){return false}}};
+window.PokeSendaJohtoRuntime={open,close:closeRoot,onBattleFx:johtoBattleFx,onGymFx:johtoGymFx,showLobby,showGame,reopenProfile:reopenRegionalProfile,el:id=>el(id),renderAll,checkAchievements,updatePremiumUI,syncPremiumClock,playSfx:johtoPlayKantoSfx,musicStatus:()=>({active:!!root&&!root.classList.contains("hidden"),track:document.querySelector("body > #johtoBgMusic")?.dataset.trackKey||johtoTrackKey(),src:document.querySelector("body > #johtoBgMusic")?.getAttribute("src")||"",paused:document.querySelector("body > #johtoBgMusic")?.paused??true,volume:document.querySelector("body > #johtoBgMusic")?.volume??0,playlist:[...JOHTO_MUSIC_KEYS]}),onCenterOpen,onCenterTick,onCenterClose,onRewardReady,onRouteUnlocked,onRewardRoll,onRewardFinalized,onRewardClose,onRunFailed,onRunStopped,onTMCompatChanged,onRouteEvent,onRouteEventClosed,onIncenseVendorOpen,onMintVendorOpen,onEvolutionReady,onGymStarted,onGymRender,onGymFinished,backgroundRecovered:sec=>{try{toast(`⏱️ Segundo plano recuperado · ${sec<60?Math.round(sec)+" s":(sec/60).toFixed(sec<600?1:0).replace(".",",")+" min"}`);renderAll();return true}catch(_){return false}},floatingUiPulse:()=>{try{if(routeEventTimer)updateRouteEventTimer();return true}catch(_){return false}}};
 })();
 </script>
 

@@ -1484,6 +1484,9 @@ body{
 .hud-box-icon-btn{background:linear-gradient(180deg,#234c68,#17364d)!important;border-color:#4f84a3!important}
 .hud-achievement-icon-btn{background:linear-gradient(180deg,#5b4c22,#403619)!important;border-color:#8d7530!important}
 .hud-tree-icon-btn{background:linear-gradient(180deg,#47376a,#30264f)!important;border-color:#7059a6!important}
+.hud-casino-icon-btn{background:linear-gradient(180deg,#63501d,#3b2f14)!important;border-color:#a88732!important;color:#ffe59a!important}
+.hud-casino-glyph{width:32px!important;height:32px!important;display:block!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect x='5' y='2' width='20' height='28' rx='1' fill='%23212f44'/%3E%3Crect x='6' y='3' width='18' height='26' fill='%233c4c63'/%3E%3Crect x='8' y='4' width='14' height='3' fill='%23c94b4b'/%3E%3Crect x='8' y='7' width='14' height='2' fill='%23ffe38d'/%3E%3Crect x='8' y='10' width='14' height='8' fill='%23f3efea'/%3E%3Crect x='9' y='11' width='3' height='6' fill='%23ffffff'/%3E%3Crect x='14' y='11' width='3' height='6' fill='%23ffffff'/%3E%3Crect x='19' y='11' width='2' height='6' fill='%23ffffff'/%3E%3Crect x='10' y='12' width='1' height='1' fill='%23d64545'/%3E%3Crect x='10' y='14' width='1' height='1' fill='%234ac45a'/%3E%3Crect x='15' y='12' width='1' height='1' fill='%2358b2ff'/%3E%3Crect x='15' y='14' width='1' height='1' fill='%23d64545'/%3E%3Crect x='19' y='12' width='1' height='1' fill='%23ffcc33'/%3E%3Crect x='19' y='14' width='1' height='1' fill='%234ac45a'/%3E%3Crect x='8' y='20' width='14' height='3' fill='%23323d4f'/%3E%3Crect x='10' y='21' width='10' height='1' fill='%23ffe38d'/%3E%3Crect x='24' y='8' width='3' height='12' fill='%2397a3b5'/%3E%3Crect x='25' y='6' width='2' height='3' fill='%2397a3b5'/%3E%3Ccircle cx='26' cy='21' r='2' fill='%23db6058'/%3E%3Crect x='9' y='24' width='4' height='4' fill='%23ffd24b'/%3E%3Crect x='17' y='24' width='4' height='4' fill='%23ffd24b'/%3E%3Crect x='10' y='25' width='2' height='2' fill='%23fff6cc'/%3E%3Crect x='18' y='25' width='2' height='2' fill='%23fff6cc'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:center!important;background-size:contain!important;filter:drop-shadow(0 2px 2px rgba(0,0,0,.42));font-size:0!important;color:transparent!important;line-height:0!important}
+
 .hud-icon-count{position:absolute;right:-5px;bottom:-6px;min-width:23px;height:15px;padding:0 4px;border-radius:999px;background:#101c35;border:1px solid #6683bd;color:#f7fbff;font-size:7px;font-weight:1000;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.4);white-space:nowrap}
 .hud-nav-icon-btn .pokedex-alert{right:-5px!important;top:-6px!important}
 .hud-nav-icon-btn .ux-improve-counter{right:-8px!important;bottom:-7px!important}
@@ -3666,6 +3669,9 @@ body{letter-spacing:.08px}
         <span class="menu-icon achievement-menu-icon hud-main-menu-icon" aria-hidden="true"></span>
         <span id="achievementAlert" class="pokedex-alert hidden">!</span>
       </button>
+      <button id="casinoHudBtn" class="btn hud-nav-icon-btn hud-casino-icon-btn" type="button" title="Casino Azulona · Blackjack y Ruleta" aria-label="Abrir Casino Azulona">
+        <span class="hud-casino-glyph" aria-hidden="true"></span>
+      </button>
       <button id="skillTreeBtn" class="btn tree-btn hud-nav-icon-btn hud-tree-icon-btn" title="Árbol del Entrenador · mejoras permanentes" aria-label="Abrir Árbol del Entrenador">
         <span class="menu-icon tree-menu-icon hud-main-menu-icon" aria-hidden="true"></span>
       </button>
@@ -4058,7 +4064,7 @@ body{letter-spacing:.08px}
 </div>
 
 <div id="lootPanel" class="loot-panel hidden">
-  <div class="loot-panel-head"><b><span class="menu-icon bag-menu-icon ui-title-icon" style="width:22px!important;height:22px!important" aria-hidden="true"></span>Inventario</b><span id="lootCapacityText" class="tiny muted">0/20 espacios</span><div class="grow"></div><button id="inventoryCasinoBtn" class="btn inventory-casino-btn" type="button" title="Abrir Casino Azulona">🎰 Casino Azulona</button><button id="lootCloseBtn" class="btn">Cerrar</button></div>
+  <div class="loot-panel-head"><b><span class="menu-icon bag-menu-icon ui-title-icon" style="width:22px!important;height:22px!important" aria-hidden="true"></span>Inventario</b><span id="lootCapacityText" class="tiny muted">0/20 espacios</span><div class="grow"></div><button id="lootCloseBtn" class="btn">Cerrar</button></div>
   <div class="inventory-tabs"><button id="lootTabMain" class="inventory-tab active"><span class="menu-icon bag-menu-icon help-inline-icon" aria-hidden="true"></span>Objetos <span id="lootTabMainCount"></span></button><button id="lootTabStones" class="inventory-tab"><span class="menu-icon material-menu-icon help-inline-icon" aria-hidden="true"></span>Materiales <span id="lootTabStoneCount"></span></button><button id="lootTabPotions" class="inventory-tab"><span class="menu-icon potion-menu-icon help-inline-icon" aria-hidden="true"></span>Botiquín <span id="lootTabPotionCount"></span></button><button id="lootTabTms" class="inventory-tab inventory-tab-tm"><span class="menu-icon tm-menu-icon help-inline-icon" aria-hidden="true"></span>MT <span id="lootTabTmCount"></span></button></div>
   <div id="lootMainPane" class="inventory-pane"><div id="lootGrid" class="loot-grid"></div><div id="lootDetail" class="loot-detail"></div><div class="tiny muted" style="margin-top:10px;font-size:11px">Objetos equipables. Cada tipo ocupa una sola casilla y tiene un máximo absoluto de 20 unidades; nunca se crea un segundo stack del mismo objeto.</div></div>
   <div id="lootStonePane" class="inventory-pane hidden">
@@ -11362,10 +11368,11 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
 
   function casinoSelectTab(tab){pkCasinoTab=tab;$("pkCasinoBj")?.classList.toggle("active",tab==="bj");$("pkCasinoRoulette")?.classList.toggle("active",tab==="roulette");$("pkCasinoTabBj")?.classList.toggle("active",tab==="bj");$("pkCasinoTabRoulette")?.classList.toggle("active",tab==="roulette");}
   function casinoWireEntrypoints(){
-    // V36.40.72 · Casino fuera del menú principal: acceso único desde Inventario.
+    // V36.64.13 · Acceso directo desde el HUD. Mecánicas del Casino intactas.
     const oldMenu=$("menuCasinoBtn");if(oldMenu)oldMenu.remove();
-    document.querySelectorAll('[data-mobile-more="casino"]').forEach(el=>el.remove());
-    const b=$("inventoryCasinoBtn");if(b&&!b.dataset.casinoWired){b.dataset.casinoWired="1";b.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();closeLoot();casinoOpen();});}
+    const legacy=$("inventoryCasinoBtn");if(legacy)legacy.remove();
+    const hud=$("casinoHudBtn");if(hud&&!hud.dataset.casinoWired){hud.dataset.casinoWired="1";hud.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();casinoOpen();});}
+    const mobile=document.querySelector('[data-mobile-more="casino"]');if(mobile&&!mobile.dataset.casinoWired){mobile.dataset.casinoWired="1";mobile.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();document.getElementById("pkMobileMore")?.classList.remove("show");casinoOpen();});}
   }
   $("pkCasinoClose")?.addEventListener("click",casinoClose);$("pkCasinoOverlay")?.addEventListener("click",e=>{if(e.target===e.currentTarget)casinoClose();});
   document.querySelectorAll("[data-casino-deposit]").forEach(b=>b.addEventListener("click",()=>casinoDeposit(b.dataset.casinoDeposit)));$("pkCasinoDepositCustomBtn")?.addEventListener("click",()=>casinoDeposit($("pkCasinoDepositCustom")?.value));$("pkCasinoWithdrawAll")?.addEventListener("click",casinoWithdrawAll);
@@ -12329,6 +12336,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   <div class="pk-mobile-more-title"><span>Más sistemas</span><button id="pkMobileMoreClose" class="btn pk-mobile-more-close" type="button" aria-label="Cerrar">×</button></div>
   <button class="btn pk-mobile-more-featured" type="button" data-mobile-more="gyms">🏛 Gimnasios</button>
   <button class="btn pk-mobile-more-featured" type="button" data-mobile-more="profile">👤 Perfil / Jugadores</button>
+  <button class="btn pk-mobile-more-featured" type="button" data-mobile-more="casino">🎰 Casino</button>
   <button class="btn" type="button" data-mobile-more="regions">🌐 Regiones</button>
   <button class="btn" type="button" data-mobile-more="tree">🌳 Árbol</button>
   <button class="btn" type="button" data-mobile-more="achievements">🏆 Logros</button>
@@ -16315,6 +16323,7 @@ function prepareGame(){
   qa("[data-speed]",game).forEach(b=>b.onclick=()=>{B()?.setSpeed?.(Number(b.dataset.speed));renderAll();});
   el("autoRepeatBtn",game).onclick=()=>toggleOpt("autoRepeat");el("autoOpenBtn",game).onclick=()=>toggleOpt("autoOpen");el("autoPotionBtn",game).onclick=()=>toggleOpt("autoPotion");
   el("lootBtn",game).onclick=openInventory;el("pokedexBtn",game).onclick=openPokedex;el("pcBoxBtn",game).onclick=openBox;
+  const casinoBtn=el("casinoHudBtn",game);if(casinoBtn){casinoBtn.title="Casino Trigal";casinoBtn.setAttribute("aria-label","Abrir Casino Trigal");casinoBtn.onclick=e=>{e.preventDefault();e.stopPropagation();openJohtoCasinoParity();};}
   const ach=el("achievementsBtn",game),tree=el("skillTreeBtn",game);
   if(ach){ach.classList.remove("pk-runtime-unsupported");ach.onclick=()=>openAchievements("game");}
   if(tree){tree.classList.remove("pk-runtime-unsupported");tree.onclick=openSkillTree;}
@@ -16368,7 +16377,7 @@ function prepareMobileParity(){
   const menuFs=el("pkMobileMenuFullscreenBtn",menu),hudFs=el("pkMobileHudFullscreenBtn",game);if(menuFs)menuFs.onclick=e=>{e.preventDefault();e.stopPropagation();requestRegionalFullscreen();};if(hudFs)hudFs.onclick=e=>{e.preventDefault();e.stopPropagation();requestRegionalFullscreen();};
   qa("[data-mobile-action]",mobileDock).forEach(b=>b.onclick=()=>{const a=b.dataset.mobileAction;if(a==="field"){showGame();el("field",game)?.scrollIntoView?.({block:"start"});}else if(a==="team"){showGame();q(".pk-formation-window",game)?.scrollIntoView?.({block:"start"});}else if(a==="loot")openInventory();else if(a==="dex")openPokedex();else if(a==="box")openBox();else if(a==="more")mobileMore.classList.add("show");});
   el("pkMobileMoreClose",mobileMore)?.addEventListener("click",()=>mobileMore.classList.remove("show"));
-  qa("[data-mobile-more]",mobileMore).forEach(b=>b.onclick=()=>{mobileMore.classList.remove("show");const a=b.dataset.mobileMore;if(a==="gyms")openGyms("game");else if(a==="profile")openRegionalProfile("game");else if(a==="regions")showRegionSelector();else if(a==="tree")openSkillTree();else if(a==="achievements")openAchievements("game");else if(a==="help"){showGame();el("helpInfoBtn",game)?.click();}else if(a==="cloud")openJohtoCloudParity();else if(a==="transfer")openJohtoTransferParity();else if(a==="menu")showLobby();});
+  qa("[data-mobile-more]",mobileMore).forEach(b=>b.onclick=()=>{mobileMore.classList.remove("show");const a=b.dataset.mobileMore;if(a==="gyms")openGyms("game");else if(a==="profile")openRegionalProfile("game");else if(a==="casino")openJohtoCasinoParity();else if(a==="regions")showRegionSelector();else if(a==="tree")openSkillTree();else if(a==="achievements")openAchievements("game");else if(a==="help"){showGame();el("helpInfoBtn",game)?.click();}else if(a==="cloud")openJohtoCloudParity();else if(a==="transfer")openJohtoTransferParity();else if(a==="menu")showLobby();});
   el("pkMobileTipClose",mobileTip)?.addEventListener("click",()=>{sessionStorage.setItem("pokesenda_johto_mobile_tip_v36619","1");mobileTip.classList.add("hidden");});
   johtoMobileModalObserver?.disconnect?.();johtoMobileModalObserver=new MutationObserver(refreshJohtoMobileModalState);root.querySelectorAll(".overlay,.loot-panel,.info-panel,.ux-context-panel").forEach(x=>johtoMobileModalObserver.observe(x,{attributes:true,attributeFilter:["class"]}));window.matchMedia?.("(max-width: 980px)")?.addEventListener?.("change",refreshJohtoMobileModalState);refreshJohtoMobileModalState();
 }
@@ -16791,7 +16800,7 @@ function onRunFailed(dist,cp,snapshot){showGame();const sum=el("summary",game);i
 function onRunStopped(snapshot){showGame();const sum=el("summary",game);if(!sum)return showLobby();const dist=Math.round(Number(snapshot?.distance||0)),cp=Math.round(Number(snapshot?.checkpoint||0));el("summaryTitle",game).textContent="Expedición detenida";el("summaryText",game).textContent="Conservaste XP, Pokédolares y botín. La próxima salida comenzará desde tu punto de farmeo seleccionado.";el("sumDistance",game).textContent=dist.toLocaleString("es-CL")+" m";el("sumCheckpoint",game).textContent=cp.toLocaleString("es-CL")+" m";el("repeatBtn",game).textContent="Cerrar";el("summaryCloseBtn",game)?.classList.add("hidden");johtoRenderRunSummary(snapshot);sum.classList.add("show");el("repeatBtn",game).onclick=()=>{sum.classList.remove("show");showLobby();};}
 function prepareInventory(){
   if(!lootPanel)return;
-  const casino=el("inventoryCasinoBtn",lootPanel);if(casino){casino.classList.remove("hidden");casino.textContent="🎰 Casino Trigal";casino.title="Casino Trigal · Próximamente";casino.disabled=false;casino.onclick=e=>{e.preventDefault();e.stopPropagation();openJohtoCasinoParity();};}
+  el("inventoryCasinoBtn",lootPanel)?.remove();
   el("incenseMaterialGateway",lootPanel)?.classList.remove("hidden");el("mintMaterialGateway",lootPanel)?.classList.remove("hidden");
   el("openIncenseInventoryBtn",lootPanel).onclick=e=>{e.stopPropagation();openIncenseInventory();};el("openMintInventoryBtn",lootPanel).onclick=e=>{e.stopPropagation();openMintInventory();};el("incenseMaterialGateway",lootPanel).onclick=openIncenseInventory;el("mintMaterialGateway",lootPanel).onclick=openMintInventory;
   el("lootCloseBtn",lootPanel).onclick=closeInventory;

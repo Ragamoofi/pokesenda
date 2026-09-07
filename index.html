@@ -4970,9 +4970,10 @@ body{letter-spacing:.08px}
   const ROUTE_ORDER = ["route1","route2","route3"];
   const INFINITE_ROUTE_ID="infinite";
   const INFINITE_MILESTONE=10000;
-  const INFINITE_REPEAT_RARITY_CHANCE={common:.67,uncommon:.25,rare:.07,epic:.009,legendary:.001};
+  // V36.64.12 · Cada hito de Expedición Infinita entrega Gachapon una sola vez.
+  // Los hitos ya reclamados se atraviesan sin premio y la expedición continúa hasta el siguiente hito nuevo.
   ROUTES[INFINITE_ROUTE_ID]={
-    name:"Expedición Infinita",description:"Endgame sin límite: empieza siempre desde 0 m, sin Centros Pokémon ni eventos de ruta. No entrega Pokédólares directos: su objetivo es superar tu récord y ganar Gachapones de hito. V33.2 incluye protección automática contra valores de combate inválidos (NaN).",className:"routeInfinite",levelBase:24,recommended:"Nv.35–60 · escala progresiva",finalBossLevel:60,
+    name:"Expedición Infinita",description:"Endgame sin límite: empieza siempre desde 0 m, sin Centros Pokémon ni eventos de ruta. No entrega Pokédólares directos: su objetivo es superar tu récord y ganar una sola vez el Gachapon mejorado de cada hito nuevo. V33.2 incluye protección automática contra valores de combate inválidos (NaN).",className:"routeInfinite",levelBase:24,recommended:"Nv.35–60 · escala progresiva",finalBossLevel:60,
     enemies:[...new Set(ROUTE_ORDER.flatMap(id=>ROUTES[id].enemies))],
     bosses:[...new Set(ROUTE_ORDER.flatMap(id=>ROUTES[id].bosses))],gacha:[]
   };
@@ -4985,7 +4986,13 @@ body{letter-spacing:.08px}
     const uncommon=Math.max(.05,.22-.018*step),epic=Math.min(.48,.28+.025*step),legendary=Math.min(.15,.02+.0125*step),rare=Math.max(.10,1-uncommon-epic-legendary);
     return {common:0,uncommon,rare,epic,legendary};
   }
-  function infiniteRatesForMilestone(milestoneMeters,firstClear){return firstClear?infiniteFirstClearRates(milestoneMeters):{...INFINITE_REPEAT_RARITY_CHANCE};}
+  function infiniteRatesForMilestone(milestoneMeters){return infiniteFirstClearRates(milestoneMeters);}
+  function nextInfiniteRewardMilestone(fromMeters=0){
+    const claimed=new Set((state?.infiniteExpedition?.claimedMilestones||[]).map(Number));
+    let milestone=(Math.floor(Math.max(0,Number(fromMeters||0))/INFINITE_MILESTONE)+1)*INFINITE_MILESTONE;
+    while(claimed.has(milestone))milestone+=INFINITE_MILESTONE;
+    return milestone;
+  }
   function infiniteRatesText(rates){return `Común ${(rates.common*100).toFixed(1).replace(".0","")}% · Poco común ${(rates.uncommon*100).toFixed(1).replace(".0","")}% · Raro ${(rates.rare*100).toFixed(1).replace(".0","")}% · Épico ${(rates.epic*100).toFixed(1).replace(".0","")}% · Legendario ${(rates.legendary*100).toFixed(2).replace(/0+$/,'').replace(/\.$/,'')}% · ${shinyRateText()}`; }
 
   // V32.0 · Logros: condiciones derivadas del estado persistente para que funcionen
@@ -5577,7 +5584,7 @@ body{letter-spacing:.08px}
     s.routes={...freshState().routes,...(s.routes||{})};
     s.timedGacha={...freshState().timedGacha,...(s.timedGacha||{})};
     s.infiniteExpedition={...freshState().infiniteExpedition,...(s.infiniteExpedition||{})};
-    s.infiniteExpedition.bestDistance=Math.max(0,Number(s.infiniteExpedition.bestDistance||0));s.infiniteExpedition.totalRuns=Math.max(0,Number(s.infiniteExpedition.totalRuns||0));s.infiniteExpedition.bosses=Math.max(0,Number(s.infiniteExpedition.bosses||0));s.infiniteExpedition.chestsOpened=Math.max(0,Number(s.infiniteExpedition.chestsOpened||0));s.infiniteExpedition.claimedMilestones=[...new Set((Array.isArray(s.infiniteExpedition.claimedMilestones)?s.infiniteExpedition.claimedMilestones:[]).map(Number).filter(x=>x>=INFINITE_MILESTONE&&x%INFINITE_MILESTONE===0))].sort((a,b)=>a-b);
+    s.infiniteExpedition.bestDistance=Math.max(0,Number(s.infiniteExpedition.bestDistance||0));s.infiniteExpedition.totalRuns=Math.max(0,Number(s.infiniteExpedition.totalRuns||0));s.infiniteExpedition.bosses=Math.max(0,Number(s.infiniteExpedition.bosses||0));s.infiniteExpedition.chestsOpened=Math.max(0,Number(s.infiniteExpedition.chestsOpened||0));s.infiniteExpedition.claimedMilestones=[...new Set((Array.isArray(s.infiniteExpedition.claimedMilestones)?s.infiniteExpedition.claimedMilestones:[]).map(Number).filter(x=>x>=INFINITE_MILESTONE&&x%INFINITE_MILESTONE===0))].sort((a,b)=>a-b);if(s.infiniteExpedition.pendingReward&&(!s.infiniteExpedition.pendingReward.firstClear||s.infiniteExpedition.claimedMilestones.includes(Number(s.infiniteExpedition.pendingReward.milestone))))s.infiniteExpedition.pendingReward=null;
     s.achievements=normalizeAchievementState(s.achievements);s.shinySeen=Array.isArray(s.shinySeen)?[...new Set(s.shinySeen.map(Number).filter(x=>x>=1&&x<=151))]:[];s.shinyDex=Array.isArray(s.shinyDex)?[...new Set(s.shinyDex.map(Number).filter(x=>x>=1&&x<=151))]:[];s.shinyCaptureCount=Math.max(0,Number(s.shinyCaptureCount||0));s.captureLog=Array.isArray(s.captureLog)?s.captureLog.filter(x=>x&&Number(x.dex)>=1&&Number(x.dex)<=151).slice(0,150):[];
     s.skillTree=s.skillTree||{};
     if(Number(s.skillTree.a15||0)<1)s.timedGacha={...freshState().timedGacha};
@@ -5604,7 +5611,7 @@ body{letter-spacing:.08px}
       s.routes={...freshState().routes,...(s.routes||{})};
       s.timedGacha={...freshState().timedGacha,...(s.timedGacha||{})};
       s.infiniteExpedition={...freshState().infiniteExpedition,...(s.infiniteExpedition||{})};
-      s.infiniteExpedition.bestDistance=Math.max(0,Number(s.infiniteExpedition.bestDistance||0));s.infiniteExpedition.totalRuns=Math.max(0,Number(s.infiniteExpedition.totalRuns||0));s.infiniteExpedition.bosses=Math.max(0,Number(s.infiniteExpedition.bosses||0));s.infiniteExpedition.chestsOpened=Math.max(0,Number(s.infiniteExpedition.chestsOpened||0));s.infiniteExpedition.claimedMilestones=[...new Set((Array.isArray(s.infiniteExpedition.claimedMilestones)?s.infiniteExpedition.claimedMilestones:[]).map(Number).filter(x=>x>=INFINITE_MILESTONE&&x%INFINITE_MILESTONE===0))].sort((a,b)=>a-b);
+      s.infiniteExpedition.bestDistance=Math.max(0,Number(s.infiniteExpedition.bestDistance||0));s.infiniteExpedition.totalRuns=Math.max(0,Number(s.infiniteExpedition.totalRuns||0));s.infiniteExpedition.bosses=Math.max(0,Number(s.infiniteExpedition.bosses||0));s.infiniteExpedition.chestsOpened=Math.max(0,Number(s.infiniteExpedition.chestsOpened||0));s.infiniteExpedition.claimedMilestones=[...new Set((Array.isArray(s.infiniteExpedition.claimedMilestones)?s.infiniteExpedition.claimedMilestones:[]).map(Number).filter(x=>x>=INFINITE_MILESTONE&&x%INFINITE_MILESTONE===0))].sort((a,b)=>a-b);if(s.infiniteExpedition.pendingReward&&(!s.infiniteExpedition.pendingReward.firstClear||s.infiniteExpedition.claimedMilestones.includes(Number(s.infiniteExpedition.pendingReward.milestone))))s.infiniteExpedition.pendingReward=null;
       s.achievements=normalizeAchievementState(s.achievements);s.shinySeen=Array.isArray(s.shinySeen)?[...new Set(s.shinySeen.map(Number).filter(x=>x>=1&&x<=151))]:[];s.shinyDex=Array.isArray(s.shinyDex)?[...new Set(s.shinyDex.map(Number).filter(x=>x>=1&&x<=151))]:[];s.shinyCaptureCount=Math.max(0,Number(s.shinyCaptureCount||0));s.captureLog=Array.isArray(s.captureLog)?s.captureLog.filter(x=>x&&Number(x.dex)>=1&&Number(x.dex)<=151).slice(0,150):[];
       for(const r of ROUTE_ORDER){
         s.routes[r]={...freshState().routes[r],...(s.routes[r]||{})};
@@ -6165,8 +6172,8 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
   function renderRouteInfo(){if(pkBackgroundCatchingUp)return;
     const route=ROUTES[state.currentRoute],base=run?run.distance:routeStartPoint();
     if(isInfiniteMode()){
-      const inf=state.infiniteExpedition||{},pending=inf.pendingReward,nextMilestone=pending?.milestone||((Math.floor(Math.max(0,base)/INFINITE_MILESTONE)+1)*INFINITE_MILESTONE),already=(inf.claimedMilestones||[]).includes(nextMilestone),firstClear=pending?!!pending.firstClear:!already,rates=pending?.rates||infiniteRatesForMilestone(nextMilestone,firstClear),tier=infiniteMilestoneNumber(nextMilestone);
-      $("routeDescription").innerHTML=`<div class="infinite-record-card"><div class="infinite-record-grid"><div class="infinite-record-metric"><b>${formatMeters(inf.bestDistance||0)}</b><small>récord permanente</small></div><div class="infinite-record-metric"><b>${inf.claimedMilestones?.length||0}</b><small>hitos nuevos reclamados</small></div><div class="infinite-record-metric"><b>${inf.totalRuns||0}</b><small>intentos iniciados</small></div></div></div><span class="infinite-badge">♾ Hito ${tier} · ${formatMeters(nextMilestone)}</span> · ${firstClear?"Cofre NUEVO con suerte mejorada":"Cofre repetido de baja suerte"}. Siempre comienzas desde 0 m. No hay Centros Pokémon ni eventos de ruta; hay jefe cada 1.000 m y Gachapon solo cada 10.000 m. No se obtienen Pokédólares directos en este modo. La dificultad aumenta sin límite, pero la entrada comienza alrededor de Nv.22–25 y escala de forma progresiva.`;
+      const inf=state.infiniteExpedition||{},pending=(inf.pendingReward&&inf.pendingReward.firstClear)?inf.pendingReward:null,nextMilestone=pending?.milestone||nextInfiniteRewardMilestone(base),rates=pending?.rates||infiniteRatesForMilestone(nextMilestone),tier=infiniteMilestoneNumber(nextMilestone);
+      $("routeDescription").innerHTML=`<div class="infinite-record-card"><div class="infinite-record-grid"><div class="infinite-record-metric"><b>${formatMeters(inf.bestDistance||0)}</b><small>récord permanente</small></div><div class="infinite-record-metric"><b>${inf.claimedMilestones?.length||0}</b><small>hitos nuevos reclamados</small></div><div class="infinite-record-metric"><b>${inf.totalRuns||0}</b><small>intentos iniciados</small></div></div></div><span class="infinite-badge">♾ Próximo premio · Hito ${tier} · ${formatMeters(nextMilestone)}</span> · Gachapon mejorado de récord. Cada hito de 10.000 m entrega su Gachapon una sola vez: si ya lo reclamaste, al volver a pasar por él no aparece nada y continúas directamente hacia el siguiente hito nuevo. Siempre comienzas desde 0 m. No hay Centros Pokémon ni eventos de ruta; hay jefe cada 1.000 m. No se obtienen Pokédólares directos en este modo. La dificultad aumenta sin límite, pero la entrada comienza alrededor de Nv.22–25 y escala de forma progresiva.`;
       const order=["common","uncommon","rare","epic","legendary"],names={common:"Común",uncommon:"Poco común",rare:"Raro",epic:"Épico",legendary:"Legendario"};
       $("poolList").innerHTML=order.map(r=>`<div class="pool-item"><span>${names[r]} ${rarityBadge(r)}</span><span>${(rates[r]*100)<1?(rates[r]*100).toFixed(2):(rates[r]*100).toFixed(1)}%</span></div>`).join("")+(pending?`<button class="btn warn" data-open-infinite-pending style="grid-column:1/-1;margin-top:7px">🎁 Abrir recompensa pendiente de ${formatMeters(pending.milestone)}</button>`:"");
       const btn=$("poolList").querySelector("[data-open-infinite-pending]");if(btn)btn.addEventListener("click",openInfinitePendingReward);return;
@@ -7952,15 +7959,25 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
       if(km%10===0){
         if(km%30===0)grantMTGachaTicket(`Expedición Infinita · hito de ${km} km`,1);
         const milestone=km*1000,firstClear=!(inf.claimedMilestones||[]).includes(milestone);
-        run.rewardPending=true;
         inf.bestDistance=Math.max(Number(inf.bestDistance||0),milestone);
-        if(!inf.pendingReward||Number(inf.pendingReward.milestone)!==milestone)inf.pendingReward=buildInfinitePendingReward(milestone,firstClear);
-        // El cofre se guarda ANTES del logro. Aunque el popup de logro aparezca o se recargue la página, la recompensa ya existe.
+        if(firstClear){
+          run.rewardPending=true;
+          if(!inf.pendingReward||Number(inf.pendingReward.milestone)!==milestone)inf.pendingReward=buildInfinitePendingReward(milestone,true);
+          // El cofre NUEVO se guarda antes de abrirse para que un refresco no haga perder el premio de récord.
+          save();
+          stopLoop();
+          addLog(`🎁 Gachapon mejorado de hito listo en ${formatMeters(milestone)} · premio nuevo de récord.`);
+          renderEverything();
+          requestAnimationFrame(()=>openInfinitePendingReward());
+          return;
+        }
+        // V36.64.12 · Un hito ya cobrado no vuelve a generar Gachapon ni pausa la expedición.
+        if(inf.pendingReward&&Number(inf.pendingReward.milestone)===milestone&&!inf.pendingReward.firstClear)inf.pendingReward=null;
         save();
-        stopLoop();
-        addLog(`🎁 Gachapon de hito listo en ${formatMeters(milestone)} · ${firstClear?"suerte mejorada por récord":"tabla de repetición"}.`);
+        const nextReward=nextInfiniteRewardMilestone(milestone);
+        addLog(`♾ Hito de ${km} km ya reclamado. Sin Gachapon; continúas hacia el próximo premio nuevo en ${formatMeters(nextReward)}.`);
+        run.spawnDelay=.75;
         renderEverything();
-        requestAnimationFrame(()=>openInfinitePendingReward());
         return;
       }
       save();
@@ -7979,14 +7996,18 @@ Conservarás XP, Pokédólares y botín. La próxima salida comenzará desde el 
   }
   function rollInfiniteGacha(milestone,firstClear,incenseType=null){const rates=infiniteRatesForMilestone(milestone,firstClear),pool=applyIncenseBiasPreserveRarity(infiniteGachaPool(rates),incenseType),total=pool.reduce((s,x)=>s+x.weight,0);let r=Math.random()*total;for(const x of pool){r-=x.weight;if(r<=0)return {...x};}return {...pool[pool.length-1]};}
   function infiniteCaptureInfo(id,milestone,rarity){const tier=infiniteMilestoneNumber(milestone),minLevel=Math.min(MAX_LEVEL,42+tier*2+(rarity==="legendary"?5:rarity==="epic"?2:0)),level=Math.min(MAX_LEVEL,minLevel+Math.floor(Math.random()*5)),stageIndex=captureStageIndexFor(id,level),stage=FAMILIES[id].stages[stageIndex];return {level,stageIndex,stage};}
-  function buildInfinitePendingReward(milestone,firstClear){const rolled=rollInfiniteGacha(milestone,firstClear),cap=infiniteCaptureInfo(rolled.id,milestone,rolled.rarity),rates=infiniteRatesForMilestone(milestone,firstClear);return {milestone,firstClear,id:rolled.id,rarity:rolled.rarity,level:cap.level,stageIndex:cap.stageIndex,shiny:rollCaptureShiny(),rates};}
+  function buildInfinitePendingReward(milestone,firstClear=true){const rolled=rollInfiniteGacha(milestone,true),cap=infiniteCaptureInfo(rolled.id,milestone,rolled.rarity),rates=infiniteRatesForMilestone(milestone);return {milestone,firstClear:true,id:rolled.id,rarity:rolled.rarity,level:cap.level,stageIndex:cap.stageIndex,shiny:rollCaptureShiny(),rates};}
   function infiniteRouletteEntries(finalRoll,milestone,firstClear,incenseType=null){const before=92,after=30,arr=[];for(let i=0;i<before;i++)arr.push(rollInfiniteGacha(milestone,firstClear,incenseType));arr.push({...finalRoll,winner:true});for(let i=0;i<after;i++)arr.push(rollInfiniteGacha(milestone,firstClear,incenseType));return {entries:arr,targetIndex:before};}
   function openInfinitePendingReward(){
-    const pr=state.infiniteExpedition?.pendingReward;if(!pr||!FAMILIES[pr.id])return;
+    const inf=state.infiniteExpedition||{},pr=inf.pendingReward;if(!pr)return;
+    const milestone=Number(pr.milestone||0);
+    // Seguridad de migración: recompensas repetidas creadas por versiones antiguas se descartan sin abrir ventana.
+    if(!pr.firstClear||(inf.claimedMilestones||[]).includes(milestone)){inf.pendingReward=null;if(run){run.rewardPending=false;run.paused=false;run.spawnDelay=.75;}save();renderEverything();return;}
+    if(!FAMILIES[pr.id])return;
     if(run){run.rewardPending=true;run.paused=true;stopLoop();}
     const safeStage=Math.max(0,Math.min((FAMILIES[pr.id].stages?.length||1)-1,Number(pr.stageIndex)||0)),rolled={id:pr.id,rarity:pr.rarity,shiny:!!pr.shiny,captureInfo:{level:Math.max(1,Number(pr.level)||1),stageIndex:safeStage,stage:FAMILIES[pr.id].stages[safeStage]}};
-    pendingReward={routeId:"route3",km:10,result:null,animating:false,infiniteGacha:true,infiniteMilestone:Number(pr.milestone),infiniteFirstClear:!!pr.firstClear,infiniteRates:pr.rates||infiniteRatesForMilestone(pr.milestone,pr.firstClear),presetRoll:rolled};
-    $("rewardTitle").textContent=pr.firstClear?`♾ Hito nuevo ${formatMeters(pr.milestone)} · Gachapon mejorado`:`♻ Hito repetido ${formatMeters(pr.milestone)} · Gachapon de baja suerte`;$("rewardSubtitle").textContent=(pr.firstClear?"PREMIO DE RÉCORD · la suerte mejora con cada hito nuevo. ":"Este hito ya fue reclamado antes, por eso usa la tabla de repetición. ")+infiniteRatesText(pendingReward.infiniteRates);$("openChestBtn").textContent="Abrir Gachapon";$("closedChest").classList.remove("hidden");$("rouletteWrap").classList.remove("show");$("rewardResult").classList.remove("show");$("rouletteStrip").innerHTML="";$("prizeFx").innerHTML="";$("rewardBox").classList.remove("prize-flash");$("rewardResult").classList.remove("prize-show");$("rewardOverlay").classList.remove("hidden");prepareGachaScreen();
+    pendingReward={routeId:"route3",km:10,result:null,animating:false,infiniteGacha:true,infiniteMilestone:milestone,infiniteFirstClear:true,infiniteRates:pr.rates||infiniteRatesForMilestone(milestone),presetRoll:rolled};
+    $("rewardTitle").textContent=`♾ Hito nuevo ${formatMeters(milestone)} · Gachapon mejorado`;$("rewardSubtitle").textContent="PREMIO DE RÉCORD · cada hito nuevo se reclama una sola vez y mejora la suerte. "+infiniteRatesText(pendingReward.infiniteRates);$("openChestBtn").textContent="Abrir Gachapon";$("closedChest").classList.remove("hidden");$("rouletteWrap").classList.remove("show");$("rewardResult").classList.remove("show");$("rouletteStrip").innerHTML="";$("prizeFx").innerHTML="";$("rewardBox").classList.remove("prize-flash");$("rewardResult").classList.remove("prize-show");$("rewardOverlay").classList.remove("hidden");prepareGachaScreen();
   }
 
   const TIMED_GACHA_INTERVAL_MS=8*60*60*1000;
@@ -8309,7 +8330,7 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     }
     const shinyCapture=!!rolled.shiny;const shinyNewVariant=shinyCapture?registerCapturedShiny(id,cap):false;const legendaryCapture=rolled.rarity==="legendary";if(legendaryCapture)grantLegendaryCaptureBonus(st);if(shinyCapture){captureOutcome=`✨ SHINY · ${captureOutcome}`;note=`✨ ¡SHINY! ${note} Variante visual registrada en la Pokédex.`;addLog(`✨ ¡${st.name} SHINY capturado! ${shinyRateText()}.`);}if(pendingReward.usedIncenseType)note+=` · 🧿 Incienso ${TYPE_NAMES[pendingReward.usedIncenseType]||pendingReward.usedIncenseType} utilizado.`;
     recordCaptureHistory({id,stage:st,level:cap.level,rarity:rolled.rarity,outcome:captureOutcome,source:captureSourceLabel(pendingReward),shiny:shinyCapture});
-    if(pendingReward.infiniteGacha){const inf=state.infiniteExpedition,milestone=Number(pendingReward.infiniteMilestone||0);if(pendingReward.infiniteFirstClear&&milestone>0&&!inf.claimedMilestones.includes(milestone)){inf.claimedMilestones.push(milestone);inf.claimedMilestones.sort((a,b)=>a-b);}inf.chestsOpened=(inf.chestsOpened||0)+1;inf.pendingReward=null;addLog(`♾ Gachapon de ${formatMeters(milestone)} abierto · ${pendingReward.infiniteFirstClear?"hito nuevo reclamado":"hito repetido"}.`);}
+    if(pendingReward.infiniteGacha){const inf=state.infiniteExpedition,milestone=Number(pendingReward.infiniteMilestone||0);if(milestone>0&&!inf.claimedMilestones.includes(milestone)){inf.claimedMilestones.push(milestone);inf.claimedMilestones.sort((a,b)=>a-b);}inf.chestsOpened=(inf.chestsOpened||0)+1;inf.pendingReward=null;addLog(`♾ Gachapon de ${formatMeters(milestone)} abierto · hito nuevo reclamado.`);}
     if(pendingReward.timedGacha){
       if(pendingReward.premiumSource==="paid"){state.timedGacha.purchasedPending=null;state.timedGacha.purchasedClaimed=(state.timedGacha.purchasedClaimed||0)+1;}
       else if(pendingReward.premiumSource==="achievement"){state.achievements=normalizeAchievementState(state.achievements);state.achievements.premiumTickets=Math.max(0,(state.achievements.premiumTickets||0)-1);}

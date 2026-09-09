@@ -19208,5 +19208,120 @@ body #pkRegionRuntimeRoot #gymBattleOverlay .gym-battle-bottom{background:#11171
 #pkRegionRuntimeRoot .ux-smart-head small,#pkRegionRuntimeRoot .ux-smart-card small,#pkRegionRuntimeRoot .ux-smart-card span,#pkRegionRuntimeRoot .ux-smart-foot{color:#9fa991!important}
 #pkRegionRuntimeRoot .summary-close-btn{background:linear-gradient(180deg,#414c34,#2d372b)!important;border-color:#766f4b!important;color:#f1edda!important}
 </style>
+
+<style id="pkVisualPolishV36651">
+/* PokéSenda · V36.65.1 · Pulido visual global, 2026-09-09.
+   Capa de presentación: no cambia combate, capturas, guardado ni sprites. */
+:root{
+  --ps-surface:#10213b;--ps-surface-deep:#0b172a;--ps-edge:#456184;
+  --ps-accent:#95caff;--ps-copy:#c8d8eb;--ps-heading:#f0f6ff;
+  --ps-menu:linear-gradient(160deg,rgba(20,42,72,.96),rgba(8,19,37,.97));
+  --ps-soft:rgba(138,188,242,.10);--ps-reading:system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+#pkRegionRuntimeRoot{
+  --ps-surface:#242d20;--ps-surface-deep:#151e16;--ps-edge:#776b45;
+  --ps-accent:#f0d58a;--ps-copy:#d8d9c7;--ps-heading:#fff4d5;
+  --ps-menu:linear-gradient(160deg,rgba(42,47,29,.97),rgba(17,25,18,.97));
+  --ps-soft:rgba(224,195,111,.10);
+}
+/* El fondo aprobado sigue visible; el menú gana una jerarquía más clara. */
+body #mainMenu .menu-box,
+body #pkRegionRuntimeRoot #mainMenu .menu-box{
+  background:var(--ps-menu)!important;border:1px solid var(--ps-edge)!important;
+  border-top:3px solid var(--ps-accent)!important;border-radius:20px!important;
+  box-shadow:0 28px 80px #0009,inset 0 1px 0 #ffffff12!important;
+}
+body #mainMenu .menu-logo{line-height:1.35!important;letter-spacing:1px!important}
+body #mainMenu .menu-sub{color:var(--ps-copy)!important;line-height:1.7!important;margin:10px 0 18px!important}
+body #mainMenu .menu-buttons .btn{border-radius:10px!important;line-height:1.55!important;transition:border-color .16s,box-shadow .16s,filter .16s}
+body #mainMenu #menuPlayBtn{min-height:58px!important;box-shadow:0 5px 0 #0003,inset 0 1px 0 #ffffff24!important}
+body #mainMenu .menu-save,
+body #pkRegionRuntimeRoot #mainMenu .menu-save{
+  background:var(--ps-surface-deep)!important;border-color:var(--ps-edge)!important;
+  color:var(--ps-copy)!important;font-family:var(--ps-reading)!important;font-size:14px!important;line-height:1.6!important;
+}
+/* Marco del juego y panel lateral: profundidad sobria, sin tapar el escenario. */
+body .game{box-shadow:0 22px 64px #0008,inset 0 1px 0 #ffffff0c}
+body .right,body #pkRegionRuntimeRoot .right{background:var(--ps-surface-deep)!important;scrollbar-gutter:stable}
+body .right>.card,body #pkRegionRuntimeRoot .right>.card{
+  background:linear-gradient(150deg,var(--ps-surface),var(--ps-surface-deep))!important;
+  border-color:var(--ps-edge)!important;box-shadow:0 4px 14px #0002;
+}
+body .right .section-title,body #pkRegionRuntimeRoot .right .section-title{
+  color:var(--ps-accent)!important;line-height:1.6;letter-spacing:.7px;
+  padding-bottom:8px;border-bottom:1px solid var(--ps-edge);margin-bottom:10px;
+}
+body .formation-slot:not(.ko-slot),body #pkRegionRuntimeRoot .formation-slot:not(.ko-slot){
+  background:var(--ps-surface)!important;box-shadow:inset 0 1px 0 #ffffff0b,0 3px 10px #0002;
+}
+body .formation-slot.reserve-slot:not(.ko-slot){border-style:dashed!important}
+body .formation-slot-label{gap:8px;line-height:1.6}
+body .formation-pokemon>div{min-width:0}
+body .formation-pokemon b{overflow-wrap:anywhere;line-height:1.55}
+body .formation-pokemon small{line-height:1.65}
+body .formation-slot .tiny-xp{font-family:var(--ps-reading)!important;font-size:12px!important;line-height:1.4;gap:6px;flex-wrap:wrap}
+/* Selección visible también con teclado; no se altera la animación del Pokémon. */
+body button:focus-visible,body select:focus-visible,body input:focus-visible,
+body textarea:focus-visible,body [tabindex]:focus-visible,body a:focus-visible{
+  outline:3px solid var(--ps-accent)!important;outline-offset:3px!important;
+}
+body .btn:disabled,body .mini-btn:disabled{filter:none!important;transform:none!important;box-shadow:none!important}
+body .auto-btn.active,body .speed-btn.active,body .quick-speed-btn.active{ text-decoration:underline;text-underline-offset:4px }
+@media(hover:hover){
+  body #mainMenu .menu-buttons .btn:not(:disabled):hover{border-color:var(--ps-accent)!important;box-shadow:0 0 0 2px var(--ps-soft),0 5px 18px #0003!important}
+  body .dex-card.discovered:hover,body .roster-card:hover{outline:2px solid var(--ps-accent);outline-offset:1px}
+}
+/* Ventanas: una superficie consistente, conservando rarezas y colores de estado. */
+body .modal-box,body #pkRegionRuntimeRoot .modal-box{
+  background:linear-gradient(160deg,var(--ps-surface),var(--ps-surface-deep))!important;
+  border-color:var(--ps-edge)!important;box-shadow:0 24px 70px #0009,inset 0 1px 0 #ffffff10!important;
+  overscroll-behavior:contain;scrollbar-gutter:stable;
+}
+body .modal-box>h2,body .pokemon-detail-head h2{color:var(--ps-heading);line-height:1.5;overflow-wrap:anywhere}
+body .pokemon-detail-head{flex-wrap:wrap}
+body .pokemon-detail-head .grow{min-width:0}
+body .pokemon-detail-close{margin-left:auto;flex-shrink:0}
+body .modal-box>p,body .option-row small,body .loot-detail p,
+body .help-page p,body .help-page li,body .help-faq div,
+body .help-table td,body .save-transfer-warning,
+body .save-transfer-card p,body .pk-public-dex-note{
+  font-family:var(--ps-reading)!important;font-size:15px!important;line-height:1.65!important;
+  color:var(--ps-copy)!important;overflow-wrap:anywhere;
+}
+body .help-table th{font-family:var(--ps-reading)!important;font-size:14px!important;line-height:1.5!important}
+body .help-table td,body .help-table th{padding:10px 12px!important}
+body .help-table-wrap{overflow-x:auto;overscroll-behavior-x:contain}
+body .dex-name,body .pk-public-dex-name{line-height:1.65;overflow-wrap:anywhere}
+body .dex-meta,body .pk-public-dex-types{font-family:var(--ps-reading)!important;font-size:12px!important;line-height:1.5!important}
+body .dex-card{transition:transform .15s,border-color .15s;}
+body .dex-card.locked{opacity:.72}
+body .pokedex-summary{gap:8px;line-height:1.6}
+body .pk-public-dex-toolbar input{font-family:var(--ps-reading)!important;font-size:16px!important}
+body .pk-public-dex-tab,body .pk-public-dex-filter{font-family:var(--ps-reading)!important;font-size:14px!important;min-height:38px!important}
+body .pk-public-dex-summary span,body .pk-public-dex-status{font-family:var(--ps-reading)!important;font-size:12px!important;line-height:1.5!important}
+/* Avisos largos y pantallas bajas: el texto cabe sin salirse del viewport. */
+body .toast{max-width:calc(100% - 28px);white-space:normal;overflow-wrap:anywhere;text-align:center;line-height:1.6}
+body .modal-box,body .menu-box{max-height:calc(100dvh - 32px);}
+@media(max-width:700px){
+  body .modal-box{max-width:calc(100vw - 16px)!important;max-height:calc(100dvh - 16px)!important;padding:16px 12px!important}
+  body #mainMenu .menu-box{max-height:calc(100dvh - 20px)!important;overflow-y:auto!important}
+  body #mainMenu .menu-logo{font-size:clamp(24px,6.5vw,34px)!important}
+  body #mainMenu .menu-buttons .btn{min-height:48px!important}
+  body .pokemon-detail-close{min-height:44px}
+  body .pk-public-dex-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body .pk-public-dex-toolbar input{min-width:0!important;width:100%;flex-basis:100%}
+  body .pk-public-dex-name{white-space:normal!important}
+}
+@media(max-height:720px) and (min-width:701px){
+  body #mainMenu .menu-box{max-height:calc(100dvh - 24px)!important;overflow-y:auto!important;padding:16px 20px!important}
+  body #mainMenu .menu-sub{margin:6px 0 12px!important}
+}
+/* Se reduce sólo el movimiento decorativo. Las ruletas conservan sus tiempos. */
+@media(prefers-reduced-motion:reduce){
+  body .btn,body .dex-card,body .roster-card{transition:none!important}
+  body .dex-card.discovered:hover,body .roster-card:hover{transform:none!important}
+}
+
+</style>
 </body>
 </html>

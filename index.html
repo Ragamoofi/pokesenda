@@ -19362,5 +19362,19 @@ body .modal-box,body .menu-box{max-height:calc(100dvh - 32px);}
 }
 </style>
 
+
+<style id="pkAutomationUnderlineFix20260910">
+/* Mantener estado activo visible sin subrayado en automatizaciones/velocidad. */
+.auto-btn.active,
+.speed-btn.active,
+.quick-speed-btn.active,
+#pkRegionRuntimeRoot .auto-btn.active,
+#pkRegionRuntimeRoot .speed-btn.active,
+#pkRegionRuntimeRoot .quick-speed-btn.active{
+  text-decoration:none!important;
+  text-underline-offset:initial!important;
+}
+</style>
+
 </body>
 </html>

@@ -19323,5 +19323,44 @@ body .modal-box,body .menu-box{max-height:calc(100dvh - 32px);}
 }
 
 </style>
+
+<style id="pkFormationNamesFix20260910">
+/* PokéSenda · Corrección segura de nombres largos en Formación.
+   Solo presentación: no toca lógica, saves, combate ni regiones. */
+.formation-pokemon{
+  grid-template-columns:72px minmax(0,1fr)!important;
+}
+.formation-pokemon img{
+  width:72px!important;
+  height:72px!important;
+}
+.formation-pokemon > div{
+  min-width:0!important;
+}
+.formation-pokemon b{
+  display:block!important;
+  white-space:nowrap!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+  hyphens:none!important;
+  font-size:10px!important;
+  line-height:1.35!important;
+  letter-spacing:0!important;
+}
+/* En pantallas algo más estrechas, se gana un poco más de ancho de texto. */
+@media(max-width:1150px){
+  .formation-pokemon{
+    grid-template-columns:66px minmax(0,1fr)!important;
+  }
+  .formation-pokemon img{
+    width:66px!important;
+    height:66px!important;
+  }
+  .formation-pokemon b{
+    font-size:9.5px!important;
+  }
+}
+</style>
+
 </body>
 </html>

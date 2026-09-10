@@ -19323,5 +19323,325 @@ body .modal-box,body .menu-box{max-height:calc(100dvh - 32px);}
 }
 
 </style>
+
+<style id="pkReworkVisual20260910">
+
+/* PokéSenda · Rework visual 2026-09-10. Presentation only; original engine retained. */
+:root{
+ --ps-reading:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+ --ps-surface:#182d29;--ps-surface-deep:#0c1918;--ps-edge:#38534a;
+ --ps-accent:#9bdfb6;--ps-copy:#c6d6cc;--ps-heading:#fff4d8;
+ --ps-soft:#9bdfb612;--ps-menu:linear-gradient(145deg,#1d352ef5,#0c1918f5);
+ --ps-gold:#ecc77b;--ps-action:#b7ecc8;--ps-ink:#10291e;
+ --ps-raised:#223a32;--ps-radius:14px;--ps-shadow:0 16px 48px #0005;
+ --bg:#091311;--panel:var(--ps-surface-deep);--panel2:var(--ps-surface);
+ --line:var(--ps-edge);--text:#f0f4ed;--muted:#aec1b7;
+}
+body #pkRegionRuntimeRoot{
+ --ps-surface:#352b25;--ps-surface-deep:#1c1917;--ps-edge:#69523b;
+ --ps-accent:#efc77d;--ps-copy:#dccbbb;--ps-heading:#fff0d2;
+ --ps-soft:#efc77d12;--ps-menu:linear-gradient(145deg,#443128f5,#201b18f7);
+ --ps-gold:#f2ca7b;--ps-action:#f1cf93;--ps-ink:#3a2419;--ps-raised:#49362b;
+ --bg:#181411;--panel:var(--ps-surface-deep);--panel2:var(--ps-surface);
+ --line:var(--ps-edge);--text:#fff0df;--muted:#c9b6a2;
+}
+html body{background:radial-gradient(ellipse at 15% 0,#244432 0,transparent 52%),#091311;color:var(--text)}
+body,body button,body input,body select,body textarea,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime button,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime input,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime select,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime textarea{font-family:var(--ps-reading)}
+body :is(.menu-logo,.title,.pk-boot-title),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.menu-logo,.title,.pk-boot-title){font-family:'Pokemon Classic Regular','Press Start 2P',monospace}
+body :is(button,input,select,textarea),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(button,input,select,textarea){font-size:12px;line-height:1.45}
+body :is(.btn,.mini-btn,.filter-chip,.inventory-tab,.achievement-tab,.help-tab,.damage-tab),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.btn,.mini-btn,.filter-chip,.inventory-tab,.achievement-tab,.help-tab,.damage-tab){
+ background:linear-gradient(180deg,var(--ps-raised),var(--ps-surface))!important;
+ color:var(--text)!important;border:1px solid var(--ps-edge)!important;border-radius:9px!important;
+ box-shadow:inset 0 1px 0 #ffffff09,0 2px 3px #0002!important;
+ font-family:var(--ps-reading)!important;font-weight:700;letter-spacing:.12px;text-shadow:none!important;
+ transition:transform .14s,background-color .14s,border-color .14s,box-shadow .14s!important;
+}
+body .btn,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .btn{padding:9px 13px;min-height:35px}
+body :is(.btn.primary,.btn.active,.mini-btn.active,.filter-chip.active,.inventory-tab.active,.achievement-tab.active,.help-tab.active,.damage-tab.active,.speed-btn.active,.auto-btn.active,.quick-speed-btn.active),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.btn.primary,.btn.active,.mini-btn.active,.filter-chip.active,.inventory-tab.active,.achievement-tab.active,.help-tab.active,.damage-tab.active,.speed-btn.active,.auto-btn.active,.quick-speed-btn.active){
+ background:var(--ps-action)!important;color:var(--ps-ink)!important;border-color:var(--ps-action)!important;
+ box-shadow:inset 0 -3px 0 #0002,0 0 0 2px var(--ps-soft)!important;text-decoration:none!important;
+}
+body :is(.btn.warn),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.btn.warn){background:#604720!important;color:#ffe0a1!important;border-color:#a17a3a!important}
+body :is(.btn.danger),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.btn.danger){background:#572a2c!important;color:#ffd7cf!important;border-color:#96534f!important}
+body :is(.btn,.mini-btn):disabled,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.btn,.mini-btn):disabled{opacity:.43!important;transform:none!important;filter:none!important;box-shadow:none!important}
+@media(hover:hover){
+ body :is(.btn,.mini-btn,.filter-chip):not(:disabled):hover,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.btn,.mini-btn,.filter-chip):not(:disabled):hover{border-color:var(--ps-accent)!important;filter:none!important;transform:translateY(-1px);box-shadow:0 4px 10px #0003!important}
+ body :is(.dex-card.discovered,.pc-card,.starter-option):hover,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.dex-card.discovered,.pc-card,.starter-option):hover{transform:translateY(-3px)!important;border-color:var(--ps-accent)!important;outline:none!important;filter:none!important;box-shadow:0 8px 20px #0004!important}
+}
+body :is(.btn,.mini-btn):not(:disabled):active,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.btn,.mini-btn):not(:disabled):active{transform:translateY(1px);box-shadow:none!important}
+body :is(input:not([type=range]):not([type=checkbox]),select,textarea),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(input:not([type=range]):not([type=checkbox]),select,textarea){background:var(--ps-surface-deep)!important;color:var(--text)!important;border:1px solid var(--ps-edge)!important;border-radius:8px;accent-color:var(--ps-accent)}
+body input::placeholder,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime input::placeholder{color:var(--muted);opacity:.8}
+body :is(button,input,select,textarea,[tabindex]):focus-visible,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--ps-accent)!important;outline-offset:3px!important}
+body :is(.modal-box,.right,.log,.formation-combo-menu),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.modal-box,.right,.log,.formation-combo-menu){scrollbar-width:thin;scrollbar-color:var(--ps-edge) var(--ps-surface-deep)}
+/* The title screen becomes a compact adventure dashboard over its existing artwork. */
+body #mainMenu::before{background:linear-gradient(90deg,#06130f99,transparent 75%)!important}
+body #mainMenu .menu-box,body #pkRegionRuntimeRoot #mainMenu .menu-box,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime #mainMenu .menu-box{
+ width:min(640px,94vw)!important;padding:30px!important;text-align:left!important;
+ border:1px solid var(--ps-edge)!important;border-top:4px solid var(--ps-gold)!important;border-radius:22px!important;
+ background:var(--ps-menu)!important;box-shadow:0 28px 80px #0008!important;backdrop-filter:none!important;
+}
+body #mainMenu .menu-logo,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime #mainMenu .menu-logo{font-size:clamp(26px,2.5vw,40px)!important;line-height:1.4!important;text-align:left!important;color:#ffe3a4!important;text-shadow:0 3px 0 #342916!important}
+body #mainMenu .menu-sub,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime #mainMenu .menu-sub{font:12px/1.7 var(--ps-reading)!important;text-align:left!important;color:var(--ps-copy)!important;margin:12px 0 22px!important;letter-spacing:1px}
+body #mainMenu .menu-buttons,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime #mainMenu .menu-buttons{width:100%!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+body #mainMenu .menu-buttons .btn,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime #mainMenu .menu-buttons .btn{min-height:45px!important;font-size:13px!important;padding:12px 14px!important;text-align:left!important;justify-content:flex-start!important;border-radius:10px!important}
+body #mainMenu #menuPlayBtn,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime #mainMenu #menuPlayBtn{grid-column:1/-1!important;min-height:60px!important;font-size:18px!important;padding:16px 20px!important;background:var(--ps-action)!important;color:var(--ps-ink)!important;position:relative}
+body #mainMenu #menuPlayBtn::after,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime #mainMenu #menuPlayBtn::after{content:'→';margin-left:auto;float:right;font-size:23px;line-height:1}
+body #mainMenu .menu-save,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime #mainMenu .menu-save{margin-top:18px!important;padding:12px 14px!important;border:1px solid var(--ps-edge)!important;border-radius:10px!important;font-size:12px!important;text-align:left!important}
+body #mainMenu .menu-credit,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime #mainMenu .menu-credit{text-align:center!important;font:11px/1.6 var(--ps-reading)!important;color:var(--muted)!important;margin-top:16px!important}
+/* Frame / information hierarchy. No positioning changes to battle actors. */
+body .game,body #pkRegionRuntimeRoot .game{border:1px solid var(--ps-edge)!important;border-radius:18px!important;background:var(--ps-surface-deep)!important;box-shadow:0 25px 70px #0007!important}
+body .top,body #pkRegionRuntimeRoot .top,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .top{background:var(--ps-surface-deep)!important;border-bottom:1px solid var(--ps-edge)!important;gap:8px!important;padding:12px 14px!important}
+body .title,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .title{color:var(--ps-gold)!important;text-shadow:none!important;font-size:15px!important}
+body .pill,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .pill{background:var(--ps-surface)!important;border-color:var(--ps-edge)!important;color:var(--muted)!important;border-radius:8px!important;font:12px/1.4 var(--ps-reading)!important;padding:7px 10px!important}
+body .pill b,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .pill b{font-variant-numeric:tabular-nums;color:var(--ps-heading)!important}
+body .right,body #pkRegionRuntimeRoot .right,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .right{padding:14px!important;background:var(--ps-surface-deep)!important}
+body .right>.card,body #pkRegionRuntimeRoot .right>.card,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .right>.card{background:var(--ps-surface)!important;border:1px solid var(--ps-edge)!important;border-radius:var(--ps-radius)!important;padding:12px!important;box-shadow:none!important;margin-bottom:12px!important}
+body .section-title,body #pkRegionRuntimeRoot .right .section-title,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .section-title{font:800 11px/1.5 var(--ps-reading)!important;text-transform:uppercase;letter-spacing:1.6px!important;color:var(--ps-accent)!important;margin:3px 0 10px!important}
+body .hud,body #pkRegionRuntimeRoot .hud,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .hud{background:var(--ps-surface-deep)!important;border:1px solid var(--ps-edge)!important;border-radius:12px!important;box-shadow:0 6px 20px #0004!important;backdrop-filter:none!important;padding:10px 12px!important}
+body :is(.timebar,.xpbar),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.timebar,.xpbar){border:1px solid #ffffff20!important;background:#070e12!important;border-radius:20px!important;box-shadow:inset 0 2px 4px #0006}
+body .timefill,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .timefill{background:linear-gradient(90deg,#bb9553,#f4d992)!important}
+body .xpfill,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .xpfill{background:linear-gradient(90deg,#5a8cca,#92c8f4)!important}
+body .route-progress,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .route-progress{min-height:38px}
+body #pkLobbyBanner,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime #pkLobbyBanner{font:700 12px/1.5 var(--ps-reading)!important;color:var(--ps-heading)!important;background:var(--ps-surface-deep)!important;border:1px solid var(--ps-edge)!important;border-radius:8px!important;padding:9px 18px!important;letter-spacing:1px!important}
+/* Formation: clearer grouping, stronger KO state, predictable text. */
+body .formation-slot:not(.ko-slot),body #pkRegionRuntimeRoot .formation-slot:not(.ko-slot){background:var(--ps-surface)!important;border:1px solid var(--ps-edge)!important;border-left:3px solid var(--ps-accent)!important;border-radius:10px!important;padding:9px!important;box-shadow:none!important}
+body .formation-slot.reserve-slot:not(.ko-slot),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .formation-slot.reserve-slot:not(.ko-slot){border-left-color:var(--ps-edge)!important;background:var(--ps-surface-deep)!important}
+body .formation-slot-label,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .formation-slot-label{font:700 11px/1.4 var(--ps-reading)!important;color:var(--ps-accent)!important;letter-spacing:.3px}
+body .formation-pokemon b,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .formation-pokemon b{font:800 13px/1.4 var(--ps-reading)!important;color:var(--text)!important}
+body .formation-pokemon small,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .formation-pokemon small{font:11px/1.5 var(--ps-reading)!important;color:var(--muted)!important}
+body .formation-combo-input,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .formation-combo-input{min-height:28px;font:11px/1.4 var(--ps-reading)!important}
+body .formation-combo-menu,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .formation-combo-menu{background:var(--ps-surface-deep)!important;border-color:var(--ps-edge)!important;padding:6px!important}
+body .formation-combo-option b,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .formation-combo-option b{font-size:12px!important}body .formation-combo-option small,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .formation-combo-option small{font-size:10px!important}
+body .formation-combo-option:is(:hover,.selected),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .formation-combo-option:is(:hover,.selected){background:var(--ps-raised)!important}
+body .formation-slot.ko-slot,body #pkRegionRuntimeRoot .formation-slot.ko-slot,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .formation-slot.ko-slot{background:#4a2025!important;border:1px solid #dd6970!important;border-left:4px solid #ff777e!important;opacity:1!important;box-shadow:inset 0 0 20px #a72c2925!important}
+body .formation-slot.ko-slot :is(b,small,.formation-slot-label),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .formation-slot.ko-slot :is(b,small,.formation-slot-label){color:#ffb5b9!important}
+body .formation-slot.ko-slot img,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .formation-slot.ko-slot img{filter:grayscale(.7) sepia(.4)!important;opacity:.55!important}
+body :is(.mon.fainted,.enemy.enemy-dead),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.mon.fainted,.enemy.enemy-dead){opacity:.62!important;filter:grayscale(.8) sepia(.4)!important}
+body :is(.mon-name,.enemy-name),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.mon-name,.enemy-name){font:800 12px/1.4 var(--ps-reading)!important;color:#fff8e7!important;text-shadow:0 2px 3px #000,1px 0 #000,-1px 0 #000!important}
+body :is(.mon img,.enemy img,.gym-mon-sprite,.poke-img,.dex-card img,.pc-card img),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.mon img,.enemy img,.gym-mon-sprite,.poke-img,.dex-card img,.pc-card img){image-rendering:pixelated;object-fit:contain}
+body :is(.battle-hp),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.battle-hp){border:1px solid #e6f4e7!important;border-radius:6px!important;height:8px!important;padding:1px;box-shadow:0 2px 4px #0009!important}
+body .hp-green,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .hp-green{background:linear-gradient(90deg,#39a97b,#a1e4a6)!important}
+body .hp-yellow,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .hp-yellow{background:linear-gradient(90deg,#bf8c2f,#f4d475)!important}
+body .hp-red,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .hp-red{background:linear-gradient(90deg,#bd394e,#ff8181)!important}
+body :is(.status-badge,.type-chip,.role-badge),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.status-badge,.type-chip,.role-badge){font-family:var(--ps-reading)!important;font-weight:800;letter-spacing:.25px;border-radius:5px!important;line-height:1.45}
+body .status-badge,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .status-badge{border:1px solid currentColor!important;padding:3px 6px!important;box-shadow:0 2px 4px #0004}
+body .pk-dmg,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .pk-dmg{font-family:var(--ps-reading)!important;font-size:20px!important;font-weight:950!important;letter-spacing:-.5px;line-height:1.1;text-shadow:2px 2px 0 #09130f,-1px -1px 0 #09130f,1px -1px 0 #09130f,-1px 1px 0 #09130f!important}
+body .pk-dmg.crit,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .pk-dmg.crit{font-size:27px!important;color:#ffe49a!important}
+body .pk-dmg.heal,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .pk-dmg.heal{color:#9bf0b9!important}body .pk-dmg.resist,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .pk-dmg.resist{font-size:15px!important;color:#c3cbd3!important}
+body .gym-float,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .gym-float{font-family:var(--ps-reading)!important;font-weight:900!important;text-shadow:2px 2px 0 #111,-1px -1px 0 #111!important}
+@keyframes allyAttackForward{0%,100%{transform:translateX(0)}35%{transform:translateX(-4px)}65%{transform:translateX(17px)}85%{transform:translateX(5px)}}
+@keyframes enemyMelee{0%,100%{transform:translateX(0)}35%{transform:translateX(4px)}65%{transform:translateX(-17px)}85%{transform:translateX(-5px)}}
+@keyframes hitReact{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px);opacity:.6}55%{transform:translateX(4px);opacity:1}80%{transform:translateX(-2px)}}
+/* Shared surfaces cover the regional clones without changing their event handlers. */
+body .modal-box,body #pkRegionRuntimeRoot .modal-box{background:linear-gradient(155deg,var(--ps-surface),var(--ps-surface-deep) 65%)!important;border:1px solid var(--ps-edge)!important;border-top:3px solid var(--ps-accent)!important;border-radius:18px!important;box-shadow:0 28px 90px #0009!important;color:var(--text)!important;scrollbar-gutter:stable;overscroll-behavior:contain}
+body :is(.modal-box h2,.pokemon-detail-head h2),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.modal-box h2,.pokemon-detail-head h2){font-family:var(--ps-reading)!important;font-size:23px!important;font-weight:850!important;letter-spacing:-.5px;line-height:1.3!important;color:var(--ps-heading)!important}
+body :is(.modal-box h3,.modal-box h4),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.modal-box h3,.modal-box h4){font-family:var(--ps-reading)!important;line-height:1.4;color:var(--ps-heading)}
+body :is(.pokemon-detail-head,.pk-casino-head,.region-select-head),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.pokemon-detail-head,.pk-casino-head,.region-select-head){padding-bottom:14px!important;border-bottom:1px solid var(--ps-edge)!important;gap:12px}
+body :is(.option-row,.dex-lore-section,.pk-detail-module,.pk-stats-section,.move-detail,.tm-owned-card,.tm-mini-card,.loot-slot,.pc-swap-slot,.incense-collection-card,.help-mini-card,.profile-stat,.metric,.db-stat,.gym-summary-stat,.achievement-metric,.pk-casino-stat,.pk-backup-card,.save-transfer-card),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.option-row,.dex-lore-section,.pk-detail-module,.pk-stats-section,.move-detail,.tm-owned-card,.tm-mini-card,.loot-slot,.pc-swap-slot,.incense-collection-card,.help-mini-card,.profile-stat,.metric,.db-stat,.gym-summary-stat,.achievement-metric,.pk-casino-stat,.pk-backup-card,.save-transfer-card){background:var(--ps-surface-deep)!important;border:1px solid var(--ps-edge)!important;border-radius:10px!important;box-shadow:none!important;color:var(--ps-copy)}
+body :is(.metric b,.profile-stat b,.db-stat b,.gym-summary-stat b,.achievement-metric b),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.metric b,.profile-stat b,.db-stat b,.gym-summary-stat b,.achievement-metric b){color:var(--ps-heading)!important;font-family:var(--ps-reading)!important;font-variant-numeric:tabular-nums;font-size:23px!important}
+body :is(.combat-stat,.dex-lore-stat,.pk-detail-tm-slot),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.combat-stat,.dex-lore-stat,.pk-detail-tm-slot){background:var(--ps-surface-deep)!important;border-color:var(--ps-edge)!important;border-radius:8px!important}
+body :is(.filter-chip,.inventory-tab,.achievement-tab,.help-tab),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.filter-chip,.inventory-tab,.achievement-tab,.help-tab){padding:8px 12px!important;min-height:33px;font-size:12px!important}
+body :is(.filter-strip,.pk-public-dex-toolbar,.pk-players-toolbar),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.filter-strip,.pk-public-dex-toolbar,.pk-players-toolbar){gap:8px!important;flex-wrap:wrap}
+body :is(.pokedex-grid,.pc-box-grid),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.pokedex-grid,.pc-box-grid){gap:12px!important}
+body :is(.dex-card,.pc-card,.pk-public-dex-card,.starter-option),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.dex-card,.pc-card,.pk-public-dex-card,.starter-option){background:radial-gradient(ellipse at 50% 20%,var(--ps-raised),var(--ps-surface-deep) 78%)!important;border-radius:12px!important;box-shadow:inset 0 1px 0 #ffffff09!important;padding:12px!important;transition:transform .16s,border-color .16s!important}
+body .dex-card,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .dex-card{border-width:1px!important;border-bottom-width:3px!important;min-height:186px!important}
+body .dex-card.locked,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .dex-card.locked{opacity:.65!important}
+body :is(.dex-name,.pc-card-name,.pk-public-dex-name),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.dex-name,.pc-card-name,.pk-public-dex-name){font:800 13px/1.45 var(--ps-reading)!important;color:var(--text)!important}
+body .rarity,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .rarity{font:800 9px/1.4 var(--ps-reading)!important;letter-spacing:1px;padding:3px 7px!important}
+body .pokemon-detail-modal,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .pokemon-detail-modal{width:min(1040px,96vw)!important}
+body :is(.dex-lore-hero,.pokemon-detail-hero),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.dex-lore-hero,.pokemon-detail-hero){background:radial-gradient(ellipse at 22% 45%,var(--ps-raised),var(--ps-surface-deep))!important;border-radius:14px!important;border-color:var(--ps-edge)!important}
+body :is(.skill,.tm-equip-move-card),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.skill,.tm-equip-move-card){background:var(--ps-surface)!important;border-color:var(--ps-edge)!important;color:var(--text)!important;border-radius:9px!important}
+body .skill.chosen,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .skill.chosen{border-left:3px solid var(--ps-accent)!important;background:var(--ps-raised)!important}
+body :is(.tree-toolbar,.tree-controls),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.tree-toolbar,.tree-controls){background:var(--ps-surface-deep)!important;border:1px solid var(--ps-edge)!important;border-radius:12px!important;padding:10px!important}
+body .tree-node,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .tree-node{box-shadow:0 4px 10px #0005}
+body :is(.reward-box,.mt-gacha-box),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.reward-box,.mt-gacha-box){border-top-color:var(--ps-gold)!important}
+body .reward-name,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .reward-name{font:900 28px/1.3 var(--ps-reading)!important;color:var(--ps-heading)!important;letter-spacing:-.5px}
+body .reward-note,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .reward-note{font:13px/1.6 var(--ps-reading)!important;color:var(--ps-copy)!important}
+body .roulette-card,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .roulette-card{border-radius:10px!important;background:var(--ps-surface-deep)!important;box-shadow:inset 0 1px 0 #ffffff15!important}
+body .pk-casino-table,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .pk-casino-table{background:radial-gradient(ellipse at 50% 30%,#205c49,#102e27)!important;border:3px solid #a48651!important;border-radius:18px!important;box-shadow:inset 0 0 0 4px #0003!important}
+body .pk-casino-betbar,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .pk-casino-betbar{gap:8px!important;padding:12px!important;background:var(--ps-surface-deep)!important;border-radius:10px!important}
+body .gym-card,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .gym-card{background:linear-gradient(145deg,var(--ps-raised),var(--ps-surface-deep))!important;border:1px solid var(--ps-edge)!important;border-radius:12px!important;padding:13px!important;box-shadow:0 4px 12px #0002!important}
+body .gym-card h3,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .gym-card h3{font:800 16px/1.3 var(--ps-reading)!important}
+body .gym-card-rule,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .gym-card-rule{font:11px/1.5 var(--ps-reading)!important;max-height:none!important;min-height:0!important;overflow:visible!important}
+body .gym-card-roster,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .gym-card-roster{background:#0002!important;border-radius:8px!important;padding:7px!important}
+body .gym-card-roster img,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .gym-card-roster img{width:34px!important;height:34px!important}
+body .gym-card .btn,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .gym-card .btn{font:700 12px/1.3 var(--ps-reading)!important}
+body #gymBattleOverlay .gym-battle-head,body #pkRegionRuntimeRoot #gymBattleOverlay .gym-battle-head,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime #gymBattleOverlay .gym-battle-head{background:var(--ps-surface-deep)!important;border-color:var(--ps-edge)!important}
+body #gymBattleOverlay .gym-battle-bottom,body #pkRegionRuntimeRoot #gymBattleOverlay .gym-battle-bottom,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime #gymBattleOverlay .gym-battle-bottom{background:var(--ps-surface-deep)!important;border-color:var(--ps-edge)!important}
+body :is(.pk-players-box,.pk-players-owner),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.pk-players-box,.pk-players-owner){background:var(--ps-surface-deep)!important;border:1px solid var(--ps-edge)!important;border-radius:14px!important}
+body .pk-players-box :is(td,th),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .pk-players-box :is(td,th){font-family:var(--ps-reading)!important;padding:12px 10px!important;border-bottom:1px solid var(--ps-edge)!important}
+body .pk-players-box tr:hover td,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .pk-players-box tr:hover td{background:var(--ps-soft)!important}
+body .region-card,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .region-card{border-radius:16px!important;box-shadow:0 8px 22px #0004!important;overflow:hidden}
+body .region-card-name,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .region-card-name{font:850 22px/1.3 var(--ps-reading)!important;letter-spacing:.5px}
+body .summary-box,body #pkRegionRuntimeRoot .summary-box,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .summary-box{background:var(--ps-menu)!important;border:1px solid var(--ps-edge)!important;border-top:4px solid var(--ps-gold)!important;border-radius:18px!important;box-shadow:var(--ps-shadow)!important}
+body .summary-head,body #pkRegionRuntimeRoot .summary-head,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .summary-head{background:var(--ps-surface-deep)!important;border-color:var(--ps-edge)!important;padding:16px!important}
+body .summary-grid,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .summary-grid{gap:10px!important}
+body .toast,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .toast{background:var(--ps-surface-deep)!important;border:1px solid var(--ps-accent)!important;border-radius:10px!important;box-shadow:0 8px 24px #0006!important;font:700 13px/1.5 var(--ps-reading)!important;padding:11px 16px!important}
+body :is(.achievement-corner-pop,.evolution-pop),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.achievement-corner-pop,.evolution-pop){background:var(--ps-surface-deep)!important;border-color:var(--ps-gold)!important;border-radius:12px!important;box-shadow:0 8px 30px #0005!important}
+body :is(.log,.gym-battle-log),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.log,.gym-battle-log){background:#080f10!important;color:#bbcfc5!important;border-color:var(--ps-edge)!important;font:11px/1.65 ui-monospace,monospace!important}
+/* Responsive enhancements leave existing mobile navigation intact. */
+@media(min-width:1550px){body .game,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .game{width:min(1760px,96vw)!important}body .main,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .main{grid-template-columns:minmax(0,1fr) 410px!important}}
+@media(max-width:700px){
+ body #mainMenu .menu-box,body #pkRegionRuntimeRoot #mainMenu .menu-box,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime #mainMenu .menu-box{padding:22px 16px!important;border-radius:16px!important}
+ body #mainMenu .menu-buttons,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime #mainMenu .menu-buttons{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ body #mainMenu .menu-buttons .btn,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime #mainMenu .menu-buttons .btn{min-height:44px!important;font-size:12px!important;padding:10px!important}
+ body .modal-box h2,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .modal-box h2{font-size:20px!important}
+ body .pokemon-detail-modal,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .pokemon-detail-modal{width:calc(100vw - 16px)!important}
+ body :is(.pokedex-grid,.pc-box-grid),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.pokedex-grid,.pc-box-grid){gap:7px!important}
+ body :is(.dex-card,.pc-card),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.dex-card,.pc-card){padding:8px!important}
+ body .pk-players-box :is(td,th),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime .pk-players-box :is(td,th){padding:8px!important}
+}
+@media(max-width:380px){body #mainMenu .menu-buttons,
+body #pkRegionRuntimeRoot.pk-region-johto-runtime #mainMenu .menu-buttons{grid-template-columns:1fr!important}}
+@media(prefers-reduced-motion:reduce){
+ body :is(.btn,.mini-btn,.dex-card,.pc-card),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.btn,.mini-btn,.dex-card,.pc-card){transition:none!important}
+ body :is(.attack-forward,.enemy-melee-cast,.enemy-ranged-cast,.hit-react,.hit-area),
+body #pkRegionRuntimeRoot.pk-region-johto-runtime :is(.attack-forward,.enemy-melee-cast,.enemy-ranged-cast,.hit-react,.hit-area){animation:none!important}
+}
+
+/* Collection and reward framing, without changing reel geometry or spin timings. */
+body .roulette-wrap{border:1px solid var(--ps-gold)!important;border-radius:14px!important;background:var(--ps-surface-deep)!important;box-shadow:inset 0 0 22px #0007,0 8px 24px #0003!important}
+body .roulette-wrap::after{content:'';position:absolute;inset:0;z-index:4;pointer-events:none;background:linear-gradient(90deg,var(--ps-surface-deep),transparent 15%,transparent 85%,var(--ps-surface-deep))}
+body .roulette-marker{z-index:5!important;filter:none!important}
+body .timed-gacha-strip,body #pkRegionRuntimeRoot .timed-gacha-strip{background:linear-gradient(110deg,var(--ps-surface-deep),var(--ps-raised))!important;border:1px solid var(--ps-edge)!important;border-left:3px solid var(--ps-gold)!important;border-radius:10px!important}
+body .timed-gacha-fill,body #pkRegionRuntimeRoot .timed-gacha-fill{background:linear-gradient(90deg,#a37e43,#f2d995)!important}
+body .achievement-road,body #pkRegionRuntimeRoot .achievement-road{background:var(--ps-surface-deep)!important;border-color:var(--ps-edge)!important;border-radius:12px!important}
+body .poe-tree-scroll,body #pkRegionRuntimeRoot .poe-tree-scroll{background-color:var(--ps-surface-deep)!important;background-image:radial-gradient(circle at 50% 50%,var(--ps-raised),transparent 70%),radial-gradient(#ffffff13 1px,transparent 1px)!important;background-size:100% 100%,24px 24px!important;border-color:var(--ps-edge)!important}
+body #mainMenu .menu-save{width:100%!important}
+body #mainMenu .menu-mini-links{width:100%!important;justify-content:flex-start!important;margin-top:12px!important}
+
+/* Revisión pre-publicación: conservar el menú móvil en una sola columna,
+   como en la base estable, para evitar regresiones entre 381 y 620 px. */
+@media(max-width:620px){
+  body #mainMenu .menu-buttons,
+  body #pkRegionRuntimeRoot.pk-region-johto-runtime #mainMenu .menu-buttons{
+    grid-template-columns:1fr!important;
+  }
+}
+
+</style>
 </body>
 </html>

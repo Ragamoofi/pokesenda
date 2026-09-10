@@ -19633,6 +19633,287 @@ body .poe-tree-scroll,body #pkRegionRuntimeRoot .poe-tree-scroll{background-colo
 body #mainMenu .menu-save{width:100%!important}
 body #mainMenu .menu-mini-links{width:100%!important;justify-content:flex-start!important;margin-top:12px!important}
 
+/* Revisión pre-publicación: conservar el menú móvil en una sola columna,
+   como en la base estable, para evitar regresiones entre 381 y 620 px. */
+@media(max-width:620px){
+  body #mainMenu .menu-buttons,
+  body #pkRegionRuntimeRoot.pk-region-johto-runtime #mainMenu .menu-buttons{
+    grid-template-columns:1fr!important;
+  }
+}
+
 </style>
+
+<style id="pkRestoreStableGeometryMenu20260910">
+/* ============================================================
+   PokéSenda · Corrección post-Astra
+   1) Restaura geometría maestra de escritorio 1920x1080.
+   2) Restaura el menú principal estable anterior.
+   El resto del rework visual de Astra se mantiene.
+   ============================================================ */
+
+/* --- Geometría maestra escritorio --- */
+@media (min-width:1501px){
+  body .game,
+  body #pkRegionRuntimeRoot .game{
+    width:min(1908px,calc(100vw - 12px))!important;
+    height:min(1068px,calc(100vh - 12px))!important;
+    max-width:none!important;
+  }
+  body .main,
+  body #pkRegionRuntimeRoot .main{
+    grid-template-columns:minmax(0,1fr) 500px!important;
+  }
+}
+
+/* --- Portada: recuperar composición clásica/estable --- */
+body > #mainMenu::before,
+body #pkRegionRuntimeRoot > #mainMenu::before{
+  background:linear-gradient(
+    90deg,
+    rgba(2,7,20,.12),
+    transparent 22%,
+    transparent 78%,
+    rgba(2,7,20,.12)
+  )!important;
+}
+
+body > #mainMenu .menu-box,
+body #pkRegionRuntimeRoot > #mainMenu .menu-box{
+  width:min(560px,100%)!important;
+  padding:24px 24px 18px!important;
+  text-align:center!important;
+  border-radius:20px!important;
+  box-shadow:0 28px 80px #0009,inset 0 1px 0 #ffffff12!important;
+  backdrop-filter:none!important;
+}
+
+/* Kanto: recuperar azul clásico del menú */
+body > #mainMenu .menu-box{
+  background:linear-gradient(160deg,rgba(20,42,72,.96),rgba(8,19,37,.97))!important;
+  border:1px solid #456184!important;
+  border-top:3px solid #95caff!important;
+}
+
+/* Johto: recuperar identidad regional anterior */
+body #pkRegionRuntimeRoot > #mainMenu .menu-box{
+  background:linear-gradient(160deg,rgba(42,47,29,.97),rgba(17,25,18,.97))!important;
+  border:1px solid #776b45!important;
+  border-top:3px solid #f0d58a!important;
+}
+
+body #mainMenu .menu-logo,
+body #pkRegionRuntimeRoot > #mainMenu .menu-logo{
+  font-family:'Pokemon Classic Regular','Pokemon Classic',monospace!important;
+  font-size:34px!important;
+  line-height:1.35!important;
+  font-weight:700!important;
+  text-align:center!important;
+  color:#ffcb05!important;
+  letter-spacing:.2px!important;
+  text-shadow:2px 2px 0 #e3350d,4px 4px 0 rgba(0,0,0,.35)!important;
+}
+
+body #mainMenu .menu-sub,
+body #pkRegionRuntimeRoot > #mainMenu .menu-sub{
+  margin:10px 0 18px!important;
+  font-family:'Pokemon Classic Regular','Pokemon Classic',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif!important;
+  font-size:10px!important;
+  line-height:1.7!important;
+  text-align:center!important;
+  letter-spacing:normal!important;
+}
+
+body > #mainMenu .menu-sub{color:#c8d8eb!important}
+body #pkRegionRuntimeRoot > #mainMenu .menu-sub{color:#bdb7a8!important}
+
+body #mainMenu .menu-buttons,
+body #pkRegionRuntimeRoot > #mainMenu .menu-buttons{
+  width:min(430px,100%)!important;
+  margin:0 auto!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:9px!important;
+  text-align:center!important;
+}
+
+/* Geometría y tipografía de botones como antes */
+body #mainMenu .menu-buttons .btn,
+body #pkRegionRuntimeRoot > #mainMenu .menu-buttons .btn{
+  min-height:48px!important;
+  padding:11px 12px!important;
+  border-radius:10px!important;
+  font-family:'Pokemon Classic Regular','Pokemon Classic',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif!important;
+  font-size:13px!important;
+  font-weight:600!important;
+  line-height:1.55!important;
+  text-align:center!important;
+  justify-content:normal!important;
+  transform:none;
+}
+
+body #mainMenu #menuPlayBtn,
+body #mainMenu #menuExitBtn,
+body #pkRegionRuntimeRoot > #mainMenu #menuPlayBtn,
+body #pkRegionRuntimeRoot > #mainMenu #menuExitBtn{
+  grid-column:1 / -1!important;
+}
+
+body #mainMenu #menuPlayBtn,
+body #pkRegionRuntimeRoot > #mainMenu #menuPlayBtn{
+  min-height:58px!important;
+  padding:11px 12px!important;
+  font-size:13px!important;
+}
+
+body #mainMenu #menuPlayBtn::after,
+body #pkRegionRuntimeRoot > #mainMenu #menuPlayBtn::after{
+  content:none!important;
+  display:none!important;
+}
+
+/* Kanto: botones rojos/azules originales */
+body > #mainMenu .menu-buttons .btn{
+  background:linear-gradient(#2a4f9b,#1b3468)!important;
+  border:1px solid #4b6cb3!important;
+  color:#eef4ff!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 2px 0 rgba(3,8,22,.60)!important;
+}
+body > #mainMenu .menu-buttons .btn.primary{
+  background:linear-gradient(#f0564b,#c62828)!important;
+  border-color:#ff9d94!important;
+  color:#eef4ff!important;
+}
+body > #mainMenu #menuPlayBtn{
+  background:linear-gradient(#f0564b,#c62828)!important;
+  border-color:#ff9d94!important;
+  color:#eef4ff!important;
+  box-shadow:0 5px 0 #0003,inset 0 1px 0 #ffffff24!important;
+}
+body > #mainMenu #menuExitBtn{
+  background:linear-gradient(#93342f,#5e1d1d)!important;
+  border-color:#c05555!important;
+  color:#eef4ff!important;
+}
+
+/* Johto: botones sobrios + Jugar dorado como antes */
+body #pkRegionRuntimeRoot > #mainMenu .menu-buttons .btn:not(.danger){
+  background:linear-gradient(#3a3d39,#2b302f)!important;
+  border:1px solid #67685e!important;
+  color:#f2eee2!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 2px 0 rgba(3,8,22,.60)!important;
+}
+body #pkRegionRuntimeRoot > #mainMenu #menuPlayBtn{
+  background:linear-gradient(#9b7534,#6f5226)!important;
+  border-color:#d8b35a!important;
+  color:#fff5d7!important;
+  box-shadow:inset 0 1px 0 rgba(255,245,215,.10),0 4px 15px rgba(92,65,24,.18)!important;
+}
+body #pkRegionRuntimeRoot > #mainMenu #menuExitBtn{
+  background:linear-gradient(#93342f,#5e1d1d)!important;
+  border-color:#c05555!important;
+  color:#eef4ff!important;
+}
+
+/* Enlaces pequeños inferiores */
+body #mainMenu .menu-mini-links,
+body #pkRegionRuntimeRoot > #mainMenu .menu-mini-links{
+  width:min(430px,100%)!important;
+  margin:10px auto 4px!important;
+  display:flex!important;
+  justify-content:center!important;
+  gap:8px!important;
+  flex-wrap:wrap!important;
+  text-align:center!important;
+}
+body #mainMenu .menu-mini-links .btn,
+body #pkRegionRuntimeRoot > #mainMenu .menu-mini-links .btn{
+  min-height:38px!important;
+  padding:9px 12px!important;
+  font-family:'Pokemon Classic Regular','Pokemon Classic',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif!important;
+  font-size:11px!important;
+  font-weight:600!important;
+  line-height:normal!important;
+  text-align:center!important;
+  border-radius:12px!important;
+}
+body > #mainMenu .menu-mini-links .btn{
+  background:linear-gradient(#2a4f9b,#1b3468)!important;
+  border-color:#4b6cb3!important;
+  color:#eef4ff!important;
+}
+body #pkRegionRuntimeRoot > #mainMenu .menu-mini-links .btn{
+  background:linear-gradient(#39452f,#283228)!important;
+  border-color:#626a4d!important;
+  color:#eeefe5!important;
+}
+
+/* Cloud/info y créditos vuelven a sus proporciones anteriores */
+body #mainMenu .menu-save,
+body #pkRegionRuntimeRoot > #mainMenu .menu-save{
+  width:min(430px,100%)!important;
+  margin:12px auto 10px!important;
+  padding:9px 11px!important;
+  border-radius:12px!important;
+  font-family:system-ui,-apple-system,'Segoe UI',sans-serif!important;
+  font-size:14px!important;
+  line-height:1.6!important;
+  text-align:center!important;
+}
+body > #mainMenu .menu-save{
+  background:#0b172a!important;
+  border-color:#456184!important;
+  color:#c8d8eb!important;
+}
+body #pkRegionRuntimeRoot > #mainMenu .menu-save{
+  background:#151e16!important;
+  border-color:#776b45!important;
+  color:#d8d9c7!important;
+}
+body #mainMenu .menu-credit,
+body #pkRegionRuntimeRoot > #mainMenu .menu-credit{
+  margin:11px 0 0!important;
+  font-family:'Pokemon Classic Regular','Pokemon Classic',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif!important;
+  font-size:8px!important;
+  line-height:normal!important;
+  text-align:center!important;
+}
+body > #mainMenu .menu-credit{color:#708397!important}
+body #pkRegionRuntimeRoot > #mainMenu .menu-credit{color:#9a927f!important}
+
+/* Mantener la portada móvil estable y de una columna. */
+@media(max-width:620px){
+  body #mainMenu .menu-box,
+  body #pkRegionRuntimeRoot > #mainMenu .menu-box{
+    padding:18px 12px 15px!important;
+    width:min(560px,100%)!important;
+  }
+  body #mainMenu .menu-buttons,
+  body #pkRegionRuntimeRoot > #mainMenu .menu-buttons{
+    grid-template-columns:1fr!important;
+    width:min(360px,100%)!important;
+  }
+  body #mainMenu #menuPlayBtn,
+  body #mainMenu #menuExitBtn,
+  body #pkRegionRuntimeRoot > #mainMenu #menuPlayBtn,
+  body #pkRegionRuntimeRoot > #mainMenu #menuExitBtn{
+    grid-column:auto!important;
+  }
+  body #mainMenu .menu-save,
+  body #mainMenu .menu-timed-gacha,
+  body #mainMenu .menu-mini-links,
+  body #pkRegionRuntimeRoot > #mainMenu .menu-save,
+  body #pkRegionRuntimeRoot > #mainMenu .menu-timed-gacha,
+  body #pkRegionRuntimeRoot > #mainMenu .menu-mini-links{
+    width:min(360px,100%)!important;
+  }
+  body #mainMenu .menu-sub,
+  body #pkRegionRuntimeRoot > #mainMenu .menu-sub{
+    font-size:9px!important;
+    margin:4px 0 8px!important;
+  }
+}
+</style>
+
 </body>
 </html>

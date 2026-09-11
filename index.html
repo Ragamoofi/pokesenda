@@ -15838,9 +15838,18 @@ function johtoSupportStatusEffect(m,rank=1){
   return type?{type,chance:Math.min(.99,base+bonus)}:null;
 }
 function smartSupport(id){
-  const entries=playerMoveEntries(id,"support");if(!entries.length)return null;const entry=entries[Math.floor(Math.random()*entries.length)],m=entry.m,ids=battleIds(),ratios=ids.map(x=>run.team[x].hp/run.team[x].maxHp),min=Math.min(...ratios),avg=ratios.reduce((a,b)=>a+b,0)/ratios.length,boss=livingEnemies().some(e=>e.boss),statusFx=johtoSupportStatusEffect(m,entry.rank);
+  const entries=playerMoveEntries(id,"support");if(!entries.length)return null;
+  // Paridad Kanto: el Support se usa de forma táctica, no se puede encadenar
+  // mientras su efecto ya está activo. Esto evita que un starter con poca vida
+  // repita Pantalla de Humo/Guardia turno tras turno en lugar de atacar.
+  const entry=entries[0],m=entry.m,ids=battleIds().filter(x=>run.team[x]?.alive);if(!ids.length)return null;
+  const ratios=ids.map(x=>run.team[x].hp/run.team[x].maxHp),min=Math.min(...ratios),avg=ratios.reduce((a,b)=>a+b,0)/ratios.length,boss=livingEnemies().some(e=>e.boss),statusFx=johtoSupportStatusEffect(m,entry.rank);
   if(statusFx&&livingEnemies().some(e=>statusFx.type==="confusion"?(e.confusion||0)<=0:!e.status?.type)&&Math.random()<.72)return entry;
-  if(m.effect==="heal"&&min<.58)return entry;if(m.effect==="guard"&&(boss||avg<.62)&&Math.random()<.7)return entry;if(["haste","power"].includes(m.effect)&&(boss||livingEnemies().length>=3)&&Math.random()<.42)return entry;return null;
+  if(m.effect==="heal"&&min<.58)return entry;
+  if(m.effect==="guard"&&(boss||avg<.62)&&ids.some(x=>(run.team[x].guard||0)<.02)&&Math.random()<.70)return entry;
+  if(m.effect==="haste"&&(boss||livingEnemies().length>=3)&&ids.every(x=>(run.team[x].haste||0)<.02)&&Math.random()<.42)return entry;
+  if(m.effect==="power"&&(boss||livingEnemies().length>=3)&&ids.every(x=>(run.team[x].power||0)<.02)&&Math.random()<.42)return entry;
+  return null;
 }
 function useSupport(id,entry){
   const m=entry.m,rank=Math.max(1,entry.rank||1),ids=battleIds(),d=derivedFor(id),amount=(.05+.003*(rank-1))*(1+.01*skillRank("c7"))*(d.supportMult||1),stat=run.stats?.[id];if(stat)stat.supports=(stat.supports||0)+1;

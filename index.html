@@ -3127,6 +3127,40 @@ body .formation-slot.ko-slot .formation-pokemon b,body .formation-slot.ko-slot [
 /* Detalle visual final: Novedades conserva su botón; las notas y el Premium ya no ocupan el menú principal. */
 #mainMenu .menu-patch-card,#mainMenu .menu-timed-gacha,
 #pkRegionRuntimeRoot #mainMenu .menu-patch-card,#pkRegionRuntimeRoot #mainMenu .menu-timed-gacha{display:none!important}
+
+
+/* Johto Launch Notice · aviso de lanzamiento mostrado solo dos veces por navegador */
+#pkJohtoLaunchOverlay{
+  position:fixed;inset:0;z-index:1900;display:flex;align-items:center;justify-content:center;
+  padding:20px;background:rgba(4,9,12,.82);backdrop-filter:blur(5px);
+}
+#pkJohtoLaunchOverlay.hidden{display:none!important}
+.pk-johto-launch-card{
+  position:relative;width:min(650px,94vw);overflow:hidden;text-align:center;
+  border:2px solid #b89a43;border-radius:20px;padding:24px 24px 20px;
+  background:linear-gradient(155deg,#24301e 0%,#17231c 46%,#101b1b 100%);
+  box-shadow:0 28px 90px rgba(0,0,0,.62),inset 0 0 0 1px rgba(255,222,116,.08);
+}
+.pk-johto-launch-card::before{
+  content:"";position:absolute;inset:-20% -5% auto;height:190px;pointer-events:none;
+  background:radial-gradient(circle at 50% 25%,rgba(255,195,72,.19),transparent 67%);
+}
+.pk-johto-launch-kicker{position:relative;font-size:10px;font-weight:1000;letter-spacing:1.5px;text-transform:uppercase;color:#efca67;margin-bottom:7px}
+.pk-johto-launch-title{position:relative;margin:0;font-size:27px;line-height:1.15;color:#fff3c7;text-shadow:0 2px 8px rgba(0,0,0,.55)}
+.pk-johto-launch-lead{position:relative;margin:12px auto 15px;max-width:555px;color:#d7dfcf;font-size:11px;line-height:1.65}
+.pk-johto-launch-features{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:13px 0 14px}
+.pk-johto-launch-feature{border:1px solid #586443;border-radius:11px;background:rgba(10,20,17,.5);padding:9px 7px;color:#dfe9d5;font-size:9px;font-weight:900;line-height:1.35}
+.pk-johto-launch-lock{position:relative;margin:0 auto 12px;padding:10px 12px;max-width:540px;border:1px solid #8d7437;border-radius:11px;background:rgba(78,61,21,.22);font-size:10px;line-height:1.5;color:#f0dfaa}
+.pk-johto-launch-lock b{color:#ffe784}
+.pk-johto-launch-infinite{position:relative;margin:0 auto 15px;max-width:555px;color:#a9c7d2;font-size:9px;line-height:1.5}
+.pk-johto-launch-actions{position:relative;display:flex;justify-content:center}
+#pkJohtoLaunchClose{min-width:220px;padding:11px 17px;background:#6c5630;border-color:#c39b49;color:#fff4ca}
+.pk-johto-launch-foot{position:relative;margin-top:9px;color:#829083;font-size:7.5px}
+@media(max-width:620px){
+  .pk-johto-launch-card{padding:20px 14px 16px}.pk-johto-launch-title{font-size:22px}
+  .pk-johto-launch-features{grid-template-columns:1fr}.pk-johto-launch-lead{font-size:10px}
+}
+
 </style>
 
 <div id="mainMenu" class="overlay">
@@ -3142,6 +3176,24 @@ body .formation-slot.ko-slot .formation-pokemon b,body .formation-slot.ko-slot [
     
     
     <div class="menu-credit">PokéSenda · <b>by Ragamoofi</b></div>
+  </div>
+</div>
+
+
+<div id="pkJohtoLaunchOverlay" class="hidden" role="dialog" aria-modal="true" aria-labelledby="pkJohtoLaunchTitle">
+  <div class="pk-johto-launch-card" onclick="event.stopPropagation()">
+    <div class="pk-johto-launch-kicker">🍂 Nueva región disponible</div>
+    <h2 id="pkJohtoLaunchTitle" class="pk-johto-launch-title">¡JOHTO YA ESTÁ DISPONIBLE!</h2>
+    <p class="pk-johto-launch-lead">La segunda región de <b>PokéSenda</b> ha llegado. Tu aventura continúa con nuevas rutas, Pokémon, Gimnasios, Medallas y desafíos.</p>
+    <div class="pk-johto-launch-features">
+      <div class="pk-johto-launch-feature">🍂 Nuevas rutas<br>y Pokémon</div>
+      <div class="pk-johto-launch-feature">🏅 8 Gimnasios<br>de Johto</div>
+      <div class="pk-johto-launch-feature">♾️ Equipos mixtos en<br>Expedición Infinita</div>
+    </div>
+    <div class="pk-johto-launch-lock">🔒 <b>Johto se desbloquea al conseguir las 8 Medallas de Kanto.</b><br>El progreso de Kanto y Johto se mantiene separado.</div>
+    <div class="pk-johto-launch-infinite">En la <b>Expedición Infinita</b> podrás reunir Pokémon de ambas regiones en un mismo equipo.</div>
+    <div class="pk-johto-launch-actions"><button id="pkJohtoLaunchClose" class="btn" type="button">🍂 Entendido</button></div>
+    <div class="pk-johto-launch-foot">Puedes acceder a Johto desde el selector de Regiones.</div>
   </div>
 </div>
 
@@ -3166,7 +3218,7 @@ body .formation-slot.ko-slot .formation-pokemon b,body .formation-slot.ko-slot [
       <div><h2 id="patchNotesTitle">📝 Novedades de PokéSenda</h2><small>Johto ya disponible · Kanto + Johto · últimas mejoras</small></div>
       <button id="patchNotesCloseBtn" class="btn" type="button">Cerrar</button>
     </div>
-    <div class="patch-notes-body"><div class="patch-current"><b>📚 Johto · Pokédex enriquecida al nivel de Kanto</b><p>Las fichas de Pokémon de Johto pasan a usar la misma estructura informativa de Kanto: origen y significado aproximado del nombre, nombre japonés con lectura romanizada, entradas oficiales priorizadas en español, curiosidades, notas de anime/diseño/cultura cuando corresponda, hábitat y crecimiento traducidos, evolución regional y estadísticas base. Las especies de Kanto presentes en familias de Johto reutilizan su lore de Kanto.</p></div><div class="patch-current"><b>🧬 Objetos evolutivos mucho más escasos</b><p>Las Piedras evolutivas, Cable de Intercambio y catalizadores especiales pasan a ser recompensas de progreso realmente valiosas. La probabilidad base de hallazgo baja de <b>0,9% a 0,15%</b> por oleada normal en Kanto y Johto: aproximadamente 6 veces más raros. Jefes, eventos y Geólogo Evolutivo siguen mejorando las posibilidades. El Orbe de Reaprendizaje conserva su rareza Legendaria independiente.</p></div><div class="patch-current"><b>🎒 Johto · Inventario en vivo durante expediciones</b><p>El Inventario deja de pausar automáticamente las expediciones de Johto. El combate continúa mientras la mochila está abierta, permitiendo usar Pociones y otros consumibles en tiempo real. Los demás menús de consulta que requieren pausa automática mantienen su comportamiento anterior.</p></div><div class="patch-current"><b>🧭 Johto · Entrenador centrado en la barra de ruta</b><p>Se baja la posición vertical del sprite del Entrenador en las expediciones de Johto para que quede visualmente centrado sobre la barra de kilómetros mientras avanza con el progreso de la ruta.</p></div><div class="patch-current"><b>👤 Perfil · visor Frente/Espalda estable</b><p>Cambiar la vista del Entrenador entre Frente y Espalda ahora actualiza únicamente el sprite y su etiqueta. Las estadísticas globales, subtítulo y distribución del Perfil permanecen intactos en Johto.</p></div><div class="patch-current"><b>🖱️ V36.66.9 · Cierre cómodo de ventanas en Johto</b><p>Las ventanas de navegación de Johto ahora se pueden cerrar haciendo clic en el fondo oscuro fuera del panel. Perfil, Pokédex, Caja, Inventario, Árbol, Logros, Opciones, Guía y demás menús respetan el mismo cierre que su botón correspondiente, sin afectar decisiones de combate, recompensas ni eventos.</p></div><div class="patch-current"><b>⚔️ Johto · IA Support sin bucles</b><p>Se corrige de forma global la selección de movimientos Support en las expediciones de Johto. Tras usar curación, protección, velocidad, potencia o un Support de estado, el Pokémon debe realizar <b>2 intentos ofensivos</b> antes de volver a usar Support. Esto elimina cadenas como Síntesis o Pantalla de Humo repetidas turno tras turno y afecta al motor completo de Johto, no a especies individuales. Los buffs temporales siguen sin recastearse mientras permanecen activos.</p></div><div class="patch-current"><b>🍂 Johto · Perfil y navegación por teclado</b><p>Se repara el botón <b>Pokédex</b> del Perfil del Entrenador en Johto para que abra correctamente la Pokédex compartida. Además, la tecla <b>ESC</b> queda desactivada dentro de Johto: ya no cierra ventanas en cadena ni puede devolver al jugador a Kanto; la navegación se realiza únicamente mediante los botones visibles de la interfaz.</p></div><div class="patch-current"><b>♾️ V36.66.4 · Infinita Global restaurada desde Kanto</b><p>La Expedición Infinita vuelve a usar la presentación y comportamiento visual de la Infinita original de Kanto: barras de PS, orientación de sprites, daño flotante, efectos y Formación 3 + 3. La ampliación Global añade Pokémon de Johto y Caja Global sin convertir el modo en una experiencia distinta.</p></div><div class="patch-current"><b>💻 V36.66.3 · Caja Global completa</b><p>La Expedición Infinita Global recibe una Caja que reúne Pokémon de <b>Kanto + Johto</b> sin recortar las herramientas originales. Puedes filtrar, buscar, ordenar, cambiar los seis puestos y abrir la <b>ficha completa regional</b> de cada Pokémon para administrar Shiny, estrellas, evolución, objetos, MT, movimientos, naturaleza y demás mejoras.</p></div><div class="patch-current"><b>♾️ V36.66.2 · Expedición Infinita pasa a ser Global</b><p>La Expedición Infinita original se amplía para aceptar Pokémon de Kanto y Johto en el mismo equipo. Llega la <b>Caja Global Kanto + Johto</b>, la Formación queda protegida durante cada intento y se conservan las reglas de combate, hitos, recompensas y automatizaciones propias de este modo.</p></div><div class="patch-current"><b>👤 V36.66.1 · Perfil del Entrenador multirregional</b><p>El Perfil propio adopta la misma organización de la Comunidad: resumen global de la aventura arriba y pestañas separadas de <b>Kanto</b> y <b>Johto</b>. Cada región muestra sus estadísticas, Formación y Medallas sin mezclar información.</p></div><div class="patch-current"><b>🍂 V36.66 · Johto ya está disponible</b><p>La segunda región de PokéSenda queda abierta como una campaña completa. Consigue las <b>8 Medallas de Kanto</b> para desbloquear Johto y comenzar una nueva aventura con sus propias rutas, Pokémon, Gimnasios, medallas, logros, música y ambientación.</p></div>
+    <div class="patch-notes-body"><div class="patch-current"><b>🍂 Aviso de lanzamiento de Johto</b><p>Al abrir PokéSenda aparece un aviso especial anunciando que Johto ya está disponible, explicando su desbloqueo con las 8 Medallas de Kanto y la Expedición Infinita compartida. El aviso se muestra únicamente durante las primeras <b>2 aperturas</b> del juego en cada navegador/dispositivo y después deja de aparecer automáticamente.</p></div><div class="patch-current"><b>📚 Johto · Pokédex enriquecida al nivel de Kanto</b><p>Las fichas de Pokémon de Johto pasan a usar la misma estructura informativa de Kanto: origen y significado aproximado del nombre, nombre japonés con lectura romanizada, entradas oficiales priorizadas en español, curiosidades, notas de anime/diseño/cultura cuando corresponda, hábitat y crecimiento traducidos, evolución regional y estadísticas base. Las especies de Kanto presentes en familias de Johto reutilizan su lore de Kanto.</p></div><div class="patch-current"><b>🧬 Objetos evolutivos mucho más escasos</b><p>Las Piedras evolutivas, Cable de Intercambio y catalizadores especiales pasan a ser recompensas de progreso realmente valiosas. La probabilidad base de hallazgo baja de <b>0,9% a 0,15%</b> por oleada normal en Kanto y Johto: aproximadamente 6 veces más raros. Jefes, eventos y Geólogo Evolutivo siguen mejorando las posibilidades. El Orbe de Reaprendizaje conserva su rareza Legendaria independiente.</p></div><div class="patch-current"><b>🎒 Johto · Inventario en vivo durante expediciones</b><p>El Inventario deja de pausar automáticamente las expediciones de Johto. El combate continúa mientras la mochila está abierta, permitiendo usar Pociones y otros consumibles en tiempo real. Los demás menús de consulta que requieren pausa automática mantienen su comportamiento anterior.</p></div><div class="patch-current"><b>🧭 Johto · Entrenador centrado en la barra de ruta</b><p>Se baja la posición vertical del sprite del Entrenador en las expediciones de Johto para que quede visualmente centrado sobre la barra de kilómetros mientras avanza con el progreso de la ruta.</p></div><div class="patch-current"><b>👤 Perfil · visor Frente/Espalda estable</b><p>Cambiar la vista del Entrenador entre Frente y Espalda ahora actualiza únicamente el sprite y su etiqueta. Las estadísticas globales, subtítulo y distribución del Perfil permanecen intactos en Johto.</p></div><div class="patch-current"><b>🖱️ V36.66.9 · Cierre cómodo de ventanas en Johto</b><p>Las ventanas de navegación de Johto ahora se pueden cerrar haciendo clic en el fondo oscuro fuera del panel. Perfil, Pokédex, Caja, Inventario, Árbol, Logros, Opciones, Guía y demás menús respetan el mismo cierre que su botón correspondiente, sin afectar decisiones de combate, recompensas ni eventos.</p></div><div class="patch-current"><b>⚔️ Johto · IA Support sin bucles</b><p>Se corrige de forma global la selección de movimientos Support en las expediciones de Johto. Tras usar curación, protección, velocidad, potencia o un Support de estado, el Pokémon debe realizar <b>2 intentos ofensivos</b> antes de volver a usar Support. Esto elimina cadenas como Síntesis o Pantalla de Humo repetidas turno tras turno y afecta al motor completo de Johto, no a especies individuales. Los buffs temporales siguen sin recastearse mientras permanecen activos.</p></div><div class="patch-current"><b>🍂 Johto · Perfil y navegación por teclado</b><p>Se repara el botón <b>Pokédex</b> del Perfil del Entrenador en Johto para que abra correctamente la Pokédex compartida. Además, la tecla <b>ESC</b> queda desactivada dentro de Johto: ya no cierra ventanas en cadena ni puede devolver al jugador a Kanto; la navegación se realiza únicamente mediante los botones visibles de la interfaz.</p></div><div class="patch-current"><b>♾️ V36.66.4 · Infinita Global restaurada desde Kanto</b><p>La Expedición Infinita vuelve a usar la presentación y comportamiento visual de la Infinita original de Kanto: barras de PS, orientación de sprites, daño flotante, efectos y Formación 3 + 3. La ampliación Global añade Pokémon de Johto y Caja Global sin convertir el modo en una experiencia distinta.</p></div><div class="patch-current"><b>💻 V36.66.3 · Caja Global completa</b><p>La Expedición Infinita Global recibe una Caja que reúne Pokémon de <b>Kanto + Johto</b> sin recortar las herramientas originales. Puedes filtrar, buscar, ordenar, cambiar los seis puestos y abrir la <b>ficha completa regional</b> de cada Pokémon para administrar Shiny, estrellas, evolución, objetos, MT, movimientos, naturaleza y demás mejoras.</p></div><div class="patch-current"><b>♾️ V36.66.2 · Expedición Infinita pasa a ser Global</b><p>La Expedición Infinita original se amplía para aceptar Pokémon de Kanto y Johto en el mismo equipo. Llega la <b>Caja Global Kanto + Johto</b>, la Formación queda protegida durante cada intento y se conservan las reglas de combate, hitos, recompensas y automatizaciones propias de este modo.</p></div><div class="patch-current"><b>👤 V36.66.1 · Perfil del Entrenador multirregional</b><p>El Perfil propio adopta la misma organización de la Comunidad: resumen global de la aventura arriba y pestañas separadas de <b>Kanto</b> y <b>Johto</b>. Cada región muestra sus estadísticas, Formación y Medallas sin mezclar información.</p></div><div class="patch-current"><b>🍂 V36.66 · Johto ya está disponible</b><p>La segunda región de PokéSenda queda abierta como una campaña completa. Consigue las <b>8 Medallas de Kanto</b> para desbloquear Johto y comenzar una nueva aventura con sus propias rutas, Pokémon, Gimnasios, medallas, logros, música y ambientación.</p></div>
 <div class="patch-current"><b>🌐 V36.65.9 · Selector de Regiones y progresión</b><p>El selector de Regiones ahora muestra claramente la región actual y el progreso para desbloquear Johto. Una vez cumplido el requisito de las 8 Medallas de Kanto, puedes viajar entre Kanto y Johto desde el mismo menú.</p></div>
 <div class="patch-current"><b>📘 V36.65.8 · Pokédex Global</b><p>Se añade una Pokédex Global capaz de reunir la colección de Kanto y Johto. Puedes verla completa o filtrar por región, manteniendo información de capturas, Shiny, rareza y colección.</p></div>
 <div class="patch-current"><b>👥 V36.65.7 · Comunidad de Entrenadores Kanto + Johto</b><p>Los perfiles de la Comunidad ahora representan la aventura completa del Entrenador. Las fichas incorporan pestañas separadas de <b>Kanto</b> y <b>Johto</b>, con estadísticas, equipo y Medallas de cada región, además de un resumen global y acceso a la colección.</p></div>
@@ -21321,6 +21373,34 @@ body > #regionSelectOverlay #regionJohtoCard.coming .region-feature-row span{
 #pkGlobalInfiniteRoot .pk-global-slot-change{display:none!important}
 @media(max-width:820px){#pkGlobalInfiniteRoot .formation-grid{grid-template-columns:1fr}}
 </style>
+
+
+
+<script>
+/* Johto Launch Notice · máximo 2 aperturas por navegador/dispositivo */
+(()=>{
+  const KEY='pokesenda_johto_launch_notice_v1';
+  const MAX_SHOWS=2;
+  function bootJohtoLaunchNotice(){
+    const overlay=document.getElementById('pkJohtoLaunchOverlay');
+    const close=document.getElementById('pkJohtoLaunchClose');
+    if(!overlay||!close)return;
+    let shown=0;
+    try{shown=Math.max(0,Number(localStorage.getItem(KEY)||0)||0);}catch(_){shown=0;}
+    if(shown>=MAX_SHOWS)return;
+    try{localStorage.setItem(KEY,String(shown+1));}catch(_){ }
+    setTimeout(()=>{
+      overlay.classList.remove('hidden');
+      try{close.focus({preventScroll:true});}catch(_){ }
+    },260);
+    const dismiss=()=>overlay.classList.add('hidden');
+    close.addEventListener('click',dismiss);
+    overlay.addEventListener('click',e=>{if(e.target===overlay)dismiss();});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bootJohtoLaunchNotice,{once:true});
+  else bootJohtoLaunchNotice();
+})();
+</script>
 
 </body>
 </html>

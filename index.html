@@ -2713,6 +2713,12 @@ body{letter-spacing:.08px}
 
 </style>
 
+<style id="pkPlayersJohtoBridgeFix">
+/* Comunidad compartida: debe quedar por encima del runtime fijo de Johto. */
+body > #pkPlayersOverlay.pk-players-from-johto{z-index:490500!important}
+body > #pkPlayersOverlay.pk-players-from-johto .pk-players-box{position:relative;z-index:1}
+</style>
+
 <style id="pkCasinoV364071Style">
 .inventory-casino-btn{border-color:#9a7830!important;background:linear-gradient(180deg,#4f421d,#2d2512)!important;color:#ffe39a!important;white-space:nowrap!important}.inventory-casino-btn:hover{border-color:#d6ad46!important;box-shadow:0 0 0 1px rgba(230,186,75,.28) inset!important}@media(max-width:650px){.inventory-casino-btn{font-size:8px!important;padding:7px 8px!important}}
 .pk-casino-box{width:min(1040px,96vw);max-height:94vh;overflow:auto;padding:15px;background:linear-gradient(180deg,#132a55,#0b1831);border-color:#b38a2e!important;box-shadow:0 18px 65px rgba(0,0,0,.72),0 0 26px rgba(236,188,57,.12)}
@@ -14408,13 +14414,32 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const list=v=>Array.isArray(v)?v:[];
 const dexes=v=>[...new Set(list(v).map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=251))].sort((a,b)=>a-b);
 const count=v=>Number.isFinite(Number(v))?Math.max(0,Number(v)):0;
+function johtoFamilyOrder(){
+ const families=window.PokeSendaJohtoIsolated?.getData?.()?.families||{};
+ const out=[],seen=new Set();
+ // Respeta exactamente el mismo orden que la Pokédex regional de Johto:
+ // familia por familia y, dentro de cada una, orden evolutivo.
+ for(const f of Object.values(families))for(const raw of list(f?.members)){
+  const dex=Number(raw);if(!Number.isInteger(dex)||dex<1||dex>251||seen.has(dex))continue;
+  seen.add(dex);out.push(dex);
+ }
+ return out;
+}
 function catalog(region){
  if(region==='kanto')return Array.from({length:151},(_,i)=>i+1);
- const families=window.PokeSendaJohtoIsolated?.getData?.()?.families||{};
- return dexes(Object.values(families).flatMap(f=>list(f.members)));
+ return johtoFamilyOrder();
 }
 function normalize(region,raw={}){
- const cat=dexes(raw.catalog?.length?raw.catalog:catalog(region)),valid=new Set(cat);
+ const sourceCat=raw.catalog?.length?list(raw.catalog):catalog(region),cat=[],catSeen=new Set();
+ for(const rawDex of sourceCat){const dex=Number(rawDex);if(Number.isInteger(dex)&&dex>=1&&dex<=251&&!catSeen.has(dex)){catSeen.add(dex);cat.push(dex);}}
+ // Los perfiles/saves antiguos de Johto pueden traer dexCatalog ordenado por número Nacional.
+ // Para la UI global siempre reconstruimos el orden por familias, sin alterar el save.
+ if(region==='johto'){
+  const wanted=new Set(cat),ordered=johtoFamilyOrder().filter(d=>wanted.has(d));
+  for(const d of cat)if(!ordered.includes(d))ordered.push(d);
+  cat.splice(0,cat.length,...ordered);
+ }
+ const valid=new Set(cat);
  const owned=list(raw.owned).filter(p=>p&&valid.has(Number(p.dex))).map(p=>({id:String(p.id||''),dex:Number(p.dex),name:String(p.name||''),level:Math.max(1,count(p.level)),stars:Math.min(5,Math.max(1,count(p.stars))),shiny:!!p.shiny,heldItem:p.heldItem?String(p.heldItem):null}));
  return {region,catalog:cat,seen:dexes([...list(raw.seen),...owned.map(p=>p.dex)]).filter(d=>valid.has(d)),shiny:dexes(raw.shiny).filter(d=>valid.has(d)),owned,badges:[...new Set(list(raw.badges).filter(v=>typeof v==='string'))]};
 }
@@ -14453,7 +14478,26 @@ function entries(regions,filter='all'){
    e.owned.push(...copies.map(p=>({...p,region})));
   }
  }
- return [...result.values()].sort((a,b)=>a.dex-b.dex);
+ const out=[...result.values()];
+ if(filter==='johto'){
+  const rank=new Map(johtoFamilyOrder().map((dex,i)=>[dex,i]));
+  return out.sort((a,b)=>(rank.get(a.dex)??9999)-(rank.get(b.dex)??9999)||a.dex-b.dex);
+ }
+ if(filter==='kanto')return out.sort((a,b)=>a.dex-b.dex);
+ // Vista TODOS: también mantiene juntas las familias cruzadas Kanto→Johto.
+ // Ej.: Pichu→Pikachu→Raichu, Zubat→Golbat→Crobat, Eevee→sus evoluciones.
+ const families=Object.values(window.PokeSendaJohtoIsolated?.getData?.()?.families||{}),famByDex=new Map();
+ for(const f of families){const members=list(f?.members).map(Number).filter(Number.isInteger);for(const d of members)if(!famByDex.has(d))famByDex.set(d,members);}
+ const wanted=new Set(out.map(e=>e.dex)),order=[],used=new Set();
+ const push=d=>{if(wanted.has(d)&&!used.has(d)){used.add(d);order.push(d);}};
+ for(let d=1;d<=151;d++){
+  if(used.has(d)||!wanted.has(d))continue;
+  const fam=famByDex.get(d);if(fam)fam.forEach(push);else push(d);
+ }
+ for(const d of johtoFamilyOrder())push(d);
+ for(const e of out)push(e.dex);
+ const rank=new Map(order.map((dex,i)=>[dex,i]));
+ return out.sort((a,b)=>(rank.get(a.dex)??9999)-(rank.get(b.dex)??9999)||a.dex-b.dex);
 }
 function profileStats(d={}){
  const k=d.regions?.kanto||d,j=d.regions?.johto||null,ks=k.stats||{},js=j?.stats||{};
@@ -14589,15 +14633,20 @@ function decorateProfile(host){
  };
  const achievementPct=(key,r)=>{
    const s=r?.stats||{};
-   if(key==='kanto'){
-     if(Number.isFinite(Number(s.achievementPercent)))return pct(s.achievementPercent);
-     const done=num(s.achievementUnlocked),total=num(s.achievementTotal);
-     return total?pct(done/total*100):0;
+   // El porcentaje de Logros siempre representa LOGROS COMPLETADOS / LOGROS TOTALES.
+   // No usar puntos: cada logro puede valer una cantidad distinta y eso inflaba Johto
+   // (por ejemplo, 5 puntos del primer logro / ~30 logros ≈ 17% aunque solo sea 1 logro).
+   if(Number.isFinite(Number(s.achievementPercent)))return pct(s.achievementPercent);
+   const done=num(s.achievementUnlocked),total=num(s.achievementTotal);
+   if(total>0)return pct(done/total*100);
+   if(key==='johto'){
+     try{
+       const a=window.PokeSendaJohtoRuntime?.achievementSummary?.()||{};
+       const unlocked=num(a.unlocked??a.completed??0),countTotal=num(a.count??a.totalAchievements??0);
+       return countTotal>0?pct(unlocked/countTotal*100):0;
+     }catch(_){return 0;}
    }
-   try{
-     const a=window.PokeSendaJohtoRuntime?.achievementSummary?.()||{};
-     return num(a.total)>0?pct(num(a.points)/num(a.total)*100):0;
-   }catch(_){return 0;}
+   return 0;
  };
  const trainerId=String(k?.trainerId||'red');
  const trainerName=String(k?.name||host.querySelector('.profile-name')?.textContent||'Entrenador').trim()||'Entrenador';
@@ -14949,8 +14998,35 @@ function sig(p){
     $('pkPublicDexBtn')?.addEventListener('click',()=>renderPublicPokedex(id,'all','all',''));
     renderRegion('kanto');
   }
-  function openPlayers(opts={}){ensureUI();externalReturn=opts&&opts.returnTo||null;$('playerProfileOverlay')?.classList.add('hidden');$('pkPlayersOverlay')?.classList.remove('hidden');$('pkPlayerDetailView')?.classList.add('hidden');$('pkPlayersListView')?.classList.remove('hidden');renderOwner();loadProfiles(true);}
-  function closePlayers(backToProfile=true){$('pkPlayersOverlay')?.classList.add('hidden');if(externalReturn==='johto'){externalReturn=null;window.PokeSendaJohtoRuntime?.reopenProfile?.();return;}if(backToProfile)$('playerProfileOverlay')?.classList.remove('hidden');}
+  function openPlayers(opts={}){
+    ensureUI();
+    externalReturn=opts&&opts.returnTo||null;
+    $('playerProfileOverlay')?.classList.add('hidden');
+    // Johto usa un runtime fijo con z-index muy alto. La Comunidad vive fuera de ese
+    // runtime (es compartida Kanto + Johto), así que debemos elevarla por encima y
+    // ocultar explícitamente el Perfil regional clonado.
+    const johtoProfile=document.querySelector('#pkRegionRuntimeRoot #playerProfileOverlay');
+    if(externalReturn==='johto')johtoProfile?.classList.add('hidden');
+    const players=$('pkPlayersOverlay');
+    if(players){
+      players.classList.toggle('pk-players-from-johto',externalReturn==='johto');
+      players.classList.remove('hidden');
+    }
+    $('pkPlayerDetailView')?.classList.add('hidden');
+    $('pkPlayersListView')?.classList.remove('hidden');
+    renderOwner();loadProfiles(true);
+  }
+  function closePlayers(backToProfile=true){
+    const players=$('pkPlayersOverlay');
+    players?.classList.add('hidden');
+    players?.classList.remove('pk-players-from-johto');
+    if(externalReturn==='johto'){
+      externalReturn=null;
+      window.PokeSendaJohtoRuntime?.reopenProfile?.();
+      return;
+    }
+    if(backToProfile)$('playerProfileOverlay')?.classList.remove('hidden');
+  }
   function ensureUI(){
     const close=$('playerProfileCloseBtn');if(close&&!$('playersOpenBtn')){const b=document.createElement('button');b.id='playersOpenBtn';b.className='btn';b.type='button';b.textContent='👥 Jugadores';close.insertAdjacentElement('beforebegin',b);b.addEventListener('click',openPlayers);}
     if(!$('pkPlayersOverlay')){
@@ -16819,7 +16895,7 @@ window.PokeSendaJohtoBattleIsolated={
 (()=>{
 "use strict";
 const SAVE="pokesenda_johto_dev_isolated_v1",ANIM="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/",CENTERS=[2500,5000,7500];
-let root=null,game=null,menu=null,starter=null,regionOverlay=null,rewardOverlay=null,centerOverlay=null,checkpointOverlay=null,lootPanel=null,pokedexOverlay=null,boxOverlay=null,pcSwapOverlay=null,detailOverlay=null,skillTreeOverlay=null,optionsOverlay=null,mtGachaOverlay=null,tmEquipOverlay=null,achievementsOverlay=null,achievementTmChoiceOverlay=null,routeEventOverlay=null,gymSelectOverlay=null,gymBattleOverlay=null,gymPotionOverlay=null,gymMonDetailOverlay=null,gymResultOverlay=null,playerProfileOverlay=null,evolutionOverlay=null,dexLoreOverlay=null,enemyDetailOverlay=null,itemEquipOverlay=null,incenseVendorOverlay=null,incenseInventoryOverlay=null,mintVendorOverlay=null,mintInventoryOverlay=null,mintUseOverlay=null,legendaryCelebrationOverlay=null,shinyCelebrationOverlay=null,patchNotesOverlay=null,uxWhyOverlay=null,uxCompareOverlay=null,exitOverlay=null,firstWelcomeOverlay=null,achievementCornerPop=null,evolutionPopEl=null,mobileDock=null,mobileMore=null,mobileTip=null,saveTransferOverlay=null,backupOverlay=null,diagnosticOverlay=null,cloudOverlay=null,cloudConflictOverlay=null,casinoOverlay=null,qaOverlay=null,renderTimer=null,currentView="menu",pokedexFilter="all",pokedexRouteFilter="all",regionReturnView="menu",formationSig="",worldSig="",pcStatus="all",pcRarity="all",pcSort="dex",pcSortDir="asc",treeZoom=.68,treeScrollLeft=0,treeScrollTop=0,pcSwapSource=null,pcFormationSource=null,detailPokemonId=null,mtGachaRolling=false,achievementFilter="all",achievementReturn="game",achievementTmMilestone=null,achievementTmSelected=null,routeEventTimer=null,routeEventDeadline=0,gymBattleTab="log",gymPotionWasPaused=false,gymDetailWasPaused=false,premiumSession=null,premiumResumeRun=false,premiumClock={verified:false,serverMs:0,perfMs:0,syncing:false,lastAttempt:0,source:""},premiumReadyNotified=false,premiumUiTimer=null,evolutionContext=null,enemyDetailReturnPaused=false,selectedEnemyUid=null,itemEquipId=null,mintUsePokemonId=null,selectedLootItemId=null,selectedStoneItemId=null,selectedPotionItemId=null,selectedIncenseId=null,selectedMintKey=null,celebrationQueue=[],dexLoreCache={},regionalProfileReturn="menu",regionalProfileTab="johto",regionalProfileFacing="front",formationMiniMinimized=false,inventoryTab="main",tmInventoryTypeFilter="all";
+let root=null,game=null,menu=null,starter=null,regionOverlay=null,rewardOverlay=null,centerOverlay=null,checkpointOverlay=null,lootPanel=null,pokedexOverlay=null,boxOverlay=null,pcSwapOverlay=null,detailOverlay=null,skillTreeOverlay=null,optionsOverlay=null,mtGachaOverlay=null,tmEquipOverlay=null,achievementsOverlay=null,achievementTmChoiceOverlay=null,routeEventOverlay=null,gymSelectOverlay=null,gymBattleOverlay=null,gymPotionOverlay=null,gymMonDetailOverlay=null,gymResultOverlay=null,playerProfileOverlay=null,evolutionOverlay=null,dexLoreOverlay=null,enemyDetailOverlay=null,itemEquipOverlay=null,incenseVendorOverlay=null,incenseInventoryOverlay=null,mintVendorOverlay=null,mintInventoryOverlay=null,mintUseOverlay=null,legendaryCelebrationOverlay=null,shinyCelebrationOverlay=null,patchNotesOverlay=null,uxWhyOverlay=null,uxCompareOverlay=null,exitOverlay=null,firstWelcomeOverlay=null,achievementCornerPop=null,evolutionPopEl=null,mobileDock=null,mobileMore=null,mobileTip=null,saveTransferOverlay=null,backupOverlay=null,diagnosticOverlay=null,cloudOverlay=null,cloudConflictOverlay=null,casinoOverlay=null,qaOverlay=null,renderTimer=null,currentView="menu",pokedexFilter="all",pokedexRouteFilter="all",regionReturnView="menu",formationSig="",worldSig="",pcStatus="all",pcRarity="all",pcSort="dex",pcSortDir="asc",treeZoom=.68,treeScrollLeft=0,treeScrollTop=0,pcSwapSource=null,pcFormationSource=null,detailPokemonId=null,mtGachaRolling=false,achievementFilter="all",achievementReturn="game",achievementTmMilestone=null,achievementTmSelected=null,routeEventTimer=null,routeEventDeadline=0,gymBattleTab="log",gymPotionWasPaused=false,gymDetailWasPaused=false,premiumSession=null,premiumResumeRun=false,premiumClock={verified:false,serverMs:0,perfMs:0,syncing:false,lastAttempt:0,source:""},premiumReadyNotified=false,premiumUiTimer=null,evolutionContext=null,enemyDetailReturnPaused=false,selectedEnemyUid=null,itemEquipId=null,mintUsePokemonId=null,selectedLootItemId=null,selectedStoneItemId=null,selectedPotionItemId=null,selectedIncenseId=null,selectedMintKey=null,celebrationQueue=[],dexLoreCache={},regionalProfileReturn="menu",regionalProfileTab="johto",regionalProfileFacing="front",formationMiniMinimized=false,inventoryTab="main",tmInventoryTypeFilter="all",johtoUiPauseObserver=null,johtoUiAutoPaused=false,johtoDeferredRunEnd=null;
 const D=()=>window.PokeSendaJohtoIsolated?.getData?.()||{},B=()=>window.PokeSendaJohtoBattleIsolated;
 const JOHTO_ROUTE_ORDER=["johto_route1","johto_route2","johto_route3"];
 const CROSS_NAMES={25:"Pikachu",26:"Raichu",35:"Clefairy",36:"Clefable",39:"Jigglypuff",40:"Wigglytuff",41:"Zubat",42:"Golbat",43:"Oddish",44:"Gloom",45:"Vileplume",60:"Poliwag",61:"Poliwhirl",62:"Poliwrath",79:"Slowpoke",80:"Slowbro",95:"Onix",106:"Hitmonlee",107:"Hitmonchan",113:"Chansey",116:"Horsea",117:"Seadra",123:"Scyther",124:"Jynx",125:"Electabuzz",126:"Magmar",133:"Eevee",134:"Vaporeon",135:"Jolteon",136:"Flareon",137:"Porygon"};
@@ -17001,11 +17077,42 @@ function build(){if(root)return;root=document.createElement("div");root.id="pkRe
     qa(`[data-tg-${key}]`,root).forEach(node=>{node.setAttribute(`data-j-tg-${key}`,node.getAttribute(`data-tg-${key}`)||"");node.removeAttribute(`data-tg-${key}`);});
   }
   root.addEventListener("click",e=>e.stopPropagation());root.addEventListener("pointerdown",e=>e.stopPropagation());
-  prepareMenu();prepareStarter();prepareRegionSelector();prepareGame();prepareCheckpoint();prepareCenter();prepareReward();prepareInventory();preparePokedex();prepareBox();prepareDetail();prepareSkillTree();prepareOptions();prepareMT();prepareAchievements();prepareRouteEvents();prepareGyms();prepareRegionalProfile();prepareEvolution();prepareDexLore();prepareEnemyDetail();prepareItemEquip();prepareMaterials();prepareCelebrations();preparePatchNotes();prepareWhyOverlay();prepareCompareOverlay();prepareExitOverlay();prepareAchievementCorner();prepareEvolutionPop();prepareHelpContext();prepareFormationMini();prepareFirstWelcome();prepareMobileParity();prepareRegionalSystemOverlays();
+  prepareMenu();prepareStarter();prepareRegionSelector();prepareGame();prepareCheckpoint();prepareCenter();prepareReward();prepareInventory();preparePokedex();prepareBox();prepareDetail();prepareSkillTree();prepareOptions();prepareMT();prepareAchievements();prepareRouteEvents();prepareGyms();prepareRegionalProfile();prepareEvolution();prepareDexLore();prepareEnemyDetail();prepareItemEquip();prepareMaterials();prepareCelebrations();preparePatchNotes();prepareWhyOverlay();prepareCompareOverlay();prepareExitOverlay();prepareAchievementCorner();prepareEvolutionPop();prepareHelpContext();prepareFormationMini();prepareFirstWelcome();prepareMobileParity();prepareRegionalSystemOverlays();johtoInstallUiPauseGuard();
 }
 function hideViews(){[menu,game,starter,regionOverlay,checkpointOverlay,centerOverlay,rewardOverlay,lootPanel,pokedexOverlay,boxOverlay,pcSwapOverlay,detailOverlay,skillTreeOverlay,optionsOverlay,mtGachaOverlay,tmEquipOverlay,achievementsOverlay,achievementTmChoiceOverlay,routeEventOverlay,gymSelectOverlay,gymBattleOverlay,gymPotionOverlay,gymMonDetailOverlay,gymResultOverlay,playerProfileOverlay,evolutionOverlay,dexLoreOverlay,enemyDetailOverlay,itemEquipOverlay,incenseVendorOverlay,incenseInventoryOverlay,mintVendorOverlay,mintInventoryOverlay,mintUseOverlay,legendaryCelebrationOverlay,shinyCelebrationOverlay,patchNotesOverlay,uxWhyOverlay,uxCompareOverlay,exitOverlay,firstWelcomeOverlay,saveTransferOverlay,backupOverlay,diagnosticOverlay,cloudOverlay,cloudConflictOverlay,casinoOverlay,qaOverlay].forEach(x=>x?.classList.add("hidden"));}
+function johtoUiPauseSurfaces(){
+  return [menu,regionOverlay,checkpointOverlay,lootPanel,pokedexOverlay,boxOverlay,pcSwapOverlay,detailOverlay,skillTreeOverlay,optionsOverlay,achievementsOverlay,achievementTmChoiceOverlay,playerProfileOverlay,dexLoreOverlay,itemEquipOverlay,incenseInventoryOverlay,mintInventoryOverlay,mintUseOverlay,tmEquipOverlay,mtGachaOverlay,patchNotesOverlay,uxWhyOverlay,uxCompareOverlay,exitOverlay,saveTransferOverlay,backupOverlay,cloudOverlay,cloudConflictOverlay,casinoOverlay,qaOverlay,el("infoPanel",game)].filter(Boolean);
+}
+function johtoUiHasPauseSurface(){return johtoUiPauseSurfaces().some(x=>!x.classList.contains("hidden"));}
+function johtoFlushDeferredRunEnd(){
+  if(!johtoDeferredRunEnd||johtoUiHasPauseSurface())return false;
+  const d=johtoDeferredRunEnd;johtoDeferredRunEnd=null;johtoUiAutoPaused=false;
+  if(d.kind==="failed")johtoShowRunFailedNow(d.dist,d.cp,d.snapshot);
+  else johtoShowRunStoppedNow(d.snapshot);
+  return true;
+}
+function johtoSyncUiPause(){
+  const r=B()?.getRun?.(),blocked=johtoUiHasPauseSurface();
+  if(blocked&&r&&!r.paused&&!r.rewardPending&&!r.centerPending){
+    const paused=B()?.togglePause?.();
+    if(paused===true)johtoUiAutoPaused=true;
+  }else if(!blocked){
+    if(johtoFlushDeferredRunEnd())return;
+    if(johtoUiAutoPaused){
+      const live=B()?.getRun?.();
+      if(live?.paused&&!live.rewardPending&&!live.centerPending)B()?.togglePause?.();
+      johtoUiAutoPaused=false;
+    }
+  }
+}
+function johtoInstallUiPauseGuard(){
+  try{johtoUiPauseObserver?.disconnect?.();}catch(_){}
+  johtoUiPauseObserver=new MutationObserver(()=>queueMicrotask(johtoSyncUiPause));
+  for(const node of johtoUiPauseSurfaces())johtoUiPauseObserver.observe(node,{attributes:true,attributeFilter:["class"]});
+  johtoSyncUiPause();
+}
 function openRoot(){build();document.getElementById("pkIsoJohtoRoot")?.classList.add("hidden");root.classList.remove("hidden");johtoStartMusic();}
-function closeRoot(){if(B()?.getRun?.())B()?.stop?.(true);hideViews();root.classList.add("hidden");currentView="kanto";document.body?.classList.remove("pk-mobile-modal-open");johtoStopMusicAndRestoreKanto();}
+function closeRoot(){johtoUiAutoPaused=false;johtoDeferredRunEnd=null;if(B()?.getRun?.())B()?.stop?.(true);hideViews();root.classList.add("hidden");currentView="kanto";document.body?.classList.remove("pk-mobile-modal-open");johtoStopMusicAndRestoreKanto();}
 function showStarter(){openRoot();hideViews();starter.classList.remove("hidden");currentView="starter";syncMobileParity();}
 function showLobby(){openRoot();hideViews();menu.classList.remove("hidden");currentView="menu";renderMenu();syncMobileParity();}
 function showGame(){openRoot();hideViews();game.classList.remove("hidden");setTimeout(()=>window.PokeSendaPlayers?.autoJoin?.({preload:false}),0);currentView="game";formationSig="";worldSig="";renderAll();updatePremiumUI();syncMobileParity();if(B()?.premiumUnlocked?.())syncPremiumClock(false);}
@@ -17713,8 +17820,10 @@ function onRewardClose(){if(premiumSession)return;rewardOverlay.classList.add("h
 function johtoSummaryScore(p){const s=p?.stats||{};return Number(s.damage||0)+.85*Number(s.healing||0)+.22*Number(s.damageTaken||0)+25*Number(s.kos||0)+10*Number(s.superEffective||0);}
 function johtoRenderRunSummary(snapshot){if(!snapshot)return;const party=Array.isArray(snapshot.party)?snapshot.party:[],itemStats=Array.isArray(snapshot.itemStats)?snapshot.itemStats:[],combat=el("summaryCombatStats",game),smart=el("uxSmartSummary",game),tot=snapshot.totals||{},mvp=party.slice().sort((a,b)=>johtoSummaryScore(b)-johtoSummaryScore(a))[0],totalDamage=Math.max(0,Number(tot.damage||0));if(combat){if(!party.length){combat.innerHTML="";combat.classList.add("hidden");}else{const rows=party.map(p=>'<div class="run-stat-row"><img src="'+(p.shiny?shinySpriteUrl(p.dex):spriteUrl(p.dex))+'"><div class="run-stat-name"><b>'+htmlSafe(p.name)+'</b><small>Nv.'+p.level+' · '+htmlSafe(p.role||'Reserva')+' · '+Number(p.stats?.deaths||0)+' caída'+(Number(p.stats?.deaths||0)===1?'':'s')+'</small>'+(p===mvp?'<span class="mvp-tag">★ MVP</span>':'')+'</div><div class="run-stat-val"><b>'+Math.round(Number(p.stats?.damage||0)).toLocaleString('es-CL')+'</b><small>daño</small></div><div class="run-stat-val"><b>'+Math.round(Number(p.stats?.healing||0)).toLocaleString('es-CL')+'</b><small>cura</small></div><div class="run-stat-val"><b>'+Math.round(Number(p.stats?.damageTaken||0)).toLocaleString('es-CL')+'</b><small>recibido</small></div><div class="run-stat-val hide-mobile"><b>'+Number(p.stats?.crits||0)+'</b><small>críticos</small></div><div class="run-stat-val hide-mobile"><b>'+Number(p.stats?.superEffective||0)+'</b><small>supereficaces</small></div><div class="run-stat-val"><b>'+Number(p.stats?.kos||0)+'</b><small>KOs</small></div></div>').join(''),held=party.filter(p=>p.heldItem),itemRows=held.map(p=>{const st=itemStats.find(x=>x.pokemonId===p.id&&x.itemId===p.heldItem)||{};return '<div class="item-run-row"><div class="item-run-name"><div><b>'+htmlSafe(p.heldItemName||p.heldItem)+'</b><small>'+htmlSafe(p.name)+'</small></div></div><div class="item-run-val"><b>'+Math.round(Number(st.damage||0)).toLocaleString('es-CL')+'</b><small>daño</small></div><div class="item-run-val"><b>'+Math.round(Number(st.healing||0)).toLocaleString('es-CL')+'</b><small>cura</small></div><div class="item-run-val item-hide-mobile"><b>'+Math.round(Number(st.mitigated||0)).toLocaleString('es-CL')+'</b><small>absorbido</small></div><div class="item-run-utility item-hide-mobile">'+htmlSafe(johtoItemRunUtility(st))+'</div></div>';}).join('');combat.innerHTML='<div class="run-summary-title">📊 Resumen de la expedición <span class="grow"></span><span class="tiny muted">datos reales de esta run</span></div><div class="run-summary-list"><div class="run-stat-row header"><div></div><div>Pokémon</div><div>Daño</div><div>Curación</div><div>Recibido</div><div class="hide-mobile">Crít.</div><div class="hide-mobile">Súper</div><div>KOs</div></div>'+rows+'</div><div class="item-run-summary"><div class="item-run-title">🎽 Rendimiento de objetos equipados</div><div class="item-run-note">'+(held.length?'Aporte medido durante esta expedición. Los objetos de velocidad usan una estimación equivalente de DPS.':'No hubo objetos equipados registrados en esta expedición.')+'</div>'+itemRows+'</div>';combat.classList.remove("hidden");}}if(smart){if(!party.length){smart.innerHTML="";smart.classList.add("hidden");}else{const danger=party.slice().sort((a,b)=>(Number(b.stats?.deaths||0)*100000+Number(b.stats?.damageTaken||0))-(Number(a.stats?.deaths||0)*100000+Number(a.stats?.damageTaken||0)))[0],share=mvp&&totalDamage>0?Number(mvp.stats?.damage||0)/totalDamage:0,deaths=Number(tot.deaths||party.reduce((n,p)=>n+Number(p.stats?.deaths||0),0)),result=snapshot.result==='defeat'?'El equipo cayó':'Expedición detenida',attention=deaths>0?{cls:'warn',title:(danger?.name||'Equipo')+': '+Number(danger?.stats?.deaths||0)+' caída'+(Number(danger?.stats?.deaths||0)===1?'':'s'),text:'Recibió '+Math.round(Number(danger?.stats?.damageTaken||0)).toLocaleString('es-CL')+' de daño. Revisa posición, objeto o resistencias si vuelve a repetirse.'}:share>.68&&party.length>1?{cls:'warn',title:'Daño muy concentrado',text:(mvp?.name||'El MVP')+' aportó '+Math.round(share*100)+'% del daño total.'}:{cls:'good',title:'Equipo estable',text:'No aparece una señal crítica en los datos de esta expedición.'},rec=snapshot.result==='defeat'&&deaths>0?'Refuerza al Pokémon que recibió más presión o prueba una posición/objeto más defensivo antes del siguiente intento.':share>.68&&party.length>1?'Subir el daño de un segundo atacante puede hacer al equipo menos dependiente del MVP.':'La composición rindió de forma equilibrada. Compara el próximo intento para decidir el siguiente ajuste.';smart.innerHTML='<div class="ux-smart-head"><div><b>🧠 Resumen inteligente</b><small>Lectura automática de los datos reales de esta expedición</small></div></div><div class="ux-smart-grid"><div class="ux-smart-card info"><span>RESULTADO</span><b>'+result+'</b><small>'+Math.round(Number(snapshot.distance||0)).toLocaleString('es-CL')+' m · '+Number(snapshot.rounds||0)+' oleadas · '+Number(tot.kos||0)+' KOs.</small></div><div class="ux-smart-card good"><span>LO MEJOR</span><b>★ '+htmlSafe(mvp?.name||'Equipo')+' · MVP</b><small>'+Math.round(Number(mvp?.stats?.damage||0)).toLocaleString('es-CL')+' daño · '+Number(mvp?.stats?.kos||0)+' KOs'+(share?' · '+Math.round(share*100)+'% del daño':'')+'.</small></div><div class="ux-smart-card '+attention.cls+'"><span>ATENCIÓN</span><b>'+htmlSafe(attention.title)+'</b><small>'+htmlSafe(attention.text)+'</small></div></div><div class="ux-next-card" style="margin-top:8px"><div class="ux-next-kicker">AJUSTE SUGERIDO</div><p>'+htmlSafe(rec)+'</p></div><div class="ux-smart-foot"><span>Es una recomendación basada en estadísticas; no es una regla obligatoria.</span><button class="btn" type="button" data-j-smart-why>❓ ¿Por qué?</button></div>';q('[data-j-smart-why]',smart)?.addEventListener('click',openWhyOverlay);smart.classList.remove("hidden");}}}
 function johtoReturnFromRunSummary(){const sum=el("summary",game);sum?.classList.remove("show");showGame();formationSig="";worldSig="";renderAll();}
-function onRunFailed(dist,cp,snapshot){showGame();const sum=el("summary",game);if(sum){el("summaryTitle",game).textContent="El equipo cayó";el("summaryText",game).textContent="La siguiente expedición volverá a tu punto de farmeo seleccionado.";el("sumDistance",game).textContent=dist.toLocaleString("es-CL")+" m";el("sumCheckpoint",game).textContent=cp.toLocaleString("es-CL")+" m";el("repeatBtn",game).textContent="Reintentar desde "+cp.toLocaleString("es-CL")+" m";johtoRenderRunSummary(snapshot);sum.classList.add("show");el("repeatBtn",game).onclick=()=>{sum.classList.remove("show");B()?.start?.();};el("summaryCloseBtn",game)?.classList.remove("hidden");el("summaryCloseBtn",game).onclick=johtoReturnFromRunSummary;}}
-function onRunStopped(snapshot){showGame();const sum=el("summary",game);if(!sum)return showGame();const dist=Math.round(Number(snapshot?.distance||0)),cp=Math.round(Number(snapshot?.checkpoint||0));el("summaryTitle",game).textContent="Expedición detenida";el("summaryText",game).textContent="Conservaste XP, Pokédolares y botín. La próxima salida comenzará desde tu punto de farmeo seleccionado.";el("sumDistance",game).textContent=dist.toLocaleString("es-CL")+" m";el("sumCheckpoint",game).textContent=cp.toLocaleString("es-CL")+" m";el("repeatBtn",game).textContent="Cerrar";el("summaryCloseBtn",game)?.classList.add("hidden");johtoRenderRunSummary(snapshot);sum.classList.add("show");el("repeatBtn",game).onclick=johtoReturnFromRunSummary;}
+function johtoShowRunFailedNow(dist,cp,snapshot){showGame();const sum=el("summary",game);if(sum){el("summaryTitle",game).textContent="El equipo cayó";el("summaryText",game).textContent="La siguiente expedición volverá a tu punto de farmeo seleccionado.";el("sumDistance",game).textContent=dist.toLocaleString("es-CL")+" m";el("sumCheckpoint",game).textContent=cp.toLocaleString("es-CL")+" m";el("repeatBtn",game).textContent="Reintentar desde "+cp.toLocaleString("es-CL")+" m";johtoRenderRunSummary(snapshot);sum.classList.add("show");el("repeatBtn",game).onclick=()=>{sum.classList.remove("show");B()?.start?.();};el("summaryCloseBtn",game)?.classList.remove("hidden");el("summaryCloseBtn",game).onclick=johtoReturnFromRunSummary;}}
+function johtoShowRunStoppedNow(snapshot){showGame();const sum=el("summary",game);if(!sum)return showGame();const dist=Math.round(Number(snapshot?.distance||0)),cp=Math.round(Number(snapshot?.checkpoint||0));el("summaryTitle",game).textContent="Expedición detenida";el("summaryText",game).textContent="Conservaste XP, Pokédolares y botín. La próxima salida comenzará desde tu punto de farmeo seleccionado.";el("sumDistance",game).textContent=dist.toLocaleString("es-CL")+" m";el("sumCheckpoint",game).textContent=cp.toLocaleString("es-CL")+" m";el("repeatBtn",game).textContent="Cerrar";el("summaryCloseBtn",game)?.classList.add("hidden");johtoRenderRunSummary(snapshot);sum.classList.add("show");el("repeatBtn",game).onclick=johtoReturnFromRunSummary;}
+function onRunFailed(dist,cp,snapshot){johtoUiAutoPaused=false;if(johtoUiHasPauseSurface()){johtoDeferredRunEnd={kind:"failed",dist,cp,snapshot};return;}johtoShowRunFailedNow(dist,cp,snapshot);}
+function onRunStopped(snapshot){johtoUiAutoPaused=false;if(johtoUiHasPauseSurface()){johtoDeferredRunEnd={kind:"stopped",snapshot};return;}johtoShowRunStoppedNow(snapshot);}
 function prepareInventory(){
   if(!lootPanel)return;
   el("inventoryCasinoBtn",lootPanel)?.remove();
@@ -17731,7 +17840,7 @@ function setInventoryTab(tab="main"){
   const map={main:["lootTabMain","lootMainPane"],stones:["lootTabStones","lootStonePane"],potions:["lootTabPotions","lootPotionPane"],tms:["lootTabTms","lootTmPane"]};
   for(const [k,[b,p]] of Object.entries(map)){el(b,lootPanel)?.classList.toggle("active",k===inventoryTab);el(p,lootPanel)?.classList.toggle("hidden",k!==inventoryTab);}
 }
-function openInventory(tab="main"){setInventoryTab(tab);renderInventory();lootPanel.classList.remove("hidden");}
+function openInventory(tab="main"){setInventoryTab(tab);renderInventory();lootPanel.classList.remove("hidden");johtoSyncUiPause();}
 function itemDef(id){return B()?.getItemDef?.(id)||D().items?.[id]||({potion:{name:"Poción",icon:"🧪",desc:"Restaura PS."},super_potion:{name:"Superpoción",icon:"🧴",desc:"Restaura más PS."},hyper_potion:{name:"Hiperpoción",icon:"⚗️",desc:"Restaura muchos PS."},full_heal:{name:"Cura Total",icon:"💊",desc:"Cura estados."}}[id])||{name:id,icon:"🎒",desc:"Objeto regional"};}
 const JOHTO_TM_SPRITE_ROOT="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/",JOHTO_TM_CASE=JOHTO_TM_SPRITE_ROOT+"tm-case.png",JOHTO_TM_GENERIC=JOHTO_TM_SPRITE_ROOT+"tm-normal.png";
 function johtoTmSpriteHTML(id,cls=""){
@@ -18494,7 +18603,7 @@ function regionalDexEntries(){
   for(const [fid,f] of Object.entries(data.families||{}))for(const dex of f.members||[]){if(entries.some(x=>x.dex===Number(dex)))continue;const s=species(dex),p=owned[fid],isOwned=!!(p&&Number(p.dex)===Number(dex)),discovered=seen.has(Number(dex)),rar=B()?.getRarity?.(fid,dex)||"common";entries.push({dex:Number(dex),name:s.name||nameDex(dex),types:s.types||[],fid,p,isOwned,discovered,shiny:new Set((saved.shinyDex||[]).map(Number)).has(Number(dex)),rar,routes:johtoFamilyRoutes(fid)});}
   return entries;
 }
-function openPokedex(){pokedexFilter="all";pokedexRouteFilter="all";pokedexOverlay.dataset.rarity="all";el("pokedexSearch",pokedexOverlay).value="";renderPokedex();pokedexOverlay.classList.remove("hidden");}
+function openPokedex(){pokedexFilter="all";pokedexRouteFilter="all";pokedexOverlay.dataset.rarity="all";el("pokedexSearch",pokedexOverlay).value="";renderPokedex();pokedexOverlay.classList.remove("hidden");johtoSyncUiPause();}
 function renderPokedex(){
   const jDexGrid=el("pokedexGrid",pokedexOverlay),jOldDexSprites=johtoCaptureSpriteNodes(jDexGrid);const saved=read(),unread=new Set((saved.dexUnread||[]).map(Number)),entries=regionalDexEntries().map(x=>({...x,isNew:x.discovered&&unread.has(Number(x.dex))})),qv=normalizeSearch(el("pokedexSearch",pokedexOverlay).value||""),rarity=pokedexOverlay.dataset.rarity||"all",shown=entries.filter(x=>{if(pokedexFilter==="owned"&&!x.isOwned)return false;if(pokedexFilter==="registered"&&!(x.discovered&&!x.isOwned))return false;if(pokedexFilter==="locked"&&x.discovered)return false;if(pokedexFilter==="shiny"&&!x.shiny)return false;if(pokedexFilter==="new"&&!x.isNew)return false;if(rarity!=="all"&&x.rar!==rarity)return false;if(pokedexRouteFilter!=="all"&&!x.routes.includes(pokedexRouteFilter))return false;return !qv||normalizeSearch(x.name+" "+x.dex+" "+x.types.join(" ")).includes(qv);});
   el("pokedexGrid",pokedexOverlay).innerHTML=shown.map(x=>'<div class="dex-card '+(x.discovered?'discovered rarity-'+x.rar:'locked')+' '+(x.isOwned?'current-possession':'')+' '+(x.shiny?'has-shiny':'')+'" '+(x.discovered?'data-j-dex="'+x.dex+'"':'')+'>'+(x.isNew?'<span class="dex-new-badge ux-new-mini" title="Entrada nueva">NUEVO</span>':'')+'<span class="dex-number">#'+String(x.dex).padStart(3,'0')+'</span><img data-j-sprite-key="jdex-main-'+x.dex+'-'+(johtoDexUsesShinyView(x.dex,saved)?1:0)+'" src="'+johtoDexVisualSprite(x.dex,saved)+'" alt="'+(x.discovered?htmlSafe(x.name):'???')+'">'+(x.shiny?'<img class="dex-shiny-mini" data-j-sprite-key="jdex-mini-'+x.dex+'-'+(johtoDexUsesShinyView(x.dex,saved)?0:1)+'" src="'+johtoUiSprite(x.dex,!johtoDexUsesShinyView(x.dex,saved))+'" alt="'+htmlSafe(x.name)+(johtoDexUsesShinyView(x.dex,saved)?' normal':' Shiny')+'"><span class="dex-shiny-badge" title="'+(johtoDexUsesShinyView(x.dex,saved)?'Vista Shiny activa':'Variante Shiny registrada')+'">★</span>':'')+'<div class="dex-name">'+(x.discovered?x.name:'???')+'</div><div class="dex-meta">'+(x.discovered?x.types.map(t=>TYPE_ES[t]||t).join('/'):'No descubierto')+'</div><div class="dex-rarity-row">'+(x.discovered?rarityBadge(x.rar):'')+'</div>'+(x.isOwned?'<span class="dex-possession-badge owned">EN POSESIÓN</span>':x.discovered?'<span class="dex-possession-badge registered">REGISTRADO</span>':'')+'</div>').join("")||'<div class="pc-box-empty">No hay entradas que coincidan con estos filtros.</div>';
@@ -18512,7 +18621,7 @@ function prepareBox(){
   el("pcBoxSortSelect",boxOverlay).onchange=()=>{pcSort=el("pcBoxSortSelect",boxOverlay).value||"dex";pcSortDir=["level","stars","rarity","power"].includes(pcSort)?"desc":"asc";renderBox();};el("pcBoxSortDirBtn",boxOverlay).onclick=()=>{pcSortDir=pcSortDir==="asc"?"desc":"asc";renderBox();};
   if(pcSwapOverlay){el("pcSwapCloseBtn",pcSwapOverlay).onclick=()=>pcSwapOverlay.classList.add("hidden");pcSwapOverlay.onclick=e=>{if(e.target===pcSwapOverlay)pcSwapOverlay.classList.add("hidden");};}
 }
-function openBox(){pcStatus="all";pcRarity="all";if(el("pcBoxSearch",boxOverlay))el("pcBoxSearch",boxOverlay).value="";renderBox();boxOverlay.classList.remove("hidden");}
+function openBox(){pcStatus="all";pcRarity="all";if(el("pcBoxSearch",boxOverlay))el("pcBoxSearch",boxOverlay).value="";renderBox();boxOverlay.classList.remove("hidden");johtoSyncUiPause();}
 function renderBox(){
   const jBoxGrid=el("pcBoxGrid",boxOverlay),jOldBoxSprites=johtoCaptureSpriteNodes(jBoxGrid);const s=read(),qv=normalizeSearch(el("pcBoxSearch",boxOverlay).value||""),formation=new Set((s.formation||[]).filter(Boolean)),order={common:0,uncommon:1,rare:2,epic:3,legendary:4};
   let entries=Object.keys(s.pokemon||{}).map(id=>{const p=s.pokemon[id],rar=B()?.getRarity?.(id)||"common",inTeam=formation.has(id),pow=powerScore(id);return{id,p,rar,inTeam,pow,types:species(p.dex).types||[]};}).filter(x=>{if(pcStatus==="team"&&!x.inTeam)return false;if(pcStatus==="box"&&x.inTeam)return false;if(pcRarity!=="all"&&x.rar!==pcRarity)return false;if(!qv)return true;return normalizeSearch(nameDex(x.p.dex)+" "+x.types.map(t=>TYPE_ES[t]||t).join(" ")+" nivel "+x.p.level+" poder "+x.pow).includes(qv);});

@@ -14549,7 +14549,17 @@ function showDetail(dex){
 function installButtons(){
  document.querySelectorAll('[id="pokedexOverlay"],[id="playerProfileOverlay"]').forEach(host=>{
   const head=host.querySelector('.pokemon-detail-head');if(!head)return;
-  let b=head.querySelector('[data-global-dex-open]');if(!b){b=document.createElement('button');b.type='button';b.className='btn';b.dataset.globalDexOpen='1';b.textContent='🌐 Pokédex Global';head.appendChild(b);}
+  let b=head.querySelector('[data-global-dex-open]');
+  if(!b){b=document.createElement('button');b.type='button';b.className='btn';b.dataset.globalDexOpen='1';}
+  if(host.id==='playerProfileOverlay'){
+    b.textContent='📘 Pokédex';
+    b.title='Abrir Pokédex';
+    const close=head.querySelector('#playerProfileCloseBtn');
+    if(close)close.insertAdjacentElement('beforebegin',b);else if(!b.parentElement)head.appendChild(b);
+  }else{
+    b.textContent='🌐 Pokédex Global';
+    if(!b.parentElement)head.appendChild(b);
+  }
   if(!boundButtons.has(b)){b.onclick=()=>open();boundButtons.add(b);}
  });
 }
@@ -14611,13 +14621,13 @@ function decorateProfile(host){
  copy.className='pk-self-profile-copy';
  copy.innerHTML=
    '<div class="profile-name">'+escSelf(trainerName)+'</div>'+
-   '<div class="muted">Entrenador de PokéSenda · '+(jStarted?'Kanto + Johto':'Kanto')+'</div>'+
+   '<div class="muted pk-self-profile-subtitle">Entrenador de PokéSenda</div>'+
    '<div class="pk-public-global-strip pk-self-global-strip">'+
-     '<div><b>'+globalBadges+'/16</b><small>Medallas totales</small></div>'+
-     '<div><b>'+globalDex+'/'+rows.length+'</b><small>Pokédex global</small></div>'+
-     '<div><b>'+globalOwned+'</b><small>Pokémon poseídos</small></div>'+
-     '<div><b>'+globalShiny+'</b><small>Especies Shiny</small></div>'+
-     '<div><b>'+fmtMeters(globalBest)+'</b><small>Récord Infinita</small></div>'+
+     '<div class="pk-self-metric"><span>🏅</span><b>'+globalBadges+'/16</b><small>Medallas</small></div>'+
+     '<div class="pk-self-metric"><span>📘</span><b>'+globalDex+'/'+rows.length+'</b><small>Pokédex</small></div>'+
+     '<div class="pk-self-metric"><span>🔴</span><b>'+globalOwned+'</b><small>Pokémon poseídos</small></div>'+
+     '<div class="pk-self-metric"><span>✨</span><b>'+globalShiny+'</b><small>Especies Shiny</small></div>'+
+     '<div class="pk-self-metric"><span>♾️</span><b>'+fmtMeters(globalBest)+'</b><small>Récord Infinita</small></div>'+
    '</div>';
  hero.appendChild(copy);
 
@@ -14675,8 +14685,7 @@ function decorateProfile(host){
    const cfg=regionInfo[key],r=cfg.data;
    if(key==='johto'&&!jStarted){
      return '<div class="pk-public-region-panel pk-self-region-panel" data-region="johto">'+
-       '<div class="pk-public-region-head"><div><h3>🍂 Región de Johto</h3><small>Esta aventura todavía no ha comenzado.</small></div>'+
-       '<button class="btn" type="button" disabled>📘 Pokédex Johto</button></div>'+
+       '<div class="pk-public-region-head"><div><h3>🍂 Región de Johto</h3><small>Esta aventura todavía no ha comenzado.</small></div></div>'+
        '<div class="pk-players-empty pk-public-region-empty">Cuando desbloquees Johto con las 8 Medallas de Kanto y elijas tu inicial, aquí aparecerán sus estadísticas, formación y medallas.</div>'+
      '</div>';
    }
@@ -14689,7 +14698,6 @@ function decorateProfile(host){
    return '<div class="pk-public-region-panel pk-self-region-panel" data-region="'+key+'">'+
      '<div class="pk-public-region-head">'+
        '<div><h3>'+cfg.icon+' Región de '+cfg.label+'</h3><small>Tu progreso de '+cfg.label+'</small></div>'+
-       '<button class="btn primary" type="button" data-self-region-dex="'+key+'">📘 Pokédex '+cfg.label+'</button>'+
      '</div>'+
      '<div class="pk-public-stats pk-public-region-stats">'+
        '<div><b>'+badges+'/8</b><small>Medallas</small></div>'+
@@ -14719,9 +14727,6 @@ function decorateProfile(host){
      const on=btn.dataset.selfProfileRegion===activeRegion;
      btn.classList.toggle('active',on);
      btn.setAttribute('aria-selected',on?'true':'false');
-   });
-   shell.querySelector('[data-self-region-dex]')?.addEventListener('click',e=>{
-     open(null,e.currentTarget.dataset.selfRegionDex||activeRegion);
    });
  };
 
@@ -20862,42 +20867,28 @@ body > #regionSelectOverlay #regionJohtoCard.coming .region-feature-row span{
 
 
 <style id="pkSelfProfileRegionalTabs20260911">
-#playerProfileOverlay .pk-self-profile-hero{
-  align-items:stretch;
-}
-#playerProfileOverlay .pk-self-profile-copy{
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  flex:1;
-}
-#playerProfileOverlay .pk-self-global-strip{
-  margin-top:12px;
-}
-#playerProfileOverlay .pk-self-profile-shell{
-  margin-top:11px;
-}
-#playerProfileOverlay .pk-self-region-panel{
-  margin-bottom:2px;
-}
-#playerProfileOverlay .pk-self-profile-tabs{
-  margin-top:0;
-}
-#playerProfileOverlay .pk-self-profile-trainer{
-  flex:0 0 auto;
-}
-#pkRegionRuntimeRoot #playerProfileOverlay .pk-self-profile-copy .profile-name,
-#pkRegionRuntimeRoot #playerProfileOverlay .pk-self-region-panel[data-region="johto"] h3{
-  color:#fff2bf;
-}
+#playerProfileOverlay .pk-self-profile-hero{align-items:stretch}
+#playerProfileOverlay .pk-self-profile-copy{min-width:0;display:flex;flex-direction:column;justify-content:center;flex:1;padding:6px 2px 4px}
+#playerProfileOverlay .pk-self-profile-copy .profile-name{font-size:27px;line-height:1.08;margin-bottom:5px}
+#playerProfileOverlay .pk-self-profile-subtitle{font-size:11px;color:#aebed3;letter-spacing:.25px}
+#playerProfileOverlay .pk-self-global-strip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:14px}
+#playerProfileOverlay .pk-self-global-strip>.pk-self-metric{grid-column:span 2;min-height:67px;display:grid;grid-template-columns:24px minmax(0,1fr);grid-template-rows:auto auto;column-gap:7px;align-items:center;text-align:left;padding:9px 10px;background:linear-gradient(180deg,#0d203d,#09172d);border:1px solid #426596;border-radius:10px}
+#playerProfileOverlay .pk-self-global-strip>.pk-self-metric:nth-child(4),#playerProfileOverlay .pk-self-global-strip>.pk-self-metric:nth-child(5){grid-column:span 3}
+#playerProfileOverlay .pk-self-metric>span{grid-row:1 / span 2;font-size:18px;line-height:1;text-align:center}
+#playerProfileOverlay .pk-self-metric>b{font-size:16px;line-height:1.05;color:#f4f8ff;overflow:visible;text-overflow:clip}
+#playerProfileOverlay .pk-self-metric>small{margin-top:1px;font-size:7.4px;line-height:1.25;color:#a9bad0}
+#playerProfileOverlay .pk-self-profile-shell{margin-top:11px}
+#playerProfileOverlay .pk-self-region-panel{margin-bottom:2px}
+#playerProfileOverlay .pk-self-profile-tabs{margin-top:0}
+#playerProfileOverlay .pk-self-profile-trainer{flex:0 0 auto}
+#playerProfileOverlay .pokemon-detail-head [data-global-dex-open]{white-space:nowrap}
+#pkRegionRuntimeRoot #playerProfileOverlay .pk-self-profile-copy .profile-name,#pkRegionRuntimeRoot #playerProfileOverlay .pk-self-region-panel[data-region="johto"] h3{color:#fff2bf}
 @media(max-width:760px){
-  #playerProfileOverlay .pk-self-profile-hero{
-    grid-template-columns:1fr!important;
-  }
-  #playerProfileOverlay .pk-self-profile-trainer{
-    margin:auto;
-  }
+  #playerProfileOverlay .pk-self-profile-hero{grid-template-columns:1fr!important}
+  #playerProfileOverlay .pk-self-profile-trainer{margin:auto}
+  #playerProfileOverlay .pk-self-global-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #playerProfileOverlay .pk-self-global-strip>.pk-self-metric,#playerProfileOverlay .pk-self-global-strip>.pk-self-metric:nth-child(4),#playerProfileOverlay .pk-self-global-strip>.pk-self-metric:nth-child(5){grid-column:span 1}
+  #playerProfileOverlay .pk-self-global-strip>.pk-self-metric:last-child{grid-column:1 / -1}
 }
 </style>
 

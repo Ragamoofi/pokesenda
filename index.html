@@ -2785,6 +2785,9 @@ body{letter-spacing:.08px}
 }
 </style>
 
+<style id="pkGlobalInfiniteHideLobbyBannerFix">
+#pkGlobalInfiniteRoot #pkLobbyBanner{display:none!important}
+</style>
 <style id="pkGlobalInfiniteV36560Style">
 #pkGlobalInfiniteRoot{position:fixed;inset:0;z-index:480000;background:#070b10;padding:6px;display:flex;justify-content:center;align-items:flex-start;overflow:hidden;box-sizing:border-box}
 #pkGlobalInfiniteRoot.hidden{display:none!important}#pkGlobalInfiniteRoot>.game{width:min(1908px,calc(100vw - 12px));height:min(1068px,calc(100vh - 12px));max-width:none;max-height:none;display:flex;flex-direction:column;border-radius:14px}
@@ -19398,7 +19401,7 @@ function renderFrame(){
 }
 function renderTop(){
   const dist=run?.distance||0,next=(Math.floor(dist/MILESTONE)+1)*MILESTONE,within=dist%MILESTONE;
-  $("collectionTop",game).textContent=roster().length+" Pokémon";$("moneyTop",game).textContent="Kanto + Johto";$("distance",game).textContent=fmt(dist)+" / próximo hito "+fmt(next);$("bestDistance",game).textContent=fmt(gs.bestDistance);$("objectiveFill",game).style.width=Math.min(100,within/MILESTONE*100)+'%';$("routeHudName",game).textContent="Expedición Infinita";$("nextBoss",game).textContent=((Math.floor(dist/1000)+1))+" km";const lobbyBanner=$("pkLobbyBanner",game);if(lobbyBanner)lobbyBanner.textContent=run?"Expedición Infinita":"Equipo listo para la Expedición Infinita";
+  $("collectionTop",game).textContent=roster().length+" Pokémon";$("moneyTop",game).textContent="Kanto + Johto";$("distance",game).textContent=fmt(dist)+" / próximo hito "+fmt(next);$("bestDistance",game).textContent=fmt(gs.bestDistance);$("objectiveFill",game).style.width=Math.min(100,within/MILESTONE*100)+'%';$("routeHudName",game).textContent="Expedición Infinita";$("nextBoss",game).textContent=((Math.floor(dist/1000)+1))+" km";const lobbyBanner=$("pkLobbyBanner",game);if(lobbyBanner)lobbyBanner.classList.add("hidden");
   const start=$("startBtn",game),stop=$("stopRunBtn",game);if(run){start.textContent=run.paused?'▶ Continuar expedición':'⏸ Pausar expedición';stop.disabled=!!run.rewardPending;}else{start.textContent='Comenzar expedición';start.disabled=!canStart()||!gs.formation.some(Boolean);stop.disabled=true;}
   qa('[data-speed]',game).forEach(b=>b.classList.toggle('active',Number(b.dataset.speed)===(run?.speed||gs.preferredSpeed||1)));
   const ap=$("autoPotionBtn",game);if(ap){ap.disabled=!globalPotionUnlocked();ap.classList.toggle("active",globalPotionEnabled());ap.title=globalPotionUnlocked()?"Auto-Poción Global · cada Pokémon usa consumibles de su propia región":"Auto-Poción no está desbloqueada en Kanto ni Johto";}

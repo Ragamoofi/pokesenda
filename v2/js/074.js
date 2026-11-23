@@ -8118,8 +8118,27 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function sendaPartyTypes(){const out={};for(const id of run?.partyIds||[]){for(const t of combatStage(id)?.types||[])out[t]=(out[t]||0)+1;}return out;}
   function sendaNewState(){
     const w=Math.random()<.25?"clear":SENDA_WEATHERS[1+Math.floor(Math.random()*(SENDA_WEATHERS.length-1))].id;
-    return {version:1,weather:w,boons:{},affinity:{},phoenix:0,crosses:0,pendingCross:0,offers:null};
+    return {version:2,weather:w,boons:{},affinity:{},phoenix:0,crosses:0,pendingCross:0,pendingFork:0,offers:null,mode:null,path:null,eliteKms:0,forks:0,rerolls:0};
   }
+
+  /* --- V2 · Bifurcaciones: a mitad de cada km eliges el camino hasta el próximo jefe. */
+  const SENDA_PATHS={
+    calm:{icon:"🌿",name:"Sendero tranquilo",rarity:"common",text:"Enemigos un 15% más débiles hasta el próximo jefe. Ideal para recuperar el aliento."},
+    elite:{icon:"⚔️",name:"Senda de élite",rarity:"epic",text:"Enemigos +35% PS y +20% ataque, pero +50% Pokédólares, +50% XP y Esencia extra."},
+    treasure:{icon:"💎",name:"Senda del tesoro",rarity:"rare",text:"La próxima Poké Ball de jefe tiene doble probabilidad de Épico y Legendario."},
+    camp:{icon:"🏕️",name:"Desvío al campamento",rarity:"common",text:"El equipo recupera un 35% de PS al instante y encuentras una poción."}
+  };
+  // --- V2 · Maestría de Senda: mejoras permanentes compradas con Esencia.
+  const PK2_MASTERY={
+    startBoon:{icon:"🎒",name:"Equipaje de Senda",max:3,costs:[12,30,60],text:l=>`Empiezas cada expedición con ${l} bendición${l===1?"":"es"} común${l===1?"":"es"} al azar.`},
+    fourth:{icon:"🃏",name:"Cuarta carta",max:1,costs:[45],text:()=>"Los Cruces de Senda ofrecen 4 bendiciones en vez de 3."},
+    reroll:{icon:"🔄",name:"Relanzar",max:2,costs:[20,50],text:l=>`Puedes relanzar las cartas de un cruce ${l} vez${l===1?"":"es"} por expedición.`},
+    fortune:{icon:"🍀",name:"Fortuna de Senda",max:3,costs:[15,35,70],text:l=>`Bendiciones Raras +${l*20}% y Épicas +${l*30}% más frecuentes.`},
+    feather:{icon:"🪶",name:"Pluma de reserva",max:1,costs:[40],text:()=>"Empiezas cada expedición con una Pluma Fénix."},
+    compass:{icon:"🧭",name:"Brújula del clima",max:1,costs:[30],text:()=>"El clima inicial favorece a los tipos de tu equipo con más frecuencia."}
+  };
+  function pk2Meta(){state.pk2=state.pk2&&typeof state.pk2==="object"?state.pk2:{};const m=state.pk2;m.essence=Math.max(0,Number(m.essence)||0);m.mastery=m.mastery&&typeof m.mastery==="object"?m.mastery:{};m.pity=Math.max(0,Number(m.pity)||0);m.essenceTotal=Math.max(0,Number(m.essenceTotal)||0);return m;}
+  const pk2Lvl=k=>Math.max(0,Math.min(PK2_MASTERY[k].max,Number(pk2Meta().mastery[k])||0));
 
   // --- Efectos: se aplican sobre las estadísticas derivadas de cada Pokémon en la expedición.
   const sendaBaseDerived=derived;
@@ -8139,23 +8158,38 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
       crit:(d.crit||0)+.06*(b.crit||0),
       roundHeal:(d.roundHeal||0)+.04*(b.regen||0),
       lifesteal:(d.lifesteal||0)+.04*(b.leech||0),
-      xpBoost:(d.xpBoost||0)+.20*(b.study||0)};
+      xpBoost:(d.xpBoost||0)+.20*(b.study||0)+(s.path==="elite"?.5:0)};
   };
   const sendaBaseMoneyBonus=moneyBonus;
-  moneyBonus=function(){const s=run?.senda;return sendaBaseMoneyBonus()*(s?1+.25*(s.boons.purse||0):1);};
+  moneyBonus=function(){const s=run?.senda;return sendaBaseMoneyBonus()*(s?(1+.25*(s.boons.purse||0))*(s.path==="elite"?1.5:1):1);};
+
+  const sendaBaseMakeEnemy=makeEnemy;
+  makeEnemy=function(...a){
+    const e=sendaBaseMakeEnemy(...a),p=run?.senda?.path;if(!e||!p)return e;
+    const k=p==="elite"?{hp:1.35,atk:1.2,xp:1.5}:p==="calm"?{hp:.85,atk:.85,xp:1}:null;if(!k)return e;
+    const bossDamp=e.boss?.45:1,hp=1+(k.hp-1)*bossDamp,at=1+(k.atk-1)*bossDamp;
+    e.maxHp=Math.max(1,Math.round(e.maxHp*hp));e.hp=e.maxHp;e.atk*=at;e.spAtk*=at;e.xp=Math.max(1,Math.round(e.xp*k.xp));if(p==="elite")e.elite=true;
+    return e;
+  };
 
   const sendaBaseFinishNormalRound=finishNormalRound;
   finishNormalRound=function(){
     const before=run?Number(run.distance||0):0;
     sendaBaseFinishNormalRound();
-    const s=run?.senda;if(!s||!(s.boons.stride>0))return;
-    if(run.pendingBoss||run.centerPending||run.eventPending||run.paused||run.rewardPending)return;
-    const gained=Number(run.distance||0)-before;if(gained<=0)return;
-    const extra=Math.round(gained*.20*s.boons.stride);
-    let cap=(Math.floor(run.distance/1000)+1)*1000-1;
-    if(!run.infinite){cap=Math.min(cap,MAX_DISTANCE-1);const c=nextUnvisitedCenter(run.distance,run.distance+extra);if(c)cap=Math.min(cap,c-1);}
-    const add=Math.max(0,Math.min(extra,cap-run.distance));
-    if(add>0){run.distance+=add;renderTop();renderRouteInfo();}
+    const s=run?.senda;if(!s)return;
+    if(s.boons.stride>0&&!(run.pendingBoss||run.centerPending||run.eventPending||run.paused||run.rewardPending)){
+      const gained=Number(run.distance||0)-before;
+      if(gained>0){
+        const extra=Math.round(gained*.20*s.boons.stride);
+        let cap=(Math.floor(run.distance/1000)+1)*1000-1;
+        if(!run.infinite){cap=Math.min(cap,MAX_DISTANCE-1);const c=nextUnvisitedCenter(run.distance,run.distance+extra);if(c)cap=Math.min(cap,c-1);}
+        const add=Math.max(0,Math.min(extra,cap-run.distance));
+        if(add>0){run.distance+=add;renderTop();renderRouteInfo();}
+      }
+    }
+    // Bifurcación al cruzar la mitad de un km (sin jefe pendiente).
+    const now=Number(run?.distance||0);
+    if(run&&!run.pendingBoss&&Math.floor(before/1000)===Math.floor(now/1000)&&before%1000<500&&now%1000>=500&&(run.infinite||now<MAX_DISTANCE-400))s.pendingFork=(s.pendingFork||0)+1;
   };
 
   const sendaBaseFaint=faintTeamPokemon;
@@ -8174,7 +8208,15 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   // Se inicializa de forma perezosa: algunos botones guardan una referencia directa al startRun original.
   function sendaEnsureRun(){
     if(!run||run.senda)return;
-    run.senda=sendaNewState();const w=sendaWeather(run.senda.weather);
+    run.senda=sendaNewState();
+    // Maestría: clima favorable, pluma y bendiciones iniciales.
+    if(pk2Lvl("compass")&&Math.random()<.6){const bw=sendaBestWeather();if(bw)run.senda.weather=bw;}
+    if(pk2Lvl("feather")){run.senda.phoenix=1;run.senda.boons.phoenix=1;}
+    run.senda.rerolls=pk2Lvl("reroll");
+    const commons=Object.entries(SENDA_BOONS).filter(([_,b])=>b.rarity==="common").map(([id])=>id);
+    for(let i=0;i<pk2Lvl("startBoon");i++){const id=commons[Math.floor(Math.random()*commons.length)];run.senda.boons[id]=(run.senda.boons[id]||0)+1;}
+    if(pk2Lvl("startBoon"))addLog(`🎒 Equipaje de Senda: empiezas con ${Object.entries(run.senda.boons).filter(([k])=>k!=="phoenix").map(([k,n])=>`${SENDA_BOONS[k].icon} ${SENDA_BOONS[k].name}${n>1?` ×${n}`:""}`).join(", ")}.`);
+    const w=sendaWeather(run.senda.weather);
     addLog(`${w.icon} Clima de la expedición: ${w.name}. ${sendaWeatherText(w)}`);
     if(w.types.length)flash(`${w.icon} ${w.name}`);
     sendaRenderHud();
@@ -8182,15 +8224,20 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   const sendaBaseStartRun=startRun;
   startRun=function(){sendaBaseStartRun();sendaEnsureRun();sendaRenderHud();};
   const sendaBaseCompleteBoss=completeBoss;
-  completeBoss=function(){if(run?.senda)run.senda.pendingCross=(run.senda.pendingCross||0)+1;return sendaBaseCompleteBoss();};
+  completeBoss=function(){
+    const s=run?.senda;
+    if(s){s.pendingCross=(s.pendingCross||0)+1;if(s.path==="elite")s.eliteKms=(s.eliteKms||0)+1;s.path=null;}
+    return sendaBaseCompleteBoss();
+  };
   const sendaBaseResumeRun=resumeRun;
   resumeRun=function(logIt=true){if(run?.sendaCrossOpen)return;return sendaBaseResumeRun(logIt);};
   const sendaBaseSimStep=pkSimulationStep;
   pkSimulationStep=function(dt,nowPerf){
     sendaEnsureRun();const s=run?.senda;
-    if(s&&s.pendingCross>0&&!run.sendaCrossOpen&&!run.rewardPending&&!run.paused&&!run.centerPending&&!run.eventPending&&!run.eventBattle&&!run.bossActive&&!run.pendingBoss&&!evolutionModalOpen){
-      if(pkBackgroundCatchingUp||document.hidden)sendaAutoPick();
-      else{sendaOpenCross();return false;}
+    if(s&&(s.pendingCross>0||s.pendingFork>0)&&!run.sendaCrossOpen&&!run.rewardPending&&!run.paused&&!run.centerPending&&!run.eventPending&&!run.eventBattle&&!run.bossActive&&!run.pendingBoss&&!evolutionModalOpen){
+      const mode=s.pendingCross>0?"cross":"fork";
+      if(pkBackgroundCatchingUp||document.hidden)sendaAutoPick(mode);
+      else{sendaOpenChoice(mode);return false;}
     }
     return sendaBaseSimStep(dt,nowPerf);
   };
@@ -8198,14 +8245,15 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   // --- Ofertas del cruce.
   function sendaRollOffers(){
     const s=run.senda,km=Math.max(1,Math.round(Number(run.distance||0)/1000)),party=sendaPartyTypes(),partyTypes=Object.keys(party).filter(t=>TYPE_NAMES[t]&&t!=="support");
-    const weights={common:SENDA_RARITY.common.weight,rare:SENDA_RARITY.rare.weight+km*1.2,epic:SENDA_RARITY.epic.weight+km*1.5};
+    const f=pk2Lvl("fortune"),count=3+pk2Lvl("fourth");
+    const weights={common:SENDA_RARITY.common.weight,rare:(SENDA_RARITY.rare.weight+km*1.2)*(1+.2*f),epic:(SENDA_RARITY.epic.weight+km*1.5)*(1+.3*f)};
     const pool=Object.entries(SENDA_BOONS).filter(([id,b])=>{
       if(id==="affinity")return partyTypes.length>0;
       if(id==="weather")return sendaBestWeather()!==null;
       return (s.boons[id]||0)<b.max;
     });
     const offers=[];
-    while(offers.length<3&&pool.length){
+    while(offers.length<count&&pool.length){
       const total=pool.reduce((a,[_,b])=>a+weights[b.rarity],0);let r=Math.random()*total,pick=0;
       for(let i=0;i<pool.length;i++){r-=weights[pool[i][1].rarity];if(r<=0){pick=i;break;}}
       const [id]=pool.splice(pick,1)[0],offer={id};
@@ -8248,55 +8296,164 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function sendaEnsureDom(){
     let ov=document.getElementById("sendaCrossOverlay");if(ov)return ov;
     ov=document.createElement("div");ov.id="sendaCrossOverlay";ov.className="senda-overlay hidden";
-    ov.innerHTML=`<div class="senda-box" role="dialog" aria-labelledby="sendaCrossTitle"><div class="senda-kicker" id="sendaCrossKicker">Cruce de Senda</div><h2 id="sendaCrossTitle">Elige tu camino</h2><p class="senda-sub">La bendición dura toda esta expedición y se acumula con las demás.</p><div class="senda-cards" id="sendaCrossCards"></div><div class="senda-timer"><div class="senda-timer-fill" id="sendaCrossFill"></div></div><div class="senda-timer-text" id="sendaCrossTimerText"></div></div>`;
+    ov.innerHTML=`<div class="senda-box" role="dialog" aria-labelledby="sendaCrossTitle"><div class="senda-kicker" id="sendaCrossKicker">Cruce de Senda</div><h2 id="sendaCrossTitle">Elige tu camino</h2><p class="senda-sub" id="sendaCrossSub"></p><div class="senda-cards" id="sendaCrossCards"></div><div class="senda-actions" id="sendaCrossActions"></div><div class="senda-timer"><div class="senda-timer-fill" id="sendaCrossFill"></div></div><div class="senda-timer-text" id="sendaCrossTimerText"></div></div>`;
     document.body.appendChild(ov);return ov;
   }
-  function sendaOpenCross(){
-    const s=run.senda;s.pendingCross=Math.max(0,(s.pendingCross||0)-1);s.offers=sendaRollOffers();
+  function sendaForkOffers(){const all=Object.keys(SENDA_PATHS);for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}return all.slice(0,3).map(id=>({path:id}));}
+  function sendaCardHTML(o,i,mode){
+    if(mode==="fork"){const p=SENDA_PATHS[o.path];return `<button type="button" class="senda-card r-${p.rarity} senda-path" data-senda-pick="${i}"><span class="senda-rarity">Camino</span><span class="senda-icon">${p.icon}</span><span class="senda-name">${p.name}</span><span class="senda-text">${p.text}</span><span class="senda-key">${i+1}</span></button>`;}
+    const v=sendaOfferView(o);return `<button type="button" class="senda-card r-${v.rarity}" data-senda-pick="${i}"><span class="senda-rarity">${SENDA_RARITY[v.rarity].name}</span><span class="senda-icon">${v.icon}</span><span class="senda-name">${v.name}</span><span class="senda-text">${v.text}</span>${v.have?`<span class="senda-have">Tienes ×${v.have}</span>`:""}<span class="senda-key">${i+1}</span></button>`;
+  }
+  function sendaRenderChoice(){
+    const s=run.senda,mode=s.mode,cards=$("sendaCrossCards");
+    cards.classList.toggle("four",s.offers.length>3);
+    cards.innerHTML=s.offers.map((o,i)=>sendaCardHTML(o,i,mode)).join("");
+    cards.querySelectorAll("[data-senda-pick]").forEach(btn=>btn.addEventListener("click",()=>sendaPick(Number(btn.dataset.sendaPick))));
+    const act=$("sendaCrossActions");
+    act.innerHTML=mode==="cross"&&s.rerolls>0?`<button type="button" class="senda-reroll" id="sendaRerollBtn">🔄 Relanzar cartas (${s.rerolls})</button>`:"";
+    $("sendaRerollBtn")?.addEventListener("click",()=>{if(!run?.sendaCrossOpen||run.senda.rerolls<=0)return;run.senda.rerolls--;run.senda.offers=sendaRollOffers();addLog("🔄 Relanzas las cartas del cruce.");sendaRenderChoice();sendaDeadline=performance.now()+SENDA_CROSS_MS;});
+  }
+  function sendaOpenChoice(mode){
+    const s=run.senda;
+    if(mode==="fork"){s.pendingFork=Math.max(0,(s.pendingFork||0)-1);s.offers=sendaForkOffers();}
+    else{s.pendingCross=Math.max(0,(s.pendingCross||0)-1);s.offers=sendaRollOffers();}
     if(!s.offers.length)return;
-    stopLoop();run.paused=true;run.sendaCrossOpen=true;
-    const ov=sendaEnsureDom(),km=Math.max(1,Math.round(Number(run.distance||0)/1000));
-    $("sendaCrossKicker").textContent=`Cruce de Senda · ${run.infinite?"Infinita":ROUTES[state.currentRoute]?.name||""} · ${km} km`;
-    $("sendaCrossCards").innerHTML=s.offers.map((o,i)=>{const v=sendaOfferView(o);return `<button type="button" class="senda-card r-${v.rarity}" data-senda-pick="${i}"><span class="senda-rarity">${SENDA_RARITY[v.rarity].name}</span><span class="senda-icon">${v.icon}</span><span class="senda-name">${v.name}</span><span class="senda-text">${v.text}</span>${v.have?`<span class="senda-have">Tienes ×${v.have}</span>`:""}<span class="senda-key">${i+1}</span></button>`;}).join("");
-    $("sendaCrossCards").querySelectorAll("[data-senda-pick]").forEach(btn=>btn.addEventListener("click",()=>sendaPick(Number(btn.dataset.sendaPick))));
+    s.mode=mode;stopLoop();run.paused=true;run.sendaCrossOpen=true;
+    const ov=sendaEnsureDom(),km=Math.max(1,Math.round(Number(run.distance||0)/1000)),where=run.infinite?"Infinita":ROUTES[state.currentRoute]?.name||"";
+    ov.classList.toggle("fork",mode==="fork");
+    $("sendaCrossKicker").textContent=mode==="fork"?`Bifurcación · ${where} · ${(Number(run.distance||0)/1000).toFixed(1)} km`:`Cruce de Senda · ${where} · ${km} km`;
+    $("sendaCrossTitle").textContent=mode==="fork"?"¿Por dónde sigues?":"Elige tu bendición";
+    $("sendaCrossSub").textContent=mode==="fork"?"El camino elegido dura hasta el próximo jefe.":"La bendición dura toda esta expedición y se acumula con las demás.";
+    sendaRenderChoice();
     ov.classList.remove("hidden");void ov.offsetWidth;ov.classList.add("show");
-    addLog("🧭 Llegas a un Cruce de Senda. Elige una bendición.");renderTop();
+    addLog(mode==="fork"?"🔀 El sendero se bifurca. Elige un camino.":"🧭 Llegas a un Cruce de Senda. Elige una bendición.");renderTop();
     sendaDeadline=performance.now()+SENDA_CROSS_MS;clearInterval(sendaTimer);sendaTimer=setInterval(sendaUpdateTimer,100);sendaUpdateTimer();
   }
+  function sendaOpenCross(){return sendaOpenChoice("cross");}
   function sendaUpdateTimer(){
     if(!run||!run.sendaCrossOpen){sendaCloseDom();return;}
-    const left=Math.max(0,sendaDeadline-performance.now());
-    $("sendaCrossFill").style.width=`${left/SENDA_CROSS_MS*100}%`;$("sendaCrossTimerText").textContent=`Elección automática en ${(left/1000).toFixed(1)} s · teclas 1-3`;
-    if(left<=0){addLog("⏱️ Cruce sin elección: la Senda elige por ti.");sendaPick(Math.floor(Math.random()*(run.senda.offers?.length||1)));}
+    const left=Math.max(0,sendaDeadline-performance.now()),n=run.senda.offers?.length||3;
+    $("sendaCrossFill").style.width=`${left/SENDA_CROSS_MS*100}%`;$("sendaCrossTimerText").textContent=`Elección automática en ${(left/1000).toFixed(1)} s · teclas 1-${n}`;
+    if(left<=0){addLog("⏱️ Sin elección: la Senda elige por ti.");sendaPick(Math.floor(Math.random()*n));}
   }
   function sendaCloseDom(){clearInterval(sendaTimer);sendaTimer=null;const ov=document.getElementById("sendaCrossOverlay");if(ov){ov.classList.remove("show");ov.classList.add("hidden");}}
+  function sendaApplyPath(path){
+    const s=run.senda,p=SENDA_PATHS[path];if(!p)return;s.forks=(s.forks||0)+1;
+    if(path==="camp"){let healed=0;for(const id of run.partyIds||[]){const t=run.team[id];if(!t?.alive)continue;const b=t.hp;t.hp=Math.min(t.maxHp,t.hp+t.maxHp*.35);healed+=t.hp-b;pkFxHealAlly(id,t.hp-b);}grantItem("potion","Desvío al campamento");addLog(`🏕️ Desvío al campamento: el equipo recupera ${Math.round(healed)} PS.`);s.path=null;}
+    else{s.path=path;if(path==="treasure")s.treasureNext=true;addLog(`${p.icon} Tomas ${p.name}.`);}
+    toast(`${p.icon} ${p.name}`);
+  }
   function sendaPick(i){
-    if(!run?.sendaCrossOpen)return;const o=run.senda.offers?.[i];if(!o)return;
-    sendaApply(o);run.senda.offers=null;run.sendaCrossOpen=false;sendaCloseDom();
+    if(!run?.sendaCrossOpen)return;const s=run.senda,o=s.offers?.[i];if(!o)return;
+    if(s.mode==="fork")sendaApplyPath(o.path);else sendaApply(o);
+    s.offers=null;s.mode=null;run.sendaCrossOpen=false;sendaCloseDom();
     run.paused=false;run.spawnDelay=Math.max(run.spawnDelay||0,.6);run.lastTick=performance.now();run.wallTickMs=Date.now();stopLoop();
     if(!pkFloatingDriver&&!pkBackgroundCatchingUp)loop=setInterval(tick,100);
     renderEverything();sendaRenderHud();renderTeamWorld();renderCards();save();
   }
-  function sendaAutoPick(){
-    const s=run.senda;s.pendingCross=Math.max(0,(s.pendingCross||0)-1);const offers=sendaRollOffers();if(!offers.length)return;
+  function sendaAutoPick(mode="cross"){
+    const s=run.senda;
+    if(mode==="fork"){s.pendingFork=Math.max(0,(s.pendingFork||0)-1);const offers=sendaForkOffers();sendaApplyPath(offers[Math.floor(Math.random()*offers.length)].path);sendaRenderHud();return;}
+    s.pendingCross=Math.max(0,(s.pendingCross||0)-1);const offers=sendaRollOffers();if(!offers.length)return;
     sendaApply(offers[Math.floor(Math.random()*offers.length)]);sendaRenderHud();
   }
-  document.addEventListener("keydown",e=>{if(!run?.sendaCrossOpen||e.repeat||e.ctrlKey||e.altKey||e.metaKey)return;const n=Number(e.key);if(n>=1&&n<=3){e.preventDefault();sendaPick(n-1);}});
+  document.addEventListener("keydown",e=>{if(!run?.sendaCrossOpen||e.repeat||e.ctrlKey||e.altKey||e.metaKey)return;const n=Number(e.key),max=run.senda.offers?.length||3;if(n>=1&&n<=max){e.preventDefault();sendaPick(n-1);}});
 
   // --- HUD: clima y bendiciones activas sobre el campo de batalla.
   function sendaRenderHud(){
     if(pkBackgroundCatchingUp)return;const anchor=$("floating")?.parentElement;if(!anchor)return;
     let hud=document.getElementById("sendaHud");
     if(!hud){hud=document.createElement("div");hud.id="sendaHud";hud.className="senda-hud";anchor.appendChild(hud);}
-    const s=run?.senda;if(!s){hud.innerHTML="";hud.classList.add("hidden");return;}
-    hud.classList.remove("hidden");const w=sendaWeather(s.weather);
-    const chips=[`<span class="senda-chip weather" title="${w.name}: ${sendaWeatherText(w)}">${w.icon}<b>${w.name}</b></span>`];
+    const s=run?.senda,meta=pk2Meta();hud.classList.remove("hidden");
+    const masteryChip=`<button type="button" class="senda-chip mastery" data-pk2-mastery title="Maestría de Senda: mejoras permanentes">✦<b>${meta.essence.toLocaleString("es-CL")}</b><i>Maestría</i></button>`;
+    if(!s){hud.innerHTML=masteryChip;return;}
+    const w=sendaWeather(s.weather);
+    const chips=[masteryChip,`<span class="senda-chip weather" title="${w.name}: ${sendaWeatherText(w)}">${w.icon}<b>${w.name}</b></span>`];
+    if(s.path&&SENDA_PATHS[s.path]){const p=SENDA_PATHS[s.path];chips.push(`<span class="senda-chip path r-${p.rarity}" title="${p.name}: ${p.text}">${p.icon}<b>${p.name}</b></span>`);}
     for(const [id,n] of Object.entries(s.boons)){const b=SENDA_BOONS[id];if(!b||!n)continue;const left=id==="phoenix"?s.phoenix:n;if(id==="phoenix"&&!left)continue;chips.push(`<span class="senda-chip r-${b.rarity}" title="${b.name}: ${b.text}">${b.icon}<i>×${left}</i></span>`);}
     for(const [t,n] of Object.entries(s.affinity||{}))chips.push(`<span class="senda-chip r-epic" title="Afinidad ${sendaTypeName(t)}: +${25*n}% de ataque">🌀<b>${sendaTypeName(t)}</b><i>×${n}</i></span>`);
     hud.innerHTML=chips.join("");
   }
   const sendaBaseRenderEverything=renderEverything;
   renderEverything=function(...a){const r=sendaBaseRenderEverything(...a);sendaRenderHud();return r;};
+  document.addEventListener("click",e=>{if(e.target.closest?.("[data-pk2-mastery]")){e.preventDefault();pk2OpenMastery();}});
+
+  /* =====================================================================
+     V2 · Esencia de Senda y Maestría (meta-progresión permanente)
+     ===================================================================== */
+  function pk2EssenceFor(r,completed=false){
+    const s=r?.senda;if(!s||s.essenceGranted)return 0;
+    return Math.max(1,Math.floor(Number(r.distance||0)/250)+2*(s.crosses||0)+(s.forks||0)+4*(s.eliteKms||0)+(completed?15:0));
+  }
+  function pk2GrantEssence(r,completed){
+    const n=pk2EssenceFor(r,completed);if(!n)return;r.senda.essenceGranted=true;const m=pk2Meta();m.essence+=n;m.essenceTotal+=n;
+    addLog(`✦ Esencia de Senda: +${n} (total ${m.essence.toLocaleString("es-CL")}). Úsala en Maestría.`);setTimeout(()=>toast(`✦ +${n} Esencia de Senda`),400);
+  }
+  const pk2BaseFailRun=failRun;
+  failRun=function(...a){if(run)pk2GrantEssence(run,false);return pk2BaseFailRun(...a);};
+  const pk2BaseCompleteRoute=completeRoute;
+  completeRoute=function(...a){if(run)pk2GrantEssence(run,true);return pk2BaseCompleteRoute(...a);};
+
+  function pk2MasteryCost(k){const l=pk2Lvl(k),d=PK2_MASTERY[k];return l>=d.max?null:d.costs[l];}
+  function pk2OpenMastery(){
+    let ov=document.getElementById("pk2MasteryOverlay");
+    if(!ov){ov=document.createElement("div");ov.id="pk2MasteryOverlay";ov.className="senda-overlay hidden";ov.innerHTML=`<div class="senda-box pk2-mastery-box" role="dialog" aria-labelledby="pk2MasteryTitle"><button type="button" class="pk2-close" data-pk2-close aria-label="Cerrar">✕</button><div class="senda-kicker">Meta-progresión</div><h2 id="pk2MasteryTitle">Maestría de Senda</h2><p class="senda-sub" id="pk2MasterySub"></p><div class="pk2-mastery-grid" id="pk2MasteryGrid"></div></div>`;document.body.appendChild(ov);
+      ov.addEventListener("click",e=>{if(e.target===ov||e.target.closest("[data-pk2-close]")){ov.classList.remove("show");ov.classList.add("hidden");return;}const b=e.target.closest("[data-pk2-buy]");if(b)pk2BuyMastery(b.dataset.pk2Buy);});}
+    pk2RenderMastery();ov.classList.remove("hidden");void ov.offsetWidth;ov.classList.add("show");
+  }
+  function pk2RenderMastery(){
+    const m=pk2Meta();$("pk2MasterySub").innerHTML=`Tienes <b>✦ ${m.essence.toLocaleString("es-CL")}</b> de Esencia. Ganas Esencia al terminar cada expedición: por distancia, cruces, bifurcaciones y kilómetros de élite. Las mejoras son permanentes y se aplican desde la próxima expedición.`;
+    $("pk2MasteryGrid").innerHTML=Object.entries(PK2_MASTERY).map(([k,d])=>{const l=pk2Lvl(k),cost=pk2MasteryCost(k),can=cost!=null&&m.essence>=cost;return `<div class="pk2-mastery-card ${l?"owned":""}"><span class="pk2-m-icon">${d.icon}</span><div class="pk2-m-body"><b>${d.name}</b><small>${d.text(Math.max(1,l+(cost!=null?1:0)))}</small><span class="pk2-m-pips">${Array.from({length:d.max},(_,i)=>`<i class="${i<l?"on":""}"></i>`).join("")}</span></div><button type="button" class="pk2-m-buy" data-pk2-buy="${k}" ${can?"":"disabled"}>${cost==null?"Máximo":`✦ ${cost}`}</button></div>`;}).join("");
+  }
+  function pk2BuyMastery(k){
+    const m=pk2Meta(),cost=pk2MasteryCost(k);if(cost==null||m.essence<cost)return;m.essence-=cost;m.mastery[k]=pk2Lvl(k)+1;save();
+    addLog(`✦ Maestría: ${PK2_MASTERY[k].name} nivel ${m.mastery[k]}.`);toast(`${PK2_MASTERY[k].icon} ${PK2_MASTERY[k].name} · Nv.${m.mastery[k]}`);pk2RenderMastery();sendaRenderHud();
+  }
+
+  /* =====================================================================
+     V2 · Gachapon 2.0: Racha de Suerte (pity), tipo destacado semanal y
+     Senda del tesoro. Solo afecta a las Poké Balls de jefe de ruta.
+     ===================================================================== */
+  const PK2_PITY_SOFT=8,PK2_PITY_HARD=15;
+  const PK2_FEATURE_TYPES=["fire","water","grass","electric","psychic","fighting","rock","ground","flying","poison","bug","ghost","ice","dragon","normal","steel","dark","fairy"];
+  function pk2WeekIndex(){return Math.floor((Date.now()/86400000+3)/7);}
+  function pk2FeaturedType(){return PK2_FEATURE_TYPES[(pk2WeekIndex()*7)%PK2_FEATURE_TYPES.length];}
+  function pk2FamilyTypes(id){const f=FAMILIES[id];return f?.stages?.[0]?.types||f?.types||[];}
+  let pk2VisualRollDepth=0;
+  const pk2BaseRouletteEntries=rouletteEntries;
+  rouletteEntries=function(...a){pk2VisualRollDepth++;try{return pk2BaseRouletteEntries(...a);}finally{pk2VisualRollDepth--;}};
+  rollReward=function(routeId,km,incenseType=null){
+    const feat=pk2FeaturedType(),real=pk2VisualRollDepth===0,pity=pk2Meta().pity,treasure=real&&!!run?.senda?.treasureNext;
+    let pool=normalRewardWeightedPool(routeId,km,incenseType).map(x=>{let w=Number(x.weight)||0;
+      if(pk2FamilyTypes(x.id).includes(feat))w*=1.8;
+      if(real&&(x.rarity==="epic"||x.rarity==="legendary")){if(pity>=PK2_PITY_SOFT)w*=1+.35*(pity-PK2_PITY_SOFT+1);if(treasure)w*=2;}
+      return {...x,weight:w};});
+    if(real&&pity>=PK2_PITY_HARD-1){
+      // Garantía: Épico o mejor; si esta Poké Ball no tiene Épicos, la mejor rareza disponible
+      // (la racha no se reinicia hasta que salga un Épico de verdad).
+      const order=["common","uncommon","rare","epic","legendary"],best=Math.max(...pool.map(x=>order.indexOf(x.rarity)));
+      const top=pool.filter(x=>order.indexOf(x.rarity)>=Math.min(3,best));
+      if(top.length){pool=top;addLog(best>=3?"🍀 Racha de Suerte completa: ¡Épico o mejor garantizado!":`🍀 Racha de Suerte completa: esta Poké Ball no tiene Épicos; sale la mejor rareza disponible y la racha sigue cargada.`);}
+    }
+    if(treasure){run.senda.treasureNext=false;addLog("💎 Senda del tesoro: la Poké Ball brilla con más fuerza.");}
+    return weightedRewardPick(pool);
+  };
+  const pk2BaseFinalizeReward=finalizeReward;
+  finalizeReward=function(rolled){
+    const pr=pendingReward,routeBall=pr&&!pr.timedGacha&&!pr.infiniteGacha&&!pr.devGift;
+    if(routeBall&&rolled){const m=pk2Meta();m.pity=(rolled.rarity==="epic"||rolled.rarity==="legendary")?0:m.pity+1;}
+    const r=pk2BaseFinalizeReward(rolled);if(routeBall){pk2RenderGachaInfo();document.getElementById("pk2GachaInfo")?.classList.remove("hidden");}return r;
+  };
+  function pk2RenderGachaInfo(){
+    const box=$("rewardBox");if(!box)return;let el=document.getElementById("pk2GachaInfo");
+    if(!el){el=document.createElement("div");el.id="pk2GachaInfo";el.className="pk2-gacha-info";const sub=$("rewardSubtitle");if(sub?.parentNode)sub.parentNode.insertBefore(el,sub.nextSibling);else box.prepend(el);}
+    const m=pk2Meta(),feat=pk2FeaturedType(),pity=Math.min(PK2_PITY_HARD,m.pity),pct=Math.round(pity/PK2_PITY_HARD*100),treasure=!!run?.senda?.treasureNext;
+    el.innerHTML=`<div class="pk2-gi-row"><span class="pk2-gi-feat" style="--tc:${TYPE_COLORS[feat]||"#ffd666"}">⭐ Destacado de la semana: <b>${TYPE_NAMES[feat]||feat}</b> ×1,8</span>${treasure?`<span class="pk2-gi-treasure">💎 Tesoro activo</span>`:""}</div><div class="pk2-gi-pity" title="Cada Poké Ball de jefe sin Épico o mejor suma +1. Desde ${PK2_PITY_SOFT} sube la probabilidad; en ${PK2_PITY_HARD} es seguro."><span>🍀 Racha de Suerte</span><div class="pk2-gi-bar"><i style="width:${pct}%"></i></div><b>${pity}/${PK2_PITY_HARD}</b></div>`;
+  }
+  const pk2BaseOpenReward=openReward;
+  openReward=function(...a){const r=pk2BaseOpenReward(...a);pk2RenderGachaInfo();document.getElementById("pk2GachaInfo")?.classList.remove("hidden");return r;};
+  const pk2BaseCloseReward=closeReward;
+  closeReward=function(...a){document.getElementById("pk2GachaInfo")?.classList.add("hidden");return pk2BaseCloseReward(...a);};
   /* =====================================================================
      V2 · Conexión con el motor de escena (js/200-pk2-stage.js)
      El motor del juego sigue calculando todo igual; aquí solo se le avisa
@@ -8354,12 +8511,12 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   };
   const pk2BaseSpawnBoss=spawnBoss;
   spawnBoss=function(...a){const r=pk2BaseSpawnBoss(...a);if(!pkBackgroundCatchingUp&&run){const b=(run.enemies||[]).find(e=>e.boss&&e.alive);if(b)PK2()?.bossIntro(`${b.name} · Nv.${b.level}`);}return r;};
-  const pk2BaseSendaOpenCross=sendaOpenCross;
-  sendaOpenCross=function(...a){const r=pk2BaseSendaOpenCross(...a);PK2()?.cross();return r;};
+  const pk2BaseSendaOpenChoice=sendaOpenChoice;
+  sendaOpenChoice=function(...a){const r=pk2BaseSendaOpenChoice(...a);PK2()?.cross();return r;};
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(pk2Sync,0),{once:true});else setTimeout(pk2Sync,0);
 
   // Herramienta de pruebas: solo existe al jugar en local (localhost), nunca en GitHub Pages.
-  if(/^(localhost|127\.0\.0\.1)$/.test(location.hostname))window.__sendaDebug={cross(){if(run?.senda)run.senda.pendingCross++;},state:()=>run?.senda,run:()=>run};
+  if(/^(localhost|127\.0\.0\.1)$/.test(location.hostname))window.__sendaDebug={cross(){if(run?.senda)run.senda.pendingCross++;},fork(){if(run?.senda)run.senda.pendingFork++;},bossDone(){if(!run)return;run.distance=Math.max(1000,Math.round(run.distance/1000)*1000);run.bossActive=false;completeBoss();},meta:()=>pk2Meta(),addEssence(n){pk2Meta().essence+=n;save();sendaRenderHud();},mastery:()=>pk2OpenMastery(),featured:()=>pk2FeaturedType(),state:()=>run?.senda,run:()=>run};
 
 })();
 

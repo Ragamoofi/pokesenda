@@ -1,5 +1,6 @@
 /* PokéSenda V2 · escena: capas, impactos y cartel de jefe */
 #field .pk2-bg{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;image-rendering:pixelated;image-rendering:crisp-edges;display:none}
+#field .pk2-bg.painted{image-rendering:auto}
 #field .pk2-fx{position:absolute;inset:0;width:100%;height:100%;z-index:7;pointer-events:none}
 #field.field.pk2-stage-on .pk2-bg{display:block}
 #field.field.pk2-stage-on{background-image:none!important;background-color:#0b1520!important}

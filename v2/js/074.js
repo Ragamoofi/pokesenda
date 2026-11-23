@@ -8518,6 +8518,10 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   const pk2BaseUpdateTimedGachaUI=updateTimedGachaUI;
   updateTimedGachaUI=function(...a){const r=pk2BaseUpdateTimedGachaUI(...a);try{document.querySelector(".timed-gacha-strip")?.classList.toggle("pk2-locked",!timedGachaUnlocked());}catch(_){}return r;};
   setTimeout(()=>{try{updateTimedGachaUI();}catch(_){}},400);
+  // V2 · modo cine: el combate ocupa todo el ancho (el panel de formación se abre cuando lo necesitas).
+  function pk2SetWide(on){document.body.classList.toggle("pk2-wide",!!on);try{localStorage.setItem("pokesenda_v2_wide",on?"1":"0");}catch(_){}const b=document.getElementById("pk2WideBtn");if(b)b.innerHTML=on?"⇤ Ver formación":"⛶ Pantalla completa";setTimeout(()=>window.dispatchEvent(new Event("resize")),30);}
+  function pk2MountWide(){const f=$("field");if(!f||document.getElementById("pk2WideBtn"))return;const b=document.createElement("button");b.type="button";b.id="pk2WideBtn";b.className="pk2-wide-btn";b.addEventListener("click",()=>pk2SetWide(!document.body.classList.contains("pk2-wide")));f.appendChild(b);let on=false;try{on=localStorage.getItem("pokesenda_v2_wide")==="1";}catch(_){}pk2SetWide(on);}
+  setTimeout(pk2MountWide,300);
 
   // Herramienta de pruebas: solo existe al jugar en local (localhost), nunca en GitHub Pages.
   if(/^(localhost|127\.0\.0\.1)$/.test(location.hostname))window.__sendaDebug={cross(){if(run?.senda)run.senda.pendingCross++;},fork(){if(run?.senda)run.senda.pendingFork++;},bossDone(){if(!run)return;run.distance=Math.max(1000,Math.round(run.distance/1000)*1000);run.bossActive=false;completeBoss();},meta:()=>pk2Meta(),addEssence(n){pk2Meta().essence+=n;save();sendaRenderHud();},mastery:()=>pk2OpenMastery(),featured:()=>pk2FeaturedType(),state:()=>run?.senda,run:()=>run};

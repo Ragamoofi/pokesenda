@@ -80,6 +80,16 @@
       ], fore: 'runes', ambient: 'motes' }
   };
 
+  // Fondos pintados (Canva). Si existe, sustituye al escenario procedural del bioma.
+  const PAINTED = { forest: 'img/bg-forest.jpg', cave: 'img/bg-cave.jpg', coast: 'img/bg-coast.jpg', jungle: 'img/bg-jungle.jpg', volcano: 'img/bg-volcano.jpg', islands: 'img/bg-islands.jpg', cosmos: 'img/bg-cosmos.jpg' };
+  const IMGS = {};
+  function paintedImg(biome) {
+    const src = PAINTED[biome]; if (!src) return null;
+    let im = IMGS[biome]; if (!im) { im = IMGS[biome] = new Image(); im.decoding = 'async'; im.src = src; im.onload = () => { S.dirty = true; resize(); }; }
+    return im.complete && im.naturalWidth ? im : null;
+  }
+  const isPainted = () => !!paintedImg(S.biome);
+
   const WEATHER_FX = {
     clear: null, sun: { rays: true, tint: '#ffcf6a', tintA: .10 }, rain: { rain: true, tint: '#2b3d5c', tintA: .28, lightning: true },
     sand: { sand: true, tint: '#c79a52', tintA: .22 }, snow: { snow: true, tint: '#cfe3ff', tintA: .16 }, fog: { fog: true, tint: '#9aa6b8', tintA: .20 },
@@ -324,22 +334,40 @@
   }
 
   function stepBgParts(ctx, dt) {
-    const P = S.bgParts;
+    const P = S.bgParts, k = S.px || 1, smooth = k > 1.01;
     for (let i = P.length - 1; i >= 0; i--) {
-      const p = P[i]; p.life -= dt; if (p.life <= 0 || p.y > S.H + 10 || p.x < -150) { P.splice(i, 1); continue; }
+      const p = P[i]; p.life -= dt; if (p.life <= 0 || p.y > S.H + 10 * k || p.x < -150 * k) { P.splice(i, 1); continue; }
       let vx = p.vx; if (p.k === 'snow' || p.k === 'leaf') vx += Math.sin(S.t * 2 + p.ph) * 10;
-      p.x += vx * dt; p.y += p.vy * dt;
+      p.x += vx * dt * k; p.y += p.vy * dt * k;
       ctx.fillStyle = p.c;
-      if (p.k === 'rain') { ctx.fillRect(Math.round(p.x), Math.round(p.y), 1, 4); }
-      else if (p.k === 'streak') ctx.fillRect(Math.round(p.x), Math.round(p.y), 6, 1);
-      else if (p.k === 'snow' || p.k === 'dot') ctx.fillRect(Math.round(p.x), Math.round(p.y), 1, 1);
-      else if (p.k === 'leaf') { ctx.fillRect(Math.round(p.x), Math.round(p.y), 2, 1); ctx.fillRect(Math.round(p.x) + (Math.sin(S.t * 6 + p.ph) > 0 ? 1 : 0), Math.round(p.y) + 1, 1, 1); }
-      else if (p.k === 'fogblob' || p.k === 'smoke') { const w = p.w || 6; ctx.fillRect(Math.round(p.x - w / 2), Math.round(p.y), Math.round(w), Math.max(2, Math.round(w / 5))); if (p.k === 'smoke') p.w = (p.w || 3) + dt * 4; }
-      else if (p.k === 'glow') { const a = Math.min(1, p.life) * (.6 + .4 * Math.sin(S.t * 8 + i)); ctx.fillStyle = rgba(p.c, a); ctx.fillRect(Math.round(p.x), Math.round(p.y), 1, 1); S.lights.push({ x: p.x, y: p.y, r: 4, c: p.c, a: a * .4 }); }
+      if (p.k === 'rain') { if (smooth) { ctx.strokeStyle = p.c; ctx.lineWidth = 1.2 * k * .6; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - .8 * k, p.y + 5 * k); ctx.stroke(); } else ctx.fillRect(Math.round(p.x), Math.round(p.y), 1, 4); }
+      else if (p.k === 'streak') ctx.fillRect(p.x, p.y, 6 * k, .7 * k);
+      else if (p.k === 'snow' || p.k === 'dot') { if (smooth) { ctx.beginPath(); ctx.arc(p.x, p.y, .7 * k, 0, TAU); ctx.fill(); } else ctx.fillRect(Math.round(p.x), Math.round(p.y), 1, 1); }
+      else if (p.k === 'leaf') { if (smooth) { ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(S.t * 3 + p.ph); ctx.beginPath(); ctx.ellipse(0, 0, 1.6 * k, .7 * k, 0, 0, TAU); ctx.fill(); ctx.restore(); } else { ctx.fillRect(Math.round(p.x), Math.round(p.y), 2, 1); ctx.fillRect(Math.round(p.x) + (Math.sin(S.t * 6 + p.ph) > 0 ? 1 : 0), Math.round(p.y) + 1, 1, 1); } }
+      else if (p.k === 'fogblob' || p.k === 'smoke') { const w = (p.w || 6) * k; if (smooth) { const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, w / 2); g.addColorStop(0, p.c); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(p.x - w / 2, p.y - w / 2, w, w); } else ctx.fillRect(Math.round(p.x - w / 2), Math.round(p.y), Math.round(w), Math.max(2, Math.round(w / 5))); if (p.k === 'smoke') p.w = (p.w || 3) + dt * 4; }
+      else if (p.k === 'glow') { const a = Math.min(1, p.life) * (.6 + .4 * Math.sin(S.t * 8 + i)); ctx.fillStyle = rgba(p.c, a); if (smooth) { ctx.beginPath(); ctx.arc(p.x, p.y, .8 * k, 0, TAU); ctx.fill(); } else ctx.fillRect(Math.round(p.x), Math.round(p.y), 1, 1); S.lights.push({ x: p.x, y: p.y, r: 4 * k, c: p.c, a: a * .4 }); }
     }
   }
 
+  // Modo pintado: ilustración a resolución completa + clima y ambiente encima.
+  function renderPainted(dt, b, img) {
+    const ctx = S.bctx, W = S.W, H = S.H, wRaw = WEATHER_FX[S.weather];
+    const wfx = wRaw && b.indoor ? { tint: wRaw.tint, tintA: (wRaw.tintA || 0) * .5, fog: wRaw.fog, sparkle: wRaw.sparkle } : wRaw;
+    S.lights = [];
+    const s = Math.max(W / img.naturalWidth, H / img.naturalHeight) * 1.07, iw = img.naturalWidth * s, ih = img.naturalHeight * s;
+    const pan = (Math.sin(S.scroll / 1400) * .5 + .5) * (iw - W), bob = Math.sin(S.t * .25) * (ih - H) * .08;
+    ctx.drawImage(img, -pan, (H - ih) * .55 + bob, iw, ih);
+    spawnAmbient(b, { light: b.indoor || b.stars ? 0 : .8 }); if (S.weather && (!b.indoor || ['fog', 'aura'].includes(S.weather))) spawnWeather(S.weather);
+    stepBgParts(ctx, dt);
+    if (wfx?.tint) { ctx.fillStyle = rgba(wfx.tint, wfx.tintA * .8); ctx.fillRect(0, 0, W, H); }
+    if (S.lights.length) { ctx.globalCompositeOperation = 'lighter'; for (const l of S.lights) { const g = ctx.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.r); g.addColorStop(0, rgba(l.c, clamp(l.a, 0, .8))); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(l.x - l.r, l.y - l.r, l.r * 2, l.r * 2); } ctx.globalCompositeOperation = 'source-over'; }
+    if (wfx?.lightning && !b.indoor) { if (S.lightning > 0) { ctx.fillStyle = `rgba(230,240,255,${(S.lightning * .45).toFixed(3)})`; ctx.fillRect(0, 0, W, H); S.lightning -= dt * 3; } else if (Math.random() < dt * .08) S.lightning = 1; }
+    const v = ctx.createRadialGradient(W / 2, H * .55, H * .4, W / 2, H * .55, W * .78); v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.22)'); ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+  }
+
   function renderBg(dt) {
+    const pimg = paintedImg(S.biome);
+    if (pimg && S.paintedMode) { renderPainted(dt, BIOMES[S.biome] || BIOMES.forest, pimg); return; }
     if (S.dirty) rebuild();
     const ctx = S.bctx, W = S.W, H = S.H, b = BIOMES[S.biome] || BIOMES.forest, dl = daylight(), wRaw = WEATHER_FX[S.weather];
     // En interiores no llueve ni nieva: solo se conserva el tinte del clima.
@@ -544,9 +572,17 @@
   function resize() {
     if (!S.field) return;
     const r = S.field.getBoundingClientRect(); if (!r.width || !r.height) return;
-    const H = r.width < 560 ? 150 : 180, W = Math.max(200, Math.round(H * r.width / r.height));
-    if (W !== S.W || H !== S.H) { S.W = W; S.H = H; S.bg.width = W; S.bg.height = H; S.bctx.imageSmoothingEnabled = false; S.dirty = true; }
-    S.dpr = Math.min(2, window.devicePixelRatio || 1); const FW = Math.round(r.width * S.dpr), FH = Math.round(r.height * S.dpr);
+    S.dpr = Math.min(2, window.devicePixelRatio || 1);
+    const painted = isPainted();
+    let H, W;
+    if (painted) { H = Math.round(r.height * Math.min(1.5, S.dpr)); W = Math.round(r.width * Math.min(1.5, S.dpr)); }
+    else { H = r.width < 560 ? 150 : 180; W = Math.max(200, Math.round(H * r.width / r.height)); }
+    if (W !== S.W || H !== S.H || painted !== S.paintedMode) {
+      S.W = W; S.H = H; S.bg.width = W; S.bg.height = H; S.paintedMode = painted; S.px = painted ? H / 180 : 1;
+      S.bctx.imageSmoothingEnabled = painted; S.bg.classList.toggle('painted', painted); S.bgParts = []; S.dirty = true;
+      if (S.active) try { renderBg(0); } catch (_) {}
+    }
+    const FW = Math.round(r.width * S.dpr), FH = Math.round(r.height * S.dpr);
     if (FW !== S.FW || FH !== S.FH) { S.FW = FW; S.FH = FH; S.fx.width = FW; S.fx.height = FH; }
   }
   function frame(now) {
@@ -579,7 +615,7 @@
     BIOMES, TYPE,
     mount,
     setScene({ biome, weather, active, distance, seed } = {}) {
-      if (biome && biome !== S.biome && BIOMES[biome]) { S.biome = biome; S.dirty = true; }
+      if (biome && biome !== S.biome && BIOMES[biome]) { S.biome = biome; S.dirty = true; paintedImg(biome); resize(); }
       if (seed != null && seed !== S.seed) { S.seed = seed; S.dirty = true; }
       if (weather !== undefined) S.weather = WEATHER_FX[weather] !== undefined ? weather : 'clear';
       if (active !== undefined && active !== S.active) { S.active = !!active; S.field?.classList.toggle('pk2-stage-on', S.active); if (!S.active) S.bgParts = []; }

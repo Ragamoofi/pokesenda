@@ -19,6 +19,12 @@ img.pk2-hit-crit{animation:pk2HitCrit .26s ease-out}
 .pk2-boss-banner b{font-size:24px;font-weight:950;letter-spacing:.04em;white-space:nowrap}
 @keyframes pk2Boss{0%{opacity:0;transform:translate(-50%,-50%) scaleX(.2)}12%{opacity:1;transform:translate(-50%,-50%) scaleX(1.05)}18%{transform:translate(-50%,-50%) scaleX(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-62%)}}
 
+/* Interfaz V2: el Gachapon Premium bloqueado no ocupa espacio */
+.timed-gacha-strip.pk2-locked{display:none!important}
+/* Campo de batalla con marco más cuidado */
+#field.field.pk2-stage-on{box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),inset 0 -40px 60px rgba(0,0,0,.18)}
+#field .enemy.boss img{filter:drop-shadow(0 0 10px rgba(255,60,60,.55))}
+
 /* Los proyectiles de emoji antiguos ya no se usan con la escena V2 activa */
 #field.pk2-stage-on .fx-projectile,#field.pk2-stage-on .fx-ring{display:none}
 

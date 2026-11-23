@@ -8514,6 +8514,10 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   const pk2BaseSendaOpenChoice=sendaOpenChoice;
   sendaOpenChoice=function(...a){const r=pk2BaseSendaOpenChoice(...a);PK2()?.cross();return r;};
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(pk2Sync,0),{once:true});else setTimeout(pk2Sync,0);
+  // V2 · interfaz más limpia: la barra del Gachapon Premium solo aparece cuando ya está desbloqueado.
+  const pk2BaseUpdateTimedGachaUI=updateTimedGachaUI;
+  updateTimedGachaUI=function(...a){const r=pk2BaseUpdateTimedGachaUI(...a);try{document.querySelector(".timed-gacha-strip")?.classList.toggle("pk2-locked",!timedGachaUnlocked());}catch(_){}return r;};
+  setTimeout(()=>{try{updateTimedGachaUI();}catch(_){}},400);
 
   // Herramienta de pruebas: solo existe al jugar en local (localhost), nunca en GitHub Pages.
   if(/^(localhost|127\.0\.0\.1)$/.test(location.hostname))window.__sendaDebug={cross(){if(run?.senda)run.senda.pendingCross++;},fork(){if(run?.senda)run.senda.pendingFork++;},bossDone(){if(!run)return;run.distance=Math.max(1000,Math.round(run.distance/1000)*1000);run.bossActive=false;completeBoss();},meta:()=>pk2Meta(),addEssence(n){pk2Meta().essence+=n;save();sendaRenderHud();},mastery:()=>pk2OpenMastery(),featured:()=>pk2FeaturedType(),state:()=>run?.senda,run:()=>run};

@@ -41,8 +41,8 @@ const write=s=>localStorage.setItem(SAVE,JSON.stringify(s));
 
 // V36.64.16 · Audio regional Johto: tema de entrada de una sola reproducción + playlist normal independiente.
 // Pokémon Johto suena COMPLETA cada vez que se entra a Johto, continúa entre sus menús y no vuelve a aparecer en el ciclo normal.
-const JOHTO_INTRO_MUSIC={key:"johto_intro",name:"Pokémon Johto",src:"assets/embedded/a7e231ce83f1e66d.mp3"};
-const JOHTO_ROUTE101_MUSIC_SRC=document.querySelector("body > #bgMusic")?.getAttribute("src")||"assets/embedded/abc32edd4bd00249.mp3";
+const JOHTO_INTRO_MUSIC={key:"johto_intro",name:"Pokémon Johto",src:"../assets/embedded/a7e231ce83f1e66d.mp3"};
+const JOHTO_ROUTE101_MUSIC_SRC=document.querySelector("body > #bgMusic")?.getAttribute("src")||"../assets/embedded/abc32edd4bd00249.mp3";
 const JOHTO_MUSIC_TRACKS={
   route101:{name:"Route 101",src:JOHTO_ROUTE101_MUSIC_SRC},
   bills_house:{name:"To Bill's House",sourceId:"musicBillsSource"},
@@ -103,7 +103,7 @@ function johtoBindMusic(){
   audio.loop=false;audio.addEventListener("ended",johtoAdvanceMusicPlaylist);audio.addEventListener("error",()=>{
     if(!root||root.classList.contains("hidden"))return;
     // Un fallo al cargar el tema de entrada NO debe hacer arrancar Route 101. Así detectamos un asset faltante en vez de ocultar el problema.
-    if(audio.dataset.trackKey===JOHTO_INTRO_MUSIC.key||johtoIntroPlaying){johtoIntroPlaying=true;console.error("PokéSenda · no se pudo cargar el tema de entrada Johto:",JOHTO_INTRO_MUSIC.src);toast("⚠️ Falta cargar el tema Pokémon Johto en assets/embedded");return;}
+    if(audio.dataset.trackKey===JOHTO_INTRO_MUSIC.key||johtoIntroPlaying){johtoIntroPlaying=true;console.error("PokéSenda · no se pudo cargar el tema de entrada Johto:",JOHTO_INTRO_MUSIC.src);toast("⚠️ Falta cargar el tema Pokémon Johto en ../assets/embedded");return;}
     setTimeout(johtoAdvanceMusicPlaylist,0);
   });
 }

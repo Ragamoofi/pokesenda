@@ -7,10 +7,10 @@
   background-color:#0b1520!important;
   transition:none!important;
 }
-#field.route1{background-image:linear-gradient(rgba(6,10,14,.06),rgba(6,10,14,.14)),url("../assets/embedded/31cfc9bab24a17e5.png")!important;}
-#field.route2{background-image:linear-gradient(rgba(6,10,14,.06),rgba(6,10,14,.12)),url("../assets/embedded/cfd07c9c4bc8fe0d.png")!important;}
-#field.route3{background-image:linear-gradient(rgba(4,10,18,.04),rgba(4,10,18,.10)),url("../assets/embedded/68d2ca8aa4ed42d5.webp")!important;}
-#field.routeInfinite{background-image:linear-gradient(rgba(4,6,16,.20),rgba(6,10,20,.28)),url("../assets/embedded/85ea9b0ea3b77f95.png")!important;}
+#field.route1{background-image:linear-gradient(rgba(6,10,14,.06),rgba(6,10,14,.14)),url("../../assets/embedded/31cfc9bab24a17e5.png")!important;}
+#field.route2{background-image:linear-gradient(rgba(6,10,14,.06),rgba(6,10,14,.12)),url("../../assets/embedded/cfd07c9c4bc8fe0d.png")!important;}
+#field.route3{background-image:linear-gradient(rgba(4,10,18,.04),rgba(4,10,18,.10)),url("../../assets/embedded/68d2ca8aa4ed42d5.webp")!important;}
+#field.routeInfinite{background-image:linear-gradient(rgba(4,6,16,.20),rgba(6,10,20,.28)),url("../../assets/embedded/85ea9b0ea3b77f95.png")!important;}
 /* Las nuevas ilustraciones ya contienen cielo, suelo y camino. Ocultamos las capas antiguas para no taparlas. */
 #field.route1>.sky,#field.route1>.ground,#field.route1>.path,#field.route1>.scenery,
 #field.route2>.sky,#field.route2>.ground,#field.route2>.path,#field.route2>.scenery,

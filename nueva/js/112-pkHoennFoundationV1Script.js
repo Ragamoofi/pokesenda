@@ -27,7 +27,7 @@
     const menuCard=document.querySelector('[data-pk-menu-region="hoenn"]'),rootCard=document.getElementById('regionHoennCard'),prelaunch=document.documentElement.classList.contains('pk-hoenn-prelaunch');
     const expectedGyms=['Roxanne','Brawly','Wattson','Flannery','Norman','Winona','Tate & Liza','Juan'];
     const html=document.documentElement.innerHTML,gymNames=expectedGyms.filter(name=>html.includes(name));
-    const gymAssets=Array.from({length:8},(_,i)=>`assets/embedded/hoenn_gym_${i+1}_${['roxanne','brawly','wattson','flannery','norman','winona','tate_liza','juan'][i]}.png`),gymAssetRefs=gymAssets.filter(x=>html.includes(x));
+    const gymAssets=Array.from({length:8},(_,i)=>`../assets/embedded/hoenn_gym_${i+1}_${['roxanne','brawly','wattson','flannery','norman','winona','tate_liza','juan'][i]}.png`),gymAssetRefs=gymAssets.filter(x=>html.includes(x));
     const regionalQA=window.PokeSendaHoennQA||null,gachaQA=window.PokeSendaHoennGachaQA?.()||null;
     const checks={released:window.PokeSendaHoennRelease?.enabled===true,noPrelaunchClass:!prelaunch,menuCardPresent:!!menuCard,regionSelectorCardPresent:!!rootCard,allGymLeadersReferenced:gymNames.length===8,allGymAssetsReferenced:gymAssetRefs.length===8,regionalDataQA:regionalQA?.ok===true,gachaRatesQA:gachaQA?.ok===true};
     return {phase:window.PokeSendaHoennRuntime?.phase||null,saveKey:'pokesenda_hoenn_isolated_v1',gymLeaders:gymNames,gymAssetRefs,regionalQA,gachaQA,checks,pass:Object.values(checks).every(Boolean)};

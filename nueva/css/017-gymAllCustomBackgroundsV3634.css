@@ -1,7 +1,7 @@
 
 /* V36.34 · Fondos exclusivos restantes de los Gimnasios de Kanto */
 #gymBattleOverlay[data-gym-id="erika"] .gym-arena-bg{
-  background-image:url("../assets/embedded/b8b57c6d205d7bdd.webp")!important;
+  background-image:url("../../assets/embedded/b8b57c6d205d7bdd.webp")!important;
   background-size:cover!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
@@ -9,7 +9,7 @@
 }
 #gymBattleOverlay[data-gym-id="erika"] .gym-arena-bg::after{display:none!important;content:none!important;}
 #gymBattleOverlay[data-gym-id="surge"] .gym-arena-bg{
-  background-image:url("../assets/embedded/74e78c7f2652f7f4.webp")!important;
+  background-image:url("../../assets/embedded/74e78c7f2652f7f4.webp")!important;
   background-size:cover!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
@@ -17,7 +17,7 @@
 }
 #gymBattleOverlay[data-gym-id="surge"] .gym-arena-bg::after{display:none!important;content:none!important;}
 #gymBattleOverlay[data-gym-id="koga"] .gym-arena-bg{
-  background-image:url("../assets/embedded/581f743f26422254.webp")!important;
+  background-image:url("../../assets/embedded/581f743f26422254.webp")!important;
   background-size:cover!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
@@ -25,7 +25,7 @@
 }
 #gymBattleOverlay[data-gym-id="koga"] .gym-arena-bg::after{display:none!important;content:none!important;}
 #gymBattleOverlay[data-gym-id="sabrina"] .gym-arena-bg{
-  background-image:url("../assets/embedded/a8db5dd8e35959a2.webp")!important;
+  background-image:url("../../assets/embedded/a8db5dd8e35959a2.webp")!important;
   background-size:cover!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
@@ -33,7 +33,7 @@
 }
 #gymBattleOverlay[data-gym-id="sabrina"] .gym-arena-bg::after{display:none!important;content:none!important;}
 #gymBattleOverlay[data-gym-id="blaine"] .gym-arena-bg{
-  background-image:url("../assets/embedded/c2a6d0fe7fc17dd6.webp")!important;
+  background-image:url("../../assets/embedded/c2a6d0fe7fc17dd6.webp")!important;
   background-size:cover!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
@@ -41,7 +41,7 @@
 }
 #gymBattleOverlay[data-gym-id="blaine"] .gym-arena-bg::after{display:none!important;content:none!important;}
 #gymBattleOverlay[data-gym-id="giovanni"] .gym-arena-bg{
-  background-image:url("../assets/embedded/9d1f4bcfac2f1e5c.webp")!important;
+  background-image:url("../../assets/embedded/9d1f4bcfac2f1e5c.webp")!important;
   background-size:cover!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;

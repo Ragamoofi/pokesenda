@@ -3,7 +3,7 @@
    Fondos externos reales de Hoenn. Este bloque vive en el documento principal, no en la ventana flotante. */
 html[data-pk-boot-region="hoenn"] #mainMenu{
   background-color:#0b3034!important;
-  background-image:url("../assets/embedded/hoenn_menu_principal.png")!important;
+  background-image:url("../../assets/embedded/hoenn_menu_principal.png")!important;
   background-size:100% 100%!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
@@ -12,28 +12,28 @@ html[data-pk-boot-region="hoenn"] #mainMenu{
    Estas reglas apuntan directamente al #field principal de Kanto/Hoenn. */
 html[data-pk-boot-region="hoenn"] body > .game #field.route1:not(.pk-lobby-mode){
   background-color:#071b20!important;
-  background-image:linear-gradient(rgba(3,18,35,.025),rgba(2,14,30,.055)),url("../assets/embedded/hoenn_ruta_1_archipielago_celeste.png")!important;
+  background-image:linear-gradient(rgba(3,18,35,.025),rgba(2,14,30,.055)),url("../../assets/embedded/hoenn_ruta_1_archipielago_celeste.png")!important;
   background-size:100% 100%!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
 }
 html[data-pk-boot-region="hoenn"] body > .game #field.route2:not(.pk-lobby-mode){
   background-color:#1a0b08!important;
-  background-image:linear-gradient(rgba(28,8,4,.02),rgba(20,5,3,.055)),url("../assets/embedded/hoenn_ruta_2_caldera_magma.png")!important;
+  background-image:linear-gradient(rgba(28,8,4,.02),rgba(20,5,3,.055)),url("../../assets/embedded/hoenn_ruta_2_caldera_magma.png")!important;
   background-size:100% 100%!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
 }
 html[data-pk-boot-region="hoenn"] body > .game #field.route3:not(.pk-lobby-mode){
   background-color:#071b16!important;
-  background-image:linear-gradient(rgba(4,18,15,.015),rgba(3,18,14,.045)),url("../assets/embedded/hoenn_ruta_3_senda_esmeralda.png")!important;
+  background-image:linear-gradient(rgba(4,18,15,.015),rgba(3,18,14,.045)),url("../../assets/embedded/hoenn_ruta_3_senda_esmeralda.png")!important;
   background-size:100% 100%!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
 }
 html[data-pk-boot-region="hoenn"] body > .game #field.pk-lobby-mode{
   background-color:#12262d!important;
-  background-image:linear-gradient(rgba(4,14,16,.04),rgba(5,14,18,.14)),url("../assets/embedded/hoenn_campamento.png")!important;
+  background-image:linear-gradient(rgba(4,14,16,.04),rgba(5,14,18,.14)),url("../../assets/embedded/hoenn_campamento.png")!important;
   background-size:cover!important;
   background-position:center bottom!important;
   background-repeat:no-repeat!important;

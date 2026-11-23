@@ -3,7 +3,7 @@
    Pokémon desplegados por el terreno izquierdo · Entrenador saliendo de la cabaña
    (derecha), a escala con la casa y sin tapar el cartel de madera. */
 #field.pk-lobby-mode{
-  background-image:linear-gradient(rgba(6,10,14,.04),rgba(6,10,14,.12)),url("../assets/embedded/bbc2f98817e374e1.jpg")!important;
+  background-image:linear-gradient(rgba(6,10,14,.04),rgba(6,10,14,.12)),url("../../assets/embedded/bbc2f98817e374e1.jpg")!important;
   background-size:cover!important;background-position:center bottom!important;background-repeat:no-repeat!important;background-color:#0b1520!important;
   transition:none!important;
 }

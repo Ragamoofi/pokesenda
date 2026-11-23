@@ -94,15 +94,15 @@
 /* V36.63.1 · Rutas Johto públicas: identidad regional por zona, sin alterar la geometría Kanto. */
 /* V36.64.6 · Pradera Ámbar · fondo reemplazado por la versión editada final del usuario, embebido localmente. */
 #pkRegionRuntimeRoot #field.route1:not(.pk-lobby-mode){
-  background-image:linear-gradient(rgba(8,10,8,.025),rgba(8,10,8,.07)),url("../assets/embedded/94d3a80f6c1a7eed.png")!important;
+  background-image:linear-gradient(rgba(8,10,8,.025),rgba(8,10,8,.07)),url("../../assets/embedded/94d3a80f6c1a7eed.png")!important;
   background-size:cover!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
 }
 /* V36.64.9 · Bosque Ancestral · fondo definitivo aprobado por el usuario, embebido localmente (WebP lossless, píxeles idénticos al PNG aprobado). */
-#pkRegionRuntimeRoot #field.route2:not(.pk-lobby-mode){background-image:linear-gradient(rgba(4,8,10,.015),rgba(4,8,10,.055)),url("../assets/embedded/a9d60944f41f7965.webp")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important}
+#pkRegionRuntimeRoot #field.route2:not(.pk-lobby-mode){background-image:linear-gradient(rgba(4,8,10,.015),rgba(4,8,10,.055)),url("../../assets/embedded/a9d60944f41f7965.webp")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important}
 /* V36.64.9 · Senda Plateada · fondo definitivo aprobado por el usuario, embebido localmente (WebP lossless, píxeles idénticos al PNG aprobado). */
-#pkRegionRuntimeRoot #field.route3:not(.pk-lobby-mode){background-image:linear-gradient(rgba(4,7,10,.01),rgba(4,7,10,.045)),url("../assets/embedded/d4301653517c74a5.webp")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important}
+#pkRegionRuntimeRoot #field.route3:not(.pk-lobby-mode){background-image:linear-gradient(rgba(4,7,10,.01),rgba(4,7,10,.045)),url("../../assets/embedded/d4301653517c74a5.webp")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important}
 #pkRegionRuntimeRoot #routeSelect option:disabled{color:#8b8576!important}
 
 /* V36.63.0 · Identidad Johto · pase 2: cromática regional suave en chrome neutral. */

@@ -2,35 +2,35 @@
 /* Hoenn PRELANZAMIENTO · gimnasios ya aprobados.
    Reutilizan los IDs del motor Kanto únicamente cuando el boot regional es Hoenn. */
 html[data-pk-boot-region="hoenn"] #gymBattleOverlay[data-gym-id="brock"] .gym-arena-bg{
-  background-image:linear-gradient(rgba(4,5,6,.02),rgba(4,5,6,.06)),url("../assets/embedded/hoenn_gym_1_roxanne.png")!important;
+  background-image:linear-gradient(rgba(4,5,6,.02),rgba(4,5,6,.06)),url("../../assets/embedded/hoenn_gym_1_roxanne.png")!important;
   background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;opacity:1!important
 }
 html[data-pk-boot-region="hoenn"] #gymBattleOverlay[data-gym-id="misty"] .gym-arena-bg{
-  background-image:linear-gradient(rgba(4,5,6,.02),rgba(4,5,6,.055)),url("../assets/embedded/hoenn_gym_2_brawly.png")!important;
+  background-image:linear-gradient(rgba(4,5,6,.02),rgba(4,5,6,.055)),url("../../assets/embedded/hoenn_gym_2_brawly.png")!important;
   background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;opacity:1!important
 }
 html[data-pk-boot-region="hoenn"] #gymBattleOverlay[data-gym-id="surge"] .gym-arena-bg{
-  background-image:linear-gradient(rgba(4,5,6,.015),rgba(4,5,6,.045)),url("../assets/embedded/hoenn_gym_3_wattson.png")!important;
+  background-image:linear-gradient(rgba(4,5,6,.015),rgba(4,5,6,.045)),url("../../assets/embedded/hoenn_gym_3_wattson.png")!important;
   background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;opacity:1!important
 }
 html[data-pk-boot-region="hoenn"] #gymBattleOverlay[data-gym-id="erika"] .gym-arena-bg{
-  background-image:linear-gradient(rgba(5,4,3,.018),rgba(6,3,2,.07)),url("../assets/embedded/hoenn_gym_4_flannery.png")!important;
+  background-image:linear-gradient(rgba(5,4,3,.018),rgba(6,3,2,.07)),url("../../assets/embedded/hoenn_gym_4_flannery.png")!important;
   background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;opacity:1!important
 }
 html[data-pk-boot-region="hoenn"] #gymBattleOverlay[data-gym-id="koga"] .gym-arena-bg{
-  background-image:linear-gradient(rgba(5,5,5,.012),rgba(5,5,5,.05)),url("../assets/embedded/hoenn_gym_5_norman.png")!important;
+  background-image:linear-gradient(rgba(5,5,5,.012),rgba(5,5,5,.05)),url("../../assets/embedded/hoenn_gym_5_norman.png")!important;
   background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;opacity:1!important
 }
 html[data-pk-boot-region="hoenn"] #gymBattleOverlay[data-gym-id="sabrina"] .gym-arena-bg{
-  background-image:linear-gradient(rgba(4,5,7,.014),rgba(4,5,7,.052)),url("../assets/embedded/hoenn_gym_6_winona.png")!important;
+  background-image:linear-gradient(rgba(4,5,7,.014),rgba(4,5,7,.052)),url("../../assets/embedded/hoenn_gym_6_winona.png")!important;
   background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;opacity:1!important
 }
 html[data-pk-boot-region="hoenn"] #gymBattleOverlay[data-gym-id="blaine"] .gym-arena-bg{
-  background-image:linear-gradient(rgba(4,4,8,.014),rgba(4,4,8,.055)),url("../assets/embedded/hoenn_gym_7_tate_liza.png")!important;
+  background-image:linear-gradient(rgba(4,4,8,.014),rgba(4,4,8,.055)),url("../../assets/embedded/hoenn_gym_7_tate_liza.png")!important;
   background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;opacity:1!important
 }
 html[data-pk-boot-region="hoenn"] #gymBattleOverlay[data-gym-id="giovanni"] .gym-arena-bg{
-  background-image:linear-gradient(rgba(4,5,6,.012),rgba(4,5,6,.045)),url("../assets/embedded/hoenn_gym_8_juan.png")!important;
+  background-image:linear-gradient(rgba(4,5,6,.012),rgba(4,5,6,.045)),url("../../assets/embedded/hoenn_gym_8_juan.png")!important;
   background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;opacity:1!important
 }
 html[data-pk-boot-region="hoenn"] #gymBattleOverlay[data-gym-id="brock"] .gym-arena-bg::after,

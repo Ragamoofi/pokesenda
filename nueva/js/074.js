@@ -6140,32 +6140,32 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   ============================================================ */
   const PK_ANIM="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/";
   const PK_CUSTOM_TRAINER_ID="ragamoofi_custom";
-  const PK_CUSTOM_TRAINER_FRONT="assets/embedded/e9a813c68096c0fd.png";
-  const PK_CUSTOM_TRAINER_BACK="assets/embedded/763bb73e40cce18c.png";
-  const PK_DANIEL2_TRAINER_FRONT="assets/embedded/90e6eaef789273c8.png";
-  const PK_DANIEL2_TRAINER_BACK="assets/embedded/c85846f256c733a0.png";
+  const PK_CUSTOM_TRAINER_FRONT="../assets/embedded/e9a813c68096c0fd.png";
+  const PK_CUSTOM_TRAINER_BACK="../assets/embedded/763bb73e40cce18c.png";
+  const PK_DANIEL2_TRAINER_FRONT="../assets/embedded/90e6eaef789273c8.png";
+  const PK_DANIEL2_TRAINER_BACK="../assets/embedded/c85846f256c733a0.png";
   const PK_TRAINER_ART={
     [PK_CUSTOM_TRAINER_ID]:{front:PK_CUSTOM_TRAINER_FRONT,back:PK_CUSTOM_TRAINER_BACK,scale:{grid:1,preview:1,field:1,marker:1}},
-    gino_friend:{front:"assets/embedded/7a74f37357249d9a.png",back:"assets/embedded/740a54fff4118e0e.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
-    arfus_friend:{front:"assets/embedded/aa6f47b51a8f82c3.png",back:"assets/embedded/af82083a5d5dbfb1.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
-    tibu_friend:{front:"assets/embedded/16286c4b5ba2b54c.png",back:"assets/embedded/4ee267eebd4afca6.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
-    daniel_friend:{front:"assets/embedded/7bf3d85bae4746bd.png",back:"assets/embedded/fcf9615d01053271.png",scale:{grid:0.82,preview:0.72,field:0.72,marker:0.78}},
-    seguridad_friend:{front:"assets/embedded/d9920c060dce2d5e.png",back:"assets/embedded/81e31a2ab9e71b29.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
-    jachi_friend:{front:"assets/embedded/22e17bcfc494f0e4.png",back:"assets/embedded/c6b25a93a5ab4fa7.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    gino_friend:{front:"../assets/embedded/7a74f37357249d9a.png",back:"../assets/embedded/740a54fff4118e0e.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    arfus_friend:{front:"../assets/embedded/aa6f47b51a8f82c3.png",back:"../assets/embedded/af82083a5d5dbfb1.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    tibu_friend:{front:"../assets/embedded/16286c4b5ba2b54c.png",back:"../assets/embedded/4ee267eebd4afca6.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    daniel_friend:{front:"../assets/embedded/7bf3d85bae4746bd.png",back:"../assets/embedded/fcf9615d01053271.png",scale:{grid:0.82,preview:0.72,field:0.72,marker:0.78}},
+    seguridad_friend:{front:"../assets/embedded/d9920c060dce2d5e.png",back:"../assets/embedded/81e31a2ab9e71b29.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    jachi_friend:{front:"../assets/embedded/22e17bcfc494f0e4.png",back:"../assets/embedded/c6b25a93a5ab4fa7.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
     daniel2_friend:{front:PK_DANIEL2_TRAINER_FRONT,back:PK_DANIEL2_TRAINER_BACK,scale:{grid:0.82,preview:0.72,field:0.72,marker:0.78}}
   };
   /* ============================================================
      POKÉSENDA VISUAL v32 · Avatares Lulu, Aka y Omar
   ============================================================ */
   Object.assign(PK_TRAINER_ART,{
-    lulu_friend:{front:"assets/embedded/a8902157c2c217bd.png",back:"assets/embedded/328de06399554623.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
-    aka_friend:{front:"assets/embedded/6e0b793478f0a9e9.png",back:"assets/embedded/6e3f3b3386669f3e.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
-    omar_friend:{front:"assets/embedded/b4147a5bbc688c04.png",back:"assets/embedded/b2cfd10b1f637d09.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    lulu_friend:{front:"../assets/embedded/a8902157c2c217bd.png",back:"../assets/embedded/328de06399554623.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    aka_friend:{front:"../assets/embedded/6e0b793478f0a9e9.png",back:"../assets/embedded/6e3f3b3386669f3e.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    omar_friend:{front:"../assets/embedded/b4147a5bbc688c04.png",back:"../assets/embedded/b2cfd10b1f637d09.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
   });
 
   /* V36.35 · Avatar Drevan */
   Object.assign(PK_TRAINER_ART,{
-    drevan_friend:{front:"assets/embedded/d39b2d201ad1f0ee.png",back:"assets/embedded/9d2c44c445e60af1.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}}
+    drevan_friend:{front:"../assets/embedded/d39b2d201ad1f0ee.png",back:"../assets/embedded/9d2c44c445e60af1.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}}
   });
 
   /* ============================================================
@@ -6173,10 +6173,10 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
      Final art override: preserves Lulu ID/save compatibility.
   ============================================================ */
   Object.assign(PK_TRAINER_ART,{
-    lulu_friend:{front:"assets/embedded/49e708b1dbc755cb.png",back:"assets/embedded/1cfcdeb92eb4350f.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
-    abuela_friend:{front:"assets/embedded/2f34a223b4cb1842.png",back:"assets/embedded/1a0b7dec58b15b08.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
-    gino2_friend:{front:"assets/embedded/daec7d98e42c6952.png",back:"assets/embedded/bfcbabe8fc9bc906.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
-    ronaldo_friend:{front:"assets/embedded/3c11d6fa381fad88.png",back:"assets/embedded/f34ae596fb935022.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    lulu_friend:{front:"../assets/embedded/49e708b1dbc755cb.png",back:"../assets/embedded/1cfcdeb92eb4350f.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    abuela_friend:{front:"../assets/embedded/2f34a223b4cb1842.png",back:"../assets/embedded/1a0b7dec58b15b08.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    gino2_friend:{front:"../assets/embedded/daec7d98e42c6952.png",back:"../assets/embedded/bfcbabe8fc9bc906.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    ronaldo_friend:{front:"../assets/embedded/3c11d6fa381fad88.png",back:"../assets/embedded/f34ae596fb935022.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
   });
 
   /* ============================================================
@@ -6185,14 +6185,14 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
      Nuevos: Arfus 2, Tibus y Omar 2.
   ============================================================ */
   Object.assign(PK_TRAINER_ART,{
-    arfus2_friend:{front:"assets/embedded/b8a75aad56326f42.png",back:"assets/embedded/9e34ec9055ec1476.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
-    tibus_friend:{front:"assets/embedded/61b2fd43fefb3a1e.png",back:"assets/embedded/fba4d72ca5fb9585.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
-    omar2_friend:{front:"assets/embedded/f7229f1a065bb864.png",back:"assets/embedded/6030b761b23de632.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
-    hox_friend:{front:"assets/embedded/hox_friend_front.png",back:"assets/embedded/hox_friend_back.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
-    pelado_friend:{front:"assets/embedded/pelado_friend_front.png",back:"assets/embedded/pelado_friend_back.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
-    lezca_friend:{front:"assets/embedded/lezca_friend_front.png",back:"assets/embedded/lezca_friend_back.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
-    lean_friend:{front:"assets/embedded/lean_friend_front.png",back:"assets/embedded/lean_friend_back.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
-    balto_friend:{front:"assets/embedded/balto_friend_front.png",back:"assets/embedded/balto_friend_back.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}}
+    arfus2_friend:{front:"../assets/embedded/b8a75aad56326f42.png",back:"../assets/embedded/9e34ec9055ec1476.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    tibus_friend:{front:"../assets/embedded/61b2fd43fefb3a1e.png",back:"../assets/embedded/fba4d72ca5fb9585.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    omar2_friend:{front:"../assets/embedded/f7229f1a065bb864.png",back:"../assets/embedded/6030b761b23de632.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    hox_friend:{front:"../assets/embedded/hox_friend_front.png",back:"../assets/embedded/hox_friend_back.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    pelado_friend:{front:"../assets/embedded/pelado_friend_front.png",back:"../assets/embedded/pelado_friend_back.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    lezca_friend:{front:"../assets/embedded/lezca_friend_front.png",back:"../assets/embedded/lezca_friend_back.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    lean_friend:{front:"../assets/embedded/lean_friend_front.png",back:"../assets/embedded/lean_friend_back.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}},
+    balto_friend:{front:"../assets/embedded/balto_friend_front.png",back:"../assets/embedded/balto_friend_back.png",scale:{grid:1.0,preview:1.0,field:1.0,marker:1.0}}
   });
 
   const pkTrainerArt=t=>t&&PK_TRAINER_ART[t.id]||null;
@@ -7187,14 +7187,14 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   window.PokeSendaJohtoBadgeSprites=window.PokeSendaJohtoBadgeSprites||{falkner:'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20shape-rendering%3D%22geometricPrecision%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22s%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%222%22%20stdDeviation%3D%222%22%20flood-opacity%3D%22.55%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%23101820%22%20fill-opacity%3D%220%22%2F%3E%3Cg%20filter%3D%22url%28%23s%29%22%3E%3Cpath%20d%3D%22M9%2029c12-16%2025-19%2046-13-6%204-12%209-16%2015%206%200%2011%202%2016%205-20%208-35%206-46-7z%22%20fill%3D%22%239ec9ef%22%20stroke%3D%22%23e6f5ff%22%20stroke-width%3D%224%22%2F%3E%3Cpath%20d%3D%22M22%2031h21%22%20stroke%3D%22%234c78a0%22%20stroke-width%3D%223%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E',bugsy:'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20shape-rendering%3D%22geometricPrecision%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22s%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%222%22%20stdDeviation%3D%222%22%20flood-opacity%3D%22.55%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%23101820%22%20fill-opacity%3D%220%22%2F%3E%3Cg%20filter%3D%22url%28%23s%29%22%3E%3Cellipse%20cx%3D%2232%22%20cy%3D%2232%22%20rx%3D%2223%22%20ry%3D%2218%22%20fill%3D%22%23d8c94e%22%20stroke%3D%22%23fff3a4%22%20stroke-width%3D%224%22%2F%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2229%22%20r%3D%225%22%20fill%3D%22%23675b0d%22%2F%3E%3Ccircle%20cx%3D%2240%22%20cy%3D%2229%22%20r%3D%225%22%20fill%3D%22%23675b0d%22%2F%3E%3Cpath%20d%3D%22M16%2022%208%2013M48%2022l8-9M16%2042%208%2051M48%2042l8%209%22%20stroke%3D%22%23eee07b%22%20stroke-width%3D%224%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E',whitney:'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20shape-rendering%3D%22geometricPrecision%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22s%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%222%22%20stdDeviation%3D%222%22%20flood-opacity%3D%22.55%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%23101820%22%20fill-opacity%3D%220%22%2F%3E%3Cg%20filter%3D%22url%28%23s%29%22%3E%3Cpath%20d%3D%22M32%208c5%209%2012%2010%2022%209-4%208-9%2013-17%2015%207%203%2011%209%2013%2017-8-2-14-6-18-12-4%206-10%2010-18%2012%202-8%206-14%2013-17-8-2-13-7-17-15%2010%201%2017%200%2022-9z%22%20fill%3D%22%23f4a4c8%22%20stroke%3D%22%23ffe0ef%22%20stroke-width%3D%224%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E',morty:'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20shape-rendering%3D%22geometricPrecision%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22s%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%222%22%20stdDeviation%3D%222%22%20flood-opacity%3D%22.55%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%23101820%22%20fill-opacity%3D%220%22%2F%3E%3Cg%20filter%3D%22url%28%23s%29%22%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2224%22%20fill%3D%22%238f76c9%22%20stroke%3D%22%23e0d5ff%22%20stroke-width%3D%224%22%2F%3E%3Cpath%20d%3D%22M19%2035c6-15%2020-15%2026%200-7%209-19%209-26%200z%22%20fill%3D%22%2329223c%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%225%22%20fill%3D%22%23f1ddff%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E',chuck:'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20shape-rendering%3D%22geometricPrecision%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22s%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%222%22%20stdDeviation%3D%222%22%20flood-opacity%3D%22.55%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%23101820%22%20fill-opacity%3D%220%22%2F%3E%3Cg%20filter%3D%22url%28%23s%29%22%3E%3Cpath%20d%3D%22M10%2033c5-12%2012-19%2022-23%2010%204%2017%2011%2022%2023-5%2012-12%2019-22%2023-10-4-17-11-22-23z%22%20fill%3D%22%236fa7d8%22%20stroke%3D%22%23dcefff%22%20stroke-width%3D%224%22%2F%3E%3Cpath%20d%3D%22M15%2033h34%22%20stroke%3D%22%23315a7c%22%20stroke-width%3D%225%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E',jasmine:'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20shape-rendering%3D%22geometricPrecision%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22s%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%222%22%20stdDeviation%3D%222%22%20flood-opacity%3D%22.55%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%23101820%22%20fill-opacity%3D%220%22%2F%3E%3Cg%20filter%3D%22url%28%23s%29%22%3E%3Cpolygon%20points%3D%2232%2C6%2051%2C17%2051%2C47%2032%2C58%2013%2C47%2013%2C17%22%20fill%3D%22%23b8c5cf%22%20stroke%3D%22%23f5fbff%22%20stroke-width%3D%224%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2210%22%20fill%3D%22%236e7d89%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%224%22%20fill%3D%22%23dfe7ec%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E',pryce:'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20shape-rendering%3D%22geometricPrecision%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22s%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%222%22%20stdDeviation%3D%222%22%20flood-opacity%3D%22.55%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%23101820%22%20fill-opacity%3D%220%22%2F%3E%3Cg%20filter%3D%22url%28%23s%29%22%3E%3Cpolygon%20points%3D%2232%2C5%2039%2C22%2057%2C22%2043%2C34%2049%2C53%2032%2C42%2015%2C53%2021%2C34%207%2C22%2025%2C22%22%20fill%3D%22%238ed7ef%22%20stroke%3D%22%23e3f9ff%22%20stroke-width%3D%224%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2231%22%20r%3D%226%22%20fill%3D%22%233e8ca8%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E',clair:'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20shape-rendering%3D%22geometricPrecision%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22s%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%222%22%20stdDeviation%3D%222%22%20flood-opacity%3D%22.55%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%23101820%22%20fill-opacity%3D%220%22%2F%3E%3Cg%20filter%3D%22url%28%23s%29%22%3E%3Cpath%20d%3D%22M11%2040c6-20%2015-30%2028-31-2%207-2%2013%201%2018%205-4%2010-5%2015-3-5%2018-15%2028-30%2031%203-6%204-11%201-16-5%204-10%204-15%201z%22%20fill%3D%22%236f91e6%22%20stroke%3D%22%23dbe5ff%22%20stroke-width%3D%224%22%2F%3E%3Ccircle%20cx%3D%2235%22%20cy%3D%2223%22%20r%3D%224%22%20fill%3D%22%23f6fbff%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E'};
   /* V36.40.74 · Medallas de Kanto con sprites oficiales embebidos localmente. */
   const GYM_BADGE_SPRITES={
-    brock:"assets/embedded/4e8592bc4acc9e8d.png",
-    misty:"assets/embedded/2c72be4e875a7ebc.png",
-    surge:"assets/embedded/b1240317ba21363a.png",
-    erika:"assets/embedded/c49fec3814894f3c.png",
-    koga:"assets/embedded/dc97a957c55d3c06.png",
-    sabrina:"assets/embedded/736e237720a7443b.png",
-    blaine:"assets/embedded/62328bc44fe5fcc0.png",
-    giovanni:"assets/embedded/8e0681f2c0f486ee.png"
+    brock:"../assets/embedded/4e8592bc4acc9e8d.png",
+    misty:"../assets/embedded/2c72be4e875a7ebc.png",
+    surge:"../assets/embedded/b1240317ba21363a.png",
+    erika:"../assets/embedded/c49fec3814894f3c.png",
+    koga:"../assets/embedded/dc97a957c55d3c06.png",
+    sabrina:"../assets/embedded/736e237720a7443b.png",
+    blaine:"../assets/embedded/62328bc44fe5fcc0.png",
+    giovanni:"../assets/embedded/8e0681f2c0f486ee.png"
   };
   if(window.PokeSendaRegionBoot?.isHoennClone){
     Object.assign(GYM_BADGE_SPRITES,{

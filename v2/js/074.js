@@ -8322,11 +8322,11 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     const ov=sendaEnsureDom(),km=Math.max(1,Math.round(Number(run.distance||0)/1000)),where=run.infinite?"Infinita":ROUTES[state.currentRoute]?.name||"";
     ov.classList.toggle("fork",mode==="fork");
     $("sendaCrossKicker").textContent=mode==="fork"?`Bifurcación · ${where} · ${(Number(run.distance||0)/1000).toFixed(1)} km`:`Cruce de Senda · ${where} · ${km} km`;
-    $("sendaCrossTitle").textContent=mode==="fork"?"¿Por dónde sigues?":"Elige tu bendición";
-    $("sendaCrossSub").textContent=mode==="fork"?"El camino elegido dura hasta el próximo jefe.":"La bendición dura toda esta expedición y se acumula con las demás.";
+    $("sendaCrossTitle").textContent=mode==="fork"?"¿Por dónde sigues?":"Elige una reliquia";
+    $("sendaCrossSub").textContent=mode==="fork"?"El camino elegido dura hasta el próximo jefe.":"La reliquia dura toda esta expedición y se acumula con las demás.";
     sendaRenderChoice();
     ov.classList.remove("hidden");void ov.offsetWidth;ov.classList.add("show");
-    addLog(mode==="fork"?"🔀 El sendero se bifurca. Elige un camino.":"🧭 Llegas a un Cruce de Senda. Elige una bendición.");renderTop();
+    addLog(mode==="fork"?"🔀 El sendero se bifurca. Elige un camino.":"🧭 Llegas a un Cruce de Senda. Elige una reliquia.");renderTop();
     sendaDeadline=performance.now()+SENDA_CROSS_MS;clearInterval(sendaTimer);sendaTimer=setInterval(sendaUpdateTimer,100);sendaUpdateTimer();
   }
   function sendaOpenCross(){return sendaOpenChoice("cross");}
@@ -8450,6 +8450,34 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
     const m=pk2Meta(),feat=pk2FeaturedType(),pity=Math.min(PK2_PITY_HARD,m.pity),pct=Math.round(pity/PK2_PITY_HARD*100),treasure=!!run?.senda?.treasureNext;
     el.innerHTML=`<div class="pk2-gi-row"><span class="pk2-gi-feat" style="--tc:${TYPE_COLORS[feat]||"#ffd666"}">⭐ Destacado de la semana: <b>${TYPE_NAMES[feat]||feat}</b> ×1,8</span>${treasure?`<span class="pk2-gi-treasure">💎 Tesoro activo</span>`:""}</div><div class="pk2-gi-pity" title="Cada Poké Ball de jefe sin Épico o mejor suma +1. Desde ${PK2_PITY_SOFT} sube la probabilidad; en ${PK2_PITY_HARD} es seguro."><span>🍀 Racha de Suerte</span><div class="pk2-gi-bar"><i style="width:${pct}%"></i></div><b>${pity}/${PK2_PITY_HARD}</b></div>`;
   }
+  /* --- V2 · Captura + reliquia en una sola pantalla. Tras revelar la Poké Ball del jefe,
+     la elección de reliquia aparece debajo del Pokémon capturado (sin ventana aparte). */
+  function pk2InjectRelics(){
+    const s=run?.senda,pr=pendingReward;if(!s||!pr||pr.autoResolved||pr.timedGacha||pr.infiniteGacha||!(s.pendingCross>0))return;
+    const res=$("rewardResult");if(!res)return;document.getElementById("pk2Relics")?.remove();
+    s.rewardOffers=sendaRollOffers();if(!s.rewardOffers.length)return;
+    const wrap=document.createElement("div");wrap.id="pk2Relics";wrap.className="pk2-relics";
+    wrap.innerHTML=`<div class="pk2-relics-head"><b>Elige una reliquia para esta expedición</b><small>Se suma a las que ya llevas.</small></div><div class="senda-cards ${s.rewardOffers.length>3?"four":""}">${s.rewardOffers.map((o,i)=>sendaCardHTML(o,i,"cross").replace('data-senda-pick=','data-pk2-relic=')).join("")}</div>`;
+    const cont=[...res.querySelectorAll("button")].find(b=>/Continuar/i.test(b.textContent));
+    if(cont&&cont.parentNode)cont.parentNode.insertBefore(wrap,cont);else res.appendChild(wrap);
+    wrap.querySelectorAll("[data-pk2-relic]").forEach(b=>b.addEventListener("click",()=>pk2PickRelic(Number(b.dataset.pk2Relic))));
+  }
+  function pk2PickRelic(i){
+    const s=run?.senda,o=s?.rewardOffers?.[i];if(!o||!(s.pendingCross>0))return;
+    sendaApply(o);s.pendingCross--;s.rewardOffers=null;
+    const w=document.getElementById("pk2Relics");if(w){w.querySelectorAll("[data-pk2-relic]").forEach((b,j)=>{b.disabled=true;b.classList.toggle("chosen",j===i);});w.querySelector(".pk2-relics-head small").textContent="¡Reliquia elegida! Pulsa Continuar para seguir la senda.";}
+    sendaRenderHud();save();
+  }
+  const pk2RelicBaseFinalize=finalizeReward;
+  finalizeReward=function(rolled){const r=pk2RelicBaseFinalize(rolled);try{pk2InjectRelics();}catch(e){console.warn("Reliquias",e);}return r;};
+  const pk2RelicBaseClose=closeReward;
+  closeReward=function(...a){
+    const s=run?.senda;
+    if(s?.rewardOffers?.length&&s.pendingCross>0){sendaApply(s.rewardOffers[Math.floor(Math.random()*s.rewardOffers.length)]);s.pendingCross--;addLog("🧭 Reliquia elegida al azar al continuar.");}
+    if(s)s.rewardOffers=null;document.getElementById("pk2Relics")?.remove();
+    return pk2RelicBaseClose(...a);
+  };
+
   const pk2BaseOpenReward=openReward;
   openReward=function(...a){const r=pk2BaseOpenReward(...a);pk2RenderGachaInfo();document.getElementById("pk2GachaInfo")?.classList.remove("hidden");return r;};
   const pk2BaseCloseReward=closeReward;
@@ -8522,6 +8550,114 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   function pk2SetWide(on){document.body.classList.toggle("pk2-wide",!!on);try{localStorage.setItem("pokesenda_v2_wide",on?"1":"0");}catch(_){}const b=document.getElementById("pk2WideBtn");if(b)b.innerHTML=on?"⇤ Ver formación":"⛶ Pantalla completa";setTimeout(()=>window.dispatchEvent(new Event("resize")),30);}
   function pk2MountWide(){const f=$("field");if(!f||document.getElementById("pk2WideBtn"))return;const b=document.createElement("button");b.type="button";b.id="pk2WideBtn";b.className="pk2-wide-btn";b.addEventListener("click",()=>pk2SetWide(!document.body.classList.contains("pk2-wide")));f.appendChild(b);let on=false;try{on=localStorage.getItem("pokesenda_v2_wide")==="1";}catch(_){}pk2SetWide(on);}
   setTimeout(pk2MountWide,300);
+
+  /* =====================================================================
+     V2 · Interfaz nueva (barra superior con mapa del sendero, panel del
+     equipo y navegación). Los botones nuevos usan los controles antiguos
+     por dentro (click), así la lógica del juego no cambia.
+     ===================================================================== */
+  const PK2_ICONS={
+    gear:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>',
+    run:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18l5-6 4 4 7-9"/></svg>',
+    team:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M3 19c1-3 3-4 5-4s4 1 5 4M11 19c1-3 3-4 5-4s4 1 5 4"/></svg>',
+    dex:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>',
+    bag:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>',
+    star:'<svg viewBox="0 0 24 24" aria-hidden="true" class="fill"><path d="M12 2l2.6 7.4L22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6z"/></svg>',
+    more:'<svg viewBox="0 0 24 24" aria-hidden="true" class="fill"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>',
+    pause:'<svg viewBox="0 0 24 24" aria-hidden="true" class="fill"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>',
+    play:'<svg viewBox="0 0 24 24" aria-hidden="true" class="fill"><path d="M8 5l11 7-11 7z"/></svg>',
+    stop:'<svg viewBox="0 0 24 24" aria-hidden="true" class="fill"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>',
+    fork:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V11M12 11L6 4M12 11l6-7"/></svg>',
+    cross:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+    crown:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18l-2-10-5 4-2-7-2 7-5-4-2 10z"/></svg>',
+    ball:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h6m6 0h6"/><circle cx="12" cy="12" r="3"/></svg>'
+  };
+  const pk2Click=sel=>{const el=typeof sel==="string"?document.querySelector(sel):sel;if(el&&!el.disabled)el.click();};
+  const pk2Esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  function pk2RegionName(){return window.PokeSendaRegionBoot?.isHoennClone?"Hoenn":"Kanto";}
+  function pk2MountShell(){
+    const game=document.querySelector(".game"),field=$("field");if(!game||!field||document.getElementById("pk2Top"))return;
+    document.body.classList.add("pk2-shell");
+    const top=document.createElement("header");top.id="pk2Top";top.className="pk2-top";
+    top.innerHTML=`<button type="button" class="pk2-iconbtn" data-pk2-act="menu" aria-label="Menú principal">${PK2_ICONS.gear}</button>
+      <button type="button" class="pk2-brand" data-pk2-act="place" aria-label="Región y ruta"><span class="pk2-logo">${PK2_ICONS.ball}</span><span class="pk2-brand-txt"><b>PokéSenda</b><small id="pk2Place">Kanto</small></span></button>
+      <div class="pk2-trail" id="pk2Trail" aria-label="Mapa del sendero"></div>
+      <div class="pk2-wallet"><span class="pk2-coin" title="Pokédólares"><i>₽</i><b id="pk2Money">0</b></span><button type="button" class="pk2-coin" data-pk2-act="mastery" title="Esencia de Senda · Maestría">${PK2_ICONS.star}<b id="pk2Essence">0</b></button></div>`;
+    game.insertBefore(top,game.firstChild);
+    const pop=document.createElement("div");pop.id="pk2Place Pop";pop.className="pk2-pop hidden";pop.id="pk2PlacePop";
+    pop.innerHTML=`<div class="pk2-pop-title">Región y ruta</div><div class="pk2-pop-row" id="pk2RouteSlot"></div><div class="pk2-pop-grid"><button type="button" data-pk2-act="region">Cambiar región</button><button type="button" data-pk2-act="checkpoint">Punto de partida</button></div>`;
+    top.appendChild(pop);
+    const sel=$("routeSelect");if(sel)$("pk2RouteSlot").appendChild(sel);
+    const dock=document.createElement("section");dock.id="pk2Dock";dock.className="pk2-dock";dock.setAttribute("aria-label","Equipo y controles");
+    dock.innerHTML=`<div class="pk2-cards" id="pk2Cards"></div><div class="pk2-next"><div class="pk2-next-txt"><small id="pk2NextKick">Próximo en la senda</small><b id="pk2NextTxt">—</b></div><div class="pk2-next-ctl"><div class="pk2-speed" role="group" aria-label="Velocidad"><button type="button" data-pk2-speed="x1">x1</button><button type="button" data-pk2-speed="x2">x2</button><button type="button" data-pk2-speed="x4">x4</button></div><button type="button" class="pk2-stop" data-pk2-act="stop" aria-label="Terminar expedición">${PK2_ICONS.stop}</button><button type="button" class="pk2-go" data-pk2-act="start" id="pk2Go">${PK2_ICONS.play}<span>Comenzar</span></button></div></div>`;
+    field.appendChild(dock);
+    const nav=document.createElement("nav");nav.id="pk2Nav";nav.className="pk2-nav";nav.setAttribute("aria-label","Secciones");
+    nav.innerHTML=[["run","Expedición","run"],["team","Equipo","team"],["dex","Pokédex","dex"],["bag","Mochila","bag"],["mastery","Maestría","star"],["more","Más","more"]].map(([a,l,ic])=>`<button type="button" data-pk2-act="${a}" class="${a==="run"?"on":""}">${PK2_ICONS[ic]}<span>${l}</span></button>`).join("");
+    field.appendChild(nav);
+    const more=document.createElement("div");more.id="pk2MorePop";more.className="pk2-pop pk2-more hidden";
+    more.innerHTML=`<div class="pk2-pop-title">Más</div><div class="pk2-pop-grid">${[["box","Caja Pokémon"],["ach","Logros"],["tree","Árbol del Entrenador"],["gym","Gimnasios"],["pvp","Duelo 1v1"],["casino","Casino"],["mt","Gachapón de MT"],["notes","Novedades"]].map(([a,l])=>`<button type="button" data-pk2-act="${a}">${l}</button>`).join("")}</div><div class="pk2-pop-title">Automático</div><div class="pk2-pop-grid" id="pk2AutoGrid"><button type="button" data-pk2-act="autoRepeat">Auto-repetir</button><button type="button" data-pk2-act="autoOpen">Auto Poké Ball</button><button type="button" data-pk2-act="autoPotion">Auto-Poción</button></div>`;
+    field.appendChild(more);
+    document.addEventListener("click",pk2ShellClick,true);
+    pk2ShellUpdate(true);
+  }
+  function pk2ClosePops(except){for(const id of ["pk2PlacePop","pk2MorePop"])if(id!==except)document.getElementById(id)?.classList.add("hidden");}
+  function pk2ShellClick(e){
+    const sp=e.target.closest?.("[data-pk2-speed]");
+    if(sp){const want=sp.dataset.pk2Speed;const b=[...document.querySelectorAll(".game>.top .quick-speed-btn")].find(x=>x.textContent.trim()===want);pk2Click(b);setTimeout(()=>pk2ShellUpdate(true),60);return;}
+    const el=e.target.closest?.("[data-pk2-act]");
+    if(!el){if(!e.target.closest?.(".pk2-pop"))pk2ClosePops();return;}
+    const a=el.dataset.pk2Act,map={menu:"#gameMenuBtn",region:"#regionSwitchBtn",checkpoint:"#checkpointSelectBtn",dex:"#pokedexBtn",bag:"#lootBtn",box:"#pcBoxBtn",ach:"#achievementsBtn",tree:"#skillTreeBtn",gym:"#gymHudBtn",pvp:".game>.top .pk-pvp-btn",casino:"#casinoHudBtn",mt:"#mtTicketTop",notes:"#menuPatchQuickBtn",autoRepeat:"#autoRepeatBtn",autoOpen:"#autoOpenBtn",autoPotion:"#autoPotionBtn",start:"#startBtn",stop:"#stopRunBtn"};
+    if(a==="place"){const p=document.getElementById("pk2PlacePop");const open=p.classList.contains("hidden");pk2ClosePops();p.classList.toggle("hidden",!open);return;}
+    if(a==="more"){const p=document.getElementById("pk2MorePop");const open=p.classList.contains("hidden");pk2ClosePops();p.classList.toggle("hidden",!open);pk2ShellUpdate(true);return;}
+    pk2ClosePops();
+    if(a==="mastery"){pk2OpenMastery();return;}
+    if(a==="team"){pk2SetWide(document.body.classList.contains("pk2-wide")?false:true);pk2ShellUpdate(true);return;}
+    if(a==="run"){pk2SetWide(true);pk2ShellUpdate(true);return;}
+    if(map[a]){pk2Click(map[a]);setTimeout(()=>pk2ShellUpdate(true),80);}
+  }
+  let pk2ShellLast=0;
+  function pk2ShellUpdate(force=false){
+    const now=performance.now();if(!force&&now-pk2ShellLast<200)return;pk2ShellLast=now;
+    if(!document.getElementById("pk2Top"))return;
+    const r=ROUTES[state?.currentRoute];$("pk2Place").textContent=`${pk2RegionName()} · ${isInfiniteMode()?"Expedición Infinita":r?.name||""}`;
+    $("pk2Money").textContent=Math.floor(state?.pokedollars||0).toLocaleString("es-CL");$("pk2Essence").textContent=pk2Meta().essence.toLocaleString("es-CL");
+    pk2RenderTrail();pk2RenderCards();
+    // controles
+    const sb=$("startBtn"),go=$("pk2Go");if(sb&&go){const label=run?(run.paused?"Reanudar":"Pausar"):"Comenzar";go.innerHTML=`${run&&!run.paused?PK2_ICONS.pause:PK2_ICONS.play}<span>${label}</span>`;go.classList.toggle("running",!!run&&!run.paused);}
+    $("pk2Dock").querySelector(".pk2-stop").disabled=!run;
+    const act=[...document.querySelectorAll(".game>.top .quick-speed-btn")].find(b=>b.classList.contains("active"))?.textContent.trim();
+    document.querySelectorAll("[data-pk2-speed]").forEach(b=>b.classList.toggle("on",b.dataset.pk2Speed===act));
+    const wide=document.body.classList.contains("pk2-wide");document.querySelectorAll("#pk2Nav [data-pk2-act]").forEach(b=>b.classList.toggle("on",(b.dataset.pk2Act==="run"&&wide)||(b.dataset.pk2Act==="team"&&!wide)));
+    for(const [k,id] of [["autoRepeat","autoRepeatBtn"],["autoOpen","autoOpenBtn"],["autoPotion","autoPotionBtn"]]){const src=$(id),dst=document.querySelector(`#pk2AutoGrid [data-pk2-act="${k}"]`);if(src&&dst){dst.disabled=!!src.disabled;dst.classList.toggle("on",/\bon\b|active/.test(src.className)||src.getAttribute("aria-pressed")==="true");dst.title=src.title||"";}}
+  }
+  function pk2RenderTrail(){
+    const el=$("pk2Trail");if(!el)return;
+    const d=run?Number(run.distance||0):(routeStartPoint?.()||0),km=Math.floor(d/1000),base=km*1000,pct=Math.max(0,Math.min(100,(d-base)/10));
+    const nodes=[];nodes.push({p:0,k:"start"});
+    if(run?.senda||!run)nodes.push({p:50,k:"fork"});
+    if(!isInfiniteMode())for(const c of POKEMON_CENTERS)if(c>base&&c<base+1000)nodes.push({p:(c-base)/10,k:"center"});
+    const pathTxt=run?.senda?.path&&SENDA_PATHS[run.senda.path]?`<span class="pk2-trail-path">${SENDA_PATHS[run.senda.path].icon} ${SENDA_PATHS[run.senda.path].name}</span>`:"";
+    el.innerHTML=`<span class="pk2-trail-km">Km ${km+1}</span><div class="pk2-trail-line"><i class="pk2-trail-done" style="width:${pct}%"></i>${nodes.map(n=>`<span class="pk2-node ${n.k} ${n.p<=pct?"past":""}" style="left:${n.p}%" title="${n.k==="fork"?"Bifurcación":n.k==="center"?"Centro Pokémon":"Inicio"}">${n.k==="fork"?PK2_ICONS.fork:n.k==="center"?PK2_ICONS.cross:""}</span>`).join("")}<span class="pk2-node boss" title="Jefe">${PK2_ICONS.crown}</span><span class="pk2-you" style="left:${pct}%"></span></div><span class="pk2-trail-m">${Math.floor(d).toLocaleString("es-CL")} m</span>${pathTxt}`;
+  }
+  function pk2RenderCards(){
+    const box=$("pk2Cards");if(!box)return;
+    const ids=run?battleIds().slice(0,3):activeIds().slice(0,3);
+    box.innerHTML=ids.map(id=>{const st=ownedStage(id)||{},p=state.progress[id]||{},t=run?.team?.[id],hp=t?Math.max(0,t.hp):derived(id).maxHp,mx=t?Math.max(1,t.maxHp):derived(id).maxHp,pc=Math.max(0,Math.min(100,hp/mx*100)),img=$("avatar-"+id)?.querySelector("img")?.getAttribute("src")||"",types=(st.types||[]).slice(0,2).map(x=>`<span class="pk2-type" style="--tc:${TYPE_COLORS[x]||"#999"}">${pk2Esc(TYPE_NAMES[x]||x)}</span>`).join("");
+      return `<div class="pk2-card ${t&&!t.alive?"down":""}"><div class="pk2-card-pic">${img?`<img src="${pk2Esc(img)}" alt="">`:""}</div><div class="pk2-card-body"><div class="pk2-card-head"><b>${pk2Esc(st.name||id)}</b><span>Nv.${p.level||1}</span></div><div class="pk2-hp"><i class="${pc<30?"low":pc<60?"mid":""}" style="width:${pc}%"></i></div><div class="pk2-card-foot"><span>PS ${Math.ceil(hp)}/${Math.ceil(mx)}</span><span class="pk2-types">${types}</span></div></div></div>`;}).join("")||`<div class="pk2-card empty">Elige tu equipo en «Equipo».</div>`;
+    // próximo evento
+    const kick=$("pk2NextKick"),txt=$("pk2NextTxt");if(!kick||!txt)return;
+    if(!run){kick.textContent="Campamento";txt.textContent="Listo para salir";return;}
+    const d=Number(run.distance||0),toBoss=Math.ceil(((Math.floor(d/1000)+1)*1000-d)),inKm=d%1000;
+    kick.textContent="Próximo en la senda";
+    if(run.bossActive)txt.textContent="¡Combate contra el jefe!";
+    else if(inKm<500&&!isInfiniteMode())txt.textContent=`Bifurcación en ${Math.ceil(500-inKm)} m`;
+    else txt.textContent=`Jefe en ${toBoss} m`;
+  }
+  const pk2ShellBaseRenderFrame=renderFrame;
+  renderFrame=function(...a){const r=pk2ShellBaseRenderFrame(...a);if(!pkBackgroundCatchingUp)pk2ShellUpdate();return r;};
+  const pk2ShellBaseRenderEverything=renderEverything;
+  renderEverything=function(...a){const r=pk2ShellBaseRenderEverything(...a);if(!pkBackgroundCatchingUp)pk2ShellUpdate(true);return r;};
+  setTimeout(pk2MountShell,350);
 
   // Herramienta de pruebas: solo existe al jugar en local (localhost), nunca en GitHub Pages.
   if(/^(localhost|127\.0\.0\.1)$/.test(location.hostname))window.__sendaDebug={cross(){if(run?.senda)run.senda.pendingCross++;},fork(){if(run?.senda)run.senda.pendingFork++;},bossDone(){if(!run)return;run.distance=Math.max(1000,Math.round(run.distance/1000)*1000);run.bossActive=false;completeBoss();},meta:()=>pk2Meta(),addEssence(n){pk2Meta().essence+=n;save();sendaRenderHud();},mastery:()=>pk2OpenMastery(),featured:()=>pk2FeaturedType(),state:()=>run?.senda,run:()=>run};

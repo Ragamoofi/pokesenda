@@ -1,0 +1,167 @@
+/* =====================================================================
+   PokéSenda V2 · Interfaz de juego (barra con mapa del sendero, panel del
+   equipo y navegación). Se activa con body.pk2-shell.
+   ===================================================================== */
+html body.pk2-shell .game>.top{display:none!important}
+html body.pk2-shell #field .hud{display:none!important}
+html body.pk2-shell .pk2-wide-btn{display:none!important}
+html body.pk2-shell .game{display:flex!important;flex-direction:column!important;gap:10px!important}
+
+/* ---------- barra superior ---------- */
+.pk2-top{position:relative;z-index:30;display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:22px;background:rgba(255,248,236,.97);box-shadow:0 10px 30px rgba(0,0,0,.35);color:#1d2733;font-family:'Nunito',system-ui,sans-serif}
+.pk2-top svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+.pk2-top svg.fill{fill:currentColor;stroke:none}
+.pk2-iconbtn{width:44px;height:44px;flex:none;border:0;border-radius:14px;background:#f2ead9;color:#4a3b2a;display:grid;place-items:center;cursor:pointer}
+.pk2-iconbtn:hover{background:#fff}
+.pk2-brand{display:flex;align-items:center;gap:10px;flex:none;border:0;background:none;padding:4px 8px;border-radius:14px;cursor:pointer;text-align:left;color:inherit;font:inherit}
+.pk2-brand:hover{background:#f2ead9}
+.pk2-logo{width:40px;height:40px;border-radius:13px;background:#14202b;color:#ff7a6b;display:grid;place-items:center}
+.pk2-brand-txt{display:flex;flex-direction:column;line-height:1.1}
+.pk2-brand-txt b{font-family:'Fredoka',sans-serif;font-weight:700;font-size:19px}
+.pk2-brand-txt small{font-size:12px;font-weight:800;color:#6b5a44}
+.pk2-wallet{display:flex;gap:8px;flex:none}
+.pk2-coin{height:42px;padding:0 14px;border-radius:14px;border:0;background:#f2ead9;color:#1d2733;display:flex;align-items:center;gap:8px;font:900 15px 'Nunito',sans-serif;cursor:default}
+button.pk2-coin{cursor:pointer}button.pk2-coin:hover{background:#fff}
+.pk2-coin i{font-style:normal;width:22px;height:22px;border-radius:50%;background:#ffb238;color:#6b3f00;font-size:12px;display:grid;place-items:center}
+.pk2-coin svg{color:#7c5cff;width:18px;height:18px}
+
+/* mapa del sendero */
+.pk2-trail{flex:1;min-width:0;height:44px;display:flex;align-items:center;gap:12px;padding:0 6px}
+.pk2-trail-km,.pk2-trail-m{flex:none;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#6b5a44}
+.pk2-trail-path{flex:none;font-size:12px;font-weight:900;padding:4px 10px;border-radius:99px;background:#14202b;color:#ffd36b}
+.pk2-trail-line{position:relative;flex:1;height:40px;margin:0 34px 0 6px}
+.pk2-trail-line::before{content:"";position:absolute;left:0;right:0;top:19px;height:3px;border-radius:2px;background:repeating-linear-gradient(90deg,#d9c9ad 0 8px,transparent 8px 14px)}
+.pk2-trail-done{position:absolute;left:0;top:18px;height:5px;border-radius:3px;background:#2bb3a3;transition:width .5s ease}
+.pk2-node{position:absolute;top:12px;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:#fff;border:3px solid #d9c9ad;box-sizing:border-box;display:grid;place-items:center}
+.pk2-node.past{background:#2bb3a3;border-color:#fff8ec}
+.pk2-node svg{width:12px;height:12px}
+.pk2-node.fork{top:8px;width:26px;height:26px;margin-left:-13px;border-radius:8px;border:2px solid #2bb3a3;transform:rotate(45deg);color:#1f8a7e}
+.pk2-node.fork svg{transform:rotate(-45deg)}
+.pk2-node.fork.past{background:#d9f3ef}
+.pk2-node.center{top:9px;width:24px;height:24px;margin-left:-12px;border:2px solid #e2574c;color:#e2574c}
+.pk2-node.center.past{background:#fde3df}
+.pk2-node.boss{left:auto;right:-18px;top:2px;width:36px;height:36px;margin:0;border:0;border-radius:12px;background:#2a2f45;color:#ffb238;box-shadow:0 4px 10px rgba(0,0,0,.25)}
+.pk2-node.boss svg{width:20px;height:20px}
+.pk2-you{position:absolute;top:8px;width:24px;height:24px;margin-left:-12px;border-radius:50%;background:#ffb238;border:3px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.3);transition:left .5s ease;animation:pk2Bob 1.4s ease-in-out infinite}
+@keyframes pk2Bob{50%{transform:translateY(-3px)}}
+
+/* pop-ups de la barra y de "Más" */
+.pk2-pop{position:absolute;z-index:40;min-width:280px;padding:14px;border-radius:18px;background:#fff8ec;color:#1d2733;box-shadow:0 18px 50px rgba(0,0,0,.4);display:flex;flex-direction:column;gap:10px;font-family:'Nunito',sans-serif}
+.pk2-pop.hidden{display:none}
+#pk2PlacePop{top:64px;left:60px}
+.pk2-pop-title{font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#6b5a44}
+.pk2-pop-row select{width:100%;height:42px!important;border-radius:12px!important;border:1px solid #e3d6bd!important;background:#fff!important;color:#1d2733!important;font:800 14px 'Nunito',sans-serif!important;padding:0 10px!important}
+.pk2-pop-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.pk2-pop-grid button{min-height:42px;padding:6px 10px;border-radius:12px;border:1px solid #e3d6bd;background:#f2ead9;color:#1d2733;font:800 13px 'Nunito',sans-serif;cursor:pointer;text-align:center}
+.pk2-pop-grid button:hover{background:#fff}
+.pk2-pop-grid button.on{background:#d9f3ef;border-color:#8fd8cd;color:#0f5a52}
+.pk2-pop-grid button:disabled{opacity:.5;cursor:not-allowed}
+.pk2-more{right:50%;bottom:76px;transform:translateX(50%);width:min(420px,calc(100% - 32px))}
+
+/* ---------- campo: sitio para el panel inferior ---------- */
+html body.pk2-shell #field.field{flex:1 1 auto!important;min-height:520px}
+html body.pk2-shell #field #teamLine{bottom:calc(236px + 2%)!important}
+html body.pk2-shell #field #enemyTeamLine{bottom:calc(236px + 4%)!important}
+html body.pk2-shell #field #pkTrainerBack{bottom:214px!important;transform:scale(.85);transform-origin:bottom left}
+html body.pk2-shell #field #sendaHud{top:14px!important}
+html body.pk2-shell #field #helpInfoBtn,html body.pk2-shell #field #uxContextBtn{top:14px!important}
+
+/* ---------- panel inferior ---------- */
+.pk2-dock{position:absolute;left:16px;right:16px;bottom:78px;z-index:12;display:flex;gap:12px;padding:12px;border-radius:24px;background:#fff8ec;box-shadow:0 18px 50px rgba(0,0,0,.32);color:#1d2733;font-family:'Nunito',sans-serif;box-sizing:border-box}
+.pk2-dock svg{width:18px;height:18px;fill:currentColor}
+.pk2-cards{flex:1;min-width:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.pk2-card{display:flex;gap:10px;align-items:center;padding:10px;border-radius:18px;background:#f2ead9;min-width:0}
+.pk2-card.down{opacity:.55;filter:grayscale(.6)}
+.pk2-card.empty{grid-column:1/-1;justify-content:center;font-weight:800;color:#6b5a44}
+.pk2-card-pic{width:58px;height:58px;flex:none;border-radius:16px;background:radial-gradient(circle at 50% 40%,#fff,#e6dac2);display:grid;place-items:center;overflow:hidden}
+.pk2-card-pic img{width:52px;height:52px;object-fit:contain;image-rendering:pixelated}
+.pk2-card-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.pk2-card-head{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.pk2-card-head b{font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pk2-card-head span{font-size:12px;font-weight:900;color:#6b5a44;flex:none}
+.pk2-hp{height:10px;border-radius:99px;background:#e0d4bd;overflow:hidden}
+.pk2-hp i{display:block;height:100%;border-radius:99px;background:#4fbf5a;transition:width .3s ease}
+.pk2-hp i.mid{background:#f0a02a}.pk2-hp i.low{background:#e2574c}
+.pk2-card-foot{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:11px;font-weight:800;color:#7d6a50}
+.pk2-types{display:flex;gap:4px}
+.pk2-type{padding:1px 7px;border-radius:99px;background:color-mix(in srgb,var(--tc) 22%,#fff);color:color-mix(in srgb,var(--tc) 70%,#000);font-size:10px;font-weight:900}
+.pk2-next{width:300px;flex:none;border-radius:18px;background:#14202b;color:#fff8ec;padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between;gap:10px;box-sizing:border-box}
+.pk2-next-txt small{display:block;font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#8fe3d8}
+.pk2-next-txt b{font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px}
+.pk2-next-ctl{display:flex;gap:8px;align-items:center}
+.pk2-speed{display:flex;background:rgba(255,255,255,.1);border-radius:12px;padding:3px}
+.pk2-speed button{border:0;border-radius:9px;padding:7px 11px;background:transparent;color:#cfe;font:800 13px 'Nunito',sans-serif;cursor:pointer}
+.pk2-speed button.on{background:#2bb3a3;color:#08201d;font-weight:900}
+.pk2-stop{width:38px;height:38px;border:0;border-radius:12px;background:rgba(226,87,76,.25);color:#ffb3a8;display:grid;place-items:center;cursor:pointer;margin-left:auto}
+.pk2-stop:disabled{opacity:.35;cursor:not-allowed}
+.pk2-go{height:38px;padding:0 14px;border:0;border-radius:12px;background:#ffb238;color:#3a2400;display:flex;align-items:center;gap:6px;font:900 14px 'Nunito',sans-serif;cursor:pointer;box-shadow:0 4px 0 #b87410}
+.pk2-go:active{transform:translateY(3px);box-shadow:0 1px 0 #b87410}
+
+/* ---------- navegación ---------- */
+.pk2-nav{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:13;display:flex;gap:4px;padding:5px;border-radius:20px;background:rgba(20,32,43,.9);box-shadow:0 10px 30px rgba(0,0,0,.35);max-width:calc(100% - 24px)}
+.pk2-nav button{display:flex;align-items:center;gap:8px;padding:9px 16px;border:0;border-radius:15px;background:transparent;color:#fff8ec;font:800 14px 'Nunito',sans-serif;cursor:pointer;white-space:nowrap}
+.pk2-nav button:hover{background:rgba(255,255,255,.1)}
+.pk2-nav button.on{background:#fff8ec;color:#14202b;font-weight:900}
+.pk2-nav svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.pk2-nav svg.fill{fill:currentColor;stroke:none}
+.pk2-nav [data-pk2-act="mastery"] svg{color:#c8b8ff}
+
+/* ---------- panel de formación como cajón ---------- */
+html body.pk2-shell:not(.pk2-wide) .main{grid-template-columns:minmax(0,1fr) 400px!important;gap:10px!important}
+html body.pk2-shell:not(.pk2-wide) .main>.right{width:auto!important;min-width:0!important;max-width:400px!important;max-height:calc(100vh - 110px);overflow:auto!important}
+html body.pk2-shell .main>.right .pk-window{width:auto!important;max-width:100%!important}
+html body.pk2-shell:not(.pk2-wide) .main>.right{animation:pk2Drawer .25s ease}
+@keyframes pk2Drawer{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+
+/* ---------- reliquias dentro de la recompensa del jefe ---------- */
+.pk2-relics{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;gap:10px;text-align:center}
+.pk2-relics-head b{display:block;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;color:#fff8ec}
+.pk2-relics-head small{font-size:13px;font-weight:700;color:#b9c6de}
+.pk2-relics .senda-cards{gap:10px}
+.pk2-relics .senda-card{min-height:0;padding:12px 10px}
+.pk2-relics .senda-card .senda-icon{font-size:30px}
+.pk2-relics .senda-card .senda-key{display:none}
+.pk2-relics .senda-card:disabled{opacity:.45;cursor:default;transform:none}
+.pk2-relics .senda-card.chosen{opacity:1;border-color:#ffd666;box-shadow:0 0 0 3px rgba(255,214,102,.5),0 10px 26px rgba(0,0,0,.35)}
+#rewardOverlay #rewardBox{max-height:calc(100vh - 32px);overflow:auto}
+
+/* ---------- móvil ---------- */
+@media (max-width:900px){
+  .pk2-trail-km,.pk2-trail-m,.pk2-trail-path{display:none}
+  .pk2-brand-txt small{display:none}
+  .pk2-next{width:230px}
+  .pk2-nav button span{display:none}
+  .pk2-nav button{padding:10px 14px}
+}
+@media (max-width:640px){
+  .pk2-nav{display:none}
+  html body.pk2-shell #field.field{min-height:600px}
+  .pk2-dock{bottom:8px!important}
+  .pk2-next{padding:8px 10px!important;gap:8px!important}
+  .pk2-next-txt small{display:none}
+  .pk2-next-txt b{font-size:14px}
+  .pk2-next-ctl{gap:6px;flex:none}
+  .pk2-speed button{padding:6px 8px}
+  .pk2-go span{display:none}
+  .pk2-go{width:38px;padding:0;justify-content:center}
+  .pk2-card-pic{width:36px!important;height:36px!important}.pk2-card-pic img{width:32px!important;height:32px!important}
+  .pk2-card{flex-direction:row!important;align-items:center}
+  .pk2-card-head{flex-direction:row!important}
+  .pk2-card-head span{display:none}
+  .pk2-cards{grid-template-columns:repeat(auto-fit,minmax(0,1fr))!important}
+  .pk2-top{flex-wrap:wrap;gap:8px;padding:8px}
+  .pk2-trail{order:5;flex-basis:100%}
+  .pk2-wallet{margin-left:auto}
+  .pk2-coin{height:38px;padding:0 10px;font-size:13px}
+  .pk2-dock{flex-direction:column;bottom:70px;left:8px;right:8px;padding:8px;gap:8px}
+  .pk2-cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .pk2-card{flex-direction:column;padding:6px;gap:4px}
+  .pk2-card-pic{width:44px;height:44px}.pk2-card-pic img{width:40px;height:40px}
+  .pk2-card-head{flex-direction:column;align-items:center}.pk2-card-head b{font-size:13px}
+  .pk2-card-foot{display:none}
+  .pk2-card-body{width:100%}
+  .pk2-next{width:auto;flex-direction:row;align-items:center}
+  html body.pk2-shell #field #teamLine{bottom:150px!important}
+  html body.pk2-shell #field #enemyTeamLine{bottom:170px!important}
+  html body.pk2-shell #field #pkTrainerBack{display:none!important}
+}

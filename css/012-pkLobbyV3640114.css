@@ -1,0 +1,28 @@
+
+/* V36.40.114 · Lobby con perspectiva: Entrenador sobre el sendero de la cabaña y Pokémon esperando dispersos. */
+#field.pk-lobby-mode .pk-trainer-back{
+  left:72.5%!important;right:auto!important;bottom:24%!important;z-index:5!important;
+}
+#field.pk-lobby-mode .pk-trainer-back img{
+  transform:scale(.86)!important;transform-origin:50% 100%!important;
+}
+#field.pk-lobby-mode #teamLine{
+  left:7%!important;right:38%!important;bottom:5%!important;height:44%!important;
+  display:block!important;transform:none!important;transform-origin:left bottom!important;
+  gap:0!important;z-index:4!important;
+}
+#field.pk-lobby-mode #teamLine .mon-wrap{
+  position:absolute!important;margin:0!important;transform-origin:50% 100%!important;
+}
+/* Tres puntos de espera irregulares: no parecen una formación de combate. */
+#field.pk-lobby-mode #teamLine .mon-wrap[data-lobby-slot="1"]{left:3%!important;bottom:1%!important;transform:scale(.74)!important}
+#field.pk-lobby-mode #teamLine .mon-wrap[data-lobby-slot="2"]{left:36%!important;bottom:18%!important;transform:scale(.72)!important}
+#field.pk-lobby-mode #teamLine .mon-wrap[data-lobby-slot="3"]{left:69%!important;bottom:4%!important;transform:scale(.74)!important}
+@media(max-width:700px){
+  #field.pk-lobby-mode .pk-trainer-back{left:68%!important;bottom:20%!important}
+  #field.pk-lobby-mode .pk-trainer-back img{transform:scale(.62)!important}
+  #field.pk-lobby-mode #teamLine{left:5%!important;right:36%!important;bottom:7%!important;height:40%!important}
+  #field.pk-lobby-mode #teamLine .mon-wrap[data-lobby-slot="1"]{left:0!important;bottom:0!important;transform:scale(.58)!important}
+  #field.pk-lobby-mode #teamLine .mon-wrap[data-lobby-slot="2"]{left:34%!important;bottom:17%!important;transform:scale(.56)!important}
+  #field.pk-lobby-mode #teamLine .mon-wrap[data-lobby-slot="3"]{left:67%!important;bottom:3%!important;transform:scale(.58)!important}
+}

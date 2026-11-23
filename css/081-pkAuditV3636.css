@@ -1,0 +1,16 @@
+
+/* V36.36 · Auditoría de slots de Gimnasio + estabilidad de Expedición Infinita */
+/* Jugador está a la izquierda: Guardia debe ser el más cercano al rival (columna derecha). */
+.gym-combat-side .gym-mon{grid-row:1!important}
+.gym-player-side .gym-mon[data-slot="0"]{grid-column:3!important}
+.gym-player-side .gym-mon[data-slot="1"]{grid-column:2!important}
+.gym-player-side .gym-mon[data-slot="2"]{grid-column:1!important}
+/* El Líder está a la derecha: su Guardia queda más cerca del jugador (columna izquierda). */
+.gym-enemy-side .gym-mon[data-slot="0"]{grid-column:1!important}
+.gym-enemy-side .gym-mon[data-slot="1"]{grid-column:2!important}
+.gym-enemy-side .gym-mon[data-slot="2"]{grid-column:3!important}
+.gym-role-mini{font-size:7px;line-height:9px;font-weight:1000;letter-spacing:.45px;text-transform:uppercase;color:#9fb7dd;margin-bottom:1px;white-space:nowrap}
+.gym-role-mini.role-0{color:#7ed7ff}.gym-role-mini.role-1{color:#ffd166}.gym-role-mini.role-2{color:#8ef0aa}
+/* V36.40.39 · Infinita: evita que un aliado reconstruido tras un KO herede el salto de vuelo y quede suspendido. */
+#field.routeInfinite #teamLine .pk-hover .mon{animation:none!important;transform:none!important}
+#field.routeInfinite #teamLine .pk-hover .pk-fly-shadow{display:none!important;animation:none!important}

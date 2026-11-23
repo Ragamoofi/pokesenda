@@ -1,0 +1,7 @@
+
+/* V36.60.2 · acceso discreto dentro del campo, fuera del HUD superior. */
+.pk-floating-mode-btn{position:absolute!important;right:12px!important;top:158px!important;z-index:31!important;width:32px!important;height:32px!important;min-width:32px!important;padding:0!important;border-radius:10px!important;border:1px solid rgba(117,153,184,.72)!important;background:linear-gradient(145deg,rgba(24,45,64,.86),rgba(11,24,36,.86))!important;color:#dcecff!important;font-size:15px!important;line-height:1!important;opacity:.72;box-shadow:0 5px 14px rgba(0,0,0,.34)!important;transition:opacity .15s ease,transform .15s ease,filter .15s ease;backdrop-filter:blur(2px)}
+.pk-floating-mode-btn:hover{opacity:1;transform:translateY(-1px);filter:brightness(1.14)}
+.pk-floating-mode-btn.pk-floating-active{opacity:1;border-color:#69c8f4!important;box-shadow:0 0 0 2px rgba(108,219,255,.26),0 0 16px rgba(86,186,255,.26)!important}
+.pk-floating-mode-btn.pk-floating-active:after{content:"";position:absolute;right:3px;top:3px;width:6px;height:6px;border-radius:50%;background:#63e793;box-shadow:0 0 8px #63e793}
+@media(max-width:760px){.pk-floating-mode-btn{right:8px!important;top:151px!important;width:30px!important;height:30px!important;min-width:30px!important}}

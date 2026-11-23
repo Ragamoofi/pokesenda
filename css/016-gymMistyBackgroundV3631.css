@@ -1,0 +1,10 @@
+
+/* V36.31 · Fondo exclusivo del Gimnasio de Misty */
+#gymBattleOverlay[data-gym-id="misty"] .gym-arena-bg{
+  background-image:url("../assets/embedded/3636e963620e4808.webp")!important;
+  background-size:cover!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
+  opacity:1!important;
+}
+#gymBattleOverlay[data-gym-id="misty"] .gym-arena-bg::after{display:none!important;content:none!important;}

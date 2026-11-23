@@ -1,0 +1,4 @@
+
+.auto-btn.active,.speed-btn.active,.quick-speed-btn.active,
+#pkRegionRuntimeRoot .auto-btn.active,#pkRegionRuntimeRoot .speed-btn.active,#pkRegionRuntimeRoot .quick-speed-btn.active,
+#pkGlobalInfiniteRoot .auto-btn.active,#pkGlobalInfiniteRoot .speed-btn.active,#pkGlobalInfiniteRoot .quick-speed-btn.active{text-decoration:none!important;text-underline-offset:initial!important}

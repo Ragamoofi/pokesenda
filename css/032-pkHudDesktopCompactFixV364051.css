@@ -1,0 +1,71 @@
+
+/* V36.40.51 · HUD superior compacto con Pokémon Classic.
+   Una fila completa para datos y una segunda para controles. */
+@media (min-width:981px) and (max-width:1500px){
+  .top{
+    display:grid!important;
+    grid-template-columns:auto minmax(0,1fr) auto!important;
+    grid-template-areas:"meta meta meta" "nav run auto"!important;
+    gap:7px 10px!important;
+    align-items:center!important;
+  }
+  .top-meta{
+    grid-area:meta!important;
+    display:flex!important;
+    align-items:center!important;
+    flex-wrap:nowrap!important;
+    gap:7px!important;
+    width:100%!important;
+    min-width:0!important;
+    overflow-x:auto!important;
+    scrollbar-width:none!important;
+  }
+  .top-meta::-webkit-scrollbar{display:none!important}
+  .top-meta>*{flex:0 0 auto!important}
+  .top-meta .title{font-size:15px!important;white-space:nowrap!important}
+  .top-meta .route-select{
+    min-width:205px!important;
+    width:min(25vw,300px)!important;
+    max-width:300px!important;
+    padding-left:8px!important;
+    padding-right:8px!important;
+  }
+  .top-meta .pill,.top-meta .mt-ticket-top{
+    padding:6px 8px!important;
+    font-size:11px!important;
+    white-space:nowrap!important;
+  }
+  .top-run{
+    grid-area:run!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex-wrap:nowrap!important;
+    gap:6px!important;
+    min-width:0!important;
+  }
+  .top-run .btn{white-space:nowrap!important}
+  .top-nav{
+    grid-area:nav!important;
+    display:flex!important;
+    align-items:center!important;
+    flex-wrap:nowrap!important;
+    gap:8px!important;
+  }
+  .top-auto{
+    grid-area:auto!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    flex-wrap:nowrap!important;
+    gap:7px!important;
+  }
+}
+@media (min-width:981px) and (max-width:1260px){
+  .top-meta{gap:5px!important}
+  .top-meta .title{font-size:14px!important}
+  .top-meta .route-select{min-width:175px!important;width:min(22vw,235px)!important;max-width:235px!important}
+  .top-meta .pill,.top-meta .mt-ticket-top{padding:5px 6px!important;font-size:10px!important}
+  .top-run{gap:4px!important}
+  .top-run .btn{padding-left:7px!important;padding-right:7px!important;font-size:10px!important}
+}

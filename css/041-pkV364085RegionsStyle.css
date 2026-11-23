@@ -1,0 +1,57 @@
+
+/* V36.40.85 · Selector de regiones preparado para futuras expansiones */
+.region-switch-btn{
+  min-height:32px!important;display:inline-flex!important;align-items:center!important;gap:7px!important;
+  padding:4px 9px!important;border:1px solid #5a78aa!important;border-radius:10px!important;
+  background:linear-gradient(180deg,#183b70,#102954)!important;color:#f5f9ff!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.08),0 3px 9px rgba(0,0,0,.22)!important;
+  cursor:pointer!important;white-space:nowrap!important;line-height:1!important;
+}
+.region-switch-btn:hover{filter:brightness(1.12);border-color:#82a5db!important}
+.region-switch-globe{font-size:16px;line-height:1;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+.region-switch-copy{display:flex;flex-direction:column;align-items:flex-start;gap:2px;line-height:1}
+.region-switch-copy b{font-size:9px!important;letter-spacing:.55px;color:#fff!important}
+.region-switch-copy small{font-size:6.5px!important;font-weight:700;color:#ffd86e;letter-spacing:.35px;text-transform:uppercase}
+.region-switch-arrow{font-size:9px;color:#9fb7d8;margin-left:1px}
+
+.region-select-box{width:min(1120px,96vw)!important;max-height:min(88vh,780px);overflow:auto;padding:0!important;border-color:#526f99!important;background:#0d1828!important}
+.region-select-head{display:flex;align-items:center;gap:12px;padding:18px 20px 15px;border-bottom:1px solid #344d70;background:linear-gradient(135deg,#142d51,#111d31 58%,#202044)}
+.region-select-head-icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:#0a1830;border:1px solid #5478a8;font-size:25px;box-shadow:0 6px 18px rgba(0,0,0,.32)}
+.region-select-head-copy{flex:1;min-width:0}.region-select-head-copy h2{margin:0 0 4px;font-size:19px}.region-select-head-copy p{margin:0;color:#9eb2ca;font-size:9px;line-height:1.5}
+.region-select-body{padding:17px 20px 20px}
+.region-current-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;color:#a9bad0;font-size:9px}.region-current-line b{color:#fff}.region-current-dot{width:7px;height:7px;border-radius:50%;background:#68d59a;box-shadow:0 0 10px rgba(104,213,154,.8)}
+.region-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.region-card{position:relative;min-height:275px;border-radius:17px;border:1px solid #405878;overflow:hidden;text-align:left;padding:0;background:#101c2b;color:#eaf2fc;box-shadow:0 12px 28px rgba(0,0,0,.28);transition:transform .14s ease,border-color .14s ease,filter .14s ease}
+.region-card.current{border-color:#4b9b75;background:linear-gradient(155deg,#10281f,#112438 62%,#122032)}
+.region-card.coming{cursor:pointer;border-color:#66578f;background:linear-gradient(155deg,#1e1730,#131d32 58%,#151b28)}
+.region-card.coming:hover{transform:translateY(-2px);border-color:#9278c3;filter:brightness(1.05)}
+.region-card-top{min-height:125px;padding:20px;position:relative;display:flex;align-items:flex-end;background:radial-gradient(circle at 75% 20%,rgba(126,190,151,.22),transparent 38%)}
+.region-card.coming .region-card-top{background:radial-gradient(circle at 75% 20%,rgba(171,132,230,.24),transparent 38%)}
+.region-number{position:absolute;right:18px;top:5px;font-size:88px;line-height:1;font-weight:1000;color:rgba(255,255,255,.055);font-family:Georgia,serif;pointer-events:none}
+.region-card-name span{display:block;font-size:8px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#87d5aa;margin-bottom:5px}.region-card.coming .region-card-name span{color:#c4a4ef}
+.region-card-name b{display:block;font-size:27px;letter-spacing:1px;color:#fff}
+.region-state-badge{position:absolute;left:18px;top:16px;padding:5px 7px;border-radius:999px;font-size:7px;font-weight:1000;letter-spacing:.8px;text-transform:uppercase;background:#1d5a3c;border:1px solid #56b880;color:#caffdc}
+.region-card.coming .region-state-badge{background:#3a2d59;border-color:#7f68a9;color:#e0cff8}
+.region-lock{position:absolute;right:18px;top:17px;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:rgba(8,12,22,.62);border:1px solid #705d95;font-size:16px}
+.region-card-info{padding:15px 18px 18px;border-top:1px solid rgba(109,133,164,.24)}
+.region-card-info p{margin:0 0 12px;color:#aebed0;font-size:9px;line-height:1.55;min-height:43px}
+.region-feature-row{display:flex;gap:6px;flex-wrap:wrap}.region-feature-row span{padding:5px 7px;border-radius:999px;background:#0b1725;border:1px solid #334b67;color:#c4d2e1;font-size:7.5px;font-weight:800}
+.region-card.coming .region-feature-row span{border-color:#493c64;color:#c9bbde}
+#regionHoennCard.coming{border-color:#3f766d;background:linear-gradient(155deg,#102a27,#111f2c 58%,#151d27)}
+#regionHoennCard.coming:hover{border-color:#68b7a8;filter:brightness(1.06)}
+#regionHoennCard.coming .region-card-top{background:radial-gradient(circle at 75% 20%,rgba(72,190,157,.24),transparent 40%)}
+#regionHoennCard.coming .region-state-badge{background:#1f5148;border-color:#4b9f8e;color:#ccfff3}
+#regionHoennCard.coming .region-card-name span{color:#72c9b8}
+#regionHoennCard.coming .region-lock{border-color:#4b8d80;background:rgba(17,49,43,.72)}
+#regionHoennCard.coming .region-feature-row span{border-color:#365e58;color:#b9ddd6}
+#regionHoennCard.requirement-met{border-color:#a88a47;background:linear-gradient(155deg,#2c2618,#14242a 58%,#182129)}
+#regionHoennCard.requirement-met .region-state-badge{background:#66501e;border-color:#d0a94e;color:#fff0b4}
+#regionHoennCard.requirement-met .region-lock{border-color:#8e713b;background:rgba(49,39,20,.72)}
+.region-coming-message{margin-top:13px;padding:10px 12px;border:1px solid #4d4168;border-radius:11px;background:#17172a;color:#b8aacd;font-size:9px;line-height:1.5;text-align:center;transition:all .15s ease}
+.region-coming-message strong{color:#eadcff}.region-coming-message.flash{border-color:#9a7acb;box-shadow:0 0 0 2px rgba(154,122,203,.14),0 0 20px rgba(139,103,197,.16);transform:scale(1.01)}
+.region-footer-note{margin-top:13px;text-align:center;color:#758aa2;font-size:8px;line-height:1.5}
+@media(max-width:980px){.region-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){
+  .region-switch-copy small{font-size:6px!important}.region-switch-btn{padding:4px 7px!important}.region-switch-globe{font-size:14px}
+  .region-select-head{padding:14px}.region-select-body{padding:13px}.region-card-grid{grid-template-columns:1fr}.region-card{min-height:235px}.region-card-top{min-height:104px;padding:17px}.region-card-name b{font-size:23px}.region-number{font-size:74px}.region-card-info p{min-height:0}
+}

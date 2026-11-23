@@ -1,0 +1,8 @@
+
+/* V36.40.17 · Ajustes de lectura para la geometría radial. */
+.poe-tree-canvas.v24 .branch-caption.automation{left:612px!important;top:48px!important}
+.poe-tree-canvas.v24 .branch-caption.expedition{left:618px!important;bottom:42px!important}
+.poe-tree-canvas.v24 .branch-caption.combat{left:76px!important;top:336px!important}
+.poe-tree-canvas.v24 .branch-caption.fortune{right:76px!important;top:336px!important}
+.poe-tree-canvas.v24 .tree-rings{opacity:1}
+.poe-tree-canvas.v24 .poe-tree-lines line:not(.cross-branch){stroke-width:4!important}

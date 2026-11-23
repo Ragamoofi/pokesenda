@@ -1,0 +1,125 @@
+
+/* V36.71.0 · Árbol de Habilidades · identidad cromática por región.
+   Solo cambia el chrome/interfaz del Árbol. NO toca nodos, ramas, lógica, layout ni mecánicas. */
+#skillTreeOverlay#skillTreeOverlay{
+  --pkt-tree-overlay:radial-gradient(ellipse at 50% 34%,rgba(24,47,79,.92),rgba(4,9,17,.972) 64%);
+  --pkt-tree-shell-bg:linear-gradient(180deg,#152233,#0b131d);
+  --pkt-tree-shell-edge:#4d6784;
+  --pkt-tree-shell-glow:rgba(106,153,214,.18);
+  --pkt-tree-head:linear-gradient(110deg,#213953,#122130 68%,#0d1723);
+  --pkt-tree-head-line:rgba(158,198,235,.34);
+  --pkt-tree-head-soft:rgba(84,124,171,.20);
+  --pkt-tree-title:#f0f6ff;
+  --pkt-tree-text:#e3edf7;
+  --pkt-tree-muted:#a8bbcf;
+  --pkt-tree-accent:#8db7e6;
+  --pkt-tree-accent-strong:#b8d4ef;
+  --pkt-tree-gold:#e5c982;
+  --pkt-tree-gold-edge:#b99a52;
+  --pkt-tree-chip:#0f1a27;
+  --pkt-tree-chip-edge:#39506a;
+  --pkt-tree-btn:linear-gradient(180deg,#30475f,#1b2b3c);
+  --pkt-tree-btn-edge:#5d7a9c;
+  --pkt-tree-btn-hover:#405876;
+  --pkt-tree-panel:#0a1420;
+  --pkt-tree-panel-soft:#101d2b;
+  --pkt-tree-panel-edge:#375168;
+  --pkt-tree-panel-grid:rgba(151,188,220,.06);
+  --pkt-tree-panel-glow:rgba(70,121,175,.15);
+  --pkt-tree-foot:#afc2d5;
+}
+#pkRegionRuntimeRoot #skillTreeOverlay#skillTreeOverlay{
+  --pkt-tree-overlay:radial-gradient(ellipse at 50% 30%,rgba(67,81,48,.94),rgba(7,12,9,.976) 64%);
+  --pkt-tree-shell-bg:linear-gradient(180deg,#1e281f,#141b16);
+  --pkt-tree-shell-edge:#726845;
+  --pkt-tree-shell-glow:rgba(216,179,90,.14);
+  --pkt-tree-head:linear-gradient(110deg,#4d562f,#2c3325 62%,#382f20);
+  --pkt-tree-head-line:rgba(240,213,138,.32);
+  --pkt-tree-head-soft:rgba(108,124,67,.22);
+  --pkt-tree-title:#fff3d1;
+  --pkt-tree-text:#eef0e4;
+  --pkt-tree-muted:#b8bea7;
+  --pkt-tree-accent:#d8b35a;
+  --pkt-tree-accent-strong:#f0d58a;
+  --pkt-tree-gold:#f0d58a;
+  --pkt-tree-gold-edge:#b69045;
+  --pkt-tree-chip:#141d16;
+  --pkt-tree-chip-edge:#5a6144;
+  --pkt-tree-btn:linear-gradient(180deg,#465433,#293325);
+  --pkt-tree-btn-edge:#70794f;
+  --pkt-tree-btn-hover:#56673d;
+  --pkt-tree-panel:#0d1610;
+  --pkt-tree-panel-soft:#18241b;
+  --pkt-tree-panel-edge:#596347;
+  --pkt-tree-panel-grid:rgba(198,213,170,.045);
+  --pkt-tree-panel-glow:rgba(116,126,67,.12);
+  --pkt-tree-foot:#c1c7b1;
+}
+html[data-pk-boot-region="hoenn"] #skillTreeOverlay#skillTreeOverlay{
+  --pkt-tree-overlay:radial-gradient(ellipse at 50% 30%,rgba(11,68,72,.94),rgba(3,14,17,.978) 64%);
+  --pkt-tree-shell-bg:linear-gradient(180deg,#10363a,#091d22);
+  --pkt-tree-shell-edge:#438984;
+  --pkt-tree-shell-glow:rgba(99,216,196,.16);
+  --pkt-tree-head:linear-gradient(110deg,#176066,#10353a 62%,#0d262c);
+  --pkt-tree-head-line:rgba(113,221,201,.30);
+  --pkt-tree-head-soft:rgba(37,118,111,.24);
+  --pkt-tree-title:#effffe;
+  --pkt-tree-text:#dcf3ef;
+  --pkt-tree-muted:#9fceca;
+  --pkt-tree-accent:#71ddc9;
+  --pkt-tree-accent-strong:#aaf0e3;
+  --pkt-tree-gold:#f0c96a;
+  --pkt-tree-gold-edge:#a87d2f;
+  --pkt-tree-chip:#0b2328;
+  --pkt-tree-chip-edge:#397975;
+  --pkt-tree-btn:linear-gradient(180deg,#1f6761,#103f45);
+  --pkt-tree-btn-edge:#63cfc0;
+  --pkt-tree-btn-hover:#2b7c73;
+  --pkt-tree-panel:#06161a;
+  --pkt-tree-panel-soft:#0c252a;
+  --pkt-tree-panel-edge:#3b807b;
+  --pkt-tree-panel-grid:rgba(128,225,210,.05);
+  --pkt-tree-panel-glow:rgba(72,171,161,.13);
+  --pkt-tree-foot:#addbd5;
+}
+#skillTreeOverlay#skillTreeOverlay.overlay{background:var(--pkt-tree-overlay)!important}
+#skillTreeOverlay#skillTreeOverlay .tree-modal{background:var(--pkt-tree-shell-bg)!important;border:1px solid var(--pkt-tree-shell-edge)!important;box-shadow:0 28px 90px rgba(0,0,0,.62),0 0 0 1px rgba(255,255,255,.03) inset,0 0 42px var(--pkt-tree-shell-glow)!important;}
+#skillTreeOverlay#skillTreeOverlay .tree-head-row{background:linear-gradient(110deg,var(--pkt-tree-head-soft),transparent 70%),var(--pkt-tree-head)!important;border-bottom:1px solid rgba(255,255,255,.06)!important;}
+#skillTreeOverlay#skillTreeOverlay .tree-head-row:before{background:linear-gradient(90deg,transparent,var(--pkt-tree-head-line),transparent)!important}
+#skillTreeOverlay#skillTreeOverlay .tree-eyebrow{color:var(--pkt-tree-muted)!important}
+#skillTreeOverlay#skillTreeOverlay .tree-eyebrow:before{background:var(--pkt-tree-accent)!important;box-shadow:0 0 12px var(--pkt-tree-shell-glow)!important}
+#skillTreeOverlay#skillTreeOverlay .tree-head-copy h2{color:var(--pkt-tree-title)!important}
+#skillTreeOverlay#skillTreeOverlay .tree-wallet{background:rgba(0,0,0,.14)!important;border-color:rgba(255,255,255,.08)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.025),0 0 0 1px rgba(0,0,0,.08)!important;}
+#skillTreeOverlay#skillTreeOverlay .tree-wallet-coin{color:#fff5d3!important;background:linear-gradient(180deg,var(--pkt-tree-gold),var(--pkt-tree-gold-edge))!important;border-color:var(--pkt-tree-gold-edge)!important;box-shadow:inset 0 0 0 3px rgba(19,23,26,.88),inset 0 0 0 4px rgba(255,255,255,.10),0 0 16px rgba(0,0,0,.16)!important;}
+#skillTreeOverlay#skillTreeOverlay .tree-wallet small{color:var(--pkt-tree-muted)!important}
+#skillTreeOverlay#skillTreeOverlay .tree-wallet b{color:var(--pkt-tree-gold)!important}
+#skillTreeOverlay#skillTreeOverlay .tree-close-top,#skillTreeOverlay#skillTreeOverlay .tree-toolbar-actions .btn,#skillTreeOverlay#skillTreeOverlay .pkt-map-home,#skillTreeOverlay#skillTreeOverlay .pkt-locate,#skillTreeOverlay#skillTreeOverlay .pkt-detail-dismiss{background:var(--pkt-tree-btn)!important;border-color:var(--pkt-tree-btn-edge)!important;color:var(--pkt-tree-title)!important;}
+#skillTreeOverlay#skillTreeOverlay .tree-close-top:hover,#skillTreeOverlay#skillTreeOverlay .tree-toolbar-actions .btn:hover,#skillTreeOverlay#skillTreeOverlay .pkt-map-home:hover,#skillTreeOverlay#skillTreeOverlay .pkt-locate:hover,#skillTreeOverlay#skillTreeOverlay .pkt-detail-dismiss:hover{background:var(--pkt-tree-btn-hover)!important;filter:none!important}
+#skillTreeOverlay#skillTreeOverlay .tree-toolbar-actions{background:var(--pkt-tree-chip)!important;border-color:var(--pkt-tree-chip-edge)!important}
+#skillTreeOverlay#skillTreeOverlay [id="treeZoomFit"]{background:var(--pkt-tree-btn)!important;border-color:var(--pkt-tree-btn-edge)!important;color:var(--pkt-tree-title)!important}
+#skillTreeOverlay#skillTreeOverlay .tree-zoom-label{color:var(--pkt-tree-muted)!important}
+#skillTreeOverlay#skillTreeOverlay .tree-toolbar{color:var(--pkt-tree-text)!important}
+#skillTreeOverlay#skillTreeOverlay .tree-toolbar-hint{color:var(--pkt-tree-muted)!important}
+#skillTreeOverlay#skillTreeOverlay [data-pkt-affordable]{color:var(--pkt-tree-gold)!important}
+#skillTreeOverlay#skillTreeOverlay .pkt-search{background:var(--pkt-tree-chip)!important;border-color:var(--pkt-tree-chip-edge)!important;color:var(--pkt-tree-muted)!important;}
+#skillTreeOverlay#skillTreeOverlay .pkt-search:focus-within{border-color:var(--pkt-tree-accent)!important;box-shadow:0 0 0 2px rgba(255,255,255,.04),0 0 0 4px var(--pkt-tree-shell-glow)!important}
+#skillTreeOverlay#skillTreeOverlay .pkt-search input{color:var(--pkt-tree-title)!important}
+#skillTreeOverlay#skillTreeOverlay .pkt-search input::placeholder{color:var(--pkt-tree-muted)!important}
+#skillTreeOverlay#skillTreeOverlay .pkt-search-count{color:var(--pkt-tree-gold)!important}
+#skillTreeOverlay#skillTreeOverlay .pkt-map-wrap,#skillTreeOverlay#skillTreeOverlay .pkt-inspector{background:var(--pkt-tree-panel)!important;border-color:var(--pkt-tree-panel-edge)!important;box-shadow:0 10px 28px rgba(0,0,0,.26),inset 0 0 0 1px rgba(255,255,255,.025),0 0 32px var(--pkt-tree-panel-glow)!important;}
+#skillTreeOverlay#skillTreeOverlay .pkt-viewport.poe-tree-scroll{background:radial-gradient(ellipse at 50% 48%,var(--pkt-tree-panel-glow),transparent 70%),radial-gradient(var(--pkt-tree-panel-grid) .9px,transparent .9px) 0 0/21px 21px,var(--pkt-tree-panel)!important;box-shadow:inset 0 0 80px rgba(0,0,0,.38)!important;}
+#skillTreeOverlay#skillTreeOverlay .pkt-map-caption,#skillTreeOverlay#skillTreeOverlay .pkt-map-legend,#skillTreeOverlay#skillTreeOverlay .pkt-feedback{background:rgba(0,0,0,.26)!important;border-color:rgba(255,255,255,.08)!important;color:var(--pkt-tree-text)!important;}
+#skillTreeOverlay#skillTreeOverlay .pkt-map-legend,#skillTreeOverlay#skillTreeOverlay .pkt-footnote{color:var(--pkt-tree-foot)!important}
+#skillTreeOverlay#skillTreeOverlay .pkt-detail-scroll,#skillTreeOverlay#skillTreeOverlay .pkt-purchase{background:linear-gradient(180deg,var(--pkt-tree-panel-soft),var(--pkt-tree-panel))!important;}
+#skillTreeOverlay#skillTreeOverlay .pkt-purchase{border-left-color:rgba(255,255,255,.08)!important}
+#skillTreeOverlay#skillTreeOverlay .pkt-detail h3,#skillTreeOverlay#skillTreeOverlay .pkt-detail-category,#skillTreeOverlay#skillTreeOverlay .pkt-price strong{color:var(--pkt-tree-title)!important}
+#skillTreeOverlay#skillTreeOverlay .pkt-effect p,#skillTreeOverlay#skillTreeOverlay .pkt-detail-rank,#skillTreeOverlay#skillTreeOverlay .pkt-req-head,#skillTreeOverlay#skillTreeOverlay .pkt-no-req,#skillTreeOverlay#skillTreeOverlay .pkt-buy-note,#skillTreeOverlay#skillTreeOverlay .pkt-footnote,#skillTreeOverlay#skillTreeOverlay .pkt-empty p,#skillTreeOverlay#skillTreeOverlay .pkt-empty-tips div,#skillTreeOverlay#skillTreeOverlay .pkt-total-progress span{color:var(--pkt-tree-muted)!important}
+#skillTreeOverlay#skillTreeOverlay .pkt-detail .pkt-eyebrow,#skillTreeOverlay#skillTreeOverlay .pkt-empty .pkt-eyebrow{color:var(--pkt-tree-accent)!important}
+#skillTreeOverlay#skillTreeOverlay .pkt-total-progress strong,#skillTreeOverlay#skillTreeOverlay .pkt-price>strong,#skillTreeOverlay#skillTreeOverlay .pkt-map-total,#skillTreeOverlay#skillTreeOverlay .pkt-empty h3{color:var(--pkt-tree-title)!important}
+#skillTreeOverlay#skillTreeOverlay .pkt-total-progress div,#skillTreeOverlay#skillTreeOverlay .pkt-detail-progress{background:rgba(255,255,255,.08)!important}
+#skillTreeOverlay#skillTreeOverlay .pkt-total-progress div>i,#skillTreeOverlay#skillTreeOverlay .pkt-detail-progress>i{background:linear-gradient(90deg,var(--pkt-tree-accent),var(--pkt-tree-gold))!important}
+#skillTreeOverlay#skillTreeOverlay .pkt-buy.can,#skillTreeOverlay#skillTreeOverlay .pkt-start{background:linear-gradient(180deg,var(--pkt-tree-accent),var(--pkt-tree-btn-edge))!important;border-color:var(--pkt-tree-accent)!important;color:#06131d!important;}
+#skillTreeOverlay#skillTreeOverlay .pkt-buy:not(.can){background:var(--pkt-tree-btn)!important;border-color:var(--pkt-tree-btn-edge)!important;color:var(--pkt-tree-title)!important}
+#skillTreeOverlay#skillTreeOverlay .pkt-requirement{background:rgba(255,255,255,.03)!important;border-color:rgba(255,255,255,.08)!important}
+#skillTreeOverlay#skillTreeOverlay .pkt-next summary,#skillTreeOverlay#skillTreeOverlay .pkt-next button{color:var(--pkt-tree-title)!important}
+#skillTreeOverlay#skillTreeOverlay .pkt-next button{background:rgba(255,255,255,.03)!important;border-color:rgba(255,255,255,.08)!important}

@@ -1,0 +1,8 @@
+
+/* V36.40.11 · SOLO tipografía de la información junto al sprite.
+   No cambia tamaños, columnas, márgenes, padding, barras, sprites ni tarjetas. */
+.formation-slot .formation-pokemon b{font-size:13px!important}
+.formation-slot .formation-pokemon small{font-size:9px!important}
+.formation-slot .formation-pokemon .formation-position-tag{font-size:7.5px!important}
+.formation-slot .formation-pokemon .formation-stars{font-size:11px!important}
+.formation-slot .formation-pokemon .click-hint{font-size:9.5px!important}

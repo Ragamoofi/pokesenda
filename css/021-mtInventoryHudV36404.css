@@ -1,0 +1,15 @@
+
+/* V36.40.4 · MT como categoría real del Inventario + contador de Tickets en HUD */
+.mt-ticket-top{appearance:none;display:inline-flex!important;align-items:center;gap:4px;color:#cfe1ff!important;background:#14243c!important;border:1px solid #49688f!important;cursor:pointer;font-weight:900!important;transition:transform .12s ease,filter .12s ease,border-color .12s ease,box-shadow .12s ease}
+.mt-ticket-top:hover{filter:brightness(1.14);transform:translateY(-1px)}
+.mt-ticket-top.has-tickets{color:#fff2b8!important;border-color:#b88a37!important;background:linear-gradient(180deg,#3a2d18,#211d18)!important;box-shadow:0 0 0 1px #6c5027 inset,0 0 14px rgba(255,196,75,.12)}
+.mt-ticket-top.has-tickets b{color:#ffd166!important}
+.inventory-tab-tm{min-width:92px}
+.inventory-tm-pane{min-height:260px}
+.inventory-tm-heading{display:flex;align-items:center;gap:12px;justify-content:space-between;margin:2px 0 11px;padding:11px 12px;background:linear-gradient(135deg,#10284a,#14203a);border:1px solid #416aa8;border-radius:11px}
+.inventory-tm-heading>div:first-child{min-width:0}.inventory-tm-heading b{display:block;font-size:14px}.inventory-tm-heading small{display:block;margin-top:3px;color:#aebed4;font-size:10px;line-height:1.35}
+.inventory-tm-ticket{flex:0 0 auto;border-radius:999px;padding:7px 10px;background:#0a1629;border:1px solid #537ab2;color:#ffe08a;font-size:11px;font-weight:1000;white-space:nowrap}
+.inventory-tm-note{margin-top:10px!important;padding:9px 10px;background:#0c1729;border:1px solid #2d466d;border-radius:9px;line-height:1.45}
+.mt-inventory-gacha-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}.mt-inventory-gacha-title>div{min-width:0}.mt-inventory-gacha-title b{display:block;font-size:13px}.mt-inventory-gacha-title small{display:block;margin-top:2px}.mt-inventory-gacha-title strong{font-size:13px;color:#ffe08a;background:#0a1629;border:1px solid #5276a8;border-radius:999px;padding:6px 9px;white-space:nowrap}
+.tm-collection-empty{border-style:dashed!important}
+@media(max-width:780px){.inventory-tabs{display:grid!important;grid-template-columns:repeat(2,1fr)!important}.inventory-tm-heading{align-items:flex-start;flex-direction:column}.mt-ticket-top{padding:7px 9px!important}}

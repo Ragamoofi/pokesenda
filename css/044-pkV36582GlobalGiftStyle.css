@@ -1,0 +1,2 @@
+
+.pk-global-toast{position:fixed!important;left:50%!important;top:88px!important;transform:translateX(-50%)!important;z-index:490500!important;border:1px solid #8f82d7!important;border-radius:999px!important;background:#111a32ee!important;color:#f4f1ff!important;padding:9px 14px!important;font-size:9px!important;font-weight:900!important;opacity:0!important;pointer-events:none!important;box-shadow:0 8px 28px #0009,0 0 20px #7f70c633!important;transition:.18s!important}.pk-global-toast.show{opacity:1!important;transform:translateX(-50%) translateY(-4px)!important}

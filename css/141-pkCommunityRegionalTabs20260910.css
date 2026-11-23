@@ -1,0 +1,57 @@
+
+/* Comunidad: Kanto y Johto comparten exactamente la misma estructura de ficha. */
+.pk-public-hero-global{align-items:stretch}
+.pk-public-hero-copy{min-width:0;display:flex;flex-direction:column;justify-content:center}
+.pk-public-global-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:11px}
+.pk-public-global-strip>div{background:#0a1830;border:1px solid #3d5d8e;border-radius:9px;padding:8px 6px;text-align:center;min-width:0}
+.pk-public-global-strip b{display:block;font-size:13px;color:#edf4ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pk-public-global-strip small{display:block;margin-top:2px;font-size:6.5px;color:#9cafc8;line-height:1.35}
+.pk-public-region-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0 0;padding:7px;border:1px solid #355382;border-radius:14px;background:linear-gradient(180deg,#08162c,#0a1b34)}
+.pk-public-region-tab{min-height:56px;border:1px solid #3b5987;border-radius:11px;background:#10213f;color:#aebfd5;font-family:inherit;cursor:pointer;transition:.14s;padding:8px 10px;display:flex;align-items:center;gap:9px;text-align:left}
+.pk-public-region-tab:hover{filter:brightness(1.1);border-color:#6d91c6}
+.pk-public-region-tab-icon{font-size:14px;line-height:1;flex:0 0 auto;filter:drop-shadow(0 1px 2px rgba(0,0,0,.32))}
+.pk-public-region-tab-copy{display:grid;gap:3px;min-width:0;line-height:1.05}
+.pk-public-region-tab-title{font-size:10px;font-weight:1000;color:#eef4ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pk-public-region-tab-state{display:inline-flex;align-items:center;gap:4px;width:max-content;max-width:100%;padding:3px 7px;border-radius:999px;border:1px solid #4a6489;background:#0c182b;color:#8fa5c4;font-size:6.5px;font-weight:950;letter-spacing:.35px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pk-public-region-tab.active{background:linear-gradient(180deg,#2a4f92,#18396f);border-color:#83ace7;color:#fff;box-shadow:inset 0 0 0 1px #ffffff12,0 3px 10px #0003}
+.pk-public-region-tab.active .pk-public-region-tab-state{border-color:#86aeea;background:#132845;color:#e7f1ff}
+.pk-public-region-tab[data-profile-region="johto"].active,.pk-public-region-tab[data-self-profile-region="johto"].active{background:linear-gradient(180deg,#5c552f,#39351f);border-color:#b29a55;color:#fff1bd}
+.pk-public-region-tab[data-profile-region="johto"].active .pk-public-region-tab-state,.pk-public-region-tab[data-self-profile-region="johto"].active .pk-public-region-tab-state{border-color:#b29a55;background:#2b2818;color:#fff1bd}
+.pk-public-region-tab[data-profile-region="hoenn"].active,.pk-public-region-tab[data-self-profile-region="hoenn"].active{background:linear-gradient(180deg,#24756f,#18524d);border-color:#74d5c6;color:#effffc}
+.pk-public-region-tab[data-profile-region="hoenn"].active .pk-public-region-tab-state,.pk-public-region-tab[data-self-profile-region="hoenn"].active .pk-public-region-tab-state{border-color:#6fcfbf;background:#123733;color:#dffef6}
+.pk-public-region-panel{margin-top:10px;padding:13px;border:1px solid #355382;border-radius:14px;background:linear-gradient(180deg,#0d1d39,#09182f)}
+.pk-public-region-panel[data-region="johto"]{border-color:#625d3c;background:linear-gradient(180deg,#20251d,#151c17)}
+.pk-public-region-panel[data-region="hoenn"]{border-color:#3e817d;background:linear-gradient(180deg,#103237,#0a2429)}
+.pk-public-region-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:4px 4px 12px;border-bottom:1px solid #355382}
+.pk-public-region-head-copy{min-width:0}
+.pk-public-region-head-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.pk-public-region-status{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;border:1px solid #4f6890;background:#0d1a2e;color:#bfd2eb;font-size:6.6px;font-weight:1000;letter-spacing:.42px;text-transform:uppercase;white-space:nowrap}
+.pk-public-region-status.ready{border-color:#5380b8;color:#eaf4ff;background:#10233e}
+.pk-public-region-status.pending{border-color:#6f6786;color:#d4cce6;background:#171c2b}
+.pk-public-region-panel[data-region="johto"] .pk-public-region-head{border-bottom-color:#5d593e}
+.pk-public-region-panel[data-region="hoenn"] .pk-public-region-head{border-bottom-color:#3f7472}
+.pk-public-region-head h3{margin:0;font-size:15px}.pk-public-region-head small{display:block;margin-top:3px;color:#93a8c4;font-size:7px}
+.pk-public-region-panel[data-region="johto"] .pk-public-region-head small{color:#b8b49b}
+.pk-public-region-panel[data-region="hoenn"] .pk-public-region-head small{color:#a6d7d1}
+.pk-public-region-stats{margin-top:11px}
+.pk-public-region-panel[data-region="johto"] .pk-public-region-stats>div{background:#181f18;border-color:#565640}
+.pk-public-region-panel[data-region="johto"] .pk-public-region-stats small{color:#abae96}
+.pk-public-region-panel[data-region="hoenn"] .pk-public-region-stats>div{background:#112c31;border-color:#3d7673}
+.pk-public-region-panel[data-region="hoenn"] .pk-public-region-stats small{color:#9fd5cf}
+.pk-public-region-section{margin-top:11px!important}
+.pk-public-region-panel[data-region="johto"] .pk-public-region-section{background:#171e18;border-color:#53543c}
+.pk-public-region-panel[data-region="hoenn"] .pk-public-region-section{background:#10252a;border-color:#386f6b}
+.pk-public-region-panel[data-region="johto"] .pk-public-mon{background:#1e271f;border-color:#5c5b3f}
+.pk-public-region-panel[data-region="johto"] .pk-public-badge{background:#1e271f;border-color:#5c5b3f}
+.pk-public-region-panel[data-region="johto"] .pk-public-badge>div{background:#121812}
+.pk-public-region-panel[data-region="hoenn"] .pk-public-mon{background:#133136;border-color:#46827d}
+.pk-public-region-panel[data-region="hoenn"] .pk-public-badge{background:#133136;border-color:#46827d}
+.pk-public-region-panel[data-region="hoenn"] .pk-public-badge>div{background:#0e2023}
+.pk-public-badge small{display:block;font-size:5.8px;line-height:1.3;color:#879bb6;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pk-public-region-panel[data-region="johto"] .pk-public-badge small{color:#a6a78e}
+.pk-public-region-panel[data-region="hoenn"] .pk-public-badge small{color:#9fd4cd}
+.pk-public-badges-section{margin-bottom:0}
+.pk-public-region-empty{margin-top:12px}
+@media(max-width:1000px){.pk-public-global-strip{grid-template-columns:repeat(3,minmax(0,1fr))}.pk-public-region-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.pk-public-global-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.pk-public-region-tabs{grid-template-columns:1fr}.pk-public-region-head{align-items:stretch;flex-direction:column}.pk-public-region-head-meta{justify-content:flex-start}.pk-public-region-head .btn{width:100%}}
+@media(max-width:430px){.pk-public-global-strip{grid-template-columns:1fr 1fr}.pk-public-region-tab-title{font-size:9.5px}.pk-public-region-tab-state{font-size:6px;padding:3px 6px}}

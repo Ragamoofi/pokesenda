@@ -1,0 +1,69 @@
+
+/* V36.40.52 · compacta aún más la fila superior y reemplaza el icono del Gachapon Premium
+   por un sprite oficial estilo Pokémon (Cherish Ball). */
+@media (min-width:981px){
+  .top{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto auto!important;
+    grid-template-areas:"meta meta meta" "nav run auto"!important;
+    gap:7px 10px!important;
+    align-items:center!important;
+  }
+  .top-meta{
+    grid-area:meta!important;
+    display:flex!important;
+    align-items:center!important;
+    flex-wrap:nowrap!important;
+    gap:4px!important;
+    width:100%!important;
+    min-width:0!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scrollbar-width:none!important;
+    padding-bottom:1px!important;
+  }
+  .top-meta::-webkit-scrollbar{display:none!important}
+  .top-meta>*{flex:0 0 auto!important}
+  .top-meta .title{font-size:14px!important;white-space:nowrap!important;letter-spacing:.1px!important}
+  .top-meta .route-select{
+    min-width:160px!important;
+    width:clamp(160px,20vw,220px)!important;
+    max-width:220px!important;
+    min-height:32px!important;
+    padding:5px 7px!important;
+    font-size:10px!important;
+  }
+  .top-meta .pill,.top-meta .mt-ticket-top{
+    min-height:31px!important;
+    padding:4px 6px!important;
+    font-size:9px!important;
+    line-height:1.1!important;
+    white-space:nowrap!important;
+  }
+  .top-run{grid-area:run!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-wrap:nowrap!important;gap:5px!important;min-width:0!important}
+  .top-run .btn{white-space:nowrap!important}
+  .top-nav{grid-area:nav!important;display:flex!important;align-items:center!important;flex-wrap:nowrap!important;gap:8px!important}
+  .top-auto{grid-area:auto!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;flex-wrap:nowrap!important;gap:7px!important}
+}
+@media (min-width:1261px) and (max-width:1500px){
+  .top-meta{gap:6px!important}
+  .top-meta .title{font-size:15px!important}
+  .top-meta .route-select{min-width:185px!important;width:clamp(185px,22vw,250px)!important;max-width:250px!important;font-size:11px!important;padding:6px 8px!important}
+  .top-meta .pill,.top-meta .mt-ticket-top{min-height:32px!important;padding:5px 8px!important;font-size:10px!important}
+}
+.tg-orb{
+  display:inline-block!important;
+  width:20px!important;
+  height:20px!important;
+  flex:0 0 20px!important;
+  font-size:0!important;
+  line-height:0!important;
+  vertical-align:middle!important;
+  background-image:url('../assets/embedded/52505622ae844bb3.png')!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+  background-size:contain!important;
+  filter:drop-shadow(0 0 7px rgba(255,102,102,.32))!important;
+}
+.menu-timed-gacha .tg-orb{width:22px!important;height:22px!important;flex-basis:22px!important}
+.timed-gacha-strip .tg-orb{width:19px!important;height:19px!important;flex-basis:19px!important}

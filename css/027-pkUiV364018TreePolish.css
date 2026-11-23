@@ -1,0 +1,45 @@
+
+/* V36.40.18 · Pulido radial final antes del fondo ilustrado. */
+.poe-tree-stage{position:relative!important}
+.poe-tree-canvas.v24 .tree-rings{
+  opacity:1!important;
+  background:
+    radial-gradient(circle at center,transparent 0 168px,rgba(255,255,255,.065) 169px 171px,transparent 172px),
+    radial-gradient(circle at center,transparent 0 253px,rgba(255,255,255,.06) 254px 256px,transparent 257px),
+    radial-gradient(circle at center,transparent 0 338px,rgba(255,255,255,.055) 339px 341px,transparent 342px),
+    radial-gradient(circle at center,transparent 0 423px,rgba(255,255,255,.052) 424px 426px,transparent 427px),
+    radial-gradient(circle at center,transparent 0 508px,rgba(255,255,255,.05) 509px 511px,transparent 512px),
+    radial-gradient(circle at center,transparent 0 598px,rgba(255,255,255,.055) 599px 601px,transparent 602px)!important;
+  mask-image:radial-gradient(circle at center,transparent 0 80px,#000 81px 100%)!important;
+}
+/* Los rótulos viven fuera del canvas escalado para no volverse ilegibles al usar Ajustar. */
+.tree-branch-labels{position:absolute;inset:0;z-index:6;pointer-events:none;overflow:visible}
+.tree-branch-label{
+  position:absolute;padding:3px 7px;border-radius:999px;background:rgba(7,15,27,.72);
+  border:1px solid rgba(157,181,216,.22);font-size:10px;font-weight:1000;line-height:1;
+  letter-spacing:1.25px;text-transform:uppercase;white-space:nowrap;text-shadow:0 2px 5px #000;
+  box-shadow:0 2px 8px rgba(0,0,0,.22)
+}
+.tree-branch-label.automation{left:50%;top:2.5%;transform:translateX(-50%);color:#d6a5ff}
+.tree-branch-label.expedition{left:50%;bottom:2.5%;transform:translateX(-50%);color:#86cfff}
+.tree-branch-label.combat{left:3.2%;top:29%;color:#ff9a8f}
+.tree-branch-label.fortune{right:3.2%;top:29%;color:#ffd86f}
+/* Más protagonismo de los nodos que realmente cierran cada rama. */
+.poe-tree-canvas.v24 .poe-node[data-skill="c9"],
+.poe-tree-canvas.v24 .poe-node[data-skill="f8"],
+.poe-tree-canvas.v24 .poe-node[data-skill="e8"],
+.poe-tree-canvas.v24 .poe-node[data-skill="a7"]{
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--branch,#7bd6a0) 24%,transparent),0 0 24px color-mix(in srgb,var(--branch,#7bd6a0) 28%,transparent),0 8px 20px rgba(0,0,0,.48)!important;
+}
+.poe-tree-canvas.v24 .poe-node[data-skill="f17"]{box-shadow:0 0 0 3px rgba(255,226,122,.16),0 0 28px rgba(255,226,122,.34),0 8px 20px rgba(0,0,0,.48)!important}
+/* Las líneas maxeadas siguen leyendo bien, pero sin robar protagonismo a los nodos. */
+.poe-tree-canvas.v24 .poe-tree-lines line:not(.cross-branch){stroke-width:3.4!important;opacity:.20!important}
+.poe-tree-canvas.v24 .poe-tree-lines line:not(.cross-branch).active{opacity:.46!important}
+.poe-tree-canvas.v24 .poe-tree-lines line:not(.cross-branch).maxed{opacity:.62!important}
+.poe-tree-canvas.v24 .poe-tree-lines line.cross-branch{stroke-width:2.1!important;opacity:.055!important}
+.poe-tree-canvas.v24 .poe-tree-lines line.cross-branch.active{opacity:.13!important}
+.poe-tree-canvas.v24 .poe-tree-lines line.cross-branch.maxed{opacity:.22!important}
+@media(max-width:700px){
+  .tree-branch-label{font-size:8px;padding:3px 5px;letter-spacing:.8px}
+  .tree-branch-label.combat,.tree-branch-label.fortune{top:27%}
+}

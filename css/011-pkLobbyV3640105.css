@@ -1,0 +1,28 @@
+
+/* V36.40.105 · Lobby de expedición: campamento "Región de Kanto".
+   Pokémon desplegados por el terreno izquierdo · Entrenador saliendo de la cabaña
+   (derecha), a escala con la casa y sin tapar el cartel de madera. */
+#field.pk-lobby-mode{
+  background-image:linear-gradient(rgba(6,10,14,.04),rgba(6,10,14,.12)),url("../assets/embedded/bbc2f98817e374e1.jpg")!important;
+  background-size:cover!important;background-position:center bottom!important;background-repeat:no-repeat!important;background-color:#0b1520!important;
+  transition:none!important;
+}
+#field.pk-lobby-mode>.sky,#field.pk-lobby-mode>.ground,#field.pk-lobby-mode>.path,#field.pk-lobby-mode>.scenery{display:none!important}
+#field.pk-lobby-mode .pk-trainer-back{left:69.5%!important;right:auto!important;bottom:30.5%!important;z-index:4}
+#field.pk-lobby-mode .pk-trainer-back img{transform:scale(.43);transform-origin:50% 100%}
+#field.pk-lobby-mode .pk-trainer-back.pk-pre-show{animation:pk-idle 2.8s ease-in-out infinite}
+#field.pk-lobby-mode #teamLine{left:12%!important;right:42%!important;bottom:13.5%!important;gap:8px!important;justify-content:space-evenly;align-items:flex-end;z-index:4}
+#field.pk-lobby-mode #teamLine .mon-wrap{flex:0 0 auto}
+#field.pk-lobby-mode #teamLine .mon-wrap:nth-child(even){transform:translateY(-7px)}
+#pkLobbyBanner{position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:7;pointer-events:none;
+  background:rgba(7,20,40,.72);border:1px solid rgba(255,255,255,.24);border-radius:999px;padding:7px 16px;
+  font-size:9px;font-weight:1000;letter-spacing:.8px;color:#ffe9a6;text-shadow:0 1px 2px #000;box-shadow:0 4px 12px rgba(0,0,0,.35)}
+#pkLobbyBanner.hidden{display:none}
+.no-anim #field.pk-lobby-mode .pk-trainer-back{animation:none!important}
+@media(max-width:700px){
+  .pk-ach-shell .pk-ach-header-actions{gap:6px}.pk-ach-shell .pk-ach-header-actions>#achievementsCloseBtn{min-height:40px;padding:8px 10px}.pk-ach-shell .pk-ach-claim-top{min-height:40px!important;padding:7px 9px!important;font-size:8px!important}
+  #field.pk-lobby-mode .pk-trainer-back{left:66%!important;bottom:25%!important}
+  #field.pk-lobby-mode .pk-trainer-back img{transform:scale(.35)}
+  #field.pk-lobby-mode #teamLine{left:7%!important;right:39%!important;bottom:11%!important;gap:4px!important}
+  #pkLobbyBanner{top:10px;bottom:auto;font-size:7.5px;white-space:nowrap;max-width:94%;overflow:hidden;text-overflow:ellipsis}
+}

@@ -1,0 +1,13 @@
+
+/* Producción: el antiguo root aislado se conserva solo como soporte interno del motor,
+   pero jamás puede mostrarse ni recibir interacción. */
+#pkIsoJohtoRoot{
+  display:none!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+.pk-johto-dev-tools,
+.pk-johto-qa-menu,
+.pk-j-qa-overlay{
+  display:none!important;
+}

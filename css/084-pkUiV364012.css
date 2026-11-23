@@ -1,0 +1,4 @@
+
+/* V36.40.12 · Ajuste mínimo: acercar SOLO la información al sprite.
+   No cambia grid, tamaños, márgenes, padding, sprites, tarjetas, barras ni selector. */
+.formation-slot .formation-pokemon>div{transform:translateX(-10px)!important}

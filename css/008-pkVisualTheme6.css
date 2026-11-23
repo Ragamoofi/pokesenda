@@ -1,0 +1,9 @@
+
+.pk-hover::after{display:none}
+.pk-fly-shadow{
+  position:absolute;left:50%;width:68%;height:15px;transform:translateX(-50%);
+  border-radius:50%;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse at center,rgba(0,0,0,.78) 0 30%,rgba(0,0,0,.45) 55%,rgba(0,0,0,0) 75%);
+  animation:pk-fly-shadow 2.2s ease-in-out infinite;
+}
+.pk-fly-shadow-el{display:block}

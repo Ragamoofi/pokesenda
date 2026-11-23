@@ -1,0 +1,14 @@
+
+/* V36.40.102 · Mesa de números más compacta */
+.pk-roulette-number-board{grid-template-columns:46px minmax(0,1fr)!important;gap:5px!important}
+.pk-roulette-number-grid{gap:3px!important}
+.pk-roulette-number-btn{height:27px!important;min-height:27px!important;border-radius:5px!important;font-size:8px!important;padding:0 4px!important}
+.pk-roulette-zero{min-height:0!important;border-radius:7px!important;font-size:12px!important}
+.pk-roulette-section-label.exact{margin-top:7px!important;margin-bottom:5px!important}
+.pk-roulette-board>.pk-casino-actions{margin-top:7px!important}
+@media(max-width:760px){
+  .pk-roulette-number-board{grid-template-columns:42px minmax(0,1fr)!important;gap:4px!important}
+  .pk-roulette-number-grid{gap:2px!important}
+  .pk-roulette-number-btn{height:27px!important;min-height:27px!important;font-size:8px!important}
+  .pk-roulette-zero{min-height:0!important;font-size:11px!important}
+}

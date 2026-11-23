@@ -1,0 +1,16 @@
+
+/* V36.40.22 · Pokédex: estado arriba a la derecha; rareza libre abajo. */
+.dex-possession-badge{
+  left:auto!important;bottom:auto!important;right:7px!important;top:7px!important;
+  z-index:5!important;white-space:nowrap;
+}
+/* El aviso NUEVO se aparta del estado y del mini Shiny. */
+.dex-new-badge.ux-new-mini{
+  left:6px!important;right:auto!important;top:24px!important;transform:none!important;
+}
+/* Mantiene la rareza centrada y sin competir con otros badges. */
+.dex-rarity-row{padding-left:4px;padding-right:4px}
+@media(max-width:650px){
+  .dex-possession-badge{right:6px!important;top:6px!important}
+  .dex-new-badge.ux-new-mini{left:5px!important;top:23px!important}
+}

@@ -1,0 +1,9 @@
+
+/* Perfil propio + Comunidad: pestañas regionales limpias, sin estado redundante bajo el nombre. */
+#playerProfileOverlay .pk-self-profile-tabs .pk-public-region-tab-copy,
+#pkPlayersOverlay .pk-public-region-tabs .pk-public-region-tab-copy{gap:0!important;align-items:flex-start!important}
+#playerProfileOverlay .pk-self-profile-tabs .pk-public-region-tab-state,
+#pkPlayersOverlay .pk-public-region-tabs .pk-public-region-tab-state{display:none!important}
+/* Las medallas oficiales se muestran completas sin pixelado forzado ni recorte. */
+#playerProfileOverlay .pk-public-badge img,
+#pkPlayersOverlay .pk-public-badge img{object-fit:contain!important;image-rendering:auto!important;max-width:38px!important;max-height:38px!important}

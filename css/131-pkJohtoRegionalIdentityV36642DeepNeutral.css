@@ -1,0 +1,98 @@
+
+/* V36.64.3 · Pase profundo: elimina restos azules de Kanto en superficies neutrales. */
+#pkRegionRuntimeRoot #pokedexOverlay .modal-box,
+#pkRegionRuntimeRoot #pcBoxOverlay .modal-box,
+#pkRegionRuntimeRoot #pcSwapOverlay .modal-box,
+#pkRegionRuntimeRoot #achievementsOverlay .modal-box,
+#pkRegionRuntimeRoot #gymSelectOverlay .modal-box,
+#pkRegionRuntimeRoot #gymBattleOverlay .modal-box,
+#pkRegionRuntimeRoot #gymPotionOverlay .modal-box,
+#pkRegionRuntimeRoot #gymMonDetailOverlay .modal-box,
+#pkRegionRuntimeRoot #gymResultOverlay .modal-box,
+#pkRegionRuntimeRoot #skillTreeOverlay .modal-box,
+#pkRegionRuntimeRoot #optionsOverlay .modal-box,
+#pkRegionRuntimeRoot #playerProfileOverlay .modal-box,
+#pkRegionRuntimeRoot #pokemonDetailOverlay .modal-box,
+#pkRegionRuntimeRoot #enemyDetailOverlay .modal-box,
+#pkRegionRuntimeRoot #mtGachaOverlay .modal-box,
+#pkRegionRuntimeRoot #tmEquipOverlay .modal-box,
+#pkRegionRuntimeRoot #achievementTmChoiceOverlay .modal-box,
+#pkRegionRuntimeRoot #routeEventOverlay .modal-box,
+#pkRegionRuntimeRoot #dexLoreOverlay .modal-box,
+#pkRegionRuntimeRoot #itemEquipOverlay .modal-box,
+#pkRegionRuntimeRoot #incenseVendorOverlay .modal-box,
+#pkRegionRuntimeRoot #incenseInventoryOverlay .modal-box,
+#pkRegionRuntimeRoot #mintVendorOverlay .modal-box,
+#pkRegionRuntimeRoot #mintInventoryOverlay .modal-box,
+#pkRegionRuntimeRoot #mintUseOverlay .modal-box,
+#pkRegionRuntimeRoot #patchNotesOverlay .modal-box,
+#pkRegionRuntimeRoot #uxWhyOverlay .modal-box,
+#pkRegionRuntimeRoot #uxCompareOverlay .modal-box,
+#pkRegionRuntimeRoot #saveTransferOverlay .modal-box,
+#pkRegionRuntimeRoot #pkBackupOverlay .modal-box,
+#pkRegionRuntimeRoot #pkDiagnosticOverlay .modal-box,
+#pkRegionRuntimeRoot #pkCloudOverlay .modal-box,
+#pkRegionRuntimeRoot #pkCasinoOverlay .modal-box{
+  background:linear-gradient(180deg,#1d271f,#151d18)!important;
+  border-color:#706845!important;
+}
+#pkRegionRuntimeRoot .card:not(.gym-result-box),
+#pkRegionRuntimeRoot .formation-slot,
+#pkRegionRuntimeRoot .team-card,
+#pkRegionRuntimeRoot .roster-card,
+#pkRegionRuntimeRoot .dex-card,
+#pkRegionRuntimeRoot .pc-box-card,
+#pkRegionRuntimeRoot .achievement-card,
+#pkRegionRuntimeRoot .achievement-road-card,
+#pkRegionRuntimeRoot .profile-section,
+#pkRegionRuntimeRoot .profile-stat,
+#pkRegionRuntimeRoot .profile-badge,
+#pkRegionRuntimeRoot .league-member,
+#pkRegionRuntimeRoot .option-row,
+#pkRegionRuntimeRoot .help-mini-card,
+#pkRegionRuntimeRoot .tutorial-step,
+#pkRegionRuntimeRoot .help-callout,
+#pkRegionRuntimeRoot .checkpoint-choice,
+#pkRegionRuntimeRoot .tm-slot-cell,
+#pkRegionRuntimeRoot .tm-card,
+#pkRegionRuntimeRoot .loot-slot,
+#pkRegionRuntimeRoot .item-card,
+#pkRegionRuntimeRoot .loot-detail,
+#pkRegionRuntimeRoot .inventory-footer-block,
+#pkRegionRuntimeRoot .tm-mini-card,
+#pkRegionRuntimeRoot .matchup-box,
+#pkRegionRuntimeRoot .combat-stat,
+#pkRegionRuntimeRoot .db-stat,
+#pkRegionRuntimeRoot .damage-card,
+#pkRegionRuntimeRoot .log{
+  background:linear-gradient(180deg,#202a22,#171f19)!important;
+  border-color:#555a40!important;
+}
+#pkRegionRuntimeRoot .formation-slot.active-slot{background:linear-gradient(180deg,#273326,#1b241d)!important;border-color:#a88b48!important}
+#pkRegionRuntimeRoot .formation-slot.reserve-slot{background:linear-gradient(180deg,#222c23,#181f1a)!important;border-color:#626349!important}
+#pkRegionRuntimeRoot .formation-slot.reserve-slot.bench-guard,
+#pkRegionRuntimeRoot .formation-slot.reserve-slot.bench-striker,
+#pkRegionRuntimeRoot .formation-slot.reserve-slot.bench-support{border-left-color:#8f814f!important}
+#pkRegionRuntimeRoot .formation-empty-visual{color:#a5a78f!important;border-color:#5d6049!important}
+#pkRegionRuntimeRoot .party-lock-note{color:#d4c58e!important;border-color:#6b5f3d!important;background:#252419!important}
+#pkRegionRuntimeRoot .filter-chip:not([class*="rarity-"]):not(.dex-new-filter),
+#pkRegionRuntimeRoot .log-tab,
+#pkRegionRuntimeRoot .damage-tab{background:#202a21!important;border-color:#596047!important;color:#c8caba!important}
+#pkRegionRuntimeRoot .filter-chip.active:not([class*="rarity-"]):not(.dex-new-filter),
+#pkRegionRuntimeRoot .log-tab.active,
+#pkRegionRuntimeRoot .damage-tab.active{background:linear-gradient(180deg,#5a6339,#3b442e)!important;border-color:#aa8c49!important;color:#fff3d1!important;box-shadow:inset 0 0 0 1px rgba(240,213,138,.06)!important}
+#pkRegionRuntimeRoot .pokedex-route-filters .dex-route-route.active,
+#pkRegionRuntimeRoot .pokedex-route-filters .dex-route-cave.active,
+#pkRegionRuntimeRoot .pokedex-route-filters .dex-route-coast.active{border-color:#b0904b!important;box-shadow:0 0 0 1px rgba(216,179,90,.12) inset!important}
+#pkRegionRuntimeRoot .pill:not(.shiny-count-pill){background:#242a21!important;border-color:#5d6048!important;color:#bfc2b2!important}
+#pkRegionRuntimeRoot .pill:not(.shiny-count-pill) b{color:#ead187!important}
+#pkRegionRuntimeRoot .pokedex-welcome,
+#pkRegionRuntimeRoot .database-note,
+#pkRegionRuntimeRoot .help-hero{background:linear-gradient(135deg,#263127,#1a221c)!important;border-color:#60644a!important}
+#pkRegionRuntimeRoot .help-search,
+#pkRegionRuntimeRoot .formation-search{background:#111914!important;border-color:#596047!important}
+#pkRegionRuntimeRoot .loot-panel-head{background:linear-gradient(90deg,#4a542f,#292f24 58%,#3a3322)!important;border-bottom-color:#8a7542!important}
+#pkRegionRuntimeRoot .log{scrollbar-color:#77734d #151d17!important;color:#c4c8b9!important}
+#pkRegionRuntimeRoot .damage-bar{background:#111812!important;border-color:#4e563f!important}
+#pkRegionRuntimeRoot .xpbar,
+#pkRegionRuntimeRoot .timebar{background:#101713!important;border-color:#555b45!important}

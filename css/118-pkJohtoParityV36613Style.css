@@ -1,0 +1,13 @@
+
+/* V36.61.10 · Paridad visual profunda Kanto → Johto.
+   Todo componente compartido hereda la cascada REAL de Kanto; aquí solo quedan visibilidad y seguridad regional. */
+#pkRegionRuntimeRoot .info-panel{z-index:32}#pkRegionRuntimeRoot .ux-context-panel{z-index:34}
+#pkRegionRuntimeRoot .pk-formation-window .pk-window-min{display:flex!important}
+#pkRegionRuntimeRoot .pk-ball-strip{display:flex}#pkRegionRuntimeRoot .pk-ball-strip.hidden{display:none!important}
+#pkRegionRuntimeRoot .pokedex-route-filters{display:flex!important}
+#pkRegionRuntimeRoot .menu-timed-gacha,#pkRegionRuntimeRoot .menu-patch-card{display:block!important}
+#pkRegionRuntimeRoot .pk-mobile-dock{z-index:460120!important}#pkRegionRuntimeRoot .pk-mobile-more{z-index:460140!important}#pkRegionRuntimeRoot .pk-mobile-tip{z-index:460130!important}
+#pkRegionRuntimeRoot .pk-j-parity-safe{margin:10px 0;padding:9px 11px;border:1px solid #4b6cb3;border-left:4px solid #5fd08a;border-radius:10px;background:#0e1c3e;color:#b9c9ea;font-size:9px;line-height:1.5}
+#pkRegionRuntimeRoot .pk-j-parity-safe b{color:#eef4ff}
+#pkRegionRuntimeRoot .pk-j-safe-disabled{opacity:.58!important;filter:saturate(.65)!important;cursor:not-allowed!important}
+#pkRegionRuntimeRoot #pkCasinoOverlay .pk-casino-lock{display:block!important}#pkRegionRuntimeRoot #pkCasinoOverlay .pk-casino-lock b{color:var(--pk-yellow)}

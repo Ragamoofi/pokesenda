@@ -1,0 +1,183 @@
+
+/* 14/09/2026 · Pasada de accesibilidad/scroll SOLO móvil.
+   Convierte ventanas largas en una única superficie desplazable y elimina mini-scrolls
+   que atrapaban el gesto táctil. Escritorio no se modifica. */
+@media(max-width:980px){
+  html,body{overscroll-behavior-y:auto!important}
+
+  /* Clase aplicada dinámicamente sólo a ventanas cuyo contenido realmente supera el viewport. */
+  .overlay.pk-mobile-scroll-page{
+    align-items:flex-start!important;
+    justify-content:flex-start!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    overscroll-behavior-y:contain!important;
+    touch-action:pan-y!important;
+    scroll-padding-top:calc(8px + env(safe-area-inset-top,0px))!important;
+    scroll-padding-bottom:calc(22px + env(safe-area-inset-bottom,0px))!important;
+    padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))!important;
+  }
+  .overlay.pk-mobile-scroll-page>.modal-box,
+  .overlay.pk-mobile-scroll-page>.menu-box,
+  .overlay.pk-mobile-scroll-page>.center-card,
+  .overlay.pk-mobile-scroll-page>.summary-box,
+  .overlay.pk-mobile-scroll-page>.reward-box,
+  .overlay.pk-mobile-scroll-page>.evo-card{
+    width:100%!important;
+    max-width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:visible!important;
+    flex:0 0 auto!important;
+    margin:0 auto!important;
+    box-sizing:border-box!important;
+    padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))!important;
+  }
+
+  /* Ventanas largas que a menudo contienen listas de selección. */
+  #pokemonDetailOverlay.pk-mobile-scroll-page .pokemon-detail-modal,
+  #pcBoxOverlay.pk-mobile-scroll-page .pc-box-modal,
+  #pcSwapOverlay.pk-mobile-scroll-page .pc-swap-modal,
+  #itemEquipOverlay.pk-mobile-scroll-page .item-equip-box,
+  #tmEquipOverlay.pk-mobile-scroll-page .tm-equip-box,
+  #mtGachaOverlay.pk-mobile-scroll-page .mt-gacha-box,
+  #mintUseOverlay.pk-mobile-scroll-page .mint-use-box,
+  #incenseInventoryOverlay.pk-mobile-scroll-page .incense-inventory-box,
+  #mintInventoryOverlay.pk-mobile-scroll-page .incense-inventory-box,
+  #optionsOverlay.pk-mobile-scroll-page .pk-options-box,
+  #playerProfileOverlay.pk-mobile-scroll-page .player-profile-box,
+  #pkPlayersOverlay.pk-mobile-scroll-page .pk-players-box,
+  #regionSelectOverlay.pk-mobile-scroll-page .region-select-box,
+  #gymPotionOverlay.pk-mobile-scroll-page .gym-sub-box,
+  #gymMonDetailOverlay.pk-mobile-scroll-page .gym-sub-box,
+  #gymResultOverlay.pk-mobile-scroll-page .gym-result-box,
+  #pkCloudOverlay.pk-mobile-scroll-page .pk-cloud-box,
+  #pkCloudConflictOverlay.pk-mobile-scroll-page .pk-cloud-conflict-box,
+  #pkRecoveryOverlay.pk-mobile-scroll-page .pk-recovery-box,
+  #saveTransferOverlay.pk-mobile-scroll-page .save-transfer-box,
+  #patchNotesOverlay.pk-mobile-scroll-page .patch-notes-modal,
+  #uxWhyOverlay.pk-mobile-scroll-page .ux-why-modal,
+  #uxCompareOverlay.pk-mobile-scroll-page .ux-compare-modal,
+  #pkCasinoOverlay.pk-mobile-scroll-page .pk-casino-box,
+  #pkGlobalDexOverlay.pk-mobile-scroll-page .modal-box,
+  #pkGlobalDexDetail.pk-mobile-scroll-page .modal-box,
+  #pkGlobalInfiniteRoot .overlay.pk-mobile-scroll-page>.modal-box{
+    max-height:none!important;
+    height:auto!important;
+    overflow:visible!important;
+  }
+
+  /* UNA sola lista vertical: objetos/MT/Pokémon ya no capturan el gesto dentro de otro scroll. */
+  .item-compatible-list,
+  .tm-compatible-list,
+  .mt-gacha-odds-scroll{
+    max-height:none!important;
+    height:auto!important;
+    overflow:visible!important;
+    overscroll-behavior:auto!important;
+    touch-action:pan-y!important;
+    padding-right:0!important;
+  }
+  .item-compat-row,.tm-compat-row,.pc-swap-choice{touch-action:pan-y!important}
+
+  /* Selector/cambio de Pokémon: filas táctiles completas y sin ancho mínimo oculto. */
+  .pc-swap-grid{grid-template-columns:1fr!important;gap:8px!important;overflow:visible!important;max-height:none!important}
+  .pc-swap-choice{width:100%!important;min-width:0!important;box-sizing:border-box!important}
+  .tm-compat-row,.item-compat-row{width:100%!important;min-width:0!important;box-sizing:border-box!important}
+  .tm-compat-info,.item-compat-info{min-width:0!important}
+
+  /* Ficha Pokémon: los selects de Objeto/MT deben poder abrir y desplazarse normalmente. */
+  #pokemonDetailOverlay select,
+  #itemEquipOverlay select,
+  #tmEquipOverlay select,
+  #mintUseOverlay select,
+  #pcSwapOverlay select{
+    touch-action:auto!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+  #pokemonDetailContent .held-item-select,
+  #pokemonDetailContent .tm-slot-select,
+  #pokemonDetailContent select{
+    width:100%!important;
+    min-height:44px!important;
+    font-size:16px!important;
+  }
+
+  /* Espacio real al final para que Aceptar/Guardar/Cambiar nunca quede pegado al home indicator. */
+  .pk-tools-actions,.save-transfer-actions,.pk-cloud-actions,.pk-cloud-conflict-actions,
+  .gym-result-actions,.route-event-actions,.achievement-tm-actions,.master-mint-row,
+  .item-sell-zone,.pk-options-actions,.pk-casino-actions,.pk-recovery-actions{
+    margin-bottom:max(10px,env(safe-area-inset-bottom,0px))!important;
+  }
+  .pk-tools-actions .btn,.save-transfer-actions .btn,.pk-cloud-actions .btn,
+  .pk-cloud-conflict-actions .btn,.gym-result-actions .btn,.route-event-actions .btn,
+  .achievement-tm-actions .btn,.master-mint-row .btn,.pk-options-actions .btn,
+  .pk-recovery-actions .btn{
+    min-height:46px!important;
+  }
+
+  /* Paneles que no usan .overlay pero también deben permitir llegar al final. */
+  .loot-panel,.info-panel,.ux-context-panel{
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    overscroll-behavior-y:contain!important;
+    touch-action:pan-y!important;
+  }
+  .loot-panel{padding-bottom:calc(28px + env(safe-area-inset-bottom,0px))!important}
+
+  /* Resúmenes/evoluciones también reciben scroll si el teléfono es bajo. */
+  .summary,.evo-overlay{
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    overscroll-behavior-y:contain!important;
+    touch-action:pan-y!important;
+    align-items:flex-start!important;
+  }
+  .summary>.summary-box,.evo-overlay>.evo-card{
+    max-height:none!important;
+    height:auto!important;
+    overflow:visible!important;
+    margin:auto!important;
+  }
+
+  /* Logros y Árbol son aplicaciones internas con viewport propio: reforzar sus scrollers, no aplanarlos. */
+  #achievementsOverlay .pk-ach-list-pane,
+  #achievementsOverlay .pk-ach-road-pane,
+  #achievementsOverlay .pk-ach-sidebar,
+  #skillTreeOverlay .pkt-detail-scroll,
+  #skillTreeOverlay .pkt-empty{
+    -webkit-overflow-scrolling:touch!important;
+    overscroll-behavior-y:contain!important;
+    touch-action:pan-y!important;
+  }
+  #skillTreeOverlay .pkt-viewport{touch-action:none!important}
+
+  /* Cabeceras con acciones importantes permanecen accesibles al desplazar ventanas largas. */
+  .pk-mobile-scroll-page .pokemon-detail-head,
+  .pk-mobile-scroll-page .pk-options-head,
+  .pk-mobile-scroll-page .pk-cloud-head,
+  .pk-mobile-scroll-page .save-transfer-head,
+  .pk-mobile-scroll-page .pk-tools-head,
+  .pk-mobile-scroll-page .incense-inventory-head{
+    position:sticky!important;
+    top:0!important;
+    z-index:60!important;
+  }
+
+  /* Teclado virtual: dejar zona de desplazamiento alrededor de buscadores/controles. */
+  .overlay input,.overlay select,.overlay textarea,
+  .loot-panel input,.loot-panel select,.info-panel input,.info-panel select{
+    scroll-margin-top:90px!important;
+    scroll-margin-bottom:160px!important;
+  }
+}
+
+@media(max-width:980px) and (orientation:landscape){
+  .overlay.pk-mobile-scroll-page{padding-top:4px!important;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px))!important}
+  .overlay.pk-mobile-scroll-page>.modal-box{padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))!important}
+}

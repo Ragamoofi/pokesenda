@@ -1,0 +1,19 @@
+
+/* Aviso de lanzamiento · Centro de Recuperación */
+#pkRecoveryLaunchNotice{z-index:2350;background:radial-gradient(circle at 50% 18%,rgba(31,88,104,.92),rgba(4,10,18,.97) 62%)}
+#pkRecoveryLaunchNotice.hidden{display:none!important}
+.pk-recovery-launch-card{width:min(720px,94vw);position:relative;overflow:hidden;background:linear-gradient(145deg,#10293a,#0d1b2c 58%,#172333);border:1px solid #5c91a5;border-radius:22px;padding:24px 24px 18px;box-shadow:0 30px 95px rgba(0,0,0,.62),inset 0 0 42px rgba(79,190,196,.055);text-align:left}
+.pk-recovery-launch-card::before{content:"";position:absolute;inset:-120px auto auto -90px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(86,205,183,.16),transparent 68%);pointer-events:none}
+.pk-recovery-launch-kicker{position:relative;font-size:9px;font-weight:1000;letter-spacing:1.35px;text-transform:uppercase;color:#87e4c4;margin-bottom:7px}
+.pk-recovery-launch-title{position:relative;margin:0;color:#f4fbff;font-size:25px;line-height:1.15;text-shadow:0 3px 16px rgba(0,0,0,.4)}
+.pk-recovery-launch-lead{position:relative;margin:9px 0 13px;color:#b9cad8;font-size:10px;line-height:1.6}
+.pk-recovery-launch-route{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
+.pk-recovery-launch-step{background:#0a1824;border:1px solid #34566c;border-radius:12px;padding:10px 11px;min-height:76px}
+.pk-recovery-launch-step b{display:block;font-size:9.5px;color:#eaf7ff;margin-bottom:4px}.pk-recovery-launch-step span{display:block;color:#93a9bb;font-size:8px;line-height:1.5}
+.pk-recovery-launch-how{position:relative;margin-top:10px;border:1px solid #3f735f;background:linear-gradient(135deg,#10271f,#0d1c23);border-radius:13px;padding:11px 12px}
+.pk-recovery-launch-how b{display:block;color:#9ce6b8;font-size:9.5px;margin-bottom:5px}.pk-recovery-launch-how span{display:block;color:#aec2cf;font-size:8.4px;line-height:1.55}
+.pk-recovery-launch-warning{position:relative;margin-top:9px;padding:8px 10px;border-left:3px solid #ffd166;border-radius:8px;background:#292313;color:#e6d59a;font-size:8px;line-height:1.5}
+.pk-recovery-launch-actions{position:relative;display:flex;gap:9px;margin-top:14px}.pk-recovery-launch-actions .btn{flex:1;min-height:45px}.pk-recovery-launch-open{background:#245a49!important;border-color:#65b997!important;color:#effff7!important}
+.pk-recovery-launch-foot{position:relative;margin-top:9px;text-align:center;color:#6f8799;font-size:7px;line-height:1.45}
+.pk-recovery-launch-count{display:inline-flex;margin-left:6px;border:1px solid #456879;border-radius:999px;padding:2px 6px;color:#a8c9d7;background:#0b1b27;font-size:6.5px;font-weight:900;vertical-align:1px}
+@media(max-width:620px){.pk-recovery-launch-card{width:100%;max-height:96dvh;overflow:auto;padding:18px 13px 14px;border-radius:16px}.pk-recovery-launch-title{font-size:20px}.pk-recovery-launch-route{grid-template-columns:1fr}.pk-recovery-launch-actions{display:grid;grid-template-columns:1fr}.pk-recovery-launch-lead{font-size:9px}.pk-recovery-launch-step{min-height:0}}

@@ -1,0 +1,43 @@
+
+/* V36.66.4 · Identidad visual Kanto + corrección del badge Hoenn.
+   El aviso de Hoenn ahora vive como tarjeta flotante real y Kanto gana una
+   paleta azul propia, sin tocar la lógica ni la identidad de Johto. */
+#pkHoennCloneBadge{
+  position:fixed;
+  right:14px;
+  bottom:14px;
+  z-index:2147483000;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:4px;
+  width:min(288px,calc(100vw - 28px));
+  padding:11px 12px;
+  border-radius:13px;
+  border:1px solid #4c9f91;
+  background:linear-gradient(135deg,rgba(13,55,49,.97),rgba(10,29,41,.97));
+  box-shadow:0 14px 36px rgba(0,0,0,.46),inset 0 0 0 1px rgba(142,230,212,.08);
+  color:#e8fff9;
+  font-family:'Pokemon Classic Regular','Pokemon Classic',ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  backdrop-filter:blur(6px);
+}
+#pkHoennCloneBadge b{display:block;font-size:10px;line-height:1.35;letter-spacing:.45px;color:#91eed7}
+#pkHoennCloneBadge span{display:block;font-size:8px;line-height:1.5;color:#b6d8d0}
+#pkHoennCloneBadge button{
+  margin-top:2px;
+  width:100%;
+  border:1px solid #5b9e90;
+  border-radius:9px;
+  background:linear-gradient(180deg,#1a4c44,#143934);
+  color:#f2fffb;
+  padding:7px 9px;
+  font-size:8px;
+  font-weight:1000;
+  letter-spacing:.25px;
+  cursor:pointer;
+}
+#pkHoennCloneBadge button:hover{filter:brightness(1.08)}
+@media(max-width:720px){
+  #pkHoennCloneBadge{right:8px;left:8px;bottom:8px;width:auto}
+}
+

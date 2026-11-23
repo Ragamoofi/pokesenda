@@ -1,0 +1,7 @@
+
+(()=>{
+  'use strict';
+  function api(){return (window.PokeSendaHoennGlobalBridge&&window.PokeSendaRegionBoot?.isHoennClone)?window.PokeSendaHoennGlobalBridge:window.PokeSendaHoennArchiveBridge;}
+  function install(){if(window.PokeSendaHoennRelease?.enabled!==true)return false;const g=window.PokeSendaGlobalInfinite;if(!g?.registerRegion)return false;const a=api();if(!a)return false;g.registerRegion('hoenn',{label:'Hoenn',roster:()=>api()?.roster?.()||[],formation:()=>api()?.formation?.()||[],enemyCatalog:()=>api()?.enemyCatalog?.()||[],bossCatalog:()=>api()?.bossCatalog?.()||[],enemyTemplate:(id,l)=>api()?.enemyTemplate?.(id,l),capture:(...x)=>api()?.capture?.(...x),progression:()=>window.PokeSendaHoennArchiveBridge?.globalInfiniteProgress?.()||api()?.globalInfiniteProgress?.()||{tier:0,levelCap:0},visualMeters:(...x)=>api()?.visualMeters?.(...x),getItemDef:id=>api()?.getItemDef?.(id),shinyChance:()=>api()?.shinyChance?.()||1/1536,bossHealPct:()=>api()?.bossHealPct?.()||0,rollDrops:(...x)=>api()?.rollDrops?.(...x),grantMTTicket:(...x)=>api()?.grantMTTicket?.(...x),refresh:()=>api()?.refresh?.(),globalAutoPotionState:()=>api()?.globalAutoPotionState?.(),globalSetAutoPotion:v=>api()?.globalSetAutoPotion?.(v),globalConsumeMedicine:id=>api()?.globalConsumeMedicine?.(id)});return true;}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(install,0),{once:true});else setTimeout(install,0);setTimeout(install,700);setTimeout(install,2200);
+})();

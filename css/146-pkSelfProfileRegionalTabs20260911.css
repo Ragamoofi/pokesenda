@@ -1,0 +1,36 @@
+
+#playerProfileOverlay .pk-self-profile-hero{align-items:stretch}
+#playerProfileOverlay .pk-self-profile-copy{min-width:0;display:flex;flex-direction:column;justify-content:center;flex:1;padding:6px 2px 4px}
+#playerProfileOverlay .pk-self-profile-copy .profile-name{font-size:27px;line-height:1.08;margin-bottom:5px}
+#playerProfileOverlay .pk-self-profile-subtitle{font-size:11px;color:#aebed3;letter-spacing:.25px}
+#playerProfileOverlay .pk-self-global-strip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:14px}
+#playerProfileOverlay .pk-self-global-strip>.pk-self-metric{grid-column:span 2;min-height:67px;display:grid;grid-template-columns:24px minmax(0,1fr);grid-template-rows:auto auto;column-gap:7px;align-items:center;text-align:left;padding:9px 10px;background:linear-gradient(180deg,#0d203d,#09172d);border:1px solid #426596;border-radius:10px}
+#playerProfileOverlay .pk-self-global-strip>.pk-self-metric:nth-child(4),#playerProfileOverlay .pk-self-global-strip>.pk-self-metric:nth-child(5){grid-column:span 3}
+#playerProfileOverlay .pk-self-metric>span{grid-row:1 / span 2;font-size:18px;line-height:1;text-align:center}
+#playerProfileOverlay .pk-self-metric>b{font-size:16px;line-height:1.05;color:#f4f8ff;overflow:visible;text-overflow:clip}
+#playerProfileOverlay .pk-self-metric>small{margin-top:1px;font-size:7.4px;line-height:1.25;color:#a9bad0}
+#playerProfileOverlay .pk-self-profile-shell{margin-top:11px}
+#playerProfileOverlay .pk-self-region-panel{margin-bottom:2px}
+#playerProfileOverlay .pk-self-profile-tabs{margin-top:0}
+#playerProfileOverlay .pk-self-profile-trainer{flex:0 0 auto}
+#playerProfileOverlay .pokemon-detail-head [data-global-dex-open]{white-space:nowrap}
+#pkRegionRuntimeRoot #playerProfileOverlay .pk-self-profile-copy .profile-name,#pkRegionRuntimeRoot #playerProfileOverlay .pk-self-region-panel[data-region="johto"] h3{color:#fff2bf}
+#playerProfileOverlay .pk-badge-clear-team,#pkPlayersOverlay .pk-badge-clear-team{display:grid!important;grid-template-columns:repeat(3,20px);grid-auto-rows:20px;justify-content:center;align-items:center;gap:2px!important;width:max-content;max-width:74px;min-height:0!important;margin:6px auto 0!important;padding:5px 5px 4px;border-top:1px solid rgba(150,178,211,.14);border-radius:7px;background:rgba(5,13,28,.22);box-sizing:border-box}
+#playerProfileOverlay .pk-badge-clear-team img,#pkPlayersOverlay .pk-badge-clear-team img{display:block!important;position:static!important;transform:none!important;margin:0!important;width:20px!important;height:20px!important;max-width:20px!important;max-height:20px!important;object-fit:contain!important;image-rendering:pixelated!important;filter:drop-shadow(0 1px 2px rgba(0,0,0,.55))}
+#playerProfileOverlay .pk-public-badge,#pkPlayersOverlay .pk-public-badge{min-height:133px;padding-bottom:7px}
+#playerProfileOverlay .pk-public-badge>div:first-child,#pkPlayersOverlay .pk-public-badge>div:first-child{margin-bottom:2px}
+/* Comunidad · medallas compactas. El Perfil propio conserva sus tarjetas grandes y su equipo histórico. */
+#pkPlayersOverlay .pk-public-badges{gap:4px!important}
+#pkPlayersOverlay .pk-public-badge{min-height:76px!important;padding:4px 2px 5px!important;border-radius:7px!important}
+#pkPlayersOverlay .pk-public-badge>div:first-child{width:34px!important;height:34px!important;margin:0 auto 2px!important;font-size:15px!important}
+#pkPlayersOverlay .pk-public-badge img{width:31px!important;height:31px!important;max-width:31px!important;max-height:31px!important}
+#pkPlayersOverlay .pk-public-badge b{font-size:5.4px!important;line-height:1.15!important;margin-top:1px!important}
+#pkPlayersOverlay .pk-public-badge small{font-size:5.1px!important;line-height:1.2!important;margin-top:1px!important}
+#pkPlayersOverlay .pk-badge-clear-team{display:none!important}
+@media(max-width:760px){
+  #playerProfileOverlay .pk-self-profile-hero{grid-template-columns:1fr!important}
+  #playerProfileOverlay .pk-self-profile-trainer{margin:auto}
+  #playerProfileOverlay .pk-self-global-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #playerProfileOverlay .pk-self-global-strip>.pk-self-metric,#playerProfileOverlay .pk-self-global-strip>.pk-self-metric:nth-child(4),#playerProfileOverlay .pk-self-global-strip>.pk-self-metric:nth-child(5){grid-column:span 1}
+  #playerProfileOverlay .pk-self-global-strip>.pk-self-metric:last-child{grid-column:1 / -1}
+}

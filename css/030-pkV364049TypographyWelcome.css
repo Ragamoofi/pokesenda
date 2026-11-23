@@ -1,0 +1,23 @@
+
+:root{
+  --pk-font-ui:'Pokemon Classic Regular','Pokemon Classic',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --pk-font-display:'Pokemon Classic Regular','Pokemon Classic','Courier New',monospace;
+}
+html,body,button,select,input,textarea{font-family:var(--pk-font-ui)!important}
+body{font-weight:400}
+button,.btn,.pill,.section-title,label,.pk-field-label{font-weight:600}
+h1,h2,h3,.menu-logo,.summary-head,.gym-result-kicker{font-weight:700}
+.menu-logo,#summaryTitle,#gymResultTitle,#starterOverlay h2,.pk-first-welcome-title{font-family:var(--pk-font-display)!important;text-transform:none}
+.menu-logo{font-size:32px!important;line-height:1.35!important}
+#summaryTitle,#gymResultTitle,#starterOverlay h2{font-size:16px!important;line-height:1.55!important;letter-spacing:0!important}
+#pkCloudQuickBtn{display:none!important}
+.pk-first-welcome{width:min(760px,calc(100% - 28px));padding:24px 26px 22px!important;text-align:left;background:linear-gradient(155deg,#13243a,#101923 62%,#14281f);border:1px solid #547492;box-shadow:0 28px 90px rgba(0,0,0,.64)}
+.pk-first-welcome-kicker{font-size:11px;font-weight:700;letter-spacing:.9px;color:#86d8a9;text-transform:uppercase;margin-bottom:12px}
+.pk-first-welcome-title{font-size:24px;line-height:1.5;margin:0 0 16px;color:#f4f8ff;text-shadow:3px 3px 0 rgba(0,0,0,.38)}
+.pk-first-welcome-lead{font-size:16px;line-height:1.55;color:#cfdae6;margin:0 0 16px}.pk-first-welcome-lead b{color:#fff}
+.pk-first-welcome-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0 16px}
+.pk-first-welcome-step{min-width:0;background:#0e1925;border:1px solid #344b61;border-radius:13px;padding:12px 13px}
+.pk-first-welcome-step b{display:block;color:#eaf4ff;font-size:14px;margin-bottom:5px}.pk-first-welcome-step span{display:block;color:#9eb2c5;font-size:13px;line-height:1.45}
+.pk-first-welcome-help{display:flex;gap:11px;align-items:flex-start;background:#172b25;border:1px solid #3f725a;border-radius:13px;padding:12px 14px;margin:4px 0 18px;color:#cce8d8;font-size:13px;line-height:1.5}
+.pk-first-welcome-help-icons{font-size:24px;line-height:1;white-space:nowrap}.pk-first-welcome-actions{display:flex;justify-content:flex-end}.pk-first-welcome-actions .btn{min-width:260px;min-height:44px;font-size:15px}
+@media(max-width:700px){.menu-logo{font-size:24px!important}#summaryTitle,#gymResultTitle,#starterOverlay h2{font-size:12px!important;line-height:1.6!important}.pk-first-welcome{padding:18px 15px 16px!important;max-height:calc(100svh - 24px);overflow:auto}.pk-first-welcome-title{font-size:16px;line-height:1.65}.pk-first-welcome-lead{font-size:14px}.pk-first-welcome-steps{grid-template-columns:1fr;gap:7px}.pk-first-welcome-step b{font-size:13px}.pk-first-welcome-step span,.pk-first-welcome-help{font-size:12px}.pk-first-welcome-actions .btn{width:100%;min-width:0;font-size:14px}}

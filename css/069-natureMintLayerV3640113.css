@@ -1,0 +1,5 @@
+
+/* V36.40.113 · La selección de Mentas debe quedar sobre la ficha Pokémon.
+   Confirmaciones globales usan z-index 5000, así que conservan prioridad. */
+#mintUseOverlay{z-index:1800!important}
+#mintUseOverlay .mint-use-box{position:relative;z-index:1}

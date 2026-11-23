@@ -1,0 +1,159 @@
+
+/* V36.40.53 · volver a poner velocidad/inicio/parar arriba a la derecha + menú principal más limpio */
+@media (min-width:981px){
+  .top{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto auto!important;
+    grid-template-areas:"meta run auto" "nav nav nav"!important;
+    gap:7px 10px!important;
+    align-items:center!important;
+  }
+  .top-meta{
+    grid-area:meta!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:5px!important;
+    flex-wrap:nowrap!important;
+    min-width:0!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scrollbar-width:none!important;
+    padding-bottom:1px!important;
+  }
+  .top-meta::-webkit-scrollbar{display:none!important}
+  .top-meta>*{flex:0 0 auto!important}
+  .top-meta .title{font-size:14px!important;white-space:nowrap!important;letter-spacing:.1px!important}
+  .top-meta .route-select{
+    min-width:175px!important;
+    width:clamp(175px,19vw,235px)!important;
+    max-width:235px!important;
+    min-height:32px!important;
+    padding:5px 8px!important;
+    font-size:10px!important;
+  }
+  .top-meta .pill,.top-meta .mt-ticket-top,.top-meta .checkpoint-btn{
+    min-height:31px!important;
+    padding:4px 7px!important;
+    font-size:9px!important;
+    line-height:1.1!important;
+    white-space:nowrap!important;
+  }
+  .top-run{
+    grid-area:run!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    flex-wrap:nowrap!important;
+    gap:5px!important;
+    min-width:0!important;
+  }
+  .top-run .run-speed-controls{padding-right:6px!important;margin-right:1px!important}
+  .top-run .quick-speed-label{font-size:8px!important}
+  .top-run .quick-speed-btn{min-width:36px!important;padding:7px 7px!important;font-size:9.5px!important}
+  .top-run .btn{white-space:nowrap!important;font-size:10px!important;padding:8px 10px!important}
+  .top-run #startBtn{min-width:210px!important}
+  .top-run #stopRunBtn{min-width:98px!important}
+  .top-auto{
+    grid-area:auto!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:6px!important;
+    flex-wrap:nowrap!important;
+    min-width:0!important;
+  }
+  .top-auto .btn{
+    white-space:nowrap!important;
+    padding:8px 10px!important;
+    font-size:10px!important;
+  }
+  .top-nav{
+    grid-area:nav!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:8px!important;
+    flex-wrap:nowrap!important;
+  }
+}
+@media (min-width:981px) and (max-width:1420px){
+  .top-meta .title{font-size:13px!important}
+  .top-meta .route-select{min-width:155px!important;width:clamp(155px,18vw,205px)!important;max-width:205px!important;font-size:9px!important}
+  .top-meta .pill,.top-meta .mt-ticket-top,.top-meta .checkpoint-btn{font-size:8px!important;padding:4px 6px!important}
+  .top-run .btn,.top-auto .btn{font-size:9px!important;padding:7px 8px!important}
+  .top-run #startBtn{min-width:190px!important}
+  .top-run #stopRunBtn{min-width:88px!important}
+}
+/* Menú principal más limpio */
+#mainMenu .menu-box{
+  width:min(560px,100%)!important;
+  padding:24px 24px 18px!important;
+}
+#mainMenu .menu-logo{font-size:34px!important}
+#mainMenu .menu-sub{
+  margin:6px 0 10px!important;
+  color:#a9bbce!important;
+  font-size:10px!important;
+}
+#pkBetaRow{display:none!important}
+#mainMenu .menu-buttons{
+  width:min(430px,100%)!important;
+  margin:0 auto!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:9px!important;
+}
+#mainMenu .menu-buttons .btn{
+  min-height:48px!important;
+  padding:11px 12px!important;
+  font-size:13px!important;
+}
+#menuPlayBtn,#menuExitBtn{grid-column:1 / -1!important}
+#mainMenu .menu-save{
+  margin:12px auto 10px!important;
+  width:min(430px,100%)!important;
+  padding:9px 11px!important;
+  border:1px solid #425a77!important;
+  background:linear-gradient(180deg,#13243a,#102033)!important;
+  border-radius:12px!important;
+  color:#d2deea!important;
+  font-size:9px!important;
+  line-height:1.4!important;
+}
+#mainMenu .menu-patch-card{display:none!important}
+#mainMenu .menu-mini-links{
+  width:min(430px,100%);
+  margin:0 auto 10px;
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+#mainMenu .menu-mini-links .btn{
+  min-height:38px;
+  padding:9px 12px;
+  font-size:11px;
+}
+#mainMenu .menu-timed-gacha{
+  width:min(430px,100%)!important;
+  margin:0 auto 10px!important;
+  padding:10px 11px!important;
+}
+#mainMenu .menu-credit{
+  margin:10px 0 0!important;
+  font-size:8px!important;
+}
+#pkFanDisclaimer{
+  margin-top:7px!important;
+  padding-top:7px!important;
+  border-top:1px solid rgba(98,120,145,.45)!important;
+  font-size:6.8px!important;
+  line-height:1.35!important;
+  color:#7f96ae!important;
+}
+@media (max-width:620px){
+  #mainMenu .menu-box{padding:18px 12px 15px!important}
+  #mainMenu .menu-buttons{grid-template-columns:1fr!important;width:min(360px,100%)!important}
+  #menuPlayBtn,#menuExitBtn{grid-column:auto!important}
+  #mainMenu .menu-save,#mainMenu .menu-timed-gacha,#mainMenu .menu-mini-links{width:min(360px,100%)!important}
+  #mainMenu .menu-sub{font-size:9px!important;margin:4px 0 8px!important}
+}

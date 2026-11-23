@@ -1,0 +1,13 @@
+
+/* Johto + Infinita: el objeto equipado debe ser el sprite oficial, aislado del sprite grande del Pokémon. */
+#pkRegionRuntimeRoot .held-badge .item-sprite-wrap,
+#pkGlobalInfiniteRoot .held-badge .item-sprite-wrap{width:21px!important;height:21px!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;position:relative!important}
+#pkRegionRuntimeRoot .held-badge img.item-sprite,
+#pkGlobalInfiniteRoot .held-badge img.item-sprite{position:static!important;inset:auto!important;width:21px!important;height:21px!important;max-width:21px!important;max-height:21px!important;object-fit:contain!important;transform:none!important;filter:drop-shadow(0 1px 1px rgba(0,0,0,.7))!important;image-rendering:pixelated!important}
+#pkRegionRuntimeRoot .held-badge .item-fallback,
+#pkGlobalInfiniteRoot .held-badge .item-fallback{font-size:13px!important}
+/* El marcador del Entrenador pisa la barra de kilómetros y avanza con ella. */
+#pkRegionRuntimeRoot #pkTrainerMarker{bottom:-6px!important;z-index:12!important;pointer-events:auto!important}
+#pkGlobalInfiniteRoot #pkTrainerMarker{bottom:8px!important;z-index:12!important;pointer-events:auto!important}
+#pkRegionRuntimeRoot #pkTrainerMarker img,
+#pkGlobalInfiniteRoot #pkTrainerMarker img{display:block!important;width:auto!important;max-width:none!important;object-fit:contain!important}

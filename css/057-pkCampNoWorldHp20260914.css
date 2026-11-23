@@ -1,0 +1,11 @@
+
+/* 14/09/2026 · Campamentos limpios: ocultar únicamente las barras de PS del mundo.
+   Formación y combate conservan sus barras normales. Aplica a Kanto, Johto y Hoenn. */
+#field.pk-lobby-mode #teamLine .battle-hp,
+#field.pk-lobby-mode #teamLine .ally-world-hp,
+#pkRegionRuntimeRoot #field.pk-lobby-mode #teamLine .battle-hp,
+#pkRegionRuntimeRoot #field.pk-lobby-mode #teamLine .ally-world-hp{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+}

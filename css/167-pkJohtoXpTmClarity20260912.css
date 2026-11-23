@@ -1,0 +1,12 @@
+
+/* Johto · la EXP sigue aplicándose por oleada, pero su barra ya no salta visualmente. */
+#pkRegionRuntimeRoot [data-j-form-xp].xpfill{
+  transition:width .62s cubic-bezier(.22,.78,.24,1)!important;
+  will-change:width;
+}
+#pkRegionRuntimeRoot .tm-compat-row.tm-natural-known{
+  border-color:rgba(96,190,125,.48)!important;
+  background:linear-gradient(135deg,rgba(39,92,61,.23),rgba(20,39,31,.16))!important;
+}
+#pkRegionRuntimeRoot .tm-compat-row.tm-natural-known .tm-compat-info small{color:#9ee6b7!important;font-weight:800}
+#pkRegionRuntimeRoot .tm-compat-row.tm-natural-known .tm-equip-action:disabled{opacity:.78!important;color:#9ee6b7!important;border-color:rgba(96,190,125,.45)!important}

@@ -1,0 +1,63 @@
+
+/* V36.62.2 · Candidata estable de paridad Kanto → Johto. Contenedor regional Johto. El chrome compartido NO redefine Kanto:
+   botones, tarjetas, tipografía, HUD y medidas heredan directamente la producción actual. */
+#pkRegionRuntimeRoot{
+  position:fixed;inset:0;z-index:460000;display:flex;align-items:flex-start;justify-content:center;
+  padding:6px;overflow:hidden;box-sizing:border-box;background:var(--bg);color:var(--text)
+}
+#pkRegionRuntimeRoot.hidden{display:none!important}
+#pkRegionRuntimeRoot>.overlay.hidden,#pkRegionRuntimeRoot>.game.hidden,#pkRegionRuntimeRoot>#lootPanel.hidden{display:none!important}
+
+/* Contenido genuinamente regional: fondos de Johto. */
+#pkRegionRuntimeRoot #field.route1{background-image:linear-gradient(rgba(6,25,20,.10),rgba(24,26,10,.18)),radial-gradient(circle at 50% 20%,#89a85e 0,#426641 35%,#203e32 70%,#182615 100%)!important;background-size:cover!important}
+#pkRegionRuntimeRoot #field.route2{background-image:linear-gradient(#132d27,#294633 50%,#151d16)!important}
+#pkRegionRuntimeRoot #field.route3{background-image:linear-gradient(#243d38,#626c50 48%,#382b1d)!important}
+/* Lobby/campamento: copia visual exacta de Kanto. Debe ganar a los fondos regionales de ruta. */
+#pkRegionRuntimeRoot #field.pk-lobby-mode{background-image:linear-gradient(rgba(37,39,23,.035),rgba(26,30,18,.10)),url("../assets/embedded/e7f3adc6b8dae10c.webp")!important;background-size:cover!important;background-position:center bottom!important;background-repeat:no-repeat!important;background-color:#14180f!important;transition:none!important}
+
+/* V36.64.14 WORK · Menú Johto definitivo aprobado; conserva el centro libre para la UI. */
+#pkRegionRuntimeRoot #mainMenu{background:#17180f url("../assets/embedded/6098eafee476279a.webp") center center/cover no-repeat!important;position:fixed;inset:0;overflow:hidden}
+#pkRegionRuntimeRoot #mainMenu::before{background:linear-gradient(90deg,rgba(21,22,13,.10),transparent 24%,transparent 76%,rgba(21,22,13,.10))!important;opacity:1!important;filter:none!important}
+#pkRegionRuntimeRoot #mainMenu::after{background:radial-gradient(circle at 50% 48%,rgba(30,31,18,.01) 0 34%,rgba(19,21,13,.08) 68%,rgba(8,10,7,.22) 100%)!important}
+
+/* Utilidades exclusivamente regionales, adaptadas a la paleta actual de Kanto. */
+#pkRegionRuntimeRoot .pk-johto-runtime-tag{font-size:7px;color:var(--pk-yellow);font-weight:1000;letter-spacing:.7px;margin:2px 0 6px}
+#pkRegionRuntimeRoot .pk-johto-dev-tools{font-size:6px!important;padding:6px 8px!important;background:#152752!important;border-color:#4b6cb3!important}
+#pkRegionRuntimeRoot .pk-runtime-unsupported{opacity:.5}#pkRegionRuntimeRoot .pk-runtime-unsupported::after{content:""}
+#pkRegionRuntimeRoot .pk-runtime-note{font-size:7px;color:#9fb3ce;border:1px solid #3d5a99;border-radius:8px;background:#0e1c3e;padding:7px;margin:7px 0}
+#pkRegionRuntimeRoot .pk-runtime-disabled-card{border:1px solid #3d5a99;border-radius:10px;background:#101f42;padding:12px;text-align:center;color:#9fb3ce;font-size:7px;line-height:1.5}
+#pkRegionRuntimeRoot .pk-runtime-toast{z-index:470000!important;position:absolute!important}
+
+/* Elementos regionales que sí necesitan stacking propio dentro del root fijo. */
+#pkRegionRuntimeRoot #skillTreeOverlay{z-index:470300!important}#pkRegionRuntimeRoot #pcSwapOverlay{z-index:470350!important}
+#pkRegionRuntimeRoot #optionsOverlay,#pkRegionRuntimeRoot #mtGachaOverlay,#pkRegionRuntimeRoot #tmEquipOverlay,#pkRegionRuntimeRoot #achievementsOverlay,#pkRegionRuntimeRoot #achievementTmChoiceOverlay,#pkRegionRuntimeRoot #routeEventOverlay{z-index:470500!important}
+#pkRegionRuntimeRoot #gymSelectOverlay,#pkRegionRuntimeRoot #gymBattleOverlay,#pkRegionRuntimeRoot #gymPotionOverlay,#pkRegionRuntimeRoot #gymMonDetailOverlay,#pkRegionRuntimeRoot #gymResultOverlay{z-index:470700!important}
+#pkRegionRuntimeRoot #rewardOverlay{z-index:470850!important}#pkRegionRuntimeRoot #playerProfileOverlay{z-index:470930!important}
+#pkRegionRuntimeRoot #evolutionOverlay,#pkRegionRuntimeRoot #dexLoreOverlay,#pkRegionRuntimeRoot #enemyDetailOverlay,#pkRegionRuntimeRoot #itemEquipOverlay,#pkRegionRuntimeRoot #incenseVendorOverlay,#pkRegionRuntimeRoot #incenseInventoryOverlay,#pkRegionRuntimeRoot #mintVendorOverlay,#pkRegionRuntimeRoot #mintInventoryOverlay,#pkRegionRuntimeRoot #mintUseOverlay,#pkRegionRuntimeRoot #legendaryCelebrationOverlay,#pkRegionRuntimeRoot #shinyCelebrationOverlay{z-index:470920!important}
+
+/* Arenas: mismo componente de Kanto, identidad visual regional de cada líder.
+   V36.64.14 WORK · 8 fondos definitivos aprobados, servidos desde assets/embedded. */
+#pkRegionRuntimeRoot .gym-arena-bg{background:radial-gradient(circle at 50% 16%,rgba(255,239,176,.20),transparent 28%),linear-gradient(180deg,#172728 0%,#203739 48%,#172326 49%,#0d1719 100%)!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="falkner"] .gym-arena-bg{background-image:linear-gradient(rgba(5,7,8,.015),rgba(5,7,8,.045)),url("../assets/embedded/7a0c266f9b890526.webp")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;opacity:1!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="falkner"] .gym-arena-bg::after{display:none!important;content:none!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="bugsy"] .gym-arena-bg{background-image:linear-gradient(rgba(5,7,8,.015),rgba(5,7,8,.045)),url("../assets/embedded/307afd7dbfff9b83.webp")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;opacity:1!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="bugsy"] .gym-arena-bg::after{display:none!important;content:none!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="whitney"] .gym-arena-bg{background-image:linear-gradient(rgba(5,7,8,.015),rgba(5,7,8,.045)),url("../assets/embedded/6f52cb9b885d3404.webp")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;opacity:1!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="whitney"] .gym-arena-bg::after{display:none!important;content:none!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="morty"] .gym-arena-bg{background-image:linear-gradient(rgba(5,7,8,.015),rgba(5,7,8,.045)),url("../assets/embedded/16ce25ae398328f0.webp")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;opacity:1!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="morty"] .gym-arena-bg::after{display:none!important;content:none!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="chuck"] .gym-arena-bg{background-image:linear-gradient(rgba(5,7,8,.015),rgba(5,7,8,.045)),url("../assets/embedded/a49eb51718feb6b9.webp")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;opacity:1!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="chuck"] .gym-arena-bg::after{display:none!important;content:none!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="jasmine"] .gym-arena-bg{background-image:linear-gradient(rgba(5,7,8,.015),rgba(5,7,8,.045)),url("../assets/embedded/8ef1119617405368.webp")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;opacity:1!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="jasmine"] .gym-arena-bg::after{display:none!important;content:none!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="pryce"] .gym-arena-bg{background-image:linear-gradient(rgba(5,7,8,.015),rgba(5,7,8,.045)),url("../assets/embedded/429c5a6800bb4f90.webp")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;opacity:1!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="pryce"] .gym-arena-bg::after{display:none!important;content:none!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="clair"] .gym-arena-bg{background-image:linear-gradient(rgba(5,7,8,.015),rgba(5,7,8,.045)),url("../assets/embedded/d44af699219f5b49.webp")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;opacity:1!important}
+#pkRegionRuntimeRoot #gymBattleOverlay[data-gym-id="clair"] .gym-arena-bg::after{display:none!important;content:none!important}
+
+@media(max-width:1500px){#pkRegionRuntimeRoot{overflow:auto!important}}
+@media(max-width:700px){#pkRegionRuntimeRoot{display:block;overflow:auto;padding:0!important}#pkRegionRuntimeRoot .game{width:100%!important;min-height:100svh!important;border-radius:0!important}}
+
+/* V36.64.9 · Paridad Kanto → Johto: no sombra terrestre artificial; HUD lobby compacto igual al maestro. */
+#pkRegionRuntimeRoot #field .pk-ground-shadow{display:none!important}
+#pkRegionRuntimeRoot #field.pk-lobby-mode .pk-hud .mon-name{font-size:10px!important}

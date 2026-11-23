@@ -1,0 +1,52 @@
+
+/* ===== Creador de Entrenador ===== */
+.pk-creator{width:min(780px,100%)}
+.pk-creator-body{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
+.pk-creator-preview{
+  flex:0 1 270px;min-width:235px;min-height:350px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  background:linear-gradient(180deg,#7ec850 0%,#5aa73c 55%,#3f7d2a 100%);
+  border:3px solid #0d1428;border-radius:12px;box-shadow:inset 0 0 0 3px rgba(255,255,255,.25);
+  image-rendering:pixelated;
+}
+.pk-creator-preview svg{filter:drop-shadow(0 4px 0 rgba(0,0,0,.25))}
+.pk-creator-name{font-family:'Press Start 2P','Courier New',monospace;font-size:11px;color:#fff;text-shadow:2px 2px 0 #0d1428}
+.pk-creator-controls{flex:1 1 390px;min-width:300px;display:flex;flex-direction:column;gap:8px}
+.pk-field-label{font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:1px;color:var(--pk-yellow);margin-top:4px}
+#pkNameInput{
+  background:#0e1c3e;border:2px solid #4b6cb3;border-radius:10px;color:var(--text);
+  padding:9px 10px;font-weight:800;font-size:13px;letter-spacing:.5px;
+}
+#pkNameInput:focus{outline:2px solid var(--pk-yellow)}
+.pk-row{display:flex;gap:6px;flex-wrap:wrap}
+.pk-choice{flex:1;min-width:78px;font-size:10px;padding:9px 8px}
+.pk-choice.active{background:linear-gradient(180deg,#3f8f5c,#2a6b43);border-color:#73daa0;color:#eafff2}
+.pk-swatches{gap:7px}
+.pk-swatch{
+  width:30px;height:30px;border-radius:50%;border:3px solid #0d1428;cursor:pointer;padding:0;
+  box-shadow:inset -3px -4px 0 rgba(0,0,0,.22);transition:transform .1s;
+}
+.pk-swatch:hover{transform:scale(1.12)}
+.pk-swatch.active{border-color:#fff;box-shadow:0 0 0 3px var(--pk-yellow),inset -3px -4px 0 rgba(0,0,0,.22)}
+.pk-creator-actions{margin-top:14px}
+.pk-creator-actions .btn{width:100%;padding:12px;font-size:13px}
+
+/* ===== Entrenador en la barra de progreso ===== */
+#pkTrainerMarker{
+  position:absolute;bottom:-2px;transform:translateX(-50%);z-index:8;pointer-events:none;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.55));
+  animation:pk-walk .55s steps(2) infinite;
+}
+@keyframes pk-walk{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-2px)}}
+
+/* ===== Entrenador de espaldas en combate ===== */
+.pk-trainer-back{
+  position:absolute;left:20px;bottom:8px;z-index:6;display:none;pointer-events:none;
+  filter:drop-shadow(0 5px 8px rgba(0,0,0,.5));
+}
+.pk-trainer-back.show{display:block;animation:pk-idle 2.4s ease-in-out infinite}
+@keyframes pk-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+.no-anim #pkTrainerMarker,.no-anim .pk-trainer-back{animation:none!important}
+
+/* ===== Pokémon un poco más arriba para que todo encaje ===== */
+.team-line{bottom:118px}
+.enemy-team-line{bottom:150px}

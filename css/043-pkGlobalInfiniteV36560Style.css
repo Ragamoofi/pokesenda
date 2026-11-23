@@ -1,0 +1,8 @@
+
+#pkGlobalInfiniteRoot{position:fixed;inset:0;z-index:480000;background:#070b10;padding:6px;display:flex;justify-content:center;align-items:flex-start;overflow:hidden;box-sizing:border-box}
+#pkGlobalInfiniteRoot.hidden{display:none!important}#pkGlobalInfiniteRoot>.game{width:min(1908px,calc(100vw - 12px));height:min(1068px,calc(100vh - 12px));max-width:none;max-height:none;display:flex;flex-direction:column;border-radius:14px}
+#pkGlobalInfiniteRoot .main{flex:1;min-height:0;grid-template-columns:minmax(0,1fr) 500px}#pkGlobalInfiniteRoot .field{height:100%;min-height:0}#pkGlobalInfiniteRoot .right{height:100%;max-height:none;padding:10px}
+#pkGlobalInfiniteRoot #rewardOverlay,#pkGlobalInfiniteRoot #pokemonDetailOverlay{z-index:480500!important}body>.game.pk-global-underlay-hidden{visibility:hidden!important}
+#pkGlobalInfiniteRoot #field.routeInfinite .hud{display:block}#pkGlobalInfiniteRoot .formation-combo.open .formation-combo-menu{display:block!important;z-index:1000}#pkGlobalInfiniteRoot .formation-slot{position:relative}
+#pkGlobalInfiniteRoot .mon-wrap,#pkGlobalInfiniteRoot .enemy-slot{cursor:pointer}#pkGlobalInfiniteRoot .summary{z-index:70}
+@media(max-width:1500px){#pkGlobalInfiniteRoot{overflow:auto}#pkGlobalInfiniteRoot>.game{height:auto;min-height:calc(100vh - 12px)}#pkGlobalInfiniteRoot .main{grid-template-columns:minmax(0,1fr) 430px;min-height:690px}#pkGlobalInfiniteRoot .right{height:auto;max-height:690px}}

@@ -1,0 +1,5 @@
+
+#teamLine .mon>img,#enemyTeamLine .enemy>img{transition:transform .18s ease}
+.pk-hover .mon,.pk-hover .enemy{animation:pk-hover 2.2s ease-in-out infinite}
+@keyframes pk-hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.no-anim .pk-hover .mon,.no-anim .pk-hover .enemy{animation:none}

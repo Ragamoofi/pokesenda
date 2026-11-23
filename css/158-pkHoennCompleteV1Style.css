@@ -1,0 +1,10 @@
+
+html[data-pk-boot-region="hoenn"] body{--hoenn-a:#1d6f61;--hoenn-b:#2f9f86}
+html[data-pk-boot-region="hoenn"] #game:not(.hidden) .route-bg.route1{background:radial-gradient(circle at 50% 78%,rgba(119,190,115,.55),transparent 35%),linear-gradient(180deg,#77b7d7 0 35%,#4f9f70 36% 68%,#285840 69% 100%)!important}
+html[data-pk-boot-region="hoenn"] #game:not(.hidden) .route-bg.route2{background:radial-gradient(circle at 58% 72%,rgba(255,113,50,.45),transparent 23%),linear-gradient(180deg,#6b5360 0 32%,#543d39 33% 68%,#241d22 69% 100%)!important}
+html[data-pk-boot-region="hoenn"] #game:not(.hidden) .route-bg.route3{background:radial-gradient(circle at 62% 58%,rgba(142,224,255,.35),transparent 24%),linear-gradient(180deg,#72bfe3 0 42%,#2f91b9 43% 72%,#145f7d 73% 100%)!important}
+/* El runtime maestro usa #field.routeX; estas reglas evitan que Hoenn conserve los fondos de Kanto durante una ruta. */
+html[data-pk-boot-region="hoenn"] #field.route1:not(.pk-lobby-mode){background-image:radial-gradient(circle at 72% 78%,rgba(124,211,119,.42),transparent 28%),linear-gradient(180deg,#72bce0 0 34%,#5fac78 35% 67%,#2f6848 68% 100%)!important;background-size:cover!important;background-position:center!important}
+html[data-pk-boot-region="hoenn"] #field.route2:not(.pk-lobby-mode){background-image:radial-gradient(circle at 62% 73%,rgba(255,104,38,.48),transparent 23%),linear-gradient(180deg,#6c5662 0 31%,#604139 32% 67%,#261e23 68% 100%)!important;background-size:cover!important;background-position:center!important}
+html[data-pk-boot-region="hoenn"] #field.route3:not(.pk-lobby-mode){background-image:radial-gradient(circle at 65% 58%,rgba(180,239,255,.38),transparent 24%),linear-gradient(180deg,#75c7e9 0 41%,#369ec5 42% 71%,#176985 72% 100%)!important;background-size:cover!important;background-position:center!important}
+html[data-pk-boot-region="hoenn"] #pkHoennCloneBadge{border-color:#48b49d!important;background:linear-gradient(135deg,rgba(16,65,57,.97),rgba(14,38,52,.97))!important}

@@ -1,0 +1,45 @@
+
+/* V36.40.120 · Lobby más repartido: menos amontonado, mensaje superior limpio y movimiento local más suave. */
+#field.pk-lobby-mode .hud{display:none!important}
+#field.pk-lobby-mode .pk-trainer-back{left:64.2%!important;right:auto!important;bottom:16.2%!important;z-index:6!important}
+#field.pk-lobby-mode .pk-trainer-back img{transform:scale(1.86)!important;transform-origin:50% 100%!important;animation:pkLobbyTrainerBreathe 4.2s ease-in-out infinite}
+@keyframes pkLobbyTrainerBreathe{0%,100%{translate:0 0;rotate:0deg;filter:drop-shadow(0 4px 6px rgba(0,0,0,.45)) brightness(1)}50%{translate:0 -2px;rotate:.35deg;filter:drop-shadow(0 5px 7px rgba(0,0,0,.48)) brightness(1.025)}}
+#field.pk-lobby-mode #teamLine{left:9%!important;right:22%!important;bottom:2.2%!important;height:67%!important;display:block!important;transform:none!important;transform-origin:left bottom!important;z-index:5!important}
+#field.pk-lobby-mode #teamLine .mon-wrap[data-lobby-slot]{position:absolute!important;width:198px!important;left:var(--lobby-left,10%)!important;bottom:var(--lobby-bottom,5%)!important;transform:scale(var(--lobby-scale,1.2))!important;translate:var(--lobby-nudge-x,0px) var(--lobby-nudge-y,0px);rotate:var(--lobby-tilt,0deg);transform-origin:50% 100%!important;transition:translate 1.75s ease-in-out,rotate 1.75s ease-in-out!important;will-change:translate,rotate}
+#field.pk-lobby-mode #teamLine .mon-wrap[data-lobby-slot]:hover{filter:brightness(1.08)}
+#field.pk-lobby-mode #teamLine .mon-wrap[data-lobby-slot] .mon{pointer-events:none}
+#pkLobbySpeech{position:absolute;z-index:30;max-width:260px;transform:translate(-50%,-100%);background:rgba(8,20,37,.94);border:1px solid #8fb1d3;border-radius:12px;padding:8px 10px;color:#f3f8ff;font-size:8.5px;line-height:1.45;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.42);pointer-events:none;animation:pkLobbySpeechIn .18s ease-out}
+#pkLobbySpeech small{display:block;color:#9fbbd3;font-size:7px;margin-top:3px}
+#pkLobbySpeech:after{content:"";position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);border-left:7px solid transparent;border-right:7px solid transparent;border-top:7px solid #8fb1d3}
+@keyframes pkLobbySpeechIn{from{opacity:0;translate:0 5px}to{opacity:1;translate:0 0}}
+#pkLobbyHouseHotspot,#pkLobbyHouseMenu{display:none!important}
+#pkLobbyAmbient{display:none;position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+#field.pk-lobby-mode #pkLobbyAmbient{display:block}
+.pk-lobby-smoke{position:absolute;width:18px;height:18px;border-radius:50%;background:rgba(224,238,244,.42);filter:blur(2px);animation:pkLobbySmoke 5.8s ease-out infinite}
+.pk-lobby-smoke.s1{left:89.5%;top:19%;animation-delay:0s}.pk-lobby-smoke.s2{left:89.8%;top:18%;animation-delay:2s}.pk-lobby-smoke.s3{left:90%;top:20%;animation-delay:4s}
+@keyframes pkLobbySmoke{0%{opacity:0;translate:0 10px;scale:.55}20%{opacity:.45}100%{opacity:0;translate:-16px -74px;scale:1.9}}
+.pk-lobby-leaf{position:absolute;font-size:12px;opacity:.75;animation:pkLobbyLeaf 9s linear infinite;filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))}.pk-lobby-leaf.l1{left:14%;top:40%;animation-delay:-1s}.pk-lobby-leaf.l2{left:42%;top:31%;animation-delay:-5s}.pk-lobby-leaf.l3{left:58%;top:45%;animation-delay:-7s}
+@keyframes pkLobbyLeaf{0%{translate:-30px -10px;rotate:0deg;opacity:0}15%{opacity:.75}55%{translate:80px 34px;rotate:180deg}100%{translate:180px 90px;rotate:360deg;opacity:0}}
+.pk-lobby-butterfly{position:absolute;font-size:11px;animation:pkLobbyButterfly 7.5s ease-in-out infinite alternate}.pk-lobby-butterfly.b1{left:48%;bottom:31%;animation-delay:-2s}.pk-lobby-butterfly.b2{left:28%;bottom:25%;animation-delay:-5s}
+@keyframes pkLobbyButterfly{0%{translate:-8px 2px}33%{translate:13px -13px}66%{translate:28px 3px}100%{translate:42px -8px}}
+#pkLobbyReturnToast{position:absolute;left:50%;top:34%;translate:-50% 0;z-index:29;background:rgba(8,21,38,.94);border:1px solid #78b895;border-radius:999px;padding:8px 14px;color:#dff8e8;font-size:8px;font-weight:950;box-shadow:0 8px 24px rgba(0,0,0,.42);animation:pkLobbyReturn 3.2s ease forwards;pointer-events:none;white-space:nowrap}
+@keyframes pkLobbyReturn{0%{opacity:0;translate:-50% 8px}12%,78%{opacity:1;translate:-50% 0}100%{opacity:0;translate:-50% -8px}}
+#pkLobbyProgressDecor{display:none;position:absolute;left:56.5%;bottom:24.2%;z-index:4;pointer-events:none;align-items:center;gap:5px;background:linear-gradient(180deg,rgba(91,61,28,.94),rgba(53,35,18,.95));border:2px solid rgba(208,164,92,.92);border-radius:9px;padding:7px 8px 6px;box-shadow:0 6px 14px rgba(0,0,0,.38);transform:rotate(-1deg);min-width:108px}
+#field.pk-lobby-mode #pkLobbyProgressDecor{display:none!important}
+#pkLobbyProgressDecor:before{content:"RECUERDOS";position:absolute;left:50%;bottom:100%;transform:translate(-50%,2px);font-size:6.5px;font-weight:1000;letter-spacing:.8px;color:#ffe6a1;text-shadow:0 1px 2px #000;white-space:nowrap}
+#pkLobbyProgressDecor.empty{opacity:.72;justify-content:center}
+#pkLobbyProgressDecor .pk-lobby-empty-memory{font-size:6.5px;color:#d2b985;white-space:nowrap}
+#pkLobbyProgressDecor .pk-lobby-badge-mini{width:25px;height:25px;object-fit:contain;filter:drop-shadow(0 2px 2px rgba(0,0,0,.45))}
+#pkLobbyProgressDecor .pk-lobby-trophy{font-size:20px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+#pkLobbyEasterEgg{position:absolute;z-index:2;pointer-events:none;opacity:.68;animation:pkLobbyEaster 12s ease-in-out forwards;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
+#pkLobbyEasterEgg img{width:54px;height:54px;object-fit:contain;image-rendering:pixelated}
+@keyframes pkLobbyEaster{0%{opacity:0;translate:-6px 0}10%,78%{opacity:.68}100%{opacity:0;translate:18px -2px}}
+.no-anim #field.pk-lobby-mode .pk-trainer-back img,.no-anim #field.pk-lobby-mode #teamLine .mon-wrap,.no-anim #pkLobbyAmbient *{animation:none!important;transition:none!important}
+@media(max-width:700px){
+  #field.pk-lobby-mode .pk-trainer-back{left:61.5%!important;bottom:13%!important}
+  #field.pk-lobby-mode .pk-trainer-back img{transform:scale(1.18)!important}
+  #field.pk-lobby-mode #teamLine{left:4%!important;right:14%!important;bottom:2%!important;height:60%!important}
+  #field.pk-lobby-mode #teamLine .mon-wrap[data-lobby-slot]{width:132px!important}
+  #pkLobbyProgressDecor{left:46%;bottom:23%;scale:.82;transform-origin:left bottom}
+  #pkLobbyReturnToast{top:37%;font-size:7px;max-width:88%;overflow:hidden;text-overflow:ellipsis}
+}

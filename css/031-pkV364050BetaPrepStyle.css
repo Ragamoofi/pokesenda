@@ -1,0 +1,30 @@
+
+/* BETA 1.0 · Pokémon Classic */
+html,body,button,select,input,textarea{font-family:'Pokemon Classic Regular','Pokemon Classic',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif!important}
+html{font-synthesis-weight:auto}
+body{letter-spacing:.08px}
+.menu-logo,#summaryTitle,#gymResultTitle,#starterOverlay h2,.pk-first-welcome-title{font-family:'Pokemon Classic Regular','Pokemon Classic',monospace!important;letter-spacing:.2px!important}
+.pk-beta-badge,.pk-boot-beta{font-family:'Press Start 2P','Courier New',monospace!important}
+
+/* Pantalla de carga */
+.pk-boot-loader{position:fixed;inset:0;z-index:200000;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#173c57 0,#0b1b31 38%,#050b14 100%);color:#f5f8ff;opacity:1;transition:opacity .34s ease,visibility .34s ease;visibility:visible}
+.pk-boot-loader.pk-ready{opacity:0;visibility:hidden;pointer-events:none}
+.pk-boot-card{width:min(430px,calc(100vw - 34px));text-align:center;padding:28px 24px 25px;border:1px solid #456783;border-radius:18px;background:rgba(7,20,38,.86);box-shadow:0 26px 80px rgba(0,0,0,.55)}
+.pk-boot-ball{width:64px;height:64px;margin:0 auto 15px;border:4px solid #0c1420;border-radius:50%;position:relative;overflow:hidden;background:linear-gradient(#e65050 0 46%,#10151b 46% 54%,#f3f5f6 54%);animation:pkBootBob 1.15s ease-in-out infinite}
+.pk-boot-ball:before{content:"";position:absolute;left:50%;top:50%;width:20px;height:20px;transform:translate(-50%,-50%);border:4px solid #0c1420;border-radius:50%;background:#f4f6f8;z-index:2}.pk-boot-ball:after{content:"";position:absolute;left:0;right:0;top:46%;height:8%;background:#0c1420}
+@keyframes pkBootBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.pk-boot-title{font-size:31px;font-weight:700;letter-spacing:1px}.pk-boot-beta{display:inline-block;margin:8px 0 15px;padding:6px 8px;border-radius:6px;background:#e6b94a;color:#151515;font-size:8px;line-height:1.3}
+.pk-boot-status{font-size:13px;color:#cad8e8;min-height:18px}.pk-boot-progress{height:8px;margin:13px 0 9px;border:1px solid #415875;border-radius:999px;background:#091422;overflow:hidden}.pk-boot-progress i{display:block;height:100%;width:38%;border-radius:999px;background:linear-gradient(90deg,#6aa9e9,#88e0ad);animation:pkBootProgress 1.1s ease-in-out infinite alternate}
+@keyframes pkBootProgress{from{transform:translateX(-90%)}to{transform:translateX(260%)}}
+.pk-boot-card small{color:#758ca5;font-size:9px}
+
+/* Beta + disclaimer */
+.pk-beta-row{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:7px 0 12px}.pk-beta-badge{display:inline-flex;align-items:center;padding:6px 8px;border-radius:7px;background:#e0b446;color:#111;font-size:7px;line-height:1.3;box-shadow:0 2px 0 #7d6225}.pk-beta-build{font-size:10px;color:#aebfd1}
+.pk-fan-disclaimer{margin:12px auto 2px;max-width:610px;padding:9px 11px;border-top:1px solid rgba(155,180,204,.2);color:#7f94aa;font-size:8.5px;line-height:1.55;text-align:center}.pk-fan-disclaimer b{color:#a9bbcc}.pk-font-credit{opacity:.82}
+
+/* Backups y diagnóstico */
+.pk-tools-box{width:min(760px,95vw);max-height:min(86vh,800px);overflow:auto}.pk-tools-head{display:flex;gap:10px;align-items:flex-start}.pk-tools-head>div{flex:1}.pk-tools-head h2{margin:0 0 4px}.pk-tools-head p{margin:0;color:var(--muted);font-size:10px;line-height:1.5}
+.pk-backup-info{margin:12px 0;padding:10px 12px;border:1px solid #3e607f;border-radius:11px;background:#102338;font-size:10px;color:#c2d2e2;line-height:1.5}.pk-backup-list{display:grid;gap:9px}.pk-backup-empty{padding:18px;border:1px dashed #425369;border-radius:12px;text-align:center;color:#91a2b5;font-size:11px}
+.pk-backup-card{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:11px 12px;border:1px solid #3c4f64;border-radius:12px;background:#172330}.pk-backup-card b,.pk-backup-card span,.pk-backup-card small{display:block}.pk-backup-card b{font-size:12px}.pk-backup-card span{margin-top:3px;color:#b8c7d7;font-size:9.5px}.pk-backup-card small{margin-top:4px;color:#8293a5;font-size:8.5px}.pk-backup-card .btn{min-width:105px}
+.pk-tools-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:12px}.pk-diagnostic-output{width:100%;min-height:300px;resize:vertical;background:#080e16;border:1px solid #3c4e63;border-radius:11px;color:#dce8f5;padding:12px;font:500 10px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap}
+@media(max-width:700px){.pk-boot-card{padding:23px 16px}.pk-boot-title{font-size:26px}.pk-backup-card{grid-template-columns:1fr}.pk-backup-card .btn{width:100%}.pk-tools-actions .btn{flex:1;min-width:135px}.pk-diagnostic-output{min-height:45vh;font-size:9px}}

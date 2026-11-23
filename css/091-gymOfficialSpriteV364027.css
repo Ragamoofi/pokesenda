@@ -1,0 +1,12 @@
+
+/* V36.40.30 · Identidad visual oficial de Gimnasios (cartel FRLG) */
+.gym-official-icon{display:inline-block;object-fit:contain;image-rendering:auto;vertical-align:middle;flex:0 0 auto;filter:drop-shadow(0 2px 2px rgba(0,0,0,.45))}
+.gym-official-icon.nav{width:30px;height:30px}
+.gym-official-icon.title{width:28px;height:28px;margin-right:8px}
+.gym-official-icon.tab{width:17px;height:17px;margin-right:5px}
+.gym-official-icon.inline{width:20px;height:20px;margin-right:6px}
+.gym-official-title{display:inline-flex!important;align-items:center;gap:0}
+#gymHudBtn{font-size:0!important;display:inline-flex!important;align-items:center!important;justify-content:center!important}
+#gymHudBtn .hud-icon-count{font-size:8px!important}
+#gymBattleKicker.gym-kicker-with-icon,#gymResultKicker.gym-kicker-with-icon{display:inline-flex;align-items:center;justify-content:center;gap:5px}
+#gymResultContinueBtn.gym-return-with-icon{display:inline-flex;align-items:center;justify-content:center;gap:5px}

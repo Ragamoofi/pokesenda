@@ -1,0 +1,9 @@
+
+/* PokéSenda · bloqueo centralizado del drag HTML5 nativo.
+   El juego usa Pointer Events para sus arrastres reales; imágenes/texto del navegador no deben iniciar DnD nativo. */
+html img,html svg,html canvas{
+  -webkit-user-drag:none!important;
+  user-drag:none!important;
+}
+html:not(.pk-formation-pointer-drag) body{cursor:auto}
+html:not(.pk-formation-pointer-drag) .formation-drag-handle{cursor:grab!important}

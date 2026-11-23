@@ -1,0 +1,20 @@
+
+/* 13/09/2026 · Blackout público temporal de Hoenn.
+   Conserva TODO el código y los saves de Región III, pero elimina sus entradas visibles
+   mientras HOENN_RELEASED=false. No afecta Kanto, Johto, Infinita ni los arreglos móviles. */
+html.pk-hoenn-prelaunch #mainMenu [data-pk-menu-region="hoenn"],
+html.pk-hoenn-prelaunch #regionHoennCard,
+html.pk-hoenn-prelaunch [data-self-profile-region="hoenn"],
+html.pk-hoenn-prelaunch [data-profile-region="hoenn"],
+html.pk-hoenn-prelaunch [data-gd-region="hoenn"],
+html.pk-hoenn-prelaunch [data-gbox-region="hoenn"],
+html.pk-hoenn-prelaunch .pk-public-region-panel[data-region="hoenn"],
+html.pk-hoenn-prelaunch #pkHoennCloneBadge{
+  display:none!important;
+}
+html.pk-hoenn-prelaunch #mainMenu .pk-menu-region-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+}
+@media(max-width:720px){
+  html.pk-hoenn-prelaunch #mainMenu .pk-menu-region-grid{grid-template-columns:1fr!important}
+}

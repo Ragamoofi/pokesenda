@@ -1,0 +1,17 @@
+
+/* Johto · resumen de expedición completamente regionalizado. */
+#pkRegionRuntimeRoot .summary{background:rgba(7,10,6,.90)!important;backdrop-filter:blur(3px)!important}
+#pkRegionRuntimeRoot .summary-box{background:linear-gradient(180deg,#1b241b 0%,#111711 100%)!important;border:2px solid #7a7045!important;box-shadow:0 24px 75px rgba(0,0,0,.72),0 0 0 1px rgba(216,179,90,.08) inset!important;color:#eef0e3!important}
+#pkRegionRuntimeRoot .summary-head{background:linear-gradient(180deg,#293426,#20291f)!important;border-bottom-color:#696342!important}
+#pkRegionRuntimeRoot .summary-head h2{color:#f2e3aa!important}
+#pkRegionRuntimeRoot .summary-box #summaryText{color:#b9c0ac!important}
+#pkRegionRuntimeRoot .summary-grid .metric{background:#182019!important;border-color:#565c42!important}
+#pkRegionRuntimeRoot .summary-grid .metric b{color:#f4ecd0!important}
+#pkRegionRuntimeRoot .summary-grid .metric .muted{color:#9fa88f!important}
+#pkRegionRuntimeRoot .ux-smart-summary{background:linear-gradient(135deg,#172018,#111711)!important;border-color:#5f6348!important}
+#pkRegionRuntimeRoot .ux-smart-card{background:#151d16!important;border-color:#4c5540!important}
+#pkRegionRuntimeRoot .ux-smart-card.info{border-color:#706b45!important;background:#1c2118!important}
+#pkRegionRuntimeRoot .ux-smart-card.good{border-color:#55704b!important;background:#142017!important}
+#pkRegionRuntimeRoot .ux-smart-card.warn{border-color:#776038!important;background:#241e12!important}
+#pkRegionRuntimeRoot .ux-smart-head small,#pkRegionRuntimeRoot .ux-smart-card small,#pkRegionRuntimeRoot .ux-smart-card span,#pkRegionRuntimeRoot .ux-smart-foot{color:#9fa991!important}
+#pkRegionRuntimeRoot .summary-close-btn{background:linear-gradient(180deg,#414c34,#2d372b)!important;border-color:#766f4b!important;color:#f1edda!important}

@@ -1,0 +1,155 @@
+
+/* V36.64.3 → Release · Johto público: tres rutas, viaje Kanto ↔ Johto, saves regionales separados,
+   Gimnasios/medallas funcionales, identidad dorado-plata y herramientas locales de respaldo/transferencia. */
+/* V36.63.0 · Identidad visual regional Johto · pase 1
+   Solo cambia acentos cromáticos. No modifica geometría, tamaños ni colores semánticos. */
+#pkRegionRuntimeRoot{
+  --johto-gold:#d8b35a;
+  --johto-gold-hi:#f0d58a;
+  --johto-bronze:#8a6a35;
+  --johto-silver:#b8c0ca;
+  --johto-edge:#62563d;
+  --johto-panel-warm:#24251f;
+}
+#pkRegionRuntimeRoot #mainMenu .menu-box{
+  background:linear-gradient(180deg,rgba(31,31,27,.975),rgba(20,25,29,.975))!important;
+  border-color:#806a3f!important;
+  box-shadow:0 35px 100px rgba(0,0,0,.55),0 0 0 1px rgba(216,179,90,.07) inset!important;
+}
+#pkRegionRuntimeRoot #mainMenu .menu-sub{color:#bdb7a8!important}
+#pkRegionRuntimeRoot #mainMenu .menu-buttons .btn:not(.danger){
+  background:linear-gradient(180deg,#3a3d39,#2b302f)!important;
+  border-color:#67685e!important;
+  color:#f2eee2!important;
+}
+#pkRegionRuntimeRoot #mainMenu #menuPlayBtn{
+  background:linear-gradient(180deg,#9b7534,#6f5226)!important;
+  border-color:#d8b35a!important;
+  color:#fff5d7!important;
+  box-shadow:inset 0 1px 0 rgba(255,245,215,.10),0 4px 15px rgba(92,65,24,.18)!important;
+}
+#pkRegionRuntimeRoot #mainMenu .menu-patch-card,
+#pkRegionRuntimeRoot #mainMenu .menu-timed-gacha{
+  border-color:#5f553e!important;
+  background:linear-gradient(135deg,#1b2425,#1b1f1d)!important;
+}
+#pkRegionRuntimeRoot #mainMenu .menu-patch-badge{
+  border-color:#8d743d!important;
+  background:#302819!important;
+  color:#f0d58a!important;
+}
+#pkRegionRuntimeRoot #mainMenu .menu-credit b{color:#d8b35a!important}
+#pkRegionRuntimeRoot .game{
+  border-color:var(--johto-edge)!important;
+  box-shadow:0 25px 80px rgba(0,0,0,.42),0 0 0 1px rgba(216,179,90,.07)!important;
+}
+#pkRegionRuntimeRoot .top{
+  background:linear-gradient(180deg,#1d1d19,#151a20)!important;
+  border-bottom-color:#685a3c!important;
+  box-shadow:inset 0 -1px 0 rgba(240,213,138,.035)!important;
+}
+#pkRegionRuntimeRoot .top .title{color:#f2e7c8!important;text-shadow:0 1px 8px rgba(216,179,90,.10)!important}
+#pkRegionRuntimeRoot .top .pill{
+  background:#23251f!important;
+  border-color:#4e4b3d!important;
+}
+#pkRegionRuntimeRoot .top .pill b{color:#f0e9d7!important}
+#pkRegionRuntimeRoot .right{
+  background-image:linear-gradient(180deg,rgba(115,84,31,.075),rgba(115,84,31,0) 190px)!important;
+}
+#pkRegionRuntimeRoot .section-title{color:#cbb47c!important}
+#pkRegionRuntimeRoot .hud{
+  border-color:#62573f!important;
+  box-shadow:0 0 0 1px rgba(216,179,90,.045) inset!important;
+}
+#pkRegionRuntimeRoot #regionSwitchBtn{
+  background:linear-gradient(145deg,#4c3a1d,#2b2a22)!important;
+  border-color:#9a7838!important;
+  box-shadow:inset 0 0 0 1px rgba(240,213,138,.07),0 3px 12px rgba(0,0,0,.18)!important;
+}
+#pkRegionRuntimeRoot #regionSwitchBtn:hover{filter:brightness(1.10)!important}
+#pkRegionRuntimeRoot #regionSwitchBtn .region-switch-copy b{color:#ffe39a!important}
+#pkRegionRuntimeRoot #regionSwitchBtn .region-switch-copy small{color:#c8c1ad!important}
+#pkRegionRuntimeRoot .route-select{
+  background:#1d211e!important;
+  border-color:#5e543d!important;
+}
+#pkRegionRuntimeRoot .route-select:focus{border-color:#a98948!important;box-shadow:0 0 0 2px rgba(216,179,90,.10)!important;outline:none!important}
+#pkRegionRuntimeRoot #pkMobileDock{
+  border-color:#65583d!important;
+  background:rgba(22,24,21,.965)!important;
+}
+#pkRegionRuntimeRoot #pkMobileMore .pk-mobile-more-box{
+  border-color:#65583d!important;
+  background:linear-gradient(180deg,#1d211e,#151b20)!important;
+}
+#pkRegionRuntimeRoot .info-panel.help-v3315,
+#pkRegionRuntimeRoot .info-panel{
+  border-color:#5c523e!important;
+}
+#pkRegionRuntimeRoot .formation-slot.active-slot{border-color:#6f6948!important}
+#pkRegionRuntimeRoot .record-pill{border-color:#5e543d!important}
+#pkRegionRuntimeRoot .record-pill b{color:#e2c978!important}
+
+/* V36.63.1 · Rutas Johto públicas: identidad regional por zona, sin alterar la geometría Kanto. */
+/* V36.64.6 · Pradera Ámbar · fondo reemplazado por la versión editada final del usuario, embebido localmente. */
+#pkRegionRuntimeRoot #field.route1:not(.pk-lobby-mode){
+  background-image:linear-gradient(rgba(8,10,8,.025),rgba(8,10,8,.07)),url("../assets/embedded/94d3a80f6c1a7eed.png")!important;
+  background-size:cover!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
+}
+/* V36.64.9 · Bosque Ancestral · fondo definitivo aprobado por el usuario, embebido localmente (WebP lossless, píxeles idénticos al PNG aprobado). */
+#pkRegionRuntimeRoot #field.route2:not(.pk-lobby-mode){background-image:linear-gradient(rgba(4,8,10,.015),rgba(4,8,10,.055)),url("../assets/embedded/a9d60944f41f7965.webp")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important}
+/* V36.64.9 · Senda Plateada · fondo definitivo aprobado por el usuario, embebido localmente (WebP lossless, píxeles idénticos al PNG aprobado). */
+#pkRegionRuntimeRoot #field.route3:not(.pk-lobby-mode){background-image:linear-gradient(rgba(4,7,10,.01),rgba(4,7,10,.045)),url("../assets/embedded/d4301653517c74a5.webp")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important}
+#pkRegionRuntimeRoot #routeSelect option:disabled{color:#8b8576!important}
+
+/* V36.63.0 · Identidad Johto · pase 2: cromática regional suave en chrome neutral. */
+#pkRegionRuntimeRoot #pokedexOverlay .modal-box,
+#pkRegionRuntimeRoot #pcBoxOverlay .modal-box,
+#pkRegionRuntimeRoot #achievementsOverlay .modal-box,
+#pkRegionRuntimeRoot #gymSelectOverlay .modal-box,
+#pkRegionRuntimeRoot #skillTreeOverlay .modal-box,
+#pkRegionRuntimeRoot #optionsOverlay .modal-box,
+#pkRegionRuntimeRoot #playerProfileOverlay .modal-box,
+#pkRegionRuntimeRoot #pokemonDetailOverlay .modal-box,
+#pkRegionRuntimeRoot #enemyDetailOverlay .modal-box{
+  border-color:#62583f!important;
+  background:linear-gradient(180deg,#1b2226,#181d20)!important;
+  box-shadow:0 28px 90px rgba(0,0,0,.55),inset 0 1px 0 rgba(240,213,138,.035)!important;
+}
+#pkRegionRuntimeRoot .card:not(.damage-card),
+#pkRegionRuntimeRoot .team-card,
+#pkRegionRuntimeRoot .roster-card{
+  border-color:#49483d!important;
+}
+#pkRegionRuntimeRoot .inventory-tab.active,
+#pkRegionRuntimeRoot .achievement-tab.active,
+#pkRegionRuntimeRoot .help-tab.active{
+  border-color:#90743b!important;
+  box-shadow:inset 0 0 0 1px rgba(240,213,138,.045)!important;
+}
+#pkRegionRuntimeRoot .inventory-tab.active{background:#3a3528!important;color:#fff3d1!important}
+#pkRegionRuntimeRoot .achievement-tab.active{background:#5b4b20!important;color:#fff2bd!important}
+#pkRegionRuntimeRoot .help-tab.active{background:#403a2d!important;color:#fff2cf!important}
+#pkRegionRuntimeRoot .top-nav .btn:not(.primary):not(.warn):not(.danger),
+#pkRegionRuntimeRoot .top-auto .btn:not(.primary):not(.warn):not(.danger){
+  border-color:#555044!important;
+}
+#pkRegionRuntimeRoot #regionSelectOverlay .region-select-box{border-color:#806a3f!important;background:#171d20!important}
+#pkRegionRuntimeRoot #regionSelectOverlay .region-select-head{border-bottom-color:#5f533b!important;background:linear-gradient(135deg,#302718,#1c2224 58%,#2a2923)!important}
+#pkRegionRuntimeRoot #regionSelectOverlay .region-select-head-icon{background:#27251d!important;border-color:#8a713d!important}
+#pkRegionRuntimeRoot #regionSelectOverlay .region-card.current{border-color:#b18a3e!important;background:linear-gradient(155deg,#302817,#1b2322 62%,#172028)!important}
+#pkRegionRuntimeRoot #regionSelectOverlay .region-card.current .region-state-badge{background:#66501e!important;border-color:#d0a94e!important;color:#fff0b4!important}
+#pkRegionRuntimeRoot #regionSelectOverlay .region-card.current .region-card-name span{color:#e0c06b!important}
+#pkRegionRuntimeRoot #regionSelectOverlay .region-coming-message{border-color:#66583d!important;background:#211f19!important;color:#c8bd9f!important}
+#pkRegionRuntimeRoot #regionSelectOverlay .region-coming-message strong{color:#f1d88e!important}
+/* Selector global: Johto disponible conserva identidad dorada sin modificar Kanto. */
+body > #regionSelectOverlay #regionJohtoCard.available{cursor:pointer;border-color:#8d6f39;background:linear-gradient(155deg,#2a2215,#161f29 58%,#171d24)}
+body > #regionSelectOverlay #regionJohtoCard.available:hover{transform:translateY(-2px);border-color:#d1aa55;filter:brightness(1.06)}
+body > #regionSelectOverlay #regionJohtoCard.available .region-card-top{background:radial-gradient(circle at 75% 20%,rgba(216,179,90,.24),transparent 40%)}
+body > #regionSelectOverlay #regionJohtoCard.available .region-state-badge{background:#5a451d;border-color:#b78c3e;color:#ffe4a2}
+body > #regionSelectOverlay #regionJohtoCard.available .region-card-name span{color:#d9b65e}
+body > #regionSelectOverlay #regionJohtoCard.available .region-lock{border-color:#8e713b;background:rgba(49,39,20,.72)}
+body > #regionSelectOverlay #regionJohtoCard.available .region-feature-row span{border-color:#5d5036;color:#d7c9a5}

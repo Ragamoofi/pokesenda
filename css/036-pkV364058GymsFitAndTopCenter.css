@@ -1,0 +1,62 @@
+
+/* V36.40.58 · Gimnasios más compactos + HUD superior mejor centrado */
+@media (min-width:981px){
+  .top-meta .pill,
+  .top-meta .mt-ticket-top,
+  .top-meta .checkpoint-btn{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    text-align:center!important;
+    line-height:1!important;
+  }
+  .top-meta .pill b,
+  .top-meta .mt-ticket-top b,
+  .top-meta .checkpoint-btn b{line-height:1!important}
+  .top-meta .route-select{
+    text-align:center!important;
+    text-align-last:center!important;
+  }
+}
+.gym-select-box{
+  width:min(1320px,98vw)!important;
+  max-height:95vh!important;
+  padding:15px!important;
+}
+#gymSelectOverlay .pokemon-detail-head{margin-bottom:6px!important}
+#gymRunNotice{margin:6px 0 8px!important;padding:8px 10px!important;font-size:9px!important}
+.gym-select-summary{gap:7px!important;margin:8px 0 10px!important}
+.gym-summary-stat{padding:8px 9px!important;border-radius:11px!important}
+.gym-summary-stat b{font-size:17px!important;line-height:1.05!important}
+.gym-summary-stat small{font-size:9px!important;line-height:1.15!important}
+.gym-select-grid{gap:8px!important}
+.gym-card{
+  padding:10px 10px 9px!important;
+  min-height:218px!important;
+  border-radius:13px!important;
+}
+.gym-card-head{gap:7px!important}
+.gym-badge-mini{width:30px!important;height:30px!important;font-size:16px!important}
+.gym-card-portrait{width:44px!important;height:54px!important;border-radius:9px!important}
+.gym-card-portrait img{max-height:54px!important}
+.gym-card h3{font-size:13px!important;line-height:1.05!important}
+.gym-card small{font-size:8px!important;line-height:1.15!important}
+.gym-card-roster{margin:7px 0 6px!important;padding:4px!important;gap:1px!important}
+.gym-card-roster img{width:29px!important;height:29px!important}
+.gym-card-rule{font-size:8px!important;line-height:1.22!important;min-height:48px!important;max-height:58px!important;overflow:hidden!important}
+.gym-card-meta{font-size:8px!important;line-height:1.15!important;margin:6px 0 4px!important;gap:5px!important}
+.gym-card .tiny.muted{font-size:8px!important;line-height:1.15!important;margin-top:3px!important}
+.gym-card .btn{margin-top:4px!important;min-height:34px!important;padding:8px 8px!important;font-size:10px!important}
+.gym-lock-note{margin-top:8px!important;font-size:9px!important}
+@media (max-width:1200px){
+  .gym-select-box{width:min(1200px,99vw)!important;padding:12px!important}
+  .gym-card{min-height:212px!important;padding:9px!important}
+  .gym-card-roster img{width:26px!important;height:26px!important}
+  .gym-card-rule{font-size:7.7px!important;min-height:44px!important;max-height:54px!important}
+}
+@media (max-width:980px){
+  .gym-select-box{max-height:94vh!important;padding:12px!important}
+  .gym-select-summary{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .gym-select-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .gym-card{min-height:230px!important}
+}

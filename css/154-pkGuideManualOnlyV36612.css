@@ -1,0 +1,10 @@
+
+/* V36.66.12 · Manual de referencia como vista principal. */
+.help-v3315.help-guide-rework .help-search-hint{display:none!important}
+.help-v3315.help-guide-rework .help-mode-switch,
+.help-v3315.help-guide-rework .help-quick-hub,
+.help-v3315.help-guide-rework .help-reference-banner{display:none!important}
+.help-v3315.help-guide-rework .help-reference-shell{display:grid!important;grid-template-columns:220px minmax(0,1fr)!important;gap:12px!important;padding:10px 14px 16px!important}
+.help-v3315.help-guide-rework .help-reference-main{padding:0!important;min-width:0}
+.help-v3315.help-guide-rework .help-reference-sidebar{top:120px}
+@media(max-width:980px){.help-v3315.help-guide-rework .help-reference-shell{grid-template-columns:1fr!important}.help-v3315.help-guide-rework .help-reference-sidebar{position:static;top:auto;max-height:none}}

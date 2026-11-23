@@ -1,0 +1,59 @@
+
+/* 14/09/2026 · Fix exclusivamente móvil para Johto.
+   No altera escritorio, saves, combate, balance ni lógica regional. */
+@media(max-width:980px){
+  #pkRegionRuntimeRoot:not(.hidden){
+    width:100vw!important;
+    max-width:100vw!important;
+    min-height:100dvh!important;
+    padding:0 0 calc(var(--pk-mobile-dock-h) + var(--pk-safe-bottom))!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+  }
+  #pkRegionRuntimeRoot .game{width:100%!important;max-width:100vw!important;min-width:0!important}
+  #pkRegionRuntimeRoot .main,#pkRegionRuntimeRoot .field,#pkRegionRuntimeRoot .right{min-width:0!important;max-width:100vw!important}
+
+  /* Combate Johto: evita heredar sprites de escritorio en móvil/tablet. */
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #teamLine .mon{width:78px!important;height:96px!important}
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #teamLine .mon>img{width:112px!important;height:112px!important;bottom:-33px!important}
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #enemyTeamLine .enemy{width:76px!important;height:96px!important}
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #enemyTeamLine .enemy>img{width:112px!important;height:112px!important;bottom:-32px!important}
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #enemyTeamLine .enemy.boss>img{width:142px!important;height:142px!important;bottom:-42px!important}
+
+  /* El dock clonado de Johto conserva la misma geometría del dock maestro. */
+  #pkRegionRuntimeRoot>#pkMobileDock:not(.hidden){display:grid!important}
+  #pkRegionRuntimeRoot>#pkMobileDock{left:0!important;right:0!important;bottom:0!important;width:100vw!important;max-width:100vw!important}
+  #pkRegionRuntimeRoot>#pkMobileMore{left:8px!important;right:8px!important;max-width:calc(100vw - 16px)!important}
+}
+
+@media(max-width:700px){
+  /* Johto reimponía 198px después del responsive maestro del Campamento. */
+  #pkRegionRuntimeRoot #field.pk-lobby-mode #teamLine .mon-wrap[data-lobby-slot]{width:132px!important}
+  #pkRegionRuntimeRoot #field.pk-lobby-mode .pk-trainer-back img{transform:scale(1.18)!important;transform-origin:50% 100%!important}
+}
+
+@media(max-width:620px){
+  /* Paridad con las proporciones móviles que ya funcionan bien en Kanto. */
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #pkTrainerBack{left:0!important;bottom:18px!important;transform:scale(.60)!important;transform-origin:left bottom!important}
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #teamLine{left:70px!important;right:auto!important;width:43vw!important;bottom:96px!important;gap:1px!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #enemyTeamLine{left:auto!important;right:2px!important;width:40vw!important;bottom:120px!important;gap:0!important;justify-content:flex-end!important}
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #teamLine .mon{width:68px!important;height:86px!important}
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #teamLine .mon>img{width:98px!important;height:98px!important;bottom:-29px!important}
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #enemyTeamLine .enemy-slot{width:68px!important;min-width:0!important}
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #enemyTeamLine .enemy{width:66px!important;height:86px!important}
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #enemyTeamLine .enemy>img{width:98px!important;height:98px!important;bottom:-28px!important}
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #enemyTeamLine .enemy.boss>img{width:126px!important;height:126px!important;bottom:-37px!important}
+}
+
+@media(max-width:430px){
+  #pkRegionRuntimeRoot #field.pk-lobby-mode #teamLine .mon-wrap[data-lobby-slot]{width:118px!important}
+}
+
+@media(max-width:980px) and (orientation:landscape){
+  /* En horizontal el viewport suele superar 620px; evita que reaparezcan tamaños de escritorio. */
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #teamLine .mon{width:72px!important;height:90px!important}
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #teamLine .mon>img{width:104px!important;height:104px!important;bottom:-30px!important}
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #enemyTeamLine .enemy{width:70px!important;height:90px!important}
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #enemyTeamLine .enemy>img{width:104px!important;height:104px!important;bottom:-30px!important}
+  #pkRegionRuntimeRoot #field:not(.pk-lobby-mode) #enemyTeamLine .enemy.boss>img{width:132px!important;height:132px!important;bottom:-39px!important}
+}

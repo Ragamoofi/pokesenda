@@ -1,0 +1,7 @@
+
+/* Comunidad compartida: debe quedar por encima del runtime fijo de Johto. */
+body > #pkPlayersOverlay.pk-players-from-johto{z-index:490500!important}
+body > #pkPlayersOverlay.pk-players-from-johto .pk-players-box{position:relative;z-index:1}
+/* La Pokédex pública se abre desde Comunidad y debe quedar por encima incluso en Johto. */
+body > #pkGlobalDexOverlay.pk-global-dex-from-community{z-index:490700!important}
+body > #pkGlobalDexDetail.pk-global-dex-from-community{z-index:490710!important}

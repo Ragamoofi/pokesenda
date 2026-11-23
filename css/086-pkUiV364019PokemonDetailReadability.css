@@ -1,0 +1,92 @@
+
+/* V36.40.19 · Primera pasada de accesibilidad visual SOLO para la ficha completa del Pokémon. */
+#pokemonDetailOverlay .pokemon-detail-modal{
+  width:min(1020px,96vw)!important;
+  max-height:94vh!important;
+  padding:16px!important;
+}
+#pokemonDetailOverlay .pokemon-detail-head{gap:14px!important;margin-bottom:10px!important}
+#pokemonDetailOverlay .pokemon-detail-head h2{font-size:24px!important;line-height:1.15!important;margin:0!important}
+#pokemonDetailOverlay .pokemon-detail-head .btn{font-size:12px!important;padding:9px 13px!important;min-height:38px}
+#pokemonDetailOverlay .pokemon-nav-btn{min-width:44px!important;font-size:22px!important;padding:4px 10px!important}
+#pokemonDetailOverlay .pokemon-detail-close{min-width:96px!important}
+#pokemonDetailOverlay .pokemon-detail-modal> .tiny.muted{font-size:12px!important;line-height:1.55!important;margin-bottom:12px!important}
+
+#pokemonDetailContent .team-card{padding:12px!important;border-radius:12px!important}
+#pokemonDetailContent .team-head{grid-template-columns:170px minmax(0,1fr) auto!important;gap:13px!important}
+#pokemonDetailContent .team-title b{font-size:17px!important;line-height:1.25!important}
+#pokemonDetailContent .team-title small{font-size:12px!important;line-height:1.45!important;margin-top:2px}
+#pokemonDetailContent .role-badge{font-size:10px!important;padding:4px 8px!important;margin-top:5px!important}
+#pokemonDetailContent .stars{font-size:16px!important;line-height:1.25!important;margin-top:3px}
+#pokemonDetailContent .party-status{font-size:11px!important;line-height:1.35!important;margin-top:4px!important}
+#pokemonDetailContent .team-head>span:last-child{font-size:13px!important;white-space:nowrap!important}
+
+#pokemonDetailContent .ux-improvement-strip{gap:7px!important;padding:9px 10px!important;margin:10px 0 9px!important}
+#pokemonDetailContent .ux-improvement-strip>b{font-size:10.5px!important}
+#pokemonDetailContent .ux-improve-chip{font-size:9.5px!important;padding:4px 7px!important;line-height:1.2!important}
+
+#pokemonDetailContent .xpbar{height:11px!important;margin-top:7px!important}
+#pokemonDetailContent .statline{font-size:12px!important;line-height:1.45!important;margin:8px 0 6px!important}
+#pokemonDetailContent .star-row{margin:8px 0!important}
+#pokemonDetailContent .star-row .tiny{font-size:11.5px!important;line-height:1.4!important}
+#pokemonDetailContent .star-upgrade{font-size:11px!important;padding:7px 10px!important}
+
+#pokemonDetailContent .moves-first-label{font-size:13px!important;letter-spacing:1.05px!important;margin:13px 0 7px!important}
+#pokemonDetailContent .evo-status-card{margin:12px 0 9px!important;padding:10px 12px!important;gap:12px!important;border-radius:11px!important}
+#pokemonDetailContent .evo-status-tag{font-size:10px!important;min-width:58px!important;padding:6px 8px!important}
+#pokemonDetailContent .evo-status-main small{font-size:9px!important}
+#pokemonDetailContent .evo-status-main b{font-size:14px!important}
+#pokemonDetailContent .evo-status-level small{font-size:10px!important}
+#pokemonDetailContent .evo-status-level strong{font-size:22px!important}
+#pokemonDetailContent .evo-status-req{font-size:10px!important}
+#pokemonDetailContent .skills{gap:8px!important;margin-top:8px!important}
+#pokemonDetailContent .skill{font-size:12px!important;padding:10px 11px!important;border-radius:9px!important;line-height:1.35!important}
+#pokemonDetailContent .skill strong{font-size:13px!important;gap:10px!important;align-items:center!important}
+#pokemonDetailContent .skill small{font-size:11px!important;line-height:1.5!important;margin-top:5px!important}
+#pokemonDetailContent .move-note{font-size:10.5px!important;line-height:1.45!important;margin-top:7px!important;padding:6px 8px!important}
+
+#pokemonDetailContent .item-slot,#pokemonDetailContent .tm-select-row{grid-template-columns:105px minmax(0,1fr)!important;gap:9px!important;margin-top:9px!important}
+#pokemonDetailContent .item-slot label,#pokemonDetailContent .tm-select-row label{font-size:11px!important}
+#pokemonDetailContent .item-slot select,#pokemonDetailContent .tm-select-row select{font-size:11.5px!important;padding:8px!important;min-height:36px!important}
+#pokemonDetailContent .held-item-info{display:flex;align-items:center;gap:9px;margin:6px 0 10px 114px;padding:8px 10px;border:1px solid #34577f;border-radius:9px;background:linear-gradient(180deg,#0d1d32,#0a1627);color:#eaf3ff}
+#pokemonDetailContent .held-item-info.empty{opacity:.78;border-style:dashed}
+#pokemonDetailContent .held-item-info-icon{width:30px;min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:16px}
+#pokemonDetailContent .held-item-info-icon .item-icon{margin:0!important}
+#pokemonDetailContent .held-item-info b{display:block;font-size:10.5px;color:#f4f8ff;margin-bottom:2px}
+#pokemonDetailContent .held-item-info small{display:block;font-size:9px;line-height:1.45;color:#aebfd3}
+@media(max-width:760px){#pokemonDetailContent .held-item-info{margin-left:0}}
+#pokemonDetailContent .tm-quick-box{padding:10px!important;margin-top:10px!important}
+#pokemonDetailContent .tm-quick-box small{font-size:10.5px!important;line-height:1.45!important;margin-bottom:8px!important}
+#pokemonDetailContent .tm-quick-actions .mini-btn{font-size:10.5px!important;padding:7px 9px!important}
+
+#pokemonDetailContent .database-note{font-size:10.5px!important;line-height:1.55!important;padding:10px!important;margin:11px 0!important}
+#pokemonDetailContent .stat-database{gap:8px!important;margin:11px 0!important}
+#pokemonDetailContent .db-stat{padding:9px 7px!important}
+#pokemonDetailContent .db-stat b{font-size:18px!important}
+#pokemonDetailContent .db-stat span{font-size:9.5px!important;line-height:1.3!important}
+#pokemonDetailContent .combat-stat-grid{gap:8px!important;margin:10px 0!important}
+#pokemonDetailContent .combat-stat{padding:9px!important}
+#pokemonDetailContent .combat-stat b{font-size:15px!important}
+#pokemonDetailContent .combat-stat small{font-size:9.5px!important;line-height:1.35!important}
+#pokemonDetailContent .matchup-box{padding:10px!important;margin:10px 0!important}
+#pokemonDetailContent .matchup-row{grid-template-columns:105px minmax(0,1fr)!important;gap:9px!important;margin:6px 0!important}
+#pokemonDetailContent .matchup-row>span{font-size:9.5px!important;line-height:1.4!important}
+#pokemonDetailContent .type-chip,#pokemonDetailContent .type-combo-chip{font-size:9.5px!important;padding:4px 7px!important;margin:2px!important}
+
+#pokemonDetailContent .shiny-variant-panel{padding:12px!important;margin:11px 0 13px!important}
+#pokemonDetailContent .shiny-variant-head b{font-size:12px!important}
+#pokemonDetailContent .shiny-variant-head small{font-size:9.5px!important}
+#pokemonDetailContent .shiny-variant-btn b{font-size:11px!important}
+#pokemonDetailContent .shiny-variant-btn small{font-size:9px!important;line-height:1.35!important}
+#pokemonDetailContent .eevee-forms-head b{font-size:12px!important}
+#pokemonDetailContent .eevee-forms-head small{font-size:9.5px!important;line-height:1.4!important}
+#pokemonDetailContent .eevee-form-btn{font-size:9.5px!important}
+
+@media(max-width:750px){
+  #pokemonDetailOverlay .pokemon-detail-modal{width:97vw!important;padding:12px!important}
+  #pokemonDetailContent .team-head{grid-template-columns:135px minmax(0,1fr) auto!important}
+  #pokemonDetailContent .poke-img{width:132px!important;height:132px!important}
+  #pokemonDetailContent .stat-database{grid-template-columns:repeat(3,1fr)!important}
+  #pokemonDetailContent .combat-stat-grid{grid-template-columns:repeat(2,1fr)!important}
+  #pokemonDetailContent .matchup-row{grid-template-columns:1fr!important}
+}

@@ -1,0 +1,75 @@
+
+
+/* V36.64.8 · Johto · campamento estabilizado según Kanto + sombras ancladas al suelo real. */
+#pkRegionRuntimeRoot #field .pk-ground-shadow{
+  position:absolute;
+  left:50%;
+  height:11px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+  background:radial-gradient(ellipse at center,rgba(0,0,0,.48) 0 28%,rgba(0,0,0,.26) 52%,rgba(0,0,0,0) 76%);
+  filter:blur(1.2px);
+  opacity:.78;
+}
+#pkRegionRuntimeRoot #field.pk-lobby-mode .pk-ground-shadow{height:10px;opacity:.66}
+#pkRegionRuntimeRoot #field .mon>img,
+#pkRegionRuntimeRoot #field .enemy>img{z-index:1}
+#pkRegionRuntimeRoot #field.pk-lobby-mode #teamLine .mon-wrap[data-lobby-slot]{
+  width:198px!important;
+  transform-origin:50% 100%!important;
+}
+#pkRegionRuntimeRoot #field.pk-lobby-mode #teamLine .mon-name{
+  font-size:10px!important;
+  font-weight:900!important;
+  line-height:1.1!important;
+  max-width:160px!important;
+  margin:3px auto 0!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  text-align:center!important;
+  text-shadow:0 2px 2px #000!important;
+}
+#pkRegionRuntimeRoot #field.pk-lobby-mode #teamLine .field-stars{font-size:10px!important;line-height:1!important}
+#pkRegionRuntimeRoot #field.pk-lobby-mode #teamLine .status-badges{min-height:17px!important;margin-top:1px!important}
+#pkRegionRuntimeRoot #field.pk-lobby-mode .pk-trainer-back::after,
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-player-trainer::after,
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-leader-full::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-1px;
+  transform:translateX(-50%);
+  width:68px;
+  height:12px;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+  background:radial-gradient(ellipse at center,rgba(0,0,0,.42) 0 28%,rgba(0,0,0,.22) 54%,rgba(0,0,0,0) 77%);
+  filter:blur(1.4px);
+  opacity:.72;
+}
+#pkRegionRuntimeRoot #field.pk-lobby-mode .pk-trainer-back::after{width:78px;height:13px;bottom:-2px}
+#pkRegionRuntimeRoot #field.pk-lobby-mode .pk-trainer-back>img,
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-player-trainer>img,
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-leader-full>img{position:relative;z-index:1}
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-mon::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-1px;
+  transform:translateX(-50%);
+  width:calc(var(--gym-size,130px)*.58);
+  max-width:105px;
+  min-width:34px;
+  height:11px;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+  background:radial-gradient(ellipse at center,rgba(0,0,0,.46) 0 30%,rgba(0,0,0,.24) 55%,rgba(0,0,0,0) 77%);
+  filter:blur(1.2px);
+  opacity:.76;
+}
+

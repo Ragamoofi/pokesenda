@@ -1,0 +1,50 @@
+
+/* V34.5 · Compatibilidad del rediseño visual con sistemas V34.3–V34.4 */
+#legendaryCelebrationOverlay .legendary-celebration{
+  border:1px solid #d7a93d;background:linear-gradient(160deg,#241d0d,#15171d 45%,#10151c);
+  box-shadow:0 0 0 1px rgba(255,222,126,.18),0 30px 90px rgba(0,0,0,.78),0 0 70px rgba(255,203,87,.18);
+}
+.type-synergy-banner{border-color:#45638f;background:#0d1b39;color:#9fb6dc}
+.type-synergy-banner b{color:#dce8ff}
+.type-synergy-banner.active{border-color:#55a978;background:linear-gradient(135deg,#143a2a,#102a26);color:#c9f2d8;box-shadow:inset 0 0 24px rgba(80,181,116,.09)}
+.type-synergy-banner.active b{color:#7de1a2}
+.formation-slot.reserve-slot.bench-guard{border-left-color:#6ca0d8}
+.formation-slot.reserve-slot.bench-striker{border-left-color:#ef765f}
+.formation-slot.reserve-slot.bench-support{border-left-color:#a886ef}
+.pk-ball-cell:focus-visible,.pk-window-min:focus-visible{outline:2px solid var(--pk-yellow);outline-offset:2px}
+
+/* V34.9 · accesos superiores minimalistas */
+/* V34.10 · música exclusiva del menú principal */
+.title-with-menu{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.hud-gear-btn{width:auto;height:auto;min-width:0;border:none;background:transparent;color:#e7f0ff;display:inline-flex;align-items:center;justify-content:center;padding:0 1px;font-size:17px;font-weight:900;line-height:1;box-shadow:none;cursor:pointer;transition:transform .12s ease,filter .12s ease,opacity .12s ease;text-shadow:0 1px 2px rgba(0,0,0,.38);opacity:.92}
+.hud-gear-btn:hover{filter:brightness(1.16);transform:rotate(18deg) scale(1.08);opacity:1}
+.hud-gear-btn:focus-visible{outline:2px solid var(--pk-yellow,#ffd64a);outline-offset:2px}
+.loot-icon-btn{width:48px!important;height:42px!important;min-width:48px!important;padding:3px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;position:relative!important;border-radius:12px!important;background:linear-gradient(180deg,#3a3320,#1f1a0f)!important;border:1px solid #a48b54!important;box-shadow:inset 0 1px rgba(255,255,255,.08),0 2px 6px rgba(0,0,0,.25)}
+.loot-icon-btn:hover{filter:brightness(1.12)}
+.poke-bag-icon{width:31px;height:31px;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
+.loot-icon-count{display:none!important}
+.loot-icon-btn .pokedex-alert{right:-5px;top:-6px}
+.top-nav{align-items:center}
+
+/* V34.11 · navegación superior solo con iconos */
+.hud-nav-icon-btn{width:48px!important;height:42px!important;min-width:48px!important;padding:3px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;position:relative!important;border-radius:12px!important;gap:0!important;box-shadow:inset 0 1px rgba(255,255,255,.08),0 2px 6px rgba(0,0,0,.25)!important}
+.hud-nav-icon-btn:hover{filter:brightness(1.15)!important;transform:translateY(-1px)}
+.hud-nav-icon-btn:focus-visible{outline:2px solid var(--pk-yellow,#ffd64a);outline-offset:2px}
+.hud-main-menu-icon{width:32px!important;height:32px!important;display:block!important;filter:drop-shadow(0 2px 2px rgba(0,0,0,.42))}
+.hud-svg-icon{width:31px;height:31px;display:block;filter:drop-shadow(0 2px 2px rgba(0,0,0,.42))}
+.hud-pokedex-icon-btn{background:linear-gradient(180deg,#6e2f42,#47233a)!important;border-color:#a85368!important}
+.hud-box-icon-btn{background:linear-gradient(180deg,#234c68,#17364d)!important;border-color:#4f84a3!important}
+.hud-achievement-icon-btn{background:linear-gradient(180deg,#5b4c22,#403619)!important;border-color:#8d7530!important}
+.hud-tree-icon-btn{background:linear-gradient(180deg,#47376a,#30264f)!important;border-color:#7059a6!important}
+.hud-casino-icon-btn{background:linear-gradient(180deg,#63501d,#3b2f14)!important;border-color:#a88732!important;color:#ffe59a!important}
+.hud-casino-glyph{width:32px!important;height:32px!important;display:block!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect x='5' y='2' width='20' height='28' rx='1' fill='%23212f44'/%3E%3Crect x='6' y='3' width='18' height='26' fill='%233c4c63'/%3E%3Crect x='8' y='4' width='14' height='3' fill='%23c94b4b'/%3E%3Crect x='8' y='7' width='14' height='2' fill='%23ffe38d'/%3E%3Crect x='8' y='10' width='14' height='8' fill='%23f3efea'/%3E%3Crect x='9' y='11' width='3' height='6' fill='%23ffffff'/%3E%3Crect x='14' y='11' width='3' height='6' fill='%23ffffff'/%3E%3Crect x='19' y='11' width='2' height='6' fill='%23ffffff'/%3E%3Crect x='10' y='12' width='1' height='1' fill='%23d64545'/%3E%3Crect x='10' y='14' width='1' height='1' fill='%234ac45a'/%3E%3Crect x='15' y='12' width='1' height='1' fill='%2358b2ff'/%3E%3Crect x='15' y='14' width='1' height='1' fill='%23d64545'/%3E%3Crect x='19' y='12' width='1' height='1' fill='%23ffcc33'/%3E%3Crect x='19' y='14' width='1' height='1' fill='%234ac45a'/%3E%3Crect x='8' y='20' width='14' height='3' fill='%23323d4f'/%3E%3Crect x='10' y='21' width='10' height='1' fill='%23ffe38d'/%3E%3Crect x='24' y='8' width='3' height='12' fill='%2397a3b5'/%3E%3Crect x='25' y='6' width='2' height='3' fill='%2397a3b5'/%3E%3Ccircle cx='26' cy='21' r='2' fill='%23db6058'/%3E%3Crect x='9' y='24' width='4' height='4' fill='%23ffd24b'/%3E%3Crect x='17' y='24' width='4' height='4' fill='%23ffd24b'/%3E%3Crect x='10' y='25' width='2' height='2' fill='%23fff6cc'/%3E%3Crect x='18' y='25' width='2' height='2' fill='%23fff6cc'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:center!important;background-size:contain!important;filter:drop-shadow(0 2px 2px rgba(0,0,0,.42));font-size:0!important;color:transparent!important;line-height:0!important}
+
+.hud-icon-count{position:absolute;right:-5px;bottom:-6px;min-width:23px;height:15px;padding:0 4px;border-radius:999px;background:#101c35;border:1px solid #6683bd;color:#f7fbff;font-size:7px;font-weight:1000;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.4);white-space:nowrap}
+.hud-nav-icon-btn .pokedex-alert{right:-5px!important;top:-6px!important}
+.hud-nav-icon-btn .ux-improve-counter{right:-8px!important;bottom:-7px!important}
+.hud-box-icon-btn .ux-improve-counter{right:-5px!important;top:-5px!important;bottom:auto!important;width:14px!important;min-width:14px!important;height:14px!important;padding:0!important;border-radius:50%!important;font-size:0!important;color:transparent!important;background:#2f8150!important;border:2px solid #8be1aa!important;box-shadow:0 0 12px rgba(91,218,137,.62),inset 0 1px 2px rgba(255,255,255,.28)!important}
+.hud-box-icon-btn .ux-improve-counter::after{content:"";width:4px;height:4px;border-radius:50%;background:#dfffea;box-shadow:0 0 5px rgba(223,255,234,.9)}
+#pcBoxCountTop,#gymHudCount{display:none!important}
+#lootNewAlert{right:-5px!important;top:-5px!important;width:14px!important;height:14px!important;min-width:14px!important;padding:0!important;border-radius:50%!important;font-size:0!important;color:transparent!important;background:#2f8150!important;border:2px solid #8be1aa!important;box-shadow:0 0 12px rgba(91,218,137,.62),inset 0 1px 2px rgba(255,255,255,.28)!important;animation:dexAlertPulse 1.15s ease-in-out infinite!important}
+#lootNewAlert::after{content:"";width:4px;height:4px;border-radius:50%;background:#dfffea;box-shadow:0 0 5px rgba(223,255,234,.9)}
+

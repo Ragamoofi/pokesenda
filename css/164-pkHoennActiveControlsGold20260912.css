@@ -1,0 +1,29 @@
+
+/* Hoenn · estados activos 12/09/2026
+   El estado activo cambia el FONDO COMPLETO. Dorado/ámbar = contraste cálido
+   con la identidad turquesa/esmeralda de Hoenn, sin alterar la lógica. */
+html[data-pk-boot-region="hoenn"] body #autoRepeatBtn.auto-btn.active,
+html[data-pk-boot-region="hoenn"] body #autoOpenBtn.auto-btn.active,
+html[data-pk-boot-region="hoenn"] body #autoPotionBtn.auto-btn.active,
+html[data-pk-boot-region="hoenn"] body .top-run .run-speed-controls .quick-speed-btn.speed-btn.active,
+html[data-pk-boot-region="hoenn"] body .quick-speed-controls .quick-speed-btn.speed-btn.active,
+html[data-pk-boot-region="hoenn"] body .speed-buttons button.active,
+html[data-pk-boot-region="hoenn"] body .speed-btn.active {
+  background-color:#c5a34d!important;
+  background-image:linear-gradient(180deg,#e4cc86 0%,#c5a34d 58%,#8e6e25 100%)!important;
+  border-color:#f1ddaa!important;
+  color:#17272a!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.20)!important;
+  box-shadow:0 0 0 1px rgba(241,221,170,.28),0 0 9px rgba(197,163,77,.20),inset 0 1px 0 rgba(255,255,255,.30)!important;
+  filter:none!important;
+}
+html[data-pk-boot-region="hoenn"] body #autoRepeatBtn.auto-btn.active:hover,
+html[data-pk-boot-region="hoenn"] body #autoOpenBtn.auto-btn.active:hover,
+html[data-pk-boot-region="hoenn"] body #autoPotionBtn.auto-btn.active:hover,
+html[data-pk-boot-region="hoenn"] body .quick-speed-btn.speed-btn.active:hover,
+html[data-pk-boot-region="hoenn"] body .speed-btn.active:hover {
+  background-color:#cfb05e!important;
+  background-image:linear-gradient(180deg,#ead494 0%,#ccb05e 58%,#99782d 100%)!important;
+}
+/* La tarjeta flotante regional de desarrollo ya no forma parte de la UI de Hoenn. */
+html[data-pk-boot-region="hoenn"] #pkHoennCloneBadge{display:none!important}

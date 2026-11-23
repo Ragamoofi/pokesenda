@@ -1,0 +1,8 @@
+
+@media(max-width:700px){
+  #pokemonDetailContent .evo-status-card{grid-template-columns:auto minmax(0,1fr) auto!important;gap:8px!important;padding:8px 9px!important}
+  #pokemonDetailContent .evo-status-tag{min-width:48px!important;font-size:9px!important}
+  #pokemonDetailContent .evo-status-main b{font-size:12px!important}
+  #pokemonDetailContent .evo-status-level strong{font-size:19px!important}
+  #pokemonDetailContent .evo-status-req{font-size:9px!important;max-width:145px;overflow:hidden;text-overflow:ellipsis}
+}

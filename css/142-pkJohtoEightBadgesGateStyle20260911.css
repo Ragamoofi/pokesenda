@@ -1,0 +1,25 @@
+
+body > #regionSelectOverlay #regionJohtoCard.coming{
+  cursor:pointer!important;
+  border-color:#6f5d38!important;
+  background:linear-gradient(155deg,#211c13,#151c22 58%,#15191d)!important;
+  filter:saturate(.82);
+}
+body > #regionSelectOverlay #regionJohtoCard.coming:hover{
+  transform:translateY(-2px);
+  border-color:#a98a49!important;
+  filter:saturate(.9) brightness(1.05);
+}
+body > #regionSelectOverlay #regionJohtoCard.coming .region-card-top{
+  background:radial-gradient(circle at 75% 20%,rgba(178,148,78,.16),transparent 40%)!important;
+}
+body > #regionSelectOverlay #regionJohtoCard.coming .region-state-badge{
+  background:#3a321f!important;border-color:#79663d!important;color:#d8c590!important;
+}
+body > #regionSelectOverlay #regionJohtoCard.coming .region-card-name span{color:#aa9664!important}
+body > #regionSelectOverlay #regionJohtoCard.coming .region-lock{
+  border-color:#79663d!important;background:rgba(24,20,13,.78)!important;
+}
+body > #regionSelectOverlay #regionJohtoCard.coming .region-feature-row span{
+  border-color:#4b4333!important;color:#a99e83!important;
+}

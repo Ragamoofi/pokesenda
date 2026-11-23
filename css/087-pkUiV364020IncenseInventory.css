@@ -1,0 +1,33 @@
+
+/* V36.40.20 · Inciensos separados visualmente de Materiales. */
+.incense-material-gateway{
+  position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) auto auto auto;gap:10px;align-items:center;
+  margin:0 0 12px;padding:10px 12px;border:1px solid #53698a;border-radius:12px;
+  background:linear-gradient(135deg,#14233b,#101b2d 58%,#17293b);box-shadow:inset 0 0 24px rgba(106,148,205,.06);
+  cursor:pointer;transition:border-color .14s,transform .14s,box-shadow .14s;
+}
+.incense-material-gateway:hover,.incense-material-gateway:focus-visible{border-color:#86a8dd;box-shadow:inset 0 0 24px rgba(106,148,205,.1),0 0 0 2px rgba(102,153,219,.12);outline:none}
+.incense-material-gateway:hover{transform:translateY(-1px)}
+.incense-gateway-icon{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:24px;background:radial-gradient(circle,#203d63,#0c182a 72%);border:1px solid #55779e}
+.incense-gateway-icon img{width:38px;height:38px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 2px 3px rgba(0,0,0,.45))}
+.incense-gateway-copy{display:grid;gap:2px;min-width:0}.incense-gateway-copy b{font-size:12px;color:#eef5ff}.incense-gateway-copy small{font-size:9px;color:#9db0ca}
+.incense-gateway-count{min-width:34px;text-align:center;border:1px solid #536c91;background:#0d1a2d;border-radius:999px;padding:4px 8px;color:#dbe9ff;font-size:9px;font-weight:1000}
+.incense-gateway-new{background:#2d8e58;border:1px solid #73d99a;color:#effff5;border-radius:999px;padding:3px 7px;font-size:7px;font-weight:1000;letter-spacing:.4px}
+.incense-gateway-btn{white-space:nowrap}
+.incense-inventory-box{width:min(980px,94vw);max-height:90vh;overflow:auto;background:linear-gradient(180deg,#152b54,#0b1730)!important;border:2px solid #5a7db7!important}
+.incense-inventory-head{display:flex;align-items:flex-start;gap:12px}.incense-inventory-head>div{flex:1}.incense-inventory-kicker{font-size:8px;font-weight:1000;letter-spacing:1.1px;color:#d7b866}.incense-inventory-head h2{margin:2px 0 2px;font-size:23px}.incense-inventory-head small{font-size:9px;color:#aab9cf}
+.incense-inventory-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.incense-inventory-summary>div{background:#0b1931;border:1px solid #385482;border-radius:9px;padding:8px;text-align:center}.incense-inventory-summary b{display:block;font-size:17px;color:#eef5ff}.incense-inventory-summary small{font-size:8px;color:#9eb0c8}
+.incense-inventory-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.incense-collection-card{--incense-color:#718096;position:relative;min-height:116px;border:2px solid color-mix(in srgb,var(--incense-color) 72%,#20314b);border-radius:12px;background:linear-gradient(155deg,color-mix(in srgb,var(--incense-color) 17%,#10203a),#0b1628 66%);color:#eef5ff;padding:8px 5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;box-shadow:inset 0 0 16px color-mix(in srgb,var(--incense-color) 8%,transparent);transition:transform .13s,box-shadow .13s,opacity .13s}
+.incense-collection-card.owned:hover{transform:translateY(-2px);box-shadow:inset 0 0 18px color-mix(in srgb,var(--incense-color) 14%,transparent),0 0 12px color-mix(in srgb,var(--incense-color) 24%,transparent)}
+.incense-collection-card.selected{box-shadow:0 0 0 2px var(--incense-color),inset 0 0 22px color-mix(in srgb,var(--incense-color) 18%,transparent)}
+.incense-collection-card.empty{opacity:.28;filter:grayscale(.75);cursor:default}
+.incense-collection-orb{width:55px;height:55px;display:grid;place-items:center;border-radius:50%;background:#091528;border:1px solid color-mix(in srgb,var(--incense-color) 68%,#fff 5%)}.incense-collection-orb .item-icon,.incense-collection-orb img{max-width:42px!important;max-height:42px!important}
+.incense-collection-card>b{font-size:9px}.incense-collection-card>small{font-size:7.5px;color:#b4c2d5}
+.incense-collection-new{position:absolute;right:5px;top:5px;width:17px;height:17px;border-radius:50%;display:grid;place-items:center;background:#2b8e56;border:1px solid #7de0a2;color:#fff;font-size:9px;font-weight:1000}
+.incense-inventory-detail{--incense-color:#718096;display:none;margin-top:12px;border:1px solid color-mix(in srgb,var(--incense-color) 64%,#3a5278);border-radius:12px;background:#0b1931;padding:10px;grid-template-columns:76px 1fr;gap:12px;align-items:start}
+.incense-inventory-detail.show{display:grid}.incense-detail-icon{width:74px;height:74px;border-radius:12px;background:#081426;border:1px solid var(--incense-color);display:grid;place-items:center}.incense-detail-icon .item-icon,.incense-detail-icon img{max-width:58px!important;max-height:58px!important}
+.incense-detail-copy{min-width:0}.incense-detail-title{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.incense-detail-title h3{margin:0 0 4px;font-size:14px}.incense-detail-title>b{font-size:11px;color:#d9e7fb;white-space:nowrap}.incense-detail-type{display:inline-block;border:1px solid var(--incense-color);border-radius:999px;padding:2px 7px;color:#eef5ff;background:color-mix(in srgb,var(--incense-color) 22%,#101c31);font-size:8px;font-weight:900}.incense-detail-copy p{font-size:9.5px;line-height:1.45;color:#ced8e6;margin:8px 0}.incense-detail-note{font-size:8.5px;color:#9fb2ca;background:#0a1426;border-radius:7px;padding:6px 8px;margin-bottom:8px}
+@media(max-width:800px){.incense-inventory-grid{grid-template-columns:repeat(3,1fr)}.incense-material-gateway{grid-template-columns:42px minmax(0,1fr) auto}.incense-gateway-new,.incense-gateway-count{display:none}.incense-gateway-btn{grid-column:2/4;justify-self:start}}
+@media(max-width:520px){.incense-inventory-grid{grid-template-columns:repeat(2,1fr)}.incense-inventory-summary{grid-template-columns:1fr}.incense-inventory-detail.show{grid-template-columns:1fr}.incense-detail-icon{margin:auto}}

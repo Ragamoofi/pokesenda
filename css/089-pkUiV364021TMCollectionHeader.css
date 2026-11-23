@@ -1,0 +1,26 @@
+
+/* V36.40.21 · La colección de MT usa un encabezado editorial, no otra tarjeta de MT. */
+.tm-collection-header{
+  display:grid;grid-template-columns:46px minmax(0,1fr);gap:11px;align-items:center;
+  margin:13px 2px 10px;padding:4px 2px 12px;border-bottom:2px solid #3d5f8c;
+  background:transparent!important;border-radius:0!important;box-shadow:none!important;
+}
+.tm-collection-emblem{
+  width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:20px;
+  background:radial-gradient(circle at 35% 30%,#345e98,#12243d 65%,#091522);
+  border:1px solid #5c82b8;box-shadow:0 0 0 3px rgba(83,126,184,.10),inset 0 0 12px rgba(126,176,238,.12);
+}
+.tm-collection-intro{min-width:0}.tm-collection-kicker{
+  display:block;color:#8fbaf1;font-size:8px;font-weight:1000;letter-spacing:1.15px;text-transform:uppercase;margin-bottom:2px;
+}
+.tm-collection-title-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}.tm-collection-title-row h3{
+  margin:0;color:#f2f7ff;font-size:16px;line-height:1.15;letter-spacing:.1px;
+}
+.tm-collection-title-row strong{font-size:15px;color:#ffe18a;white-space:nowrap}.tm-collection-title-row strong small{font-size:9px;color:#9fb2cb;margin-left:2px}
+.tm-collection-progress{height:4px;margin:6px 0 5px;border-radius:999px;overflow:hidden;background:#0a1526;border:1px solid #283f60}.tm-collection-progress>span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#6fa7ef,#ffe083);box-shadow:0 0 8px rgba(111,167,239,.25)}
+.tm-collection-intro p{margin:0;color:#a9b9cd;font-size:9.5px;line-height:1.4}
+.tm-collection-header+.tm-owned-card{margin-top:2px}
+.tm-collection-empty-state{margin:4px 0 2px;padding:18px;text-align:center;border:1px dashed #3b526f;border-radius:10px;background:#0b1523}.tm-collection-empty-state b{display:block;color:#dbe7f6;font-size:11px}.tm-collection-empty-state small{display:block;color:#8fa3ba;font-size:9px;margin-top:4px}
+.tm-type-filter-row{display:flex;align-items:center;gap:9px;margin:2px 2px 10px;padding:8px 10px;border:1px solid #34547d;border-radius:10px;background:linear-gradient(135deg,#0d1a2d,#10223b)}
+.tm-type-filter-row label{font-size:8px;font-weight:1000;color:#9fbae0;text-transform:uppercase;letter-spacing:.7px;white-space:nowrap}.tm-type-filter-select{min-width:170px;max-width:250px;background:#0a1628;color:#eef5ff;border:1px solid #4b6c99;border-radius:8px;padding:7px 9px;font-size:9px;font-weight:900;outline:none;cursor:pointer}.tm-type-filter-select:focus{border-color:#8ab4f8;box-shadow:0 0 0 2px rgba(138,180,248,.12)}.tm-type-filter-count{margin-left:auto;color:#9fb1c8;font-size:8px;font-weight:850;text-align:right}.tm-type-filter-count b{color:#ffe18a;font-size:9px}.tm-type-filter-empty{margin:4px 0;padding:15px;text-align:center;border:1px dashed #3b526f;border-radius:10px;background:#0b1523;color:#90a5bd;font-size:9px}
+@media(max-width:620px){.tm-collection-header{grid-template-columns:38px minmax(0,1fr)}.tm-collection-emblem{width:36px;height:36px;font-size:17px}.tm-collection-title-row h3{font-size:14px}.tm-collection-title-row strong{font-size:13px}.tm-type-filter-row{align-items:stretch;flex-wrap:wrap}.tm-type-filter-select{flex:1 1 180px;max-width:none}.tm-type-filter-count{width:100%;margin-left:0;text-align:left}}

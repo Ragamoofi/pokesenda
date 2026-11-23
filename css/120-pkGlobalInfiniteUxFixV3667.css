@@ -1,0 +1,11 @@
+
+#pkGlobalInfiniteRoot #routeHudName{display:none!important}
+#pkGlobalInfiniteRoot .pk-trainer-back{pointer-events:auto!important;cursor:pointer!important}
+#pkGlobalInfiniteRoot .pk-trainer-back .pk-trainer-name{top:auto!important;bottom:2px!important;left:auto!important;right:-42px!important;transform:none!important}
+#pkGlobalInfiniteRoot .pk-global-confirm-overlay{background:rgba(4,8,14,.86)!important;backdrop-filter:blur(5px)}
+#pkGlobalInfiniteRoot .pk-global-confirm-box{width:min(520px,92vw);text-align:left;border-color:#60758d;background:linear-gradient(180deg,#1b2735,#131c27);box-shadow:0 28px 90px rgba(0,0,0,.68)}
+#pkGlobalInfiniteRoot .pk-global-confirm-box h2{margin:0;font-size:18px}
+#pkGlobalInfiniteRoot .pk-global-confirm-box>p{white-space:pre-line;color:#c1cedb;font-size:11px;line-height:1.6;margin:8px 0 16px}
+#pkGlobalInfiniteRoot .pk-global-confirm-symbol{width:64px;height:64px;margin:6px auto 10px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;background:#0e1823;border:1px solid #4d6680;box-shadow:0 0 22px rgba(98,169,255,.12)}
+#pkGlobalInfiniteRoot .pk-global-confirm-box .evo-actions{margin-top:12px}
+#pkGlobalInfiniteRoot .pk-global-confirm-box .evo-actions .btn{min-height:42px}

@@ -1,0 +1,13 @@
+
+.pk-mobile-start-badge{display:none;margin:0 auto 12px;padding:8px 10px;border:1px solid var(--pk-mobile-start-border,#5d83be);border-radius:12px;background:var(--pk-mobile-start-bg,linear-gradient(180deg,#183666,#102449));color:var(--pk-mobile-start-text,#e9f3ff);font-size:10px;font-weight:900;align-items:center;justify-content:center;gap:8px;box-shadow:0 7px 20px rgba(0,0,0,.28)}
+.pk-mobile-start-badge .pk-mobile-version-dot{width:8px;height:8px;border-radius:50%;background:#62e68d;box-shadow:0 0 10px #62e68d;flex:0 0 auto}
+.pk-mobile-start-badge button{min-height:34px!important;padding:5px 9px!important;font-size:9px!important;margin-left:auto}
+.pk-mobile-hud-fullscreen{display:none!important;width:35px!important;height:35px!important;min-width:35px!important;min-height:35px!important;padding:0!important;border-radius:9px!important;font-size:18px!important;line-height:1!important}
+.save-transfer-box{width:min(720px,94vw);background:linear-gradient(180deg,#152b54,#0c1832)!important;border:1px solid #5274aa!important}
+.save-transfer-head{display:flex;align-items:flex-start;gap:10px}.save-transfer-head>div{flex:1}.save-transfer-kicker{font-size:9px;font-weight:1000;letter-spacing:1px;color:#78b8ff;text-transform:uppercase}.save-transfer-head h2{margin:3px 0 4px}.save-transfer-head p{margin:0;color:#acbdd7;font-size:10px;line-height:1.45}
+.save-transfer-status{margin:12px 0;padding:10px;border:1px solid #345485;border-radius:11px;background:#0a1830;font-size:10px;line-height:1.45;color:#cfdef2}.save-transfer-status b{color:#fff}.save-transfer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.save-transfer-card{padding:12px;border:1px solid #385987;border-radius:12px;background:#102243}.save-transfer-card h3{margin:0 0 5px;font-size:13px}.save-transfer-card p{margin:0 0 10px;font-size:9px;color:#aebdd3;line-height:1.45}.save-transfer-card .btn{width:100%;min-height:43px}.save-transfer-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.save-transfer-actions .btn{flex:1}.save-transfer-warning{margin-top:10px;font-size:8.5px;color:#e7c782;line-height:1.45}.save-transfer-file{display:none!important}
+@media(max-width:980px){
+  .pk-mobile-start-badge{display:flex}
+  .pk-mobile-hud-fullscreen{display:inline-grid!important;place-items:center}
+  .save-transfer-grid{grid-template-columns:1fr}.save-transfer-box{width:100%!important}.save-transfer-card{padding:11px}.save-transfer-card h3{font-size:14px}.save-transfer-card p,.save-transfer-status{font-size:10px}
+}

@@ -1,0 +1,12 @@
+
+/* V36.40.108 · colección de Mentas y encabezado estable */
+.loot-panel-head #lootCapacityText{display:none!important}
+.mint-material-gateway{border-color:#55745f;background:linear-gradient(135deg,#14281d,#101c18 58%,#182a21);box-shadow:inset 0 0 24px rgba(102,184,128,.07)}
+.mint-material-gateway:hover,.mint-material-gateway:focus-visible{border-color:#83bd91!important;box-shadow:inset 0 0 24px rgba(102,184,128,.13),0 0 0 2px rgba(102,184,128,.12)!important}
+.mint-gateway-icon{background:radial-gradient(circle,#294c35,#0c1b13 72%);border-color:#59846a}
+.mint-inventory-box{width:min(980px,94vw);border-color:#5b9870!important;background:linear-gradient(180deg,#173528,#0a1812)!important}
+.mint-inventory-grid .incense-collection-card{min-height:116px}
+.mint-collection-card b{text-align:center;line-height:1.15}.mint-collection-orb img,.mint-detail-icon img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 2px 3px rgba(0,0,0,.45))}.mint-collection-orb img{max-width:42px;max-height:42px}.mint-detail-icon img{max-width:58px;max-height:58px}
+.mint-master-card{border-color:#c39a43!important;background:linear-gradient(155deg,#3d3112,#121821 68%)!important}.mint-master-card.selected{box-shadow:0 0 0 2px #d4ae4d,inset 0 0 22px rgba(216,178,75,.18)!important}
+.nature-card.nature-card-textonly{grid-template-columns:minmax(0,1fr) auto;padding-left:12px}.nature-card.nature-card-textonly .nature-copy{min-width:0}
+@media(max-width:800px){.mint-material-gateway{grid-template-columns:42px minmax(0,1fr) auto}.mint-material-gateway .incense-gateway-count{display:none}.mint-material-gateway .incense-gateway-btn{grid-column:2/4;justify-self:start}}

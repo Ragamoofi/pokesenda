@@ -1,0 +1,5 @@
+
+body .formation-slot.ko-slot{position:relative!important;border:2px solid #ff3434!important;background:linear-gradient(145deg,rgba(132,18,24,.94),rgba(49,7,12,.98))!important;box-shadow:inset 0 0 30px rgba(255,25,32,.30),0 0 0 1px rgba(255,94,94,.34),0 0 16px rgba(220,0,20,.28)!important}
+body .formation-slot.ko-slot:after{content:"KO";position:absolute;right:7px;top:25px;z-index:20;pointer-events:none;padding:3px 6px;border-radius:999px;background:#b60012;border:1px solid #ff7b84;color:#fff;font-size:8px;font-weight:1000;letter-spacing:.7px;text-shadow:0 1px 2px #500}
+body .formation-slot.ko-slot .formation-pokemon img{filter:grayscale(.12) sepia(1) saturate(7.5) hue-rotate(315deg) brightness(.82) contrast(1.28) drop-shadow(0 0 7px rgba(255,35,45,.75)) drop-shadow(0 5px 5px rgba(0,0,0,.62))!important;opacity:.74!important}
+body .formation-slot.ko-slot .formation-pokemon b,body .formation-slot.ko-slot [data-pk-form-hp],#pkRegionRuntimeRoot .formation-slot.ko-slot [data-j-form-hp]{color:#ff9a9f!important;text-shadow:0 1px 2px #590008!important}

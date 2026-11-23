@@ -1,0 +1,122 @@
+
+/* Hoenn · identidad regional elegante: zafiro profundo + jade esmeralda + oro champán.
+   Sólo chrome/superficies neutrales: tipos, rarezas, PS, estados y Shiny conservan sus colores. */
+html[data-pk-boot-region="hoenn"]{
+ --bg:#07141f;--panel:#0d2430;--panel2:#15323b;--line:#416f75;--text:#eff8f6;--muted:#a4b9b8;
+ --h-bg:#07141f;--h-deep:#091b27;--h-panel:#102934;--h-panel2:#173842;--h-line:#4b8181;
+ --h-aqua:#74bbaa;--h-emerald:#347b68;--h-sapphire:#356b8b;--h-coral:#c96f62;--h-sand:#d9bd72;
+ --pk-mobile-top-bg:rgba(11,31,41,.985);--pk-mobile-right-bg:#091b25;
+ --pk-mobile-sticky-bg:#102c38;--pk-mobile-sticky-line:#416f75;--pk-mobile-subbar-bg:#0b222d;
+ --pk-mobile-dock-bg:rgba(6,17,26,.985);--pk-mobile-dock-border:#456f75;--pk-mobile-dock-text:#bdd0cf;
+ --pk-mobile-dock-active-bg:#173a43;--pk-mobile-dock-active-border:#588b88;
+ --pk-mobile-more-bg:#0d2632;--pk-mobile-more-border:#4b7d80;--pk-mobile-more-title:#dcebe8;
+ --pk-mobile-tip-bg:rgba(14,39,50,.985);--pk-mobile-tip-border:#527f82;--pk-mobile-tip-text:#d8ebe7;--pk-mobile-tip-btn:#214952;
+ --pk-mobile-start-bg:linear-gradient(180deg,#173744,#102632);--pk-mobile-start-border:#55878a;--pk-mobile-start-text:#ecf7f5;
+ --pk-mobile-region-head-bg:linear-gradient(120deg,#102d3a,#153039);--pk-mobile-system-head-bg:linear-gradient(180deg,#102d3a 82%,rgba(16,45,58,.94));--pk-mobile-tabs-bg:#091e29;
+}
+html[data-pk-boot-region="hoenn"] body{background:radial-gradient(circle at 18% 0%,rgba(53,107,139,.16),transparent 34%),radial-gradient(circle at 82% 100%,rgba(52,123,104,.12),transparent 32%),linear-gradient(180deg,#06121c,#091b25)!important}
+html[data-pk-boot-region="hoenn"] .game{background:linear-gradient(180deg,#0e2732,#091d27)!important;border-color:#47787c!important;box-shadow:0 28px 90px #0008,inset 0 0 0 1px rgba(116,187,170,.055)!important}
+html[data-pk-boot-region="hoenn"] .top{background:linear-gradient(180deg,#173d4c,#102c38)!important;border-bottom-color:#4e8584!important}
+html[data-pk-boot-region="hoenn"] .right{background:linear-gradient(180deg,#0d2530,#091b24)!important}
+html[data-pk-boot-region="hoenn"] .title{color:#f1faf8!important;text-shadow:0 0 14px rgba(116,187,170,.16)!important}
+html[data-pk-boot-region="hoenn"] .section-title{color:#b8d0cd!important}
+
+/* Botones, inputs y navegación */
+html[data-pk-boot-region="hoenn"] .btn:not(.danger):not(.warn),html[data-pk-boot-region="hoenn"] .top-nav .btn,html[data-pk-boot-region="hoenn"] .pokedex-btn,html[data-pk-boot-region="hoenn"] .loot-btn,html[data-pk-boot-region="hoenn"] .achievement-btn,html[data-pk-boot-region="hoenn"] .tree-btn,html[data-pk-boot-region="hoenn"] .gym-hud-btn,html[data-pk-boot-region="hoenn"] .profile-hud-btn{background:linear-gradient(180deg,#204b55,#173440)!important;border-color:#4f8585!important;color:#eff8f6!important}
+html[data-pk-boot-region="hoenn"] .btn.primary{background:linear-gradient(180deg,#3e8a73,#2a6654)!important;border-color:#74b9a4!important;color:#f5fffb!important}
+html[data-pk-boot-region="hoenn"] .btn.warn{background:linear-gradient(180deg,#725f32,#504423)!important;border-color:#bda15b!important;color:#fff0c0!important}
+html[data-pk-boot-region="hoenn"] .btn.danger{background:linear-gradient(180deg,#7c4446,#592f34)!important;border-color:#bd746e!important}
+html[data-pk-boot-region="hoenn"] .speed-buttons button.active,html[data-pk-boot-region="hoenn"] .speed-btn.active,html[data-pk-boot-region="hoenn"] .quick-speed-btn.active{background:linear-gradient(180deg,#e4cc86,#c5a34d 58%,#8e6e25)!important;border-color:#f1ddaa!important;color:#17272a!important;box-shadow:0 0 0 1px rgba(241,221,170,.28),0 0 9px rgba(197,163,77,.20)!important}
+html[data-pk-boot-region="hoenn"] #autoRepeatBtn.auto-btn.active,html[data-pk-boot-region="hoenn"] #autoOpenBtn.auto-btn.active,html[data-pk-boot-region="hoenn"] #autoPotionBtn.auto-btn.active{background:linear-gradient(180deg,#e4cc86,#c5a34d 58%,#8e6e25)!important;border-color:#f1ddaa!important;color:#17272a!important;box-shadow:0 0 0 1px rgba(241,221,170,.28),0 0 9px rgba(197,163,77,.20)!important}
+html[data-pk-boot-region="hoenn"] .route-select,html[data-pk-boot-region="hoenn"] select,html[data-pk-boot-region="hoenn"] input:not([type="range"]):not([type="checkbox"]):not([type="radio"]){background:#0a202b!important;border-color:#3f6d72!important;color:#eff8f6!important}
+html[data-pk-boot-region="hoenn"] .pill{background:#122e37!important;border-color:#47777a!important;color:#a9c1bf!important}html[data-pk-boot-region="hoenn"] .pill b{color:#f3fbf9!important}
+
+/* Superficies globales del juego */
+html[data-pk-boot-region="hoenn"] .hud,html[data-pk-boot-region="hoenn"] .card,html[data-pk-boot-region="hoenn"] .team-card,html[data-pk-boot-region="hoenn"] .roster-card,html[data-pk-boot-region="hoenn"] .formation-slot,html[data-pk-boot-region="hoenn"] .metric,html[data-pk-boot-region="hoenn"] .drop-metric,html[data-pk-boot-region="hoenn"] .item-card,html[data-pk-boot-region="hoenn"] .option-row,html[data-pk-boot-region="hoenn"] .tm-card,html[data-pk-boot-region="hoenn"] .tm-slot-cell,html[data-pk-boot-region="hoenn"] .tm-loadout-summary,html[data-pk-boot-region="hoenn"] .tm-rarity-rule,html[data-pk-boot-region="hoenn"] .database-note,html[data-pk-boot-region="hoenn"] .matchup-box,html[data-pk-boot-region="hoenn"] .combat-stat,html[data-pk-boot-region="hoenn"] .db-stat{background:linear-gradient(145deg,#102a34,#0b202a)!important;border-color:#39686d!important}
+html[data-pk-boot-region="hoenn"] .timebar,html[data-pk-boot-region="hoenn"] .xpbar{background:#071821!important;border-color:#315c63!important}
+html[data-pk-boot-region="hoenn"] .log{background:#071922!important;border-color:#38676b!important;scrollbar-color:#47797a #071922!important}
+
+/* Overlays y ventanas */
+html[data-pk-boot-region="hoenn"] .overlay{background:radial-gradient(circle at 50% 22%,rgba(28,63,76,.965),rgba(4,13,20,.98) 66%)!important}
+html[data-pk-boot-region="hoenn"] .modal-box,html[data-pk-boot-region="hoenn"] .summary-box,html[data-pk-boot-region="hoenn"] .reward-box,html[data-pk-boot-region="hoenn"] .evo-card,html[data-pk-boot-region="hoenn"] .center-card,html[data-pk-boot-region="hoenn"] .loot-panel,html[data-pk-boot-region="hoenn"] .info-panel,html[data-pk-boot-region="hoenn"] .pokemon-detail-modal,html[data-pk-boot-region="hoenn"] .enemy-detail-modal,html[data-pk-boot-region="hoenn"] .dex-lore-modal,html[data-pk-boot-region="hoenn"] .tree-modal,html[data-pk-boot-region="hoenn"] .achievement-modal,html[data-pk-boot-region="hoenn"] .achievement-tm-modal,html[data-pk-boot-region="hoenn"] .incense-vendor-box,html[data-pk-boot-region="hoenn"] .route-event-box,html[data-pk-boot-region="hoenn"] .pk-window,html[data-pk-boot-region="hoenn"] .pk-formation-window,html[data-pk-boot-region="hoenn"] .player-profile-box{background:linear-gradient(180deg,#102c37,#091f29)!important;border-color:#487a7c!important;box-shadow:0 28px 90px #0009,0 0 0 1px rgba(116,187,170,.04) inset!important}
+html[data-pk-boot-region="hoenn"] .pokemon-detail-head,html[data-pk-boot-region="hoenn"] .info-panel-head,html[data-pk-boot-region="hoenn"] .help-search-wrap,html[data-pk-boot-region="hoenn"] .help-v3315 .help-tabs,html[data-pk-boot-region="hoenn"] .patch-notes-head{background:rgba(13,38,48,.992)!important;border-color:#39676c!important}
+
+/* Menú Hoenn */
+html[data-pk-boot-region="hoenn"] #mainMenu::before{background:linear-gradient(90deg,rgba(4,18,28,.27),transparent 25%,transparent 75%,rgba(35,15,20,.13))!important}
+html[data-pk-boot-region="hoenn"] #mainMenu::after{background:radial-gradient(circle at 50% 46%,rgba(71,137,126,.035) 0 28%,rgba(7,28,38,.22) 68%,rgba(3,12,18,.56) 100%)!important}
+html[data-pk-boot-region="hoenn"] #mainMenu>.menu-box{background:linear-gradient(180deg,rgba(16,45,56,.97),rgba(8,28,38,.985))!important;border-color:#527f81!important;box-shadow:0 35px 100px #0009,0 0 0 1px rgba(116,187,170,.055) inset!important}
+html[data-pk-boot-region="hoenn"] .menu-logo{color:#f2fbf9!important;text-shadow:0 2px 18px rgba(116,187,170,.16)!important}
+html[data-pk-boot-region="hoenn"] #mainMenu .menu-sub b{color:#8cc7b9!important}
+html[data-pk-boot-region="hoenn"] .menu-patch-card,html[data-pk-boot-region="hoenn"] .menu-timed-gacha,html[data-pk-boot-region="hoenn"] .patch-current,html[data-pk-boot-region="hoenn"] .patch-group{background:linear-gradient(135deg,#122f38,#0b222c)!important;border-color:#3e6f72!important}
+html[data-pk-boot-region="hoenn"] .patch-current>b,html[data-pk-boot-region="hoenn"] .patch-version{color:#86c7b8!important}
+html[data-pk-boot-region="hoenn"] .patch-history-toggle-row{background:linear-gradient(145deg,#102a34,#0a1f28)!important;border-color:#3a686c!important}
+
+/* Pokédex / Caja / Formación */
+html[data-pk-boot-region="hoenn"] .dex-card,html[data-pk-boot-region="hoenn"] .pokedex-rarity-guide,html[data-pk-boot-region="hoenn"] .pc-card,html[data-pk-boot-region="hoenn"] .loot-detail,html[data-pk-boot-region="hoenn"] .loot-target{background:#0c242d!important;border-color:#326167!important}
+html[data-pk-boot-region="hoenn"] .poke-img{background:#091f28!important;border-color:#386a6d!important}
+html[data-pk-boot-region="hoenn"] .formation-empty-visual{border-color:#3b686c!important;color:#7ea6a4!important}
+html[data-pk-boot-region="hoenn"] .formation-combo-menu,html[data-pk-boot-region="hoenn"] .formation-combo-option{background:#0a212a!important;border-color:#37666a!important}
+html[data-pk-boot-region="hoenn"] .formation-combo-option:hover{background:#173843!important}
+
+/* Guía */
+html[data-pk-boot-region="hoenn"] .help-hero,html[data-pk-boot-region="hoenn"] .help-mini-card,html[data-pk-boot-region="hoenn"] .tutorial-step,html[data-pk-boot-region="hoenn"] .help-callout,html[data-pk-boot-region="hoenn"] .help-faq,html[data-pk-boot-region="hoenn"] .help-quick-card,html[data-pk-boot-region="hoenn"] .help-reference-sidebar,html[data-pk-boot-region="hoenn"] .help-reference-banner,html[data-pk-boot-region="hoenn"] .help-search-results,html[data-pk-boot-region="hoenn"] .help-search-hit{background:#0c242d!important;border-color:#326267!important}
+html[data-pk-boot-region="hoenn"] .tutorial-num{background:#2d6d66!important;border-color:#6eae9f!important}
+html[data-pk-boot-region="hoenn"] .help-tab.active,html[data-pk-boot-region="hoenn"] .help-mode-btn.active,html[data-pk-boot-region="hoenn"] .help-ref-link.active{background:#285d59!important;border-color:#73aa9f!important;color:#fff!important}
+html[data-pk-boot-region="hoenn"] .help-tip{background:#102c33!important;border-left-color:#68aa9d!important}
+
+/* Árbol: conserva los colores de las ramas */
+html[data-pk-boot-region="hoenn"] .poe-tree-scroll{background:radial-gradient(circle at 50% 48%,#132f39 0,#091f28 50%,#06141a 100%)!important;border-color:#3b6b70!important;box-shadow:inset 0 0 78px #0008!important}
+html[data-pk-boot-region="hoenn"] .tree-toolbar,html[data-pk-boot-region="hoenn"] .tree-zoom-controls,html[data-pk-boot-region="hoenn"] .tree-zoom-label,html[data-pk-boot-region="hoenn"] .formation-search-count{background:#0d252f!important;border-color:#39686c!important;color:#d9e8e5!important}
+
+/* Logros */
+html[data-pk-boot-region="hoenn"] .achievement-card,html[data-pk-boot-region="hoenn"] .achievement-metric,html[data-pk-boot-region="hoenn"] .achievement-summary,html[data-pk-boot-region="hoenn"] .master-path-card,html[data-pk-boot-region="hoenn"] .achievement-category-card{background:linear-gradient(145deg,#102932,#0a2028)!important;border-color:#37666a!important}
+html[data-pk-boot-region="hoenn"] .achievement-tabs .active,html[data-pk-boot-region="hoenn"] .achievement-filter.active{background:#285f59!important;border-color:#72ad9f!important}
+
+/* Perfil / Comunidad */
+html[data-pk-boot-region="hoenn"] .player-profile-hero,html[data-pk-boot-region="hoenn"] .profile-section,html[data-pk-boot-region="hoenn"] .profile-badge,html[data-pk-boot-region="hoenn"] .profile-current-mon,html[data-pk-boot-region="hoenn"] .pk-public-hero,html[data-pk-boot-region="hoenn"] .pk-public-region-panel,html[data-pk-boot-region="hoenn"] .pk-players-card,html[data-pk-boot-region="hoenn"] .pk-players-box{background:linear-gradient(145deg,#102b34,#0b212a)!important;border-color:#396a6d!important}
+html[data-pk-boot-region="hoenn"] .pk-public-region-tab.active,html[data-pk-boot-region="hoenn"] [data-self-profile-region="hoenn"].active,html[data-pk-boot-region="hoenn"] [data-profile-region="hoenn"].active{background:#285f58!important;border-color:#75b0a1!important;color:#fff!important}
+
+/* Casino Malvalona */
+html[data-pk-boot-region="hoenn"] #pkCasinoOverlay .modal-box,html[data-pk-boot-region="hoenn"] .pk-casino-shell,html[data-pk-boot-region="hoenn"] .pk-casino-head,html[data-pk-boot-region="hoenn"] .pk-casino-wallet,html[data-pk-boot-region="hoenn"] .pk-casino-dashboard,html[data-pk-boot-region="hoenn"] .pk-casino-stat,html[data-pk-boot-region="hoenn"] .pk-casino-betbar,html[data-pk-boot-region="hoenn"] .pk-casino-table-title{background:linear-gradient(145deg,#102d38,#0a222c)!important;border-color:#3f7476!important}
+html[data-pk-boot-region="hoenn"] .pk-casino-kicker,html[data-pk-boot-region="hoenn"] #pkCasinoTitle{color:#87c4b7!important}
+
+/* Gachapón, vendedores, Centro y eventos */
+html[data-pk-boot-region="hoenn"] .incense-offer,html[data-pk-boot-region="hoenn"] .route-event-choice,html[data-pk-boot-region="hoenn"] .checkpoint-choice,html[data-pk-boot-region="hoenn"] .roulette-wrap{background:linear-gradient(145deg,#102a34,#091f28)!important;border-color:#396b6e!important}
+html[data-pk-boot-region="hoenn"] .center-card{border-color:#b87569!important}
+html[data-pk-boot-region="hoenn"] .toast{background:rgba(10,34,42,.975)!important;border-color:#568b87!important}
+
+/* Gimnasios Hoenn */
+html[data-pk-boot-region="hoenn"] #gymSelectOverlay .gym-select-box,html[data-pk-boot-region="hoenn"] #gymPotionOverlay .gym-sub-box,html[data-pk-boot-region="hoenn"] #gymMonDetailOverlay .gym-sub-box,html[data-pk-boot-region="hoenn"] #gymResultOverlay .gym-result-box{background:linear-gradient(180deg,#102d38,#091f29)!important;border-color:#477c7d!important;box-shadow:0 28px 90px #0009,inset 0 0 0 1px rgba(116,187,170,.04)!important}
+html[data-pk-boot-region="hoenn"] .gym-summary-stat,html[data-pk-boot-region="hoenn"] .gym-card,html[data-pk-boot-region="hoenn"] .gym-card-portrait,html[data-pk-boot-region="hoenn"] .gym-card-roster,html[data-pk-boot-region="hoenn"] .gym-rule-footer,html[data-pk-boot-region="hoenn"] .gym-potion-item,html[data-pk-boot-region="hoenn"] .gym-potion-target,html[data-pk-boot-region="hoenn"] .gym-detail-hero,html[data-pk-boot-region="hoenn"] .gym-detail-stats>div,html[data-pk-boot-region="hoenn"] .gym-detail-move,html[data-pk-boot-region="hoenn"] .gym-result-stats,html[data-pk-boot-region="hoenn"] .gym-result-rewards,html[data-pk-boot-region="hoenn"] .gym-result-total-grid>div{background:linear-gradient(145deg,#102a34,#0b2029)!important;border-color:#37686c!important}
+html[data-pk-boot-region="hoenn"] .gym-card.completed{border-color:#d9bd72!important;box-shadow:0 0 0 1px rgba(217,189,114,.16) inset!important}
+html[data-pk-boot-region="hoenn"] .gym-card-meta{color:#91c7bd!important}
+html[data-pk-boot-region="hoenn"] .gym-battle-overlay{background:rgba(3,12,18,.96)!important}
+html[data-pk-boot-region="hoenn"] .gym-battle-box{background:#071a23!important;border-color:#477d7d!important;box-shadow:0 22px 75px #000b!important}
+html[data-pk-boot-region="hoenn"] .gym-battle-head{background:linear-gradient(180deg,#1b4d5e,#12343f)!important;border-bottom-color:#4d8181!important}
+html[data-pk-boot-region="hoenn"] .gym-battle-kicker{color:#ddc47f!important}
+html[data-pk-boot-region="hoenn"] .gym-battle-center-info span{background:#0a232d!important;border-color:#3f7073!important}
+html[data-pk-boot-region="hoenn"] .gym-battle-bottom{background:#081d27!important;border-top-color:#37686d!important}
+html[data-pk-boot-region="hoenn"] .gym-reserve-mon,html[data-pk-boot-region="hoenn"] .gym-mon-hud,html[data-pk-boot-region="hoenn"] .gym-battle-log,html[data-pk-boot-region="hoenn"] .gym-battle-damage,html[data-pk-boot-region="hoenn"] .gym-log-tab{background:#0b252f!important;border-color:#336267!important}
+html[data-pk-boot-region="hoenn"] .gym-log-tab.active{background:#295f59!important;border-color:#72aa9e!important;color:#fff!important}
+html[data-pk-boot-region="hoenn"] .gym-reserve-mon.active{border-color:#d9bd72!important}
+html[data-pk-boot-region="hoenn"] .gym-result-kicker,html[data-pk-boot-region="hoenn"] .gym-next-unlock{color:#8cc7b8!important}
+
+/* Paneles flotantes */
+html[data-pk-boot-region="hoenn"] .ux-context-panel,html[data-pk-boot-region="hoenn"] .pk-floating-panel,html[data-pk-boot-region="hoenn"] .tm-capacity-note{background:#0d2730!important;border-color:#38666a!important;color:#bdd1cf!important}
+html[data-pk-boot-region="hoenn"] .pk-floating-mode-btn{background:linear-gradient(145deg,rgba(24,62,70,.92),rgba(9,29,38,.92))!important;border-color:rgba(83,132,133,.84)!important;color:#eff8f6!important}
+html[data-pk-boot-region="hoenn"] #pkHoennCloneBadge{border-color:#55898a!important;background:linear-gradient(135deg,rgba(15,45,54,.985),rgba(9,27,37,.985))!important;box-shadow:0 14px 38px #0008,inset 0 0 0 1px rgba(116,187,170,.05)!important}
+html[data-pk-boot-region="hoenn"] #pkHoennCloneBadge b{color:#91c9bc!important}
+html[data-pk-boot-region="hoenn"] #pkHoennCloneBadge button{background:linear-gradient(180deg,#2a655f,#1b4448)!important;border-color:#6aa094!important}
+html[data-pk-boot-region="hoenn"] .loot-panel,html[data-pk-boot-region="hoenn"] .info-panel,html[data-pk-boot-region="hoenn"] .modal-box,html[data-pk-boot-region="hoenn"] .summary-box,html[data-pk-boot-region="hoenn"] .right{scrollbar-color:#47797a #081b24!important}
+
+/* Carga, avisos y tooltips */
+html[data-pk-boot-region="hoenn"] .pk-boot-loader{background:radial-gradient(circle at 50% 34%,#173b49 0,#0a202b 42%,#041018 100%)!important;color:#eff8f6!important}
+html[data-pk-boot-region="hoenn"] .pk-boot-card{background:rgba(8,30,39,.92)!important;border-color:#497b7c!important;box-shadow:0 26px 80px #0009,inset 0 0 0 1px rgba(116,187,170,.04)!important}
+html[data-pk-boot-region="hoenn"] .pk-boot-status{color:#baccca!important}
+html[data-pk-boot-region="hoenn"] .pk-boot-progress{background:#061720!important;border-color:#356469!important}
+html[data-pk-boot-region="hoenn"] .pk-boot-progress i{background:linear-gradient(90deg,#356b8b,#61a997,#d9bd72)!important}
+html[data-pk-boot-region="hoenn"] .pk-boot-card small{color:#809f9d!important}
+html[data-pk-boot-region="hoenn"] .evolution-pop{background:#102e36!important;border-color:#689b91!important;color:#eff8f6!important;box-shadow:0 10px 35px #0008,0 0 16px rgba(116,187,170,.08)!important}
+html[data-pk-boot-region="hoenn"] .paused-banner{background:rgba(10,33,41,.97)!important;border-color:#d9bd72!important;color:#f4dfa3!important}
+html[data-pk-boot-region="hoenn"] .poe-tooltip{background:#081e27!important;border-color:#477878!important;color:#eff8f6!important}
+html[data-pk-boot-region="hoenn"] #achievementRewardToasts .achievement-reward-toast{background:linear-gradient(145deg,rgba(15,43,51,.99),rgba(8,27,35,.99))!important;border-color:#3d6d70!important;border-left-color:#72b4a4!important;box-shadow:0 10px 30px #0008,inset 0 0 20px rgba(116,187,170,.035)!important}

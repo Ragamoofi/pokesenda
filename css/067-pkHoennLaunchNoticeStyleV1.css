@@ -1,0 +1,21 @@
+
+/* Hoenn · aviso breve de economía/dificultad · máximo 2 apariciones */
+#pkHoennLaunchNotice{z-index:2365;background:rgba(3,7,11,.94);backdrop-filter:blur(5px)}
+#pkHoennLaunchNotice.hidden{display:none!important}
+.pk-hoenn-launch-card{width:min(650px,94vw);position:relative;overflow:hidden;background:linear-gradient(180deg,#24130f,#111820 42%,#0b1219);border:2px solid #e59a3b;border-radius:18px;padding:0;box-shadow:0 32px 100px rgba(0,0,0,.78),0 0 0 1px rgba(255,205,110,.08) inset;text-align:left}
+.pk-hoenn-launch-warningbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 14px;background:linear-gradient(90deg,#b84d28,#d7852f);border-bottom:1px solid #ffc56f;color:#fff8e9;font-size:8px;font-weight:1000;letter-spacing:1.1px;text-transform:uppercase}
+.pk-hoenn-launch-count{display:inline-flex;border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:3px 7px;background:rgba(35,12,7,.26);font-size:6.5px;white-space:nowrap}
+.pk-hoenn-launch-body{padding:18px 20px 16px}
+.pk-hoenn-launch-title{margin:0;color:#fff4db;font-size:24px;line-height:1.15;letter-spacing:.2px;text-shadow:0 3px 18px #000}
+.pk-hoenn-launch-lead{margin:7px 0 13px;color:#bfc9d3;font-size:9px;line-height:1.55}
+.pk-hoenn-launch-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0 12px}
+.pk-hoenn-launch-metric{min-width:0;background:#0d151d;border:1px solid #46515d;border-radius:11px;padding:10px;text-align:center}
+.pk-hoenn-launch-metric strong{display:block;color:#ffd57f;font-size:20px;line-height:1;margin-bottom:5px}
+.pk-hoenn-launch-metric b{display:block;color:#f1f5f8;font-size:8px;margin-bottom:3px;text-transform:uppercase;letter-spacing:.45px}
+.pk-hoenn-launch-metric small{display:block;color:#8998a7;font-size:7px;line-height:1.4}
+.pk-hoenn-launch-note{margin:0;padding:10px 11px;border-left:4px solid #e59a3b;border-radius:8px;background:#1d1913;color:#d8c9a9;font-size:8.5px;line-height:1.5}
+.pk-hoenn-launch-note b{color:#ffe0a1}
+.pk-hoenn-launch-actions{display:flex;margin-top:13px}
+.pk-hoenn-launch-actions .btn{width:100%;min-height:44px;background:linear-gradient(180deg,#b75a2c,#85371f)!important;border-color:#e99b52!important;color:#fff7e9!important;font-weight:1000;letter-spacing:.3px}
+.pk-hoenn-launch-foot{margin-top:8px;text-align:center;color:#65717d;font-size:6.5px;line-height:1.4}
+@media(max-width:620px){#pkHoennLaunchNotice{align-items:flex-start;padding:10px 7px}.pk-hoenn-launch-card{width:100%;max-height:96dvh;overflow:auto}.pk-hoenn-launch-body{padding:15px 12px 13px}.pk-hoenn-launch-title{font-size:19px}.pk-hoenn-launch-metrics{grid-template-columns:1fr}.pk-hoenn-launch-metric{display:grid;grid-template-columns:72px 1fr;grid-template-areas:"value label" "value note";text-align:left;align-items:center;column-gap:10px}.pk-hoenn-launch-metric strong{grid-area:value;margin:0;text-align:center}.pk-hoenn-launch-metric b{grid-area:label;margin:0}.pk-hoenn-launch-metric small{grid-area:note;margin-top:3px}}

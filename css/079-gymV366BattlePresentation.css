@@ -1,0 +1,56 @@
+
+/* V36.6 · Medallas oficiales, colores de tipo, partículas y daño en vivo. */
+.gym-badge-mini{background:radial-gradient(circle,rgba(255,255,255,.14),rgba(8,20,44,.78))!important;border-color:#7f9ccf!important;overflow:visible!important}
+.gym-badge-mini img{width:30px;height:30px;object-fit:contain;image-rendering:auto;filter:drop-shadow(0 2px 2px rgba(0,0,0,.58))}
+.profile-badge-medal{background:radial-gradient(circle,rgba(255,255,255,.13),rgba(8,20,44,.9))!important;border-color:#6e8fc5!important}
+.profile-badge-medal img{width:43px;height:43px;object-fit:contain;image-rendering:auto;filter:drop-shadow(0 3px 3px rgba(0,0,0,.6))}
+.gym-result-badge{background:radial-gradient(circle,rgba(255,255,255,.14),rgba(7,18,39,.92))!important;border-color:#e4c75b!important}
+.gym-result-badge img{width:68px;height:68px;object-fit:contain;image-rendering:auto;filter:drop-shadow(0 5px 5px rgba(0,0,0,.55))}
+.gym-result-box.defeat .gym-result-badge img{filter:grayscale(1) brightness(.68)!important}
+
+/* Líder de Gimnasio a escala equivalente al Entrenador del jugador. */
+.gym-leader-full{right:-0.35%!important;bottom:31px!important;width:170px!important;height:235px!important;opacity:1!important;z-index:4!important;overflow:visible!important;pointer-events:none!important}
+.gym-leader-full img{height:158px!important;width:auto!important;max-height:none!important;max-width:none!important;object-fit:contain!important;image-rendering:pixelated;transform-origin:center bottom!important;filter:drop-shadow(0 6px 5px rgba(0,0,0,.7))!important}
+.gym-battle-leader-mini img{width:58px!important;height:66px!important;image-rendering:pixelated;filter:drop-shadow(0 3px 3px rgba(0,0,0,.5))}
+
+/* Identidad de tipo en HUD, banca y fichas. */
+.gym-mon-hud{box-shadow:inset 4px 0 0 var(--gym-type,#607fb2),0 5px 14px #0007!important}
+.gym-reserve-mon{border-top:2px solid var(--gym-type,#334f7c)!important}
+.gym-reserve-mon.active{box-shadow:inset 0 0 0 1px var(--gym-type,#ffd84d),0 0 8px rgba(255,216,77,.2)}
+.gym-type-chip{border:1px solid rgba(255,255,255,.35)!important;color:#fff!important;text-shadow:0 1px 1px rgba(0,0,0,.8);font-weight:950!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+.gym-type-chip.detail{font-size:8px!important;padding:3px 7px!important;border-radius:999px!important}
+.gym-detail-types{align-items:center;flex-wrap:wrap}.gym-detail-types .gym-type-chip{margin:0}
+.gym-detail-move{border-left:4px solid var(--move-color,#607fb2)!important;background:linear-gradient(90deg,color-mix(in srgb,var(--move-color,#607fb2) 16%,#0b1930),#0b1930 50%)!important}
+.gym-detail-move small{display:flex;align-items:center;gap:5px;justify-content:flex-end;flex-wrap:wrap}
+.gym-detail-move .gym-type-chip{font-size:7px!important;padding:2px 5px!important}
+
+/* Ataques y partículas heredando iconografía/colores de Expedición. */
+.gym-attack-projectile{position:absolute;z-index:48;pointer-events:none;font-size:28px;line-height:1;font-weight:1000;text-shadow:0 0 5px currentColor,0 2px 3px #000;filter:drop-shadow(0 0 5px currentColor)}
+.gym-attack-projectile.important{font-size:35px;filter:drop-shadow(0 0 9px currentColor) drop-shadow(0 0 3px #fff)}
+.gym-impact-particle{position:absolute;z-index:47;pointer-events:none;font-style:normal;font-size:15px;line-height:1;text-shadow:0 0 5px currentColor,0 1px 2px #000}
+.gym-cast .gym-mon-sprite{filter:brightness(1.23) drop-shadow(0 0 11px var(--gym-type,#fff)) drop-shadow(0 6px 4px #0007)!important}
+.gym-hit-react .gym-mon-sprite{filter:brightness(1.5) contrast(1.12) drop-shadow(0 0 12px #fff)!important}
+
+/* Jugadas importantes flotando en la zona superior del campo. */
+.gym-spotlight{position:static!important;transform:none!important;flex:1;min-width:0;width:auto!important;height:24px;display:flex;flex-direction:row;align-items:center;justify-content:flex-end;overflow:hidden;z-index:auto;pointer-events:none;margin-left:5px}
+.gym-spotlight-card{--spot-color:#dce8ff;min-width:0;max-width:100%;height:20px;display:flex;align-items:center;justify-content:flex-end;gap:4px;padding:2px 7px;border:1px solid color-mix(in srgb,var(--spot-color) 56%,transparent);border-radius:999px;background:rgba(14,31,59,.72);box-shadow:none;animation:gymSpotHudIn .14s ease-out both;transition:opacity .16s,transform .16s;overflow:hidden}
+.gym-spotlight-card.enemy{background:rgba(48,20,31,.68)}
+.gym-spotlight-card>span{font-size:10px;flex:0 0 auto;filter:drop-shadow(0 0 2px var(--spot-color))}
+.gym-spotlight-card>b{min-width:0;font-size:7px;color:#eaf1fb;text-shadow:0 1px 1px #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gym-spotlight-card.out{opacity:0;transform:translateX(5px)}
+@keyframes gymSpotHudIn{from{opacity:0;transform:translateX(6px)}to{opacity:1;transform:none}}
+
+/* Registro / Daño de batalla en pestañas. */
+.gym-log-wrap{min-width:0;display:flex;flex-direction:column}
+.gym-log-tabs{height:24px;display:flex;align-items:center;gap:4px;margin-bottom:4px;flex:0 0 auto;min-width:0}
+.gym-log-tab{border:1px solid #334f7c;background:#0d1b36;color:#9fb4d1;border-radius:6px;padding:3px 8px;font-size:7.5px;font-weight:950;cursor:pointer}
+.gym-log-tab.active{background:#1d3f73;border-color:#7194cf;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.gym-battle-log,.gym-battle-damage{height:92px!important;min-height:92px!important;overflow:auto}
+.gym-battle-damage{background:#050b17;border:1px solid #263c63;border-radius:7px;padding:5px}
+.gym-live-dmg-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.gym-live-dmg-team{min-width:0;background:#09152a;border:1px solid #263d62;border-radius:6px;padding:4px}
+.gym-live-dmg-head{display:flex;align-items:center;justify-content:space-between;gap:5px;margin-bottom:3px;color:#bfd1ea}.gym-live-dmg-head b{font-size:6.7px!important}.gym-live-dmg-head span{font-size:6px;color:#8fa8c8}
+.gym-live-dmg-row{display:grid;grid-template-columns:12px 18px minmax(0,1fr) 42px;gap:3px;align-items:center;height:13px;font-size:6px}
+.gym-live-dmg-row.ko{opacity:.48}.gym-live-dmg-row>em{font-style:normal;text-align:center;color:#758aa7}.gym-live-dmg-row>img{width:16px;height:16px;object-fit:contain;image-rendering:pixelated}.gym-live-dmg-row>div{min-width:0}.gym-live-dmg-row>div>b{font-size:6px!important;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#e6eef8}.gym-live-dmg-row>strong{text-align:right;font-size:6.5px;color:#fff}
+.gym-live-dmg-bar{height:3px;background:#111a29;border-radius:999px;overflow:hidden}.gym-live-dmg-bar>i{display:block;height:100%;background:var(--dmg-color,#d86455);border-radius:999px;box-shadow:0 0 4px var(--dmg-color,#d86455)}
+@media(max-width:980px){.gym-leader-full{right:-0.2%!important;width:145px!important;height:205px!important;opacity:.34!important;overflow:visible!important}.gym-leader-full img{height:138px!important;width:auto!important;max-height:none!important;max-width:none!important}.gym-spotlight{margin-left:3px}.gym-spotlight-card{max-width:100%}.gym-live-dmg-grid{grid-template-columns:1fr}}

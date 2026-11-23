@@ -1,0 +1,95 @@
+
+/* V36.39 · Creador de Entrenador mucho más amplio */
+.pk-creator{
+  width:min(1180px,96vw)!important;
+  max-width:1180px!important;
+  max-height:95vh!important;
+  padding:22px 24px!important;
+}
+.pk-creator-body{
+  display:grid!important;
+  grid-template-columns:minmax(390px,440px) minmax(0,1fr)!important;
+  gap:24px!important;
+  flex-wrap:nowrap!important;
+  align-items:stretch!important;
+  margin-top:16px!important;
+}
+.pk-creator-preview,
+.pk-creator-preview.pk-trainer-viewer{
+  min-width:0!important;
+  width:100%!important;
+  min-height:570px!important;
+  height:570px!important;
+  padding:14px 16px 18px!important;
+  gap:10px!important;
+}
+.pk-creator-preview .pk-facing-toolbar{
+  min-height:42px!important;
+  max-width:340px!important;
+  margin:0 auto!important;
+  gap:16px!important;
+  padding:5px 10px!important;
+}
+.pk-creator-preview .pk-facing-arrow{
+  width:42px!important;
+  height:34px!important;
+  font-size:26px!important;
+}
+.pk-creator-preview .pk-facing-label{
+  min-width:105px!important;
+  font-size:9px!important;
+}
+.pk-creator-preview .pk-preview-stage{
+  flex:1 1 auto!important;
+  height:440px!important;
+  min-height:440px!important;
+  width:100%!important;
+  align-items:flex-end!important;
+}
+.pk-creator-preview .pk-preview-stage img,
+.pk-creator-preview img#pkPreviewImg{
+  height:420px!important;
+  max-height:420px!important;
+  max-width:98%!important;
+  width:auto!important;
+  object-fit:contain!important;
+}
+.pk-creator-preview .pk-creator-name{
+  font-size:12px!important;
+  min-height:18px!important;
+}
+.pk-creator-controls{
+  min-width:0!important;
+  width:100%!important;
+  gap:11px!important;
+}
+.pk-creator-controls .pk-field-label{font-size:10px!important}
+.pk-creator-controls #pkNameInput{padding:11px 12px!important;font-size:14px!important}
+.pk-creator-controls .pk-choice{min-width:96px!important;padding:10px 10px!important;font-size:10px!important}
+.pk-creator-controls .pk-trainer-grid{
+  max-height:430px!important;
+  min-height:360px!important;
+  grid-template-columns:repeat(auto-fill,minmax(86px,1fr))!important;
+  gap:9px!important;
+  padding:7px!important;
+}
+.pk-creator-controls .pk-trainer-opt{min-height:88px!important;padding:7px 3px!important;font-size:8px!important}
+.pk-creator-controls .pk-trainer-opt img{height:66px!important;max-width:82px!important;object-fit:contain!important}
+.pk-creator-actions{margin-top:16px!important}
+.pk-creator-actions .btn{padding:13px!important;font-size:13px!important}
+
+@media(max-width:980px){
+  .pk-creator{width:min(760px,96vw)!important;max-height:95vh!important}
+  .pk-creator-body{grid-template-columns:1fr!important;gap:16px!important}
+  .pk-creator-preview,.pk-creator-preview.pk-trainer-viewer{min-height:430px!important;height:430px!important}
+  .pk-creator-preview .pk-preview-stage{height:315px!important;min-height:315px!important}
+  .pk-creator-preview .pk-preview-stage img,.pk-creator-preview img#pkPreviewImg{height:300px!important;max-height:300px!important}
+  .pk-creator-controls .pk-trainer-grid{min-height:220px!important;max-height:300px!important}
+}
+@media(max-width:560px){
+  .pk-creator{width:96vw!important;padding:16px!important}
+  .pk-creator-preview,.pk-creator-preview.pk-trainer-viewer{min-height:350px!important;height:350px!important}
+  .pk-creator-preview .pk-preview-stage{height:245px!important;min-height:245px!important}
+  .pk-creator-preview .pk-preview-stage img,.pk-creator-preview img#pkPreviewImg{height:230px!important;max-height:230px!important}
+  .pk-creator-controls .pk-trainer-grid{grid-template-columns:repeat(auto-fill,minmax(74px,1fr))!important;min-height:190px!important}
+}

@@ -1,0 +1,121 @@
+
+/* V36.64.3 · Identidad Johto total · pase 3.
+   Extiende dorado + verde oliva a TODO el chrome neutral de Johto.
+   No pisa colores semánticos: tipos, rarezas, PS, estados, Shiny ni peligro. */
+#pkRegionRuntimeRoot{
+  --bg:#111713;
+  --panel:#1b241d;
+  --panel2:#242e25;
+  --line:#5f6248;
+  --text:#f1f0e7;
+  --muted:#b8b9a8;
+  --johto-olive:#56623a;
+  --johto-olive-deep:#293426;
+  --johto-olive-soft:#3c4830;
+  --johto-gold:#d8b35a;
+  --johto-gold-hi:#f0d58a;
+  --johto-silver:#bfc5bd;
+  --johto-edge:#6f6847;
+}
+#pkRegionRuntimeRoot .overlay{background:radial-gradient(circle at 50% 24%,rgba(67,80,48,.94),rgba(7,12,9,.975) 62%)!important}
+#pkRegionRuntimeRoot .overlay>.modal-box,
+#pkRegionRuntimeRoot .overlay>.center-card,
+#pkRegionRuntimeRoot .overlay>.menu-box,
+#pkRegionRuntimeRoot .evo-overlay>.evo-card,
+#pkRegionRuntimeRoot #lootPanel,
+#pkRegionRuntimeRoot .info-panel,
+#pkRegionRuntimeRoot .pk-window{
+  background:linear-gradient(180deg,#1e281f,#171e19)!important;
+  border-color:#706845!important;
+  box-shadow:0 26px 78px rgba(0,0,0,.58),inset 0 1px 0 rgba(240,213,138,.045)!important;
+}
+#pkRegionRuntimeRoot .pk-window-header,
+#pkRegionRuntimeRoot .loot-panel-head,
+#pkRegionRuntimeRoot .patch-notes-head,
+#pkRegionRuntimeRoot .info-panel-head,
+#pkRegionRuntimeRoot .region-select-head,
+#pkRegionRuntimeRoot .pk-cloud-head{
+  background:linear-gradient(90deg,#4a542f,#292f24 58%,#3a3322)!important;
+  border-color:#857443!important;
+  color:#fff3cf!important;
+}
+#pkRegionRuntimeRoot .pk-window-header{border-bottom-color:#9a8144!important}
+#pkRegionRuntimeRoot .pk-window-header b,
+#pkRegionRuntimeRoot .loot-panel-head b,
+#pkRegionRuntimeRoot .info-panel-head b,
+#pkRegionRuntimeRoot .patch-notes-head h2{color:#fff1c5!important}
+#pkRegionRuntimeRoot .card:not(.damage-card),
+#pkRegionRuntimeRoot .team-card,
+#pkRegionRuntimeRoot .roster-card,
+#pkRegionRuntimeRoot .formation-slot,
+#pkRegionRuntimeRoot .dex-card,
+#pkRegionRuntimeRoot .pc-box-card,
+#pkRegionRuntimeRoot .achievement-card,
+#pkRegionRuntimeRoot .achievement-road-card,
+#pkRegionRuntimeRoot .gym-card,
+#pkRegionRuntimeRoot .profile-section,
+#pkRegionRuntimeRoot .profile-stat,
+#pkRegionRuntimeRoot .profile-badge,
+#pkRegionRuntimeRoot .league-member,
+#pkRegionRuntimeRoot .option-row,
+#pkRegionRuntimeRoot .help-mini-card,
+#pkRegionRuntimeRoot .tutorial-step,
+#pkRegionRuntimeRoot .help-callout,
+#pkRegionRuntimeRoot .checkpoint-choice,
+#pkRegionRuntimeRoot .tm-slot-cell,
+#pkRegionRuntimeRoot .tm-card,
+#pkRegionRuntimeRoot .loot-slot,
+#pkRegionRuntimeRoot .item-card{
+  background-color:#1b251d!important;
+  border-color:#565a40!important;
+}
+#pkRegionRuntimeRoot .formation-slot.active-slot,
+#pkRegionRuntimeRoot .gym-card.completed,
+#pkRegionRuntimeRoot .achievement-card.unlocked,
+#pkRegionRuntimeRoot .achievement-road-card.ready{border-color:#a88b48!important}
+#pkRegionRuntimeRoot .player-profile-hero{background:linear-gradient(135deg,#3e4b2d,#202b22 58%,#3c3320)!important;border-color:#8d7844!important}
+#pkRegionRuntimeRoot .profile-quick-stat,
+#pkRegionRuntimeRoot .gym-summary-stat,
+#pkRegionRuntimeRoot .gym-card-roster,
+#pkRegionRuntimeRoot .gym-rule-footer{background:#182219!important;border-color:#536043!important}
+#pkRegionRuntimeRoot .gym-card{background:linear-gradient(180deg,#263126,#182019)!important}
+#pkRegionRuntimeRoot .gym-card-portrait{background:#141c16!important;border-color:#5e6546!important}
+#pkRegionRuntimeRoot .gym-card-meta{color:#d8c98f!important}
+#pkRegionRuntimeRoot .achievement-road{background:linear-gradient(145deg,#2a2b1c,#192019)!important;border-color:#74623b!important}
+#pkRegionRuntimeRoot .achievement-overall>div,
+#pkRegionRuntimeRoot .achievement-road-progress>div{background:linear-gradient(90deg,#667343,#d8b35a)!important}
+#pkRegionRuntimeRoot .inventory-tabs,
+#pkRegionRuntimeRoot .achievement-tabs,
+#pkRegionRuntimeRoot .help-tabs{background:#151d17!important;border-color:#53573e!important}
+#pkRegionRuntimeRoot .inventory-tab,
+#pkRegionRuntimeRoot .achievement-tab,
+#pkRegionRuntimeRoot .help-tab{background:#202a21!important;border-color:#555b43!important;color:#c5c7b8!important}
+#pkRegionRuntimeRoot .inventory-tab.active,
+#pkRegionRuntimeRoot .achievement-tab.active,
+#pkRegionRuntimeRoot .help-tab.active{background:linear-gradient(180deg,#5b6339,#3b432d)!important;border-color:#b2924c!important;color:#fff3cd!important}
+#pkRegionRuntimeRoot input:not([type="range"]),
+#pkRegionRuntimeRoot select,
+#pkRegionRuntimeRoot textarea,
+#pkRegionRuntimeRoot .formation-combo-input{background:#121a14!important;border-color:#586047!important;color:#eff0e7!important}
+#pkRegionRuntimeRoot input:focus,
+#pkRegionRuntimeRoot select:focus,
+#pkRegionRuntimeRoot textarea:focus{border-color:#b08e48!important;box-shadow:0 0 0 2px rgba(216,179,90,.11)!important;outline:none!important}
+#pkRegionRuntimeRoot .btn:not(.danger),
+#pkRegionRuntimeRoot .mini-btn:not(.danger){background:linear-gradient(180deg,#39452f,#283228)!important;border-color:#626a4d!important;color:#eeefe5!important}
+#pkRegionRuntimeRoot .btn.primary{background:linear-gradient(180deg,#6c7743,#4a5633)!important;border-color:#b4934c!important;color:#fff5d8!important}
+#pkRegionRuntimeRoot .btn.warn{background:linear-gradient(180deg,#725c2e,#4c4027)!important;border-color:#b38e45!important;color:#ffe8ad!important}
+#pkRegionRuntimeRoot .btn:not(:disabled):not(.danger):hover,
+#pkRegionRuntimeRoot .mini-btn:not(:disabled):hover{filter:brightness(1.12)!important}
+#pkRegionRuntimeRoot .timed-gacha-strip,
+#pkRegionRuntimeRoot .menu-timed-gacha{background:linear-gradient(90deg,#1a241b,#24291e)!important;border-color:#68613f!important}
+#pkRegionRuntimeRoot .timed-gacha-progress{background:#111812!important;border-color:#5a6045!important}
+#pkRegionRuntimeRoot .timed-gacha-fill{background:linear-gradient(90deg,#6d7c45,#d8b35a,#f0d58a)!important}
+#pkRegionRuntimeRoot .timed-gacha-status.online{color:#a9dd86!important}
+#pkRegionRuntimeRoot .timed-gacha-status.warn{color:#efd486!important}
+#pkRegionRuntimeRoot .pk-mobile-dock,
+#pkRegionRuntimeRoot .pk-mobile-more-box{background:rgba(24,31,25,.975)!important;border-color:#716844!important}
+#pkRegionRuntimeRoot .poe-tree-scroll{border-color:#626647!important;background:radial-gradient(circle at center,#252d22 0,#151d18 52%,#0d120f 100%)!important}
+#pkRegionRuntimeRoot .pk-j-parity-safe{background:#1b281d!important;border-color:#67704d!important;border-left-color:#d8b35a!important;color:#c9cbbd!important}
+#pkRegionRuntimeRoot .route-event-timer,
+#pkRegionRuntimeRoot .run-summary,
+#pkRegionRuntimeRoot .item-run-summary{border-color:#5a5d43!important;background:#151d17!important}

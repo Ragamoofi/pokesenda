@@ -1,0 +1,8 @@
+
+html.pk-hoenn-prelaunch #regionHoennCard,
+html.pk-hoenn-prelaunch [data-self-profile-region="hoenn"],
+html.pk-hoenn-prelaunch [data-profile-region="hoenn"],
+html.pk-hoenn-prelaunch [data-gd-region="hoenn"],
+html.pk-hoenn-prelaunch .pk-public-region-panel[data-region="hoenn"]{display:none!important}
+html.pk-hoenn-prelaunch #regionSelectOverlay .region-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+@media(max-width:980px){html.pk-hoenn-prelaunch #regionSelectOverlay .region-card-grid{grid-template-columns:1fr!important}}

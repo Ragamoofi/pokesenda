@@ -1,0 +1,33 @@
+
+/* Optimización EXCLUSIVAMENTE móvil. No cambia estados, motor, saves ni escritorio. */
+@media(max-width:980px){
+  .hud,.overlay,.modal-box,.menu-box,.loot-panel,.info-panel,.ux-context-panel,
+  .pk-mobile-dock,.pk-mobile-more-box,.pk-floating-mode-btn,.pk-global-confirm-overlay,
+  #pkCloudOverlay,#pkRecoveryOverlay,#pkCasinoOverlay{
+    -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+  }
+  #field .mon>img,#field .enemy:not(.enemy-dead)>img,
+  #pkRegionRuntimeRoot #field .mon>img,#pkRegionRuntimeRoot #field .enemy:not(.enemy-dead)>img,
+  #pkGlobalInfiniteRoot #field .mon>img,#pkGlobalInfiniteRoot #field .enemy:not(.enemy-dead)>img,
+  .gym-mon:not(.ko)>img.gym-mon-sprite,.gym-player-trainer>img,.gym-leader-full>img,.fx-projectile{
+    filter:none!important;-webkit-filter:none!important;
+  }
+  #pkLobbyAmbient .pk-lobby-smoke,#pkLobbyAmbient .pk-lobby-leaf,#pkLobbyAmbient .pk-lobby-butterfly,
+  #pkRegionRuntimeRoot #pkLobbyAmbient .pk-lobby-smoke,#pkRegionRuntimeRoot #pkLobbyAmbient .pk-lobby-leaf,#pkRegionRuntimeRoot #pkLobbyAmbient .pk-lobby-butterfly{display:none!important;}
+  #field.pk-lobby-mode .pk-trainer-back img,#pkRegionRuntimeRoot #field.pk-lobby-mode .pk-trainer-back img,#pkTrainerMarker,.pk-trainer-back{animation:none!important;}
+  #field .pk-hover .mon,#field .pk-hover .enemy,#pkRegionRuntimeRoot #field .pk-hover .mon,#pkRegionRuntimeRoot #field .pk-hover .enemy{animation:none!important;}
+  #field .pk-hover::after,#pkRegionRuntimeRoot #field .pk-hover::after{animation:none!important;}
+  .battle-hp-fill,.gym-hpfill{transition:none!important;}
+  .overlay>.modal-box,.overlay>.menu-box,.overlay>.center-card,.pk-mobile-more-box{box-shadow:0 8px 24px rgba(0,0,0,.34)!important;}
+
+  /* Árbol: en teléfono el mapa sigue siendo arrastrable/zoomable, pero sin composición GPU
+     continua ni órbitas decorativas pesadas. */
+  #skillTreeOverlay#skillTreeOverlay .pkt-stage{will-change:auto!important;transition:none!important;}
+  #skillTreeOverlay#skillTreeOverlay .pkt-orbits{display:none!important;}
+  #skillTreeOverlay#skillTreeOverlay .pkt-node,#skillTreeOverlay#skillTreeOverlay .pkt-edge,#skillTreeOverlay#skillTreeOverlay .pkt-rank-fill,#skillTreeOverlay#skillTreeOverlay .pkt-feedback{animation:none!important;transition:none!important;}
+  #skillTreeOverlay#skillTreeOverlay .pkt-node{box-shadow:0 3px 9px rgba(0,0,0,.36)!important;}
+  #skillTreeOverlay#skillTreeOverlay .pkt-map-wrap,#skillTreeOverlay#skillTreeOverlay .pkt-viewport{box-shadow:none!important;}
+
+  /* Las tarjetas fuera del viewport no necesitan pintarse en Chromium/Android. */
+  .pokedex-grid .dex-card,.pc-box-grid .pc-card,.roster-grid .roster-card{content-visibility:auto;contain-intrinsic-size:210px 190px;}
+}

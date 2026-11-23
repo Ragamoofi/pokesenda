@@ -1,0 +1,26 @@
+
+/* V36.40.41 · Formación rápida, estabilidad de Volador, comparador de objetos y avisos compactos. */
+/* V36.67.4 · Arrastre visual fluido + compatibilidad con Infinita Global */
+.formation-drag-handle{cursor:grab!important;user-select:none;-webkit-user-drag:none;touch-action:none;transition:opacity .12s ease,transform .12s ease,filter .12s ease!important;will-change:opacity,transform}
+.formation-drag-handle img{-webkit-user-drag:none!important;user-drag:none!important;pointer-events:none}
+html.pk-formation-pointer-drag,html.pk-formation-pointer-drag body{cursor:grabbing!important}
+html.pk-formation-pointer-drag .formation-drag-handle{cursor:grabbing!important}
+.formation-slot{transition:border-color .12s ease,box-shadow .12s ease,transform .12s cubic-bezier(.2,.8,.2,1)!important}
+.formation-slot.formation-dragging{outline:1px dashed rgba(125,182,255,.72)!important;outline-offset:-3px!important}
+.formation-slot.formation-dragging>.formation-pokemon{opacity:.28!important;transform:scale(.975)!important;filter:saturate(.72) brightness(.86)!important}
+.formation-slot.formation-drop-target{border-color:#77e39b!important;outline:2px solid rgba(119,227,155,.92)!important;outline-offset:-3px!important;box-shadow:0 0 0 3px rgba(80,220,130,.08),inset 0 0 25px rgba(80,220,130,.16)!important;transform:translateY(-2px)!important}
+.formation-slot.formation-drop-target::after{content:"SOLTAR AQUÍ";position:absolute;right:8px;top:7px;z-index:30;padding:3px 6px;border-radius:999px;background:#173b29;border:1px solid #77e39b;color:#bfffd2;font-size:6.5px;font-weight:1000;letter-spacing:.45px;pointer-events:none;box-shadow:0 3px 10px rgba(0,0,0,.35)}
+.pk-formation-drag-ghost{position:fixed!important;left:0!important;top:0!important;z-index:999999!important;margin:0!important;pointer-events:none!important;box-sizing:border-box!important;border:1px solid #7db6ff!important;border-radius:11px!important;background:linear-gradient(145deg,rgba(23,35,49,.98),rgba(13,23,34,.98))!important;box-shadow:0 16px 36px rgba(0,0,0,.42),0 0 0 3px rgba(125,182,255,.10)!important;padding:4px 6px!important;opacity:.97!important;will-change:transform,opacity!important;backface-visibility:hidden!important;transform-origin:0 0!important;contain:layout paint style!important;transition:none!important;filter:none!important}
+.pk-formation-drag-ghost .formation-pokemon{margin:0!important;background:transparent!important;transform:none!important;opacity:1!important;filter:none!important}
+.pk-formation-drag-ghost::after{content:"↔ MOVER";position:absolute;right:6px;bottom:5px;padding:2px 5px;border-radius:999px;background:rgba(8,16,25,.9);border:1px solid #5d86b0;color:#b9dcff;font-size:6px;font-weight:1000;letter-spacing:.4px}
+.pk-formation-drag-ghost.pk-settling{transition:transform .18s cubic-bezier(.18,.82,.22,1),opacity .16s ease!important;opacity:.88!important}
+#pkGlobalInfiniteRoot .formation-slot.formation-drop-target::after{background:#163b2a!important}
+.pc-swap-choice.selected{border-color:#ffd166!important;background:#312914!important;opacity:.86}.pc-swap-choice.selected:disabled{cursor:default!important}
+/* Aliados Volador/Fantasma: nunca se desplaza el contenedor verticalmente. La sombra sigue indicando que vuela. */
+#teamLine .mon-wrap,#teamLine .mon-wrap.pk-hover{transform:none!important}
+#teamLine .mon-wrap.pk-hover .mon{transform:none!important;animation:none!important}
+#teamLine .mon-wrap{grid-row:1!important}
+/* Todos los avisos de la barra superior usan el mismo punto verde compacto de Caja/PC. */
+.top-nav .pokedex-alert,.top-nav .ux-improve-counter{right:-5px!important;top:-5px!important;bottom:auto!important;width:14px!important;min-width:14px!important;height:14px!important;padding:0!important;border-radius:50%!important;font-size:0!important;line-height:0!important;color:transparent!important;background:#2f8150!important;border:2px solid #8be1aa!important;box-shadow:0 0 12px rgba(91,218,137,.68),inset 0 1px 2px rgba(255,255,255,.28)!important;animation:pcImprovePulse 1.45s ease-in-out infinite alternate!important}
+.top-nav .pokedex-alert::after,.top-nav .ux-improve-counter::after{content:""!important;display:block!important;width:4px!important;height:4px!important;border-radius:50%!important;background:#dfffea!important;box-shadow:0 0 5px rgba(223,255,234,.9)!important}
+.ux-item-effect-title{margin:10px 0 5px;font-size:8px;font-weight:1000;letter-spacing:.45px;text-transform:uppercase;color:#9fd7ff}.ux-item-effect-stats{margin-top:0!important}.ux-item-effect-note{margin-top:7px;padding:7px 9px;border-radius:9px;background:#101a23;border:1px solid #344c61;color:#b9c9d8;font-size:7.5px;line-height:1.5}

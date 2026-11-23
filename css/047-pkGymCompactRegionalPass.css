@@ -1,0 +1,43 @@
+
+/* PokeSenda · gimnasios compactos: más arena visible, misma información. */
+#gymBattleOverlay .gym-battle-box{grid-template-rows:auto 1fr 142px!important}
+#gymBattleOverlay .gym-battle-head{padding:4px 9px!important;gap:7px!important;min-height:0!important;align-items:center!important;flex-wrap:nowrap!important}
+#gymBattleOverlay .gym-battle-leader-mini{min-width:250px!important;gap:6px!important}
+#gymBattleOverlay .gym-battle-leader-mini img{width:38px!important;height:44px!important}
+#gymBattleOverlay .gym-battle-head h2{font-size:14px!important;line-height:1.05!important}
+#gymBattleOverlay .gym-battle-kicker{font-size:7.5px!important;line-height:1.05!important}
+#gymBattleOverlay .gym-battle-head small{font-size:7.5px!important;line-height:1.1!important}
+#gymBattleOverlay #gymBattleRule{display:block!important;max-width:390px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;margin-top:2px!important}
+#gymBattleOverlay .gym-battle-center-info{gap:5px!important;align-items:center!important;min-width:265px!important}
+#gymBattleOverlay .gym-battle-center-info span{min-width:64px!important;min-height:32px!important;padding:3px 8px!important;font-size:10px!important;line-height:1!important}
+#gymBattleOverlay .gym-battle-center-info #gymBattleScore{min-width:72px!important}
+#gymBattleOverlay .gym-battle-actions{gap:4px!important;align-items:center!important;flex-wrap:nowrap!important}
+#gymBattleOverlay .gym-battle-actions .btn{padding:4px 8px!important;min-height:32px!important;font-size:10px!important;line-height:1!important;white-space:nowrap!important}
+#gymBattleOverlay .gym-battle-bottom{padding:6px 8px!important;gap:7px!important}
+#gymBattleOverlay .gym-battle-log{height:91px!important}
+
+/* Johto no hereda el azul de Kanto: oliva oscuro + oro viejo. */
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-battle-box{background:#141b16!important;border-color:#8b7745!important;box-shadow:0 20px 70px #000!important}
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-battle-head{background:linear-gradient(180deg,#38402d 0%,#252c22 100%)!important;border-bottom-color:#8b7745!important;color:#f3edda!important}
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-battle-kicker{color:#e7c85d!important}
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-battle-head small{color:#d5d6c6!important}
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-battle-center-info span{background:#171e18!important;border-color:#77714b!important;color:#f2eedf!important}
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-battle-actions .btn:not(.danger){background:linear-gradient(180deg,#4a5236,#343c2d)!important;border-color:#81784b!important;color:#f4efdc!important}
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-battle-bottom{background:#121914!important;border-top-color:#625f3f!important;color:#ece9d8!important}
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-mon-hud{background:rgba(15,22,17,.92)!important;border-color:#686a48!important}
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-battle-log{background:#0b100d!important;border-color:#424b36!important}
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-reserve-mon{background:#172019!important;border-color:#4e5940!important}
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-reserve-mon.active{border-color:#d2b84e!important}
+#pkRegionRuntimeRoot #gymBattleOverlay .gym-type-chip{filter:saturate(.86) brightness(.95)}
+@media(max-width:980px){
+ #gymBattleOverlay .gym-battle-head{padding:3px 6px!important;gap:4px!important}
+ #gymBattleOverlay .gym-battle-leader-mini{min-width:190px!important}
+ #gymBattleOverlay .gym-battle-leader-mini img{width:32px!important;height:38px!important}
+ #gymBattleOverlay #gymBattleRule{max-width:250px!important}
+ #gymBattleOverlay .gym-battle-center-info{min-width:190px!important}
+ #gymBattleOverlay .gym-battle-center-info span{min-width:52px!important;min-height:29px!important;padding:2px 5px!important;font-size:9px!important}
+ #gymBattleOverlay .gym-battle-actions .btn{padding:3px 6px!important;min-height:29px!important;font-size:9px!important}
+}
+
+/* V36.64.15 · GIF Pokémon: la única animación del sprite es la contenida en el propio GIF. */
+#formationControls .formation-pokemon>img,#formationControls .formation-combo-option>img,#pcBoxGrid .pc-card>img,#pokedexGrid .dex-card>img,.pk-ball-strip .pk-strip-sprite,.pk-iso-battler>img,.pk-iso-enemy-card>img{animation:none!important;animation-duration:0s!important;transition:none!important;}

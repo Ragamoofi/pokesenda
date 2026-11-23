@@ -1,0 +1,295 @@
+
+/* Pokémon Classic + paletas del juego: Kanto azul, Johto oliva/dorado, Hoenn esmeralda. */
+.pk-ach-shell,#achievementRewardToasts,#johtoAchievementRewardToasts{
+  --ach-accent:#8cbde7;--ach-rgb:140,189,231;--ach-gold:#e9c579;
+  --ach-bg:#0e1925;--ach-chrome:#111f2e;--ach-sidebar:#101c28;
+  --ach-panel:#1a2b3d;--ach-panel-low:#111e2c;--ach-input:#0c1722;
+  --ach-text:#eef4fb;--ach-soft-text:#cbd8e6;--ach-muted:#a8b8ca;--ach-subtle:#94a7bd;
+  --ach-edge:#506176;--ach-line:#34465a;--ach-button:#20364d;--ach-button-edge:#54789d;
+  --ach-hero-a:#293640;--ach-hero-b:#192b3a;--ach-hero-c:#23333e;
+  --ach-ready:#333024;--ach-ready-edge:#a38549;--ach-claimed:#172d2b;--ach-claimed-edge:#3d6a54;
+}
+.pk-ach-shell[data-ach-region="johto"],#johtoAchievementRewardToasts{
+  --ach-accent:#d8b35a;--ach-rgb:216,179,90;--ach-gold:#f0d58a;
+  --ach-bg:#151d18;--ach-chrome:#1d271f;--ach-sidebar:#18211a;
+  --ach-panel:#293425;--ach-panel-low:#1b251d;--ach-input:#111a14;
+  --ach-text:#f2efdf;--ach-soft-text:#d4d7c4;--ach-muted:#b8c0ad;--ach-subtle:#a5b299;
+  --ach-edge:#706845;--ach-line:#4c563d;--ach-button:#3b4931;--ach-button-edge:#79704d;
+  --ach-hero-a:#3a3c26;--ach-hero-b:#222e21;--ach-hero-c:#303725;
+  --ach-ready:#3b3823;--ach-ready-edge:#a88b48;--ach-claimed:#203524;--ach-claimed-edge:#57764b;
+}
+.pk-ach-shell[data-ach-region="hoenn"],html[data-pk-boot-region="hoenn"] #achievementRewardToasts{
+  --ach-accent:#72b4a4;--ach-rgb:114,180,164;--ach-gold:#d9bd72;
+  --ach-bg:#081b24;--ach-chrome:#102a34;--ach-sidebar:#0b222c;
+  --ach-panel:#132f38;--ach-panel-low:#0b222b;--ach-input:#071922;
+  --ach-text:#eaf5f2;--ach-soft-text:#cadbd8;--ach-muted:#a7bab7;--ach-subtle:#8fa6a4;
+  --ach-edge:#416f74;--ach-line:#315b61;--ach-button:#285c58;--ach-button-edge:#6c9d93;
+  --ach-hero-a:#233f3b;--ach-hero-b:#102b34;--ach-hero-c:#17343a;
+  --ach-ready:#353729;--ach-ready-edge:#9f8d58;--ach-claimed:#14342e;--ach-claimed-edge:#4d7e70;
+}
+/* PokéSenda · Rework de Logros, aislado del resto de la interfaz. */
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay{padding:22px!important;background:rgba(3,9,16,.89)!important;backdrop-filter:blur(6px)}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell{
+  width:min(1260px,100%)!important;max-width:1260px!important;height:min(900px,94vh)!important;height:min(900px,94dvh)!important;max-height:94dvh!important;
+  padding:0!important;overflow:hidden!important;border:1px solid var(--ach-edge)!important;border-radius:22px!important;display:flex;flex-direction:column;
+  background:var(--ach-bg)!important;color:var(--ach-text);font-family:"PokeSenda Pokemon Classic",monospace!important;font-size:10px;line-height:1.7;
+  box-shadow:0 35px 110px #0009,0 0 0 4px #d4b27409,inset 0 1px 0 #ffffff0c;
+}
+.pk-ach-shell *{box-sizing:border-box;font-family:"PokeSenda Pokemon Classic",monospace!important}.pk-ach-shell [hidden]{display:none!important}
+.pk-ach-shell button,.pk-ach-shell input,.pk-ach-shell select{font-family:inherit!important;font-size:9px!important;line-height:1.65;font-weight:650;touch-action:manipulation}
+.pk-ach-shell button{transition:background .16s,border-color .16s,transform .16s;cursor:pointer}
+.pk-ach-shell button:disabled{opacity:.44;cursor:default;transform:none!important}
+.pk-ach-shell button:focus-visible,.pk-ach-shell input:focus-visible,.pk-ach-shell select:focus-visible,.pk-ach-shell [tabindex]:focus-visible{outline:2px solid var(--ach-accent)!important;outline-offset:3px}
+.pk-ach-shell svg.pk-ach-icon{display:block;width:20px;height:20px;flex-shrink:0}
+.pk-ach-shell .pk-ach-header{display:flex;align-items:center;gap:17px;padding:22px 28px 18px;flex-shrink:0;background:radial-gradient(ellipse at 5% 0,rgba(var(--ach-rgb),.09),transparent 60%)}
+.pk-ach-shell .pk-ach-header-emblem{width:58px;height:62px;background:linear-gradient(145deg,var(--ach-ready),var(--ach-hero-a));border:1px solid var(--ach-ready-edge);border-radius:15px;display:grid;place-items:center;box-shadow:inset 0 1px #fff2,0 4px 16px #0003}
+.pk-ach-shell .pk-ach-header-emblem svg{width:32px;height:32px;color:var(--ach-gold)}
+.pk-ach-shell .pk-ach-heading{flex:1;min-width:0}
+.pk-ach-shell .pk-ach-eyebrow{font-size:8px;font-weight:800;letter-spacing:0;color:var(--ach-muted);display:flex;align-items:center;gap:9px;line-height:1.5}
+.pk-ach-shell .pk-ach-eyebrow i{width:3px;height:3px;background:var(--ach-gold);border-radius:50%}
+.pk-ach-shell .pk-ach-heading h2{display:flex;align-items:center;gap:14px;font-size:22px!important;line-height:1.65;letter-spacing:0;margin:2px 0 4px!important;color:var(--ach-text)!important}
+.pk-ach-shell .pk-ach-heading p{font-size:9px;line-height:1.65;margin:0;color:var(--ach-muted)}
+.pk-ach-shell .pk-ach-region{font-size:8px;letter-spacing:0;border:1px solid rgba(var(--ach-rgb),.3);background:rgba(var(--ach-rgb),.07);padding:5px 9px;border-radius:5px;color:var(--ach-accent)}
+.pk-ach-shell .pk-ach-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex:0 0 auto;flex-wrap:wrap}
+.pk-ach-shell .pk-ach-header-actions>#achievementsCloseBtn{min-height:42px;padding:8px 13px;white-space:nowrap}
+.pk-ach-shell .pk-ach-header-actions>.pk-ach-wallet-top{display:flex;gap:8px;align-items:center;margin-right:2px}
+.pk-ach-shell .pk-ach-header-actions .pk-ach-ticket{display:flex;align-items:center;gap:8px;border:1px solid #71618b77;background:linear-gradient(#a98adb0f,#a98adb0f),var(--ach-panel-low);padding:5px 8px;border-radius:9px;color:#c9b4ed;min-height:42px}
+.pk-ach-shell .pk-ach-header-actions .pk-ach-ticket>span:nth-child(2){display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0}
+.pk-ach-shell .pk-ach-header-actions .pk-ach-ticket b{font-size:13px;line-height:1.1;color:#e9ddfa;font-variant-numeric:tabular-nums}
+.pk-ach-shell .pk-ach-header-actions .pk-ach-ticket small{font-size:8px}
+.pk-ach-shell .pk-ach-header-actions .pk-ach-ticket.shiny{border-color:#a28a4970;background:linear-gradient(#d6b66712,#d6b66712),var(--ach-panel-low);color:#e7c887}
+.pk-ach-shell .pk-ach-header-actions .pk-ach-ticket.shiny b{color:#f7e2aa}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .pk-ach-header-actions .pk-ach-ticket button{background:#ffffff08!important;border:1px solid currentColor!important;color:inherit!important;min-height:31px!important;padding:5px 9px!important;font-size:8px!important}
+.pk-ach-shell .pk-ach-header-actions .pk-ach-ticket>button{flex:0 0 60px;width:60px}
+.pk-ach-shell .pk-ach-header-actions .pk-ach-ticket,.pk-ach-shell .pk-ach-header-actions .pk-ach-wallet-top{min-width:0}
+.pk-ach-shell .pk-ach-header-actions .pk-ach-claim{min-height:42px!important;padding:8px 12px!important;white-space:nowrap}
+.pk-ach-shell .pk-ach-claim-top{min-height:42px!important;padding:8px 12px!important;white-space:nowrap}
+.pk-ach-shell .pk-ach-footer{display:none!important}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-close{display:flex;align-items:center;gap:15px;background:var(--ach-button)!important;border:1px solid var(--ach-line)!important;border-radius:10px;color:var(--ach-soft-text)!important;min-height:42px;padding:8px 13px!important;box-shadow:none!important}
+.pk-ach-shell .pk-ach-close b{font-size:18px;line-height:1;font-weight:400}
+.pk-ach-shell .pk-ach-close{width:114px;flex:0 0 114px;justify-content:center}
+.pk-ach-shell .pk-ach-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:0 28px 17px;flex-shrink:0}
+.pk-ach-shell .pk-ach-metric{display:flex;align-items:center;gap:11px;padding:1px 18px;border-right:1px solid var(--ach-line)}
+.pk-ach-shell .pk-ach-metric:first-child{padding-left:0}.pk-ach-shell .pk-ach-metric:last-child{border:0}
+.pk-ach-shell .pk-ach-metric>span{color:var(--ach-subtle)}.pk-ach-shell .pk-ach-metric:nth-child(3)>span{color:var(--ach-gold)}
+.pk-ach-shell .pk-ach-metric b{display:block;font-size:14px;line-height:1.6;font-weight:750;font-variant-numeric:tabular-nums;letter-spacing:0;color:var(--ach-text)}
+.pk-ach-shell .pk-ach-metric small{display:block;font-size:8px;color:var(--ach-muted);margin-top:2px}
+.pk-ach-shell .pk-ach-metric>div{min-width:0;flex:1}.pk-ach-shell .pk-ach-metric b{white-space:nowrap}
+.pk-ach-shell .pk-ach-overall{height:3px;flex-shrink:0;background:var(--ach-line)}
+.pk-ach-shell .pk-ach-overall>div{height:100%;background:linear-gradient(90deg,#8d733f,var(--ach-gold));transition:width .3s}
+.pk-ach-shell .pk-ach-main-tabs{display:flex;gap:8px;flex-shrink:0;padding:0 28px;border-bottom:1px solid var(--ach-line);background:var(--ach-chrome)}
+.pk-ach-shell .pk-ach-main-tabs>button{display:flex;align-items:center;gap:9px;min-height:57px;padding:14px 17px;background:none;border:0;border-bottom:3px solid transparent;border-radius:0;color:var(--ach-subtle);font-size:10px!important;position:relative}
+.pk-ach-shell .pk-ach-main-tabs>button.active{color:#fff1cc;border-bottom-color:var(--ach-gold);background:linear-gradient(0deg,#d6b2640d,transparent)}
+.pk-ach-shell .pk-ach-main-tabs>button>b{display:inline-flex;align-items:center;justify-content:center;min-width:21px;height:21px;border-radius:5px;background:#594529;color:#ffe1a3;font-size:8px}
+.pk-ach-shell .pk-ach-main-tabs>button>span{white-space:normal}
+.pk-ach-shell .pk-ach-tab-star{font-size:10px;color:var(--ach-gold);font-style:normal}
+.pk-ach-shell .pk-ach-content{flex:1;min-height:0;overflow:hidden;position:relative}
+.pk-ach-shell .pk-ach-content,.pk-ach-shell .pk-ach-collection,.pk-ach-shell .pk-ach-sidebar,.pk-ach-shell .pk-ach-list-pane,.pk-ach-shell .pk-ach-road-pane,.pk-ach-shell .pk-ach-card{min-width:0;max-width:100%}
+.pk-ach-shell .pk-ach-collection{height:100%;display:grid;grid-template-columns:206px minmax(0,1fr);overflow:hidden}
+.pk-ach-shell .pk-ach-sidebar{padding:24px 14px;background:var(--ach-sidebar);border-right:1px solid var(--ach-line);overflow:auto;scrollbar-width:thin}
+.pk-ach-shell .pk-ach-side-label{display:block;font-size:8px;font-weight:800;letter-spacing:0;color:var(--ach-subtle);margin:0 10px 12px}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .achievement-tabs{display:flex;flex-direction:column;gap:5px;padding:0;margin:0;border:0!important;background:transparent!important;overflow:visible}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .achievement-tab{display:flex;align-items:center;gap:9px;text-align:left;min-height:45px;width:100%;padding:10px;border:1px solid transparent!important;background:transparent!important;color:var(--ach-soft-text)!important;border-radius:9px;box-shadow:none!important;font-size:9px!important;white-space:nowrap}
+.pk-ach-shell .achievement-tab svg{width:18px;height:18px}.pk-ach-shell .achievement-tab>span{flex:1}.pk-ach-shell .achievement-tab>small{font-size:8px;color:var(--ach-subtle);font-variant-numeric:tabular-nums}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .achievement-tab.active{background:rgba(var(--ach-rgb),.1)!important;border-color:rgba(var(--ach-rgb),.3)!important;color:var(--ach-accent)!important}
+.pk-ach-shell .pk-ach-side-note{margin:32px 8px 0;border-top:1px solid var(--ach-line);padding-top:20px;color:var(--ach-muted);font-size:9px}
+.pk-ach-shell .pk-ach-side-note svg{color:#ae9b71;margin-bottom:9px}.pk-ach-shell .pk-ach-side-note b{font-size:9px;color:var(--ach-soft-text)}.pk-ach-shell .pk-ach-side-note p{margin:6px 0;line-height:1.7}
+.pk-ach-shell .pk-ach-list-pane{padding:21px 24px 25px;overflow:auto;min-width:0;scrollbar-gutter:stable;overscroll-behavior:contain}
+.pk-ach-shell .pk-ach-teaser{width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:13px 16px;border-radius:12px;border:1px solid var(--ach-ready-edge);background:linear-gradient(105deg,var(--ach-ready),var(--ach-panel-low) 80%);color:#eed8a8;margin-bottom:20px;position:relative;overflow:hidden}
+.pk-ach-shell .pk-ach-teaser::after{content:'';position:absolute;right:66px;top:-45px;width:130px;height:130px;border:20px solid #e0b46005;border-radius:50%;pointer-events:none}
+.pk-ach-shell .pk-ach-teaser-icon svg{width:30px;height:30px;color:var(--ach-gold)}
+.pk-ach-shell .pk-ach-teaser{min-height:62px}
+.pk-ach-shell .pk-ach-teaser-main{flex:1;min-width:0}.pk-ach-shell .pk-ach-teaser-main small{display:block;font-size:8px;font-weight:850;letter-spacing:0;color:var(--ach-gold)}.pk-ach-shell .pk-ach-teaser-main b{display:block;font-size:9px;font-weight:500;margin-top:3px;color:#bdb9b1}
+.pk-ach-shell .pk-ach-teaser-end{display:flex;align-items:center;gap:16px;white-space:nowrap}.pk-ach-shell .pk-ach-teaser-end b{font-size:9px;color:#ffe5b0}.pk-ach-shell .pk-ach-teaser-end svg{width:18px}
+.pk-ach-shell .pk-ach-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.pk-ach-shell .pk-ach-section-head h3{font-size:14px;letter-spacing:0;margin:0;color:var(--ach-text)}.pk-ach-shell [data-ach-result-count]{font-size:9px;color:var(--ach-subtle)}
+.pk-ach-shell .pk-ach-sort{display:flex;gap:8px;align-items:center;font-size:9px;color:var(--ach-subtle)}
+.pk-ach-shell select{background:var(--ach-input);color:var(--ach-soft-text);border:1px solid var(--ach-line);border-radius:8px;padding:8px 28px 8px 10px;min-height:38px;color-scheme:dark;max-width:100%}
+.pk-ach-shell .pk-ach-filters{display:grid;grid-template-columns:minmax(0,1fr) 224px;gap:10px;margin-bottom:17px}
+.pk-ach-shell .pk-ach-search{display:flex;align-items:center;gap:9px;padding:0 11px;border:1px solid var(--ach-line);border-radius:9px;background:var(--ach-input);min-width:0;color:var(--ach-subtle)}.pk-ach-shell .pk-ach-search svg{width:18px}.pk-ach-shell .pk-ach-search:focus-within{border-color:var(--ach-accent)}
+.pk-ach-shell .pk-ach-search input{background:transparent;color:var(--ach-text);outline:none!important;border:0;padding:10px 0;width:100%;min-width:0;min-height:40px;font-size:10px!important;font-weight:450}.pk-ach-shell .pk-ach-search input::placeholder{color:var(--ach-subtle)}
+.pk-ach-shell .pk-ach-status-filter select{width:100%;height:100%}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .achievement-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:13px;align-items:stretch}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .pk-ach-card{display:flex;flex-direction:column;align-items:stretch;gap:0;min-height:238px;padding:16px;position:relative;border:1px solid var(--ach-line)!important;border-radius:13px;background:linear-gradient(135deg,var(--ach-panel),var(--ach-panel-low))!important;opacity:1;box-shadow:0 3px 10px #0001;transition:border-color .15s,box-shadow .15s}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .pk-ach-card[data-ach-state="ready"]{background:linear-gradient(130deg,var(--ach-ready),var(--ach-panel-low) 80%)!important;border-color:var(--ach-ready-edge)!important;box-shadow:inset 0 1px #ffd98b13,0 3px 10px #0002}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .pk-ach-card[data-ach-state="claimed"]{background:var(--ach-claimed)!important;border-color:var(--ach-claimed-edge)!important}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .pk-ach-card[data-ach-state="locked"]{background:var(--ach-panel-low)!important;border-color:var(--ach-line)!important}
+.pk-ach-shell .pk-ach-card-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+.pk-ach-shell .pk-ach-state{display:inline-flex;align-items:center;gap:5px;font-size:8px;font-weight:650;color:var(--ach-muted)}.pk-ach-shell .pk-ach-state svg{width:13px;height:13px}
+.pk-ach-shell .pk-ach-state.ready{color:#f1cd82}.pk-ach-shell .pk-ach-state.claimed{color:#9cd4b6}.pk-ach-shell .pk-ach-state.progress{color:var(--ach-accent)}
+.pk-ach-shell .pk-ach-points{font-size:9px;font-weight:800;color:#e8ce99;background:#e3bd6610;border:1px solid #d8b77025;border-radius:5px;padding:2px 7px;white-space:nowrap}.pk-ach-shell .pk-ach-points small{font-size:7px;letter-spacing:0}
+.pk-ach-shell .pk-ach-card-main{display:flex;gap:11px;align-items:center;margin-bottom:9px}
+.pk-ach-shell .pk-ach-copy{flex:1}
+.pk-ach-shell .pk-ach-emblem{width:43px;height:43px;flex:0 0 43px;display:grid;place-items:center;border:1px solid rgba(var(--ach-rgb),.3);border-radius:11px;background:rgba(var(--ach-rgb),.08);color:var(--ach-accent);box-shadow:inset 0 1px #ffffff08}
+.pk-ach-shell .pk-ach-emblem svg{width:24px;height:24px}
+.pk-ach-shell .pk-ach-emblem.collection{color:#c1adf1;background:#a486e514;border-color:#a08aca44}.pk-ach-shell .pk-ach-emblem.trainer{color:#8ecab4;background:#77c59f12;border-color:#639c8144}.pk-ach-shell .pk-ach-emblem.gyms{color:#d9b989;background:#d4ab7b12;border-color:#c0945944}.pk-ach-shell .pk-ach-emblem.special{color:#eccb78;background:#d5b36512;border-color:#ddba6244}
+.pk-ach-shell .pk-ach-card[data-ach-state="locked"] .pk-ach-emblem{filter:saturate(.4);opacity:.8}
+.pk-ach-shell .pk-ach-copy{min-width:0}.pk-ach-shell .pk-ach-kicker{display:block;letter-spacing:0;font-size:7px;font-weight:800;color:var(--ach-subtle);text-transform:uppercase}.pk-ach-shell .pk-ach-copy h3{font-size:11px;line-height:1.65;letter-spacing:0;margin:2px 0 0;color:var(--ach-text)}
+.pk-ach-shell .pk-ach-desc{font-size:9px;line-height:1.65;color:var(--ach-muted);margin:0 0 15px;flex:1;overflow-wrap:anywhere}
+.pk-ach-shell .pk-ach-progress-label{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:8px;color:var(--ach-subtle);margin-bottom:5px;min-height:15px}.pk-ach-shell .pk-ach-progress-label>b{font-size:9px;font-weight:750;color:var(--ach-soft-text);font-variant-numeric:tabular-nums}.pk-ach-shell .pk-ach-progress-label>b>span{color:var(--ach-subtle);font-weight:400}
+.pk-ach-shell .pk-ach-new{font-size:7px;letter-spacing:0;color:#f3ca80;background:#a780301c;padding:2px 5px;border-radius:3px}
+.pk-ach-shell .pk-ach-bar{height:5px;background:var(--ach-input);border-radius:5px;overflow:hidden;flex-shrink:0}.pk-ach-shell .pk-ach-bar>i{display:block;height:100%;background:var(--ach-accent);border-radius:inherit;transition:width .3s ease}
+.pk-ach-shell .pk-ach-card[data-ach-state="ready"] .pk-ach-bar>i{background:linear-gradient(90deg,#b0873e,#f2cf80)}.pk-ach-shell .pk-ach-card[data-ach-state="claimed"] .pk-ach-bar>i{background:#639d81}
+.pk-ach-shell .pk-ach-card-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--ach-line);padding-top:12px;margin-top:14px}
+.pk-ach-shell .pk-ach-prize{min-width:0;flex:1}.pk-ach-shell .pk-ach-prize>small{display:block;font-size:7px;letter-spacing:0;color:var(--ach-subtle)}.pk-ach-shell .pk-ach-prize>strong{font-size:9px;font-weight:700;display:block;color:#dccb9e;line-height:1.6;overflow-wrap:anywhere;margin-top:1px}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .achievement-claim-btn{min-height:36px!important;padding:8px 11px!important;font-size:9px!important;white-space:nowrap;border-radius:8px!important;box-shadow:none!important}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .pk-ach-claim{display:flex;align-items:center;justify-content:center;gap:7px;background:linear-gradient(#edce8a,#d5ad61)!important;border:1px solid #f2d59a!important;color:#29200d!important;font-weight:800}
+.pk-ach-shell .pk-ach-claim svg{width:15px;height:15px}.pk-ach-shell .pk-ach-foot-state{display:flex;align-items:center;gap:4px;color:var(--ach-subtle);font-size:8px}.pk-ach-shell .pk-ach-foot-state svg{width:15px;height:15px}.pk-ach-shell .pk-ach-foot-state.claimed{color:#8dbea5}
+.pk-ach-shell .pk-ach-empty{text-align:center;padding:40px 15px;color:var(--ach-muted)}.pk-ach-shell .pk-ach-empty>svg{margin:auto;width:34px;height:34px}.pk-ach-shell .pk-ach-empty h3{font-size:12px;color:var(--ach-soft-text)}.pk-ach-shell .pk-ach-empty p{font-size:9px}.pk-ach-shell .pk-ach-empty button{padding:10px 14px;border:1px solid var(--ach-button-edge);background:var(--ach-button);color:var(--ach-text);border-radius:8px}
+.pk-ach-shell .pk-ach-road-pane{height:100%;overflow:auto;overscroll-behavior:contain;padding:24px 27px;scrollbar-gutter:stable}
+.pk-ach-shell .pk-ach-road-hero{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) 210px minmax(230px,.86fr);align-items:center;gap:18px;background:radial-gradient(ellipse at 45% 110%,#ac834221,transparent 60%),linear-gradient(120deg,var(--ach-hero-a),var(--ach-hero-b) 60%,var(--ach-hero-c));border:1px solid var(--ach-ready-edge);border-radius:16px;padding:24px 28px;overflow:hidden;min-height:232px}
+.pk-ach-shell .pk-ach-road-hero::before{content:'';position:absolute;width:330px;height:330px;right:32%;top:-58px;border:1px solid #d9b97914;border-radius:50%;box-shadow:0 0 0 35px #dab87705,0 0 0 70px #dab87703;pointer-events:none}
+.pk-ach-shell .pk-ach-hero-copy{position:relative;z-index:1}.pk-ach-shell .pk-ach-hero-copy .pk-ach-eyebrow{font-size:7px;color:#cdb581;letter-spacing:0}
+.pk-ach-shell .pk-ach-hero-copy>h3{font-size:20px;line-height:1.65;letter-spacing:0;margin:9px 0 11px;font-weight:760;color:var(--ach-text)}.pk-ach-shell .pk-ach-hero-copy>h3 em{font-style:normal;color:#f1d598}
+.pk-ach-shell .pk-ach-hero-copy>p{font-size:9px;line-height:1.7;color:var(--ach-muted);margin:0;max-width:325px}
+.pk-ach-shell .pk-ach-hero-badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:15px}.pk-ach-shell .pk-ach-hero-badges>span{font-size:8px;font-weight:650;padding:4px 8px;border:1px solid #bda36b42;background:#bda36b0b;border-radius:5px;color:#e5cfa3}
+.pk-ach-shell .pk-ach-hero-art{position:relative;filter:drop-shadow(0 15px 18px #0006)}.pk-ach-shell .pk-ach-crest{display:block;width:100%;height:210px;overflow:visible}
+.pk-ach-shell .pk-ach-hero-copy{grid-column:1;grid-row:1;min-width:0}.pk-ach-shell .pk-ach-hero-art{grid-column:2;grid-row:1;min-width:0}.pk-ach-shell .pk-ach-next-prize{grid-column:3;grid-row:1;min-width:0}
+.pk-ach-shell .pk-ach-next-prize{position:relative;z-index:1;background:var(--ach-sidebar);border:1px solid #b3945c44;padding:18px;border-radius:12px}
+.pk-ach-shell .pk-ach-next-prize>.pk-ach-kicker{color:#cbb781}.pk-ach-shell .pk-ach-next-prize>h4{font-size:12px;line-height:1.65;margin:5px 0 4px;color:#f3e3bf}.pk-ach-shell .pk-ach-next-prize>p{font-size:9px;color:var(--ach-muted);line-height:1.5;margin:0 0 12px}
+.pk-ach-shell .pk-ach-next-numbers{display:flex;justify-content:space-between;font-size:9px;color:#d6c7a7;margin-bottom:5px}.pk-ach-shell .pk-ach-next-prize .pk-ach-bar>i{background:#e5c274}.pk-ach-shell .pk-ach-next-remaining{display:block;font-size:8px;color:var(--ach-muted);margin-top:6px}
+.pk-ach-shell .pk-ach-next-prize>button{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;color:#f0d79e;border:0;border-top:1px solid var(--ach-line);background:none;border-radius:0;margin-top:12px;padding:10px 0 0;font-size:9px!important}.pk-ach-shell .pk-ach-next-prize>button svg{width:16px}
+.pk-ach-shell .pk-ach-road-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:22px 0 5px}.pk-ach-shell .pk-ach-road-toolbar h3{font-size:12px;color:var(--ach-text);margin:0}.pk-ach-shell .pk-ach-road-toolbar>div>span{font-size:9px;color:var(--ach-muted)}
+.pk-ach-shell .pk-ach-road-controls{display:flex;gap:7px;align-items:center}.pk-ach-shell .pk-ach-road-controls>small{font-size:8px;color:var(--ach-subtle);margin-right:5px}.pk-ach-shell .pk-ach-road-controls button{display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--ach-button-edge);border-radius:8px;color:var(--ach-soft-text);background:var(--ach-button)}.pk-ach-shell [data-ach-scroll="-1"] svg{transform:rotate(180deg)}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .pk-ach-track{display:flex;gap:14px;position:relative;padding:8px 2px 17px;margin:0;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;scroll-snap-type:x proximity;scroll-padding:2px}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .pk-ach-road-card{position:relative;flex:0 0 209px;display:flex;gap:0;flex-direction:column;min-height:0;padding:0;border:0!important;border-radius:0;background:transparent!important;box-shadow:none!important;scroll-snap-align:start;overflow:visible}
+.pk-ach-shell .pk-ach-road-node{display:flex;align-items:center;gap:9px;height:54px;position:relative;padding-left:15px;flex-shrink:0}
+.pk-ach-shell .pk-ach-road-node::before{content:'';height:2px;position:absolute;top:27px;left:-17px;right:-16px;background:var(--ach-line);z-index:0}
+.pk-ach-shell .pk-ach-road-card:first-child .pk-ach-road-node::before{left:15px}.pk-ach-shell .pk-ach-road-card:last-child .pk-ach-road-node::before{right:50%}
+.pk-ach-shell .pk-ach-road-node>span{width:30px;height:30px;display:grid;place-items:center;border:2px solid var(--ach-edge);background:var(--ach-panel-low);color:var(--ach-soft-text);border-radius:50%;font-size:8px;font-weight:800;z-index:1;box-shadow:0 0 0 5px var(--ach-bg)}
+.pk-ach-shell .pk-ach-road-node>span svg{width:16px}.pk-ach-shell .pk-ach-road-node>b{position:relative;font-size:9px;color:#c9baa0;background:var(--ach-bg);padding:0 5px;font-variant-numeric:tabular-nums;z-index:1}.pk-ach-shell .pk-ach-road-node small{font-size:7px}
+.pk-ach-shell .pk-ach-road-card.ready .pk-ach-road-node>span{background:#dfbb71;border-color:#f4d69a;color:#2f2615;box-shadow:0 0 0 5px var(--ach-bg),0 0 14px #d2ac4144}.pk-ach-shell .pk-ach-road-card.claimed .pk-ach-road-node>span{background:var(--ach-claimed);border-color:#73aa87;color:#b8e1c6}.pk-ach-shell .pk-ach-road-card.ready .pk-ach-road-node::before,.pk-ach-shell .pk-ach-road-card.claimed .pk-ach-road-node::before{background:#a08a53}
+.pk-ach-shell .pk-ach-road-prize{flex:1;min-height:255px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;border:1px solid var(--ach-line);border-radius:12px;padding:14px 15px;background:linear-gradient(155deg,var(--ach-panel),var(--ach-panel));overflow:hidden}
+.pk-ach-shell .pk-ach-road-prize::before{content:'';position:absolute;top:33px;left:30px;right:30px;height:105px;pointer-events:none;background:radial-gradient(ellipse,#debc7220,transparent 65%)}
+.pk-ach-shell .pk-ach-road-card.ready .pk-ach-road-prize{border-color:var(--ach-ready-edge);background:linear-gradient(155deg,var(--ach-ready),var(--ach-panel-low));box-shadow:inset 0 1px #ffe2a721}.pk-ach-shell .pk-ach-road-card.claimed .pk-ach-road-prize{border-color:var(--ach-claimed-edge);background:linear-gradient(150deg,var(--ach-claimed),var(--ach-panel-low))}.pk-ach-shell .pk-ach-road-card.master .pk-ach-road-prize{border-color:var(--ach-ready-edge);background:radial-gradient(ellipse at top,#604a2766,transparent 80%),var(--ach-panel-low)}
+.pk-ach-shell .pk-ach-road-card.pk-ach-next .pk-ach-road-prize::after{content:'';position:absolute;inset:0 35% auto;height:3px;background:var(--ach-gold);border-radius:0 0 3px 3px}
+.pk-ach-shell .pk-ach-road-kind{font-size:7px;letter-spacing:0;font-weight:850;color:var(--ach-subtle);min-height:13px}.pk-ach-shell .ready .pk-ach-road-kind{color:#d9c396}
+.pk-ach-shell .pk-ach-reward-art{width:80px;height:80px;display:grid;place-items:center;position:relative;margin:10px 0 5px;transform:rotate(-9deg);color:#f2d492;filter:drop-shadow(0 6px 4px #0005)}
+.pk-ach-shell .pk-ach-reward-art>svg{width:58px;height:58px;stroke-width:1.15}.pk-ach-shell .pk-ach-road-prize.ticket .pk-ach-reward-art{color:#cdb9fa}.pk-ach-shell .pk-ach-road-prize.disc .pk-ach-reward-art{color:#a2caf4}.pk-ach-shell .pk-ach-road-prize.shiny .pk-ach-reward-art{color:#f2d598}.pk-ach-shell .pk-ach-road-prize.trophy .pk-ach-reward-art{color:#ffe08e}
+.pk-ach-shell .pk-ach-road-tier{font-size:7px;letter-spacing:0;color:var(--ach-subtle)}.pk-ach-shell .pk-ach-road-prize>h3{font-size:10px;line-height:1.65;margin:4px 0;color:var(--ach-text)}.pk-ach-shell .pk-ach-road-prize>p{font-size:9px;line-height:1.6;color:var(--ach-muted);margin:4px 0 12px;flex:1}.pk-ach-shell .pk-ach-road-action{width:100%;min-height:36px;display:flex;align-items:center;justify-content:center}.pk-ach-shell .pk-ach-road-action>button{width:100%}
+.pk-ach-shell .pk-ach-road-bottom{margin-top:14px;display:grid;grid-template-columns:auto minmax(100px,1fr);gap:5px 25px;align-items:center;border:1px solid var(--ach-line);background:var(--ach-chrome);border-radius:10px;padding:13px 17px}.pk-ach-shell .pk-ach-road-bottom>div:first-child{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.pk-ach-shell .pk-ach-road-bottom span{font-size:7px;letter-spacing:0;color:var(--ach-subtle)}.pk-ach-shell .pk-ach-road-bottom b{font-size:14px;color:#e3cb94}.pk-ach-shell .pk-ach-road-bottom small{font-size:8px;color:var(--ach-subtle)}.pk-ach-shell .pk-ach-road-bottom p{grid-column:1/-1;margin:0;font-size:8px;color:var(--ach-subtle)}
+.pk-ach-shell .pk-ach-road-progress{height:5px;overflow:hidden;border-radius:5px;background:var(--ach-input)}.pk-ach-shell .pk-ach-road-progress>div{height:100%;background:linear-gradient(90deg,#938057,#e5c27c);border-radius:5px;transition:width .3s}
+.pk-ach-shell .pk-ach-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 24px;border-top:1px solid var(--ach-line);background:var(--ach-chrome);flex-shrink:0;box-shadow:0 -8px 25px #03080e25;z-index:2}
+.pk-ach-shell .pk-ach-wallet{display:flex;gap:10px;align-items:center}.pk-ach-shell .pk-ach-ticket{display:flex;align-items:center;gap:9px;border:1px solid #71618b77;background:linear-gradient(#a98adb0f,#a98adb0f),var(--ach-panel-low);padding:6px 8px;border-radius:9px;color:#c9b4ed}.pk-ach-shell .pk-ach-ticket>span:nth-child(2){display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0}.pk-ach-shell .pk-ach-ticket b{font-size:13px;line-height:1.1;color:#e9ddfa;font-variant-numeric:tabular-nums}.pk-ach-shell .pk-ach-ticket small{font-size:8px}.pk-ach-shell .pk-ach-ticket.shiny{border-color:#a28a4970;background:linear-gradient(#d6b66712,#d6b66712),var(--ach-panel-low);color:#e7c887}.pk-ach-shell .pk-ach-ticket.shiny b{color:#f7e2aa}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .pk-ach-ticket button{background:#ffffff08!important;border:1px solid currentColor!important;color:inherit!important;min-height:31px!important;padding:5px 9px!important;font-size:8px!important}
+.pk-ach-shell .pk-ach-claim-all{display:flex;gap:14px;align-items:center}.pk-ach-shell .pk-ach-claim-all>span{display:flex;flex-direction:column;text-align:right;line-height:1.4}.pk-ach-shell .pk-ach-claim-all>span>b{font-size:13px;color:var(--ach-gold)}.pk-ach-shell .pk-ach-claim-all small{font-size:8px;color:var(--ach-muted)}.pk-ach-shell .pk-ach-claim-all>button{min-height:42px!important}
+.pk-ach-shell .pk-ach-ticket>button{flex:0 0 60px;width:60px}.pk-ach-shell .pk-ach-ticket,.pk-ach-shell .pk-ach-wallet,.pk-ach-shell .pk-ach-claim-all{min-width:0}
+.pk-ach-shell .pk-ach-list-pane,.pk-ach-shell .pk-ach-road-pane,.pk-ach-shell .pk-ach-track,.pk-ach-shell .pk-ach-sidebar{scrollbar-width:thin;scrollbar-color:var(--ach-edge) var(--ach-input)}
+@media(hover:hover){.pk-ach-shell button:not(:disabled):hover{filter:brightness(1.12)}.pk-ach-shell .pk-ach-card:hover{box-shadow:0 6px 16px #0003}.pk-ach-shell .pk-ach-claim:not(:disabled):hover{transform:translateY(-1px)}}
+.pk-ach-shell .pk-ach-just-claimed{animation:pkAchClaim .65s ease-out}
+@keyframes pkAchClaim{0%{box-shadow:0 0 0 2px #efd397,0 0 25px #e0c07150}100%{box-shadow:0 0 0 0 transparent}}
+/* Fix the pre-existing .summary collision only on achievement receipts. */
+:is(#achievementRewardToasts,#johtoAchievementRewardToasts) .achievement-reward-toast.summary{position:relative!important;inset:auto!important;display:block!important;z-index:auto!important;align-items:normal;justify-content:normal}
+@media(max-width:1100px){.pk-ach-shell .pk-ach-collection{grid-template-columns:206px minmax(0,1fr)}.pk-ach-shell .pk-ach-sidebar{padding:20px 9px}.pk-ach-shell .pk-ach-list-pane{padding:18px}.pk-ach-shell .pk-ach-card-main{gap:8px}.pk-ach-shell .pk-ach-road-hero{grid-template-columns:1fr 150px 1fr;gap:9px;padding:20px}.pk-ach-shell .pk-ach-crest{height:160px}.pk-ach-shell .pk-ach-hero-copy>h3{font-size:18px}.pk-ach-shell .pk-ach-claim-all>span{display:none}}
+@media(max-width:980px){
+  :is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay{padding:10px!important;align-items:center!important;overflow:hidden!important}
+  :is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell{height:calc(100dvh - 20px)!important;max-height:calc(100dvh - 20px)!important;border-radius:16px!important;width:100%!important;overflow:hidden!important;padding:0!important;margin:0!important}
+  .pk-ach-shell .pk-ach-header{padding:16px 20px 13px}.pk-ach-shell .pk-ach-summary{padding:0 20px 14px}.pk-ach-shell .pk-ach-metric{padding:0 11px}.pk-ach-shell .pk-ach-metric b{font-size:12px}.pk-ach-shell .pk-ach-metric>span{display:none}.pk-ach-shell .pk-ach-main-tabs{padding:0 18px}.pk-ach-shell .pk-ach-main-tabs>button{min-height:50px;padding:11px 14px}
+  .pk-ach-shell .pk-ach-collection{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}.pk-ach-shell .pk-ach-sidebar{padding:10px 16px;border-right:0;border-bottom:1px solid var(--ach-line);overflow:hidden}.pk-ach-shell .pk-ach-side-label,.pk-ach-shell .pk-ach-side-note{display:none}
+  :is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .achievement-tabs{flex-direction:row!important;overflow-x:auto!important;gap:6px;scrollbar-width:thin;padding-bottom:3px}:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .achievement-tab{width:auto;min-height:39px;flex:0 0 auto;padding:8px 10px;font-size:9px!important}.pk-ach-shell .achievement-tab svg{width:16px;height:16px}.pk-ach-shell .achievement-tab>small{font-size:8px}
+  .pk-ach-shell .pk-ach-filters{grid-template-columns:minmax(0,1fr) 220px}.pk-ach-shell .pk-ach-header-actions{gap:8px}.pk-ach-shell .pk-ach-header-actions>.pk-ach-wallet-top{gap:6px}.pk-ach-shell .pk-ach-header-actions .pk-ach-ticket{gap:6px;padding:5px 7px}.pk-ach-shell .pk-ach-header-actions .pk-ach-ticket small{font-size:8px}.pk-ach-shell .pk-ach-header-actions .pk-ach-ticket>span:first-child svg{width:17px}
+}
+@media(max-width:700px){
+  .pk-ach-shell .pk-ach-close{width:40px;flex-basis:40px}.pk-ach-shell .pk-ach-teaser{min-height:58px}
+  .pk-ach-shell .pk-ach-next-prize{grid-column:1/-1;grid-row:2}
+  :is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay{padding:0!important}
+  :is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell{height:100dvh!important;max-height:100dvh!important;border-radius:0!important;border:0!important;padding-top:env(safe-area-inset-top,0px)!important;padding-bottom:env(safe-area-inset-bottom,0px)!important}
+  .pk-ach-shell .pk-ach-header{padding:14px 15px 11px;gap:10px}.pk-ach-shell .pk-ach-header-emblem{width:41px;height:46px;border-radius:11px}.pk-ach-shell .pk-ach-header-emblem svg{width:26px;height:26px}.pk-ach-shell .pk-ach-heading .pk-ach-eyebrow{font-size:6.5px;letter-spacing:0;gap:5px}.pk-ach-shell .pk-ach-heading h2{font-size:18px!important;gap:9px;margin-top:3px!important;letter-spacing:0}.pk-ach-shell .pk-ach-heading p{font-size:8px}.pk-ach-shell .pk-ach-region{font-size:6.5px;padding:4px 6px;letter-spacing:0}.pk-ach-shell .pk-ach-close span{display:none}:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-close{padding:8px 12px!important;min-height:40px}
+  .pk-ach-shell .pk-ach-summary{padding:0 15px 11px;grid-template-columns:repeat(4,minmax(0,1fr));gap:0}.pk-ach-shell .pk-ach-metric{padding:0 9px}.pk-ach-shell .pk-ach-metric b{font-size:10px;letter-spacing:0;white-space:nowrap}.pk-ach-shell .pk-ach-metric small{font-size:7px;line-height:1.65;margin-top:4px}.pk-ach-shell .pk-ach-metric:last-child{padding-right:0}
+  .pk-ach-shell .pk-ach-main-tabs{padding:0 11px;gap:0}.pk-ach-shell .pk-ach-main-tabs>button{font-size:9px!important;padding:10px 8px;min-height:45px;gap:7px}.pk-ach-shell .pk-ach-main-tabs>button svg{width:17px;height:17px}.pk-ach-shell .pk-ach-main-tabs>button>b{font-size:7px;height:18px;min-width:18px}.pk-ach-shell .pk-ach-tab-star{display:none}
+  .pk-ach-shell .pk-ach-sidebar{padding:7px 12px}.pk-ach-shell .pk-ach-list-pane{padding:13px 13px 22px;scrollbar-gutter:auto}.pk-ach-shell .pk-ach-teaser{padding:11px;gap:10px;margin-bottom:16px}.pk-ach-shell .pk-ach-teaser-main small{font-size:7px;letter-spacing:0}.pk-ach-shell .pk-ach-teaser-main b{font-size:8px;line-height:1.5}.pk-ach-shell .pk-ach-teaser-end{gap:7px}.pk-ach-shell .pk-ach-teaser-end b{display:none}.pk-ach-shell .pk-ach-teaser-icon svg{width:25px;height:25px}
+  .pk-ach-shell .pk-ach-section-head{gap:8px;margin-bottom:11px}.pk-ach-shell .pk-ach-section-head h3{font-size:12px}.pk-ach-shell [data-ach-result-count]{font-size:8px}.pk-ach-shell .pk-ach-sort>span{display:none}.pk-ach-shell .pk-ach-sort select{font-size:8px!important;padding:7px 4px;min-height:36px;max-width:143px}
+  .pk-ach-shell .pk-ach-filters{grid-template-columns:1fr;gap:7px;margin-bottom:12px}.pk-ach-shell .pk-ach-status-filter select{min-height:37px;font-size:9px!important}.pk-ach-shell .pk-ach-search input{min-height:44px;font-size:16px!important}.pk-ach-shell .pk-ach-status-filter{display:block}
+  :is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .achievement-grid{grid-template-columns:1fr!important;gap:11px}:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .pk-ach-card{min-height:235px;padding:15px}.pk-ach-shell .pk-ach-copy h3{font-size:11px}.pk-ach-shell .pk-ach-desc{font-size:9px}.pk-ach-shell .pk-ach-card-footer{gap:8px}.pk-ach-shell .pk-ach-prize>strong{font-size:9px}.pk-ach-shell .pk-ach-card-top{margin-bottom:12px}
+  .pk-ach-shell .pk-ach-header-actions{width:100%;justify-content:flex-end;gap:7px}.pk-ach-shell .pk-ach-header-actions>.pk-ach-wallet-top{width:100%;justify-content:flex-end}.pk-ach-shell .pk-ach-header-actions .pk-ach-ticket{padding:5px 8px;gap:8px}.pk-ach-shell .pk-ach-header-actions .pk-ach-ticket>span:nth-child(2){flex:1;gap:6px}.pk-ach-shell .pk-ach-header-actions .pk-ach-ticket b{font-size:12px}.pk-ach-shell .pk-ach-header-actions .pk-ach-ticket small{font-size:8px}.pk-ach-shell .pk-ach-header-actions>.pk-ach-wallet-top .pk-ach-ticket{flex:1 1 0}
+  .pk-ach-shell .pk-ach-road-pane{padding:14px 12px 22px;scrollbar-gutter:auto}.pk-ach-shell .pk-ach-road-hero{grid-template-columns:minmax(0,1fr) 90px;gap:12px;padding:20px 16px 16px;min-height:0;border-radius:13px}.pk-ach-shell .pk-ach-hero-copy .pk-ach-eyebrow{font-size:6.5px;letter-spacing:0;line-height:1.7}.pk-ach-shell .pk-ach-hero-copy>h3{font-size:18px;letter-spacing:0;margin-top:8px}.pk-ach-shell .pk-ach-hero-copy>p{font-size:9px;line-height:1.65}.pk-ach-shell .pk-ach-hero-art{align-self:start;padding-top:20px}.pk-ach-shell .pk-ach-crest{height:115px}.pk-ach-shell .pk-ach-hero-badges{margin-top:10px}.pk-ach-shell .pk-ach-hero-badges>span{font-size:8px}.pk-ach-shell .pk-ach-next-prize{grid-column:1/-1;padding:13px}.pk-ach-shell .pk-ach-next-prize>h4{font-size:11px}.pk-ach-shell .pk-ach-next-prize>p{font-size:9px}
+  .pk-ach-shell .pk-ach-road-toolbar{padding-top:18px}.pk-ach-shell .pk-ach-road-toolbar h3{font-size:11px}.pk-ach-shell .pk-ach-road-controls>small{display:none}.pk-ach-shell .pk-ach-road-controls button{width:36px;height:36px}.pk-ach-shell .pk-ach-road-controls{gap:5px}
+  :is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .pk-ach-road-card{flex-basis:209px}.pk-ach-shell .pk-ach-road-bottom{grid-template-columns:1fr;padding:12px;gap:10px}.pk-ach-shell .pk-ach-road-bottom>div:first-child{gap:7px}.pk-ach-shell .pk-ach-road-bottom p{font-size:8px}
+}
+@media(max-width:360px){.pk-ach-shell .pk-ach-heading .pk-ach-eyebrow{font-size:6px;letter-spacing:0}.pk-ach-shell .pk-ach-summary{padding-left:12px;padding-right:12px}.pk-ach-shell .pk-ach-metric{padding:0 6px}.pk-ach-shell .pk-ach-metric b{font-size:9px}.pk-ach-shell .pk-ach-metric small{font-size:6.5px}.pk-ach-shell .pk-ach-ticket{padding:5px;gap:5px}.pk-ach-shell .pk-ach-ticket>span:first-child{display:none}.pk-ach-shell .pk-ach-hero-copy>h3{font-size:16px}.pk-ach-shell .pk-ach-road-hero{grid-template-columns:minmax(0,1fr) 72px}}
+@media(max-height:600px) and (min-width:701px){.pk-ach-shell .pk-ach-header{padding:9px 18px;gap:10px}.pk-ach-shell .pk-ach-header-emblem{height:42px;width:42px}.pk-ach-shell .pk-ach-heading p,.pk-ach-shell .pk-ach-heading .pk-ach-eyebrow{display:none}.pk-ach-shell .pk-ach-summary{padding-bottom:9px}.pk-ach-shell .pk-ach-main-tabs>button{min-height:42px;padding-top:8px;padding-bottom:8px}.pk-ach-shell .pk-ach-sidebar{padding-top:6px;padding-bottom:6px}.pk-ach-shell .pk-ach-footer{padding-top:7px;padding-bottom:7px}}
+@media(prefers-reduced-motion:reduce){.pk-ach-shell *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* Typography, wrapping and native controls are isolated to the Logros dialog. */
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay:has(>.pk-ach-shell[data-ach-region="johto"]){background:rgba(8,13,9,.89)!important}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay:has(>.pk-ach-shell[data-ach-region="hoenn"]){background:rgba(3,17,19,.89)!important}
+.pk-ach-shell .pk-ach-eyebrow{flex-wrap:wrap;row-gap:3px}
+.pk-ach-shell .pk-ach-heading h2{flex-wrap:wrap;row-gap:5px}
+.pk-ach-shell .pk-ach-header-emblem{flex-shrink:0}
+.pk-ach-shell .pk-ach-metric small{line-height:1.7}
+.pk-ach-shell .pk-ach-main-tabs>button{min-width:0;text-align:left}
+.pk-ach-shell .pk-ach-section-head{flex-wrap:wrap;align-items:flex-start}
+.pk-ach-shell .pk-ach-section-head>div{min-width:0}
+.pk-ach-shell .pk-ach-sort{flex-wrap:wrap;max-width:100%}
+.pk-ach-shell .pk-ach-copy h3,.pk-ach-shell .pk-ach-road-prize>h3,.pk-ach-shell .pk-ach-hero-copy>h3,.pk-ach-shell .pk-ach-next-prize>h4{overflow-wrap:anywhere;line-height:1.65}
+.pk-ach-shell .pk-ach-state,.pk-ach-shell .pk-ach-foot-state{line-height:1.7}
+.pk-ach-shell .pk-ach-card-footer{flex-wrap:wrap}
+.pk-ach-shell .pk-ach-prize{flex:1 1 120px}
+.pk-ach-shell .pk-ach-progress-label{flex-wrap:wrap;align-items:baseline}
+.pk-ach-shell .pk-ach-progress-label>b{overflow-wrap:anywhere}
+.pk-ach-shell .pk-ach-road-node>span{flex-shrink:0}
+.pk-ach-shell .pk-ach-road-prize>p{overflow-wrap:anywhere;line-height:1.8}
+.pk-ach-shell .pk-ach-road-toolbar>div:first-child{min-width:0}
+.pk-ach-shell .pk-ach-road-controls{flex-shrink:0}
+.pk-ach-shell .pk-ach-ticket b{line-height:1.6;overflow-wrap:anywhere}
+.pk-ach-shell .pk-ach-footer{flex-wrap:wrap}
+.pk-ach-shell .pk-ach-claim-all{margin-left:auto;max-width:100%}
+.pk-ach-shell .pk-ach-claim-all>button{white-space:normal;text-wrap:balance}
+.pk-ach-shell .pk-ach-crest>path:first-child{fill:var(--ach-panel-low);stroke:var(--ach-gold)}
+.pk-ach-shell .pk-ach-main-tabs>button.active{color:var(--ach-accent);border-bottom-color:var(--ach-accent);background:linear-gradient(0deg,rgba(var(--ach-rgb),.08),transparent)}
+.pk-ach-shell .pk-ach-overall>div{background:linear-gradient(90deg,rgba(var(--ach-rgb),.5),var(--ach-accent))}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell select{background:var(--ach-input)!important;color:var(--ach-soft-text)!important;border:1px solid var(--ach-line)!important;box-shadow:none!important;line-height:1.7}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell option{background:var(--ach-input)!important;color:var(--ach-text)!important}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .pk-ach-search input{background:transparent!important;color:var(--ach-text)!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .pk-ach-search input::placeholder{color:var(--ach-subtle)!important;opacity:1}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .pk-ach-ticket button{font-size:8px!important;min-height:36px!important;flex-shrink:0}
+:is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell .pk-ach-close{gap:10px}
+:is(#achievementRewardToasts,#johtoAchievementRewardToasts) .achievement-reward-toast{font-family:"PokeSenda Pokemon Classic",monospace!important;background:linear-gradient(145deg,var(--ach-panel),var(--ach-bg));border-color:var(--ach-edge);border-left-color:#72d79c}
+:is(#achievementRewardToasts,#johtoAchievementRewardToasts) .achievement-reward-toast.summary{background:linear-gradient(145deg,var(--ach-ready),var(--ach-bg));border-color:var(--ach-ready-edge);border-left-color:var(--ach-gold)}
+:is(#achievementRewardToasts,#johtoAchievementRewardToasts) .achievement-reward-toast-title{color:var(--ach-text)}
+:is(#achievementRewardToasts,#johtoAchievementRewardToasts) .achievement-reward-toast-prize{background:var(--ach-input);border-color:var(--ach-line);color:var(--ach-gold)}
+:is(#achievementRewardToasts,#johtoAchievementRewardToasts) .achievement-reward-toast-hint,:is(#achievementRewardToasts,#johtoAchievementRewardToasts) .achievement-reward-toast-close{color:var(--ach-muted)}
+@media(max-width:980px){
+  .pk-ach-shell .pk-ach-road-hero{grid-template-columns:minmax(0,1fr) 140px minmax(0,1fr)}
+  .pk-ach-shell .pk-ach-hero-copy>h3{font-size:16px}
+}
+@media(max-width:700px){
+  .pk-ach-shell .pk-ach-main-tabs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr)}
+  .pk-ach-shell .pk-ach-main-tabs>button{font-size:8px!important;line-height:1.8;padding:9px 6px}
+  .pk-ach-shell .pk-ach-summary small{font-size:7px}
+  .pk-ach-shell .pk-ach-sort{width:100%;flex-wrap:nowrap}
+  .pk-ach-shell .pk-ach-sort>span{display:block;font-size:8px}
+  .pk-ach-shell .pk-ach-sort select{max-width:100%;flex:1;min-width:0;font-size:8px!important}
+  .pk-ach-shell .pk-ach-search input{font-size:16px!important}
+  .pk-ach-shell .pk-ach-status-filter select{font-size:8px!important;min-height:42px}
+  .pk-ach-shell .pk-ach-road-hero{grid-template-columns:minmax(0,1fr) 90px}
+  .pk-ach-shell .pk-ach-hero-copy>h3{font-size:17px}
+  .pk-ach-shell .pk-ach-road-toolbar{flex-wrap:wrap;row-gap:10px}
+  .pk-ach-shell .pk-ach-ticket{padding:5px 7px;gap:6px}
+  .pk-ach-shell .pk-ach-ticket>span:nth-child(2){gap:2px}
+  .pk-ach-shell .pk-ach-ticket small{font-size:7px}
+  .pk-ach-shell .pk-ach-ticket b{font-size:11px}
+  .pk-ach-shell .pk-ach-claim-all{margin-left:0;max-width:none}
+}
+@media(max-width:420px){
+  .pk-ach-shell .pk-ach-summary{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:10px}
+  .pk-ach-shell .pk-ach-metric:nth-child(2){border-right:0}
+  .pk-ach-shell .pk-ach-metric:nth-child(3){padding-left:0}
+  .pk-ach-shell .pk-ach-metric b{font-size:12px;letter-spacing:0}
+  .pk-ach-shell .pk-ach-metric small{font-size:7px}
+  .pk-ach-shell .pk-ach-main-tabs>button>span[data-ach-symbol]{display:none}
+  .pk-ach-shell .pk-ach-ticket>span:first-child{display:none}
+  .pk-ach-shell .pk-ach-road-hero{grid-template-columns:minmax(0,1fr) 72px}
+  .pk-ach-shell .pk-ach-hero-copy>h3{font-size:16px}
+}
+@media(max-height:500px){
+  :is(body,#pkRegionRuntimeRoot) .pk-achievements#achievementsOverlay .pk-ach-shell{overflow-y:auto!important}
+  .pk-ach-shell .pk-ach-content{flex:0 0 320px;min-height:320px}
+  .pk-ach-shell .pk-ach-heading p,.pk-ach-shell .pk-ach-heading .pk-ach-eyebrow{display:none}
+}
+
+/* Apply the bundled face explicitly, including controls and dynamically cloned regions. */
+#achievementsOverlay.pk-achievements .pk-ach-shell,
+#achievementsOverlay.pk-achievements .pk-ach-shell *,
+:is(#achievementRewardToasts,#johtoAchievementRewardToasts) .achievement-reward-toast,
+:is(#achievementRewardToasts,#johtoAchievementRewardToasts) .achievement-reward-toast *{font-family:"PokeSenda Pokemon Classic",monospace!important;font-synthesis:none}
+

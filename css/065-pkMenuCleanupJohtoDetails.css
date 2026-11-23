@@ -1,0 +1,7 @@
+
+/* Detalle visual final: Novedades conserva su botón; las notas y el Premium ya no ocupan el menú principal. */
+#mainMenu .menu-patch-card,#mainMenu .menu-timed-gacha,
+#pkRegionRuntimeRoot #mainMenu .menu-patch-card,#pkRegionRuntimeRoot #mainMenu .menu-timed-gacha{display:none!important}
+
+
+

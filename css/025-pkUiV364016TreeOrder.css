@@ -1,0 +1,23 @@
+
+/* V36.40.16 · Orden visual del Árbol por sectores. */
+.poe-tree-canvas.v24 .tree-wheel::before,
+.poe-tree-canvas.v24 .tree-wheel::after{
+  content:"";position:absolute;left:50%;top:50%;width:2px;height:100%;pointer-events:none;
+  transform-origin:50% 50%;
+  background:linear-gradient(to bottom,transparent 0 7%,rgba(205,220,240,.13) 20% 80%,transparent 93% 100%);
+  box-shadow:0 0 8px rgba(140,165,200,.06);
+}
+.poe-tree-canvas.v24 .tree-wheel::before{transform:translate(-50%,-50%) rotate(45deg)}
+.poe-tree-canvas.v24 .tree-wheel::after{transform:translate(-50%,-50%) rotate(-45deg)}
+.poe-tree-canvas.v24 .crosshair{opacity:.22}
+.poe-tree-canvas.v24 .poe-tree-lines line{transition:opacity .15s,stroke-width .15s}
+.poe-tree-canvas.v24 .poe-tree-lines line.cross-branch{
+  stroke-width:2.5!important;
+  stroke-dasharray:9 10;
+  opacity:.075!important;
+}
+.poe-tree-canvas.v24 .poe-tree-lines line.cross-branch.active{opacity:.18!important}
+.poe-tree-canvas.v24 .poe-tree-lines line.cross-branch.maxed{opacity:.30!important}
+.poe-tree-canvas.v24 .poe-tree-lines line:not(.cross-branch){opacity:.24}
+.poe-tree-canvas.v24 .poe-tree-lines line:not(.cross-branch).active{opacity:.52}
+.poe-tree-canvas.v24 .poe-tree-lines line:not(.cross-branch).maxed{opacity:.72}

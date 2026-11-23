@@ -1,0 +1,24 @@
+
+/* V36.40.25 · sprites oficiales de MT */
+.tm-menu-icon{background-image:url("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-case.png")!important;background-size:contain!important;background-repeat:no-repeat!important;background-position:center!important}
+.tm-official-sprite{position:relative;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:34px;height:34px;vertical-align:middle}
+.tm-official-sprite img{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 3px 4px rgba(0,0,0,.45))}
+.tm-official-sprite .tm-sprite-fallback{display:none;align-items:center;justify-content:center;width:100%;height:100%;font-size:21px}
+.tm-official-sprite.fallback .tm-sprite-fallback{display:flex}
+.tm-case-sprite img{image-rendering:pixelated}
+.help-mt-official-icon{width:34px!important;height:34px!important;margin:0!important}
+.help-mt-title{display:flex;align-items:center;gap:7px}.help-mt-title .ui-title-icon{margin-right:0!important}
+.mt-gacha-head h2,.tm-equip-head h2{display:flex;align-items:center;gap:8px}
+.mt-gacha-disc-content{display:flex;align-items:center;justify-content:center;gap:14px;text-align:left}
+.mt-gacha-disc-copy{min-width:0}.mt-gacha-disc-copy b{white-space:normal}
+.tm-gacha-result-sprite{width:58px;height:58px}.tm-gacha-ready-sprite{width:54px;height:54px}
+.mt-gacha-tier-row{grid-template-columns:34px 110px 70px 1fr!important}.tm-gacha-odds-sprite{width:27px;height:27px}.mt-gacha-tier-row>span:last-child{min-width:0}
+.mt-inventory-gacha-main{display:flex;align-items:center;gap:9px;min-width:0}.tm-gacha-card-sprite{width:38px;height:38px}
+.tm-collection-emblem{border-radius:12px!important}.tm-collection-case-sprite{width:34px;height:34px}
+.tm-owned-card-layout{display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px;align-items:center}.tm-owned-sprite{width:42px;height:42px}.tm-owned-card-copy{min-width:0}
+.tm-owned-card-head{align-items:center}.tm-owned-card-head>b{display:block!important;margin:0!important}
+.tm-equip-feature-sprite{width:44px;height:44px;margin-right:2px}.tm-title-sprite{width:32px;height:32px}.tm-equip-head .tm-title-sprite{width:34px;height:34px}
+.tm-quick-sprite-btn{display:inline-flex!important;align-items:center!important;gap:5px!important}.tm-inline-button-sprite{width:20px;height:20px}
+.achievement-tm-choice-main{display:grid;grid-template-columns:42px minmax(0,1fr);gap:9px;align-items:center}.achievement-tm-sprite{width:38px;height:38px}.achievement-tm-choice-main b{margin-bottom:4px!important}
+.achievement-tm-detail-title{display:flex;align-items:flex-start;gap:10px;min-width:0}.achievement-tm-detail-sprite{width:48px;height:48px}.achievement-tm-detail-title>div{min-width:0}
+@media(max-width:700px){.mt-gacha-tier-row{grid-template-columns:30px 88px 58px 1fr!important}.tm-gacha-result-sprite{width:48px;height:48px}.tm-owned-card-layout{grid-template-columns:42px minmax(0,1fr)}.tm-owned-sprite{width:36px;height:36px}}

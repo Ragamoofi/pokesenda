@@ -1,0 +1,148 @@
+
+/* Pasada final móvil de lanzamiento. Solo presentación/responsive; no altera balance ni progreso. */
+@media(max-width:980px){
+  html,body{width:100%!important;max-width:100%!important;overflow-x:hidden!important}
+  body{min-height:100dvh!important;padding-bottom:calc(var(--pk-mobile-dock-h) + var(--pk-safe-bottom))!important}
+  body.pk-mobile-modal-open{padding-bottom:0!important}
+  body>.game,#pkRegionRuntimeRoot,#pkGlobalInfiniteRoot,#pkRegionRuntimeRoot .game,#pkGlobalInfiniteRoot .game{max-width:100vw!important;min-width:0!important}
+  .game{min-height:100dvh!important}
+  .top,.top-meta,.top-run,.top-auto,.main,.field,.right{min-width:0!important;max-width:100vw!important}
+  .top{padding-left:max(7px,env(safe-area-inset-left,0px))!important;padding-right:max(7px,env(safe-area-inset-right,0px))!important}
+  .top-meta,.top-auto{scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+  .top-meta>*{scroll-snap-align:start}
+  .top-run{align-items:center!important}
+  .top-run>.btn{overflow-wrap:anywhere}
+  .quick-speed-controls{flex-wrap:nowrap!important}
+
+  /* Campo y panel derecho: menos altura muerta y lectura táctil más limpia. */
+  .field{height:clamp(470px,64dvh,650px)!important;min-height:470px!important}
+  .right{padding-bottom:18px!important}
+  .right .section-title{position:relative!important;top:auto!important}
+  .formation-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+  .formation-slot{min-width:0!important;min-height:140px!important;padding:7px!important}
+  .formation-slot .formation-pokemon img{width:68px!important;height:68px!important}
+  .formation-slot .formation-pokemon b{max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .roster-grid{grid-template-columns:1fr!important}
+  .damage-card,.drop-card,.log,.capture-log{max-width:100%!important}
+
+  /* Ventanas: usar el viewport dinámico real y respetar notch/home indicator. */
+  .overlay{width:100vw!important;height:100dvh!important;max-height:100dvh!important;padding:calc(6px + var(--pk-safe-top)) max(6px,env(safe-area-inset-right,0px)) calc(6px + var(--pk-safe-bottom)) max(6px,env(safe-area-inset-left,0px))!important;overflow:auto!important;overscroll-behavior:contain}
+  .overlay>.modal-box,.overlay>.menu-box,.overlay>.center-card,
+  .pokedex-modal,.pc-box-modal,.tree-modal,.achievement-modal,
+  .pk-options-box,.player-profile-box,.pk-players-box,.region-select-box,
+  .save-transfer-box,.pk-cloud-box,.pk-cloud-conflict-box,.pk-casino-box{
+    width:100%!important;max-width:100%!important;min-width:0!important;max-height:calc(100dvh - var(--pk-safe-top) - var(--pk-safe-bottom) - 12px)!important;box-sizing:border-box!important;margin:0!important
+  }
+  .pokemon-detail-head,.pk-options-head,.save-transfer-head,.pk-cloud-head,.pk-casino-head,.region-select-head{min-width:0!important}
+  .pokemon-detail-head>div:first-child,.pk-options-head>div:first-child,.save-transfer-head>div:first-child,.pk-cloud-head>div:first-child,.pk-casino-head>div:first-child{min-width:0!important}
+  .pokemon-detail-head h2,.pk-options-head h2,.save-transfer-head h2,.pk-cloud-head h2,.pk-casino-head h2{overflow-wrap:anywhere}
+  .modal-box input,.modal-box select,.modal-box textarea,.loot-panel input,.loot-panel select{max-width:100%!important}
+
+  /* Opciones: una sola columna y cabecera siempre recuperable. */
+  #optionsOverlay .pk-options-box{padding:10px!important}
+  #optionsOverlay .pk-options-head{position:sticky;top:0;z-index:12;background:linear-gradient(180deg,#14284d 82%,rgba(20,40,77,.94));padding:5px 0 9px!important;margin:0 0 9px!important}
+  #optionsOverlay .pk-options-section{padding:10px!important}
+  #optionsOverlay .option-row{gap:9px!important;padding:10px!important}
+  #optionsOverlay .pk-options-actions{grid-template-columns:1fr!important}
+
+  /* Pokédex / Caja: dos columnas constantes, barras que no empujan el ancho. */
+  .pokedex-tools,.pc-box-tools{min-width:0!important}
+  .pokedex-grid,.pc-box-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+  .dex-card,.pc-card{min-width:0!important}
+  .pokedex-search,.pc-box-search,.pk-public-dex-toolbar{min-width:0!important;max-width:100%!important}
+  #pkGlobalDexOverlay .modal-box,#pkGlobalDexDetail .modal-box{width:100%!important;max-width:100%!important}
+  #pkGlobalDexOverlay .pokedex-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+
+  /* Perfil propio + Comunidad: tabs compactos y datos sin columnas imposibles. */
+  #playerProfileOverlay .player-profile-box,#pkPlayersOverlay .pk-players-box{padding:9px!important}
+  #playerProfileOverlay .pk-self-profile-copy .profile-name{font-size:21px!important}
+  #playerProfileOverlay .pk-self-profile-subtitle{font-size:9px!important}
+  #playerProfileOverlay .pk-self-global-strip,.pk-public-global-strip{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+  #playerProfileOverlay .pk-self-global-strip>.pk-self-metric,#playerProfileOverlay .pk-self-global-strip>.pk-self-metric:nth-child(4),#playerProfileOverlay .pk-self-global-strip>.pk-self-metric:nth-child(5),#playerProfileOverlay .pk-self-global-strip>.pk-self-metric:last-child{grid-column:span 1!important;min-height:58px!important}
+  .pk-public-region-tabs,#playerProfileOverlay .pk-self-profile-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important;padding:5px!important}
+  .pk-public-region-tab{min-height:46px!important;padding:6px 5px!important;gap:5px!important;justify-content:center!important;text-align:center!important}
+  .pk-public-region-tab-icon{font-size:12px!important}
+  .pk-public-region-tab-copy{align-items:center!important;min-width:0!important}
+  .pk-public-region-tab-title{font-size:8.5px!important}
+  .pk-public-region-panel{padding:9px!important;margin-top:7px!important}
+  .pk-public-region-head{gap:7px!important;padding-bottom:8px!important}
+  .pk-public-region-head h3{font-size:13px!important}
+  .pk-public-region-stats,.pk-public-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .pk-public-team,.profile-current-team{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+  .pk-public-badges,.profile-badges{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important}
+  #playerProfileOverlay .pk-public-badge{min-height:94px!important;padding:5px 2px!important}
+  #playerProfileOverlay .pk-public-badge img,#pkPlayersOverlay .pk-public-badge img{max-width:34px!important;max-height:34px!important}
+  #pkPlayersOverlay .pk-public-badge{min-height:70px!important}
+  .pk-public-hero{gap:9px!important}
+  .pk-public-trainer{max-width:100%!important}
+
+  /* Selector regional: cabecera compacta y tarjetas sin cortes. */
+  #regionSelectOverlay .region-select-box{max-height:calc(100dvh - 12px)!important;overflow:auto!important}
+  #regionSelectOverlay .region-select-head{position:sticky;top:0;z-index:8;background:var(--pk-mobile-region-head-bg,linear-gradient(120deg,#11284b,#171a37));padding:10px!important}
+  #regionSelectOverlay .region-select-body{padding:10px!important}
+  #regionSelectOverlay .region-card-grid{grid-template-columns:1fr!important;gap:9px!important}
+  #regionSelectOverlay .region-card{min-height:0!important}
+  #regionSelectOverlay .region-card-top{min-height:90px!important;padding:14px!important}
+  #regionSelectOverlay .region-card-info{padding:12px 14px 14px!important}
+  #regionSelectOverlay .region-feature-row{flex-wrap:wrap!important}
+
+  /* Casino / Cloud / Transferencia: pantalla útil completa y controles accesibles. */
+  #pkCasinoOverlay .pk-casino-box,#pkCloudOverlay .pk-cloud-box,#saveTransferOverlay .save-transfer-box{border-radius:12px!important;padding:9px!important;max-height:calc(100dvh - 12px)!important;overflow:auto!important}
+  #pkCasinoOverlay .pk-casino-head,#pkCloudOverlay .pk-cloud-head,#saveTransferOverlay .save-transfer-head{position:sticky;top:-9px;z-index:15;padding:9px 2px 8px!important;background:var(--pk-mobile-system-head-bg,linear-gradient(180deg,#132a55 82%,rgba(19,42,85,.94)));margin-bottom:8px!important}
+  #pkCasinoOverlay .pk-casino-head .btn,#pkCloudOverlay .pk-cloud-head .btn,#saveTransferOverlay .save-transfer-head .btn{flex:0 0 auto!important}
+  .pk-casino-dashboard{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .pk-casino-tabs{position:sticky;top:54px;z-index:12;background:var(--pk-mobile-tabs-bg,#0b1831);padding:4px 0!important}
+  .pk-casino-money-row{align-items:stretch!important}
+  .pk-casino-money-row .btn,.pk-casino-custom{flex:1 1 92px!important;min-width:0!important;width:auto!important}
+  .pk-roulette-layout{grid-template-columns:1fr!important}
+  .pk-roulette-board{min-width:0!important}
+  .pk-cloud-linked-summary{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .pk-cloud-actions,.save-transfer-grid{grid-template-columns:1fr!important}
+  .pk-cloud-qr-wrap{grid-template-columns:1fr!important}
+
+  /* Infinita Global: Caja y cambio de equipo dejan de heredar anchos de escritorio. */
+  #pkGlobalInfiniteRoot #pkGlobalBoxOverlay .pk-global-box-modal,
+  #pkGlobalInfiniteRoot #pkGlobalSwapOverlay .modal-box{width:100%!important;max-width:100%!important;max-height:calc(100dvh - 12px)!important;border-radius:12px!important;padding:9px!important;overflow:auto!important}
+  #pkGlobalInfiniteRoot .formation-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #pkGlobalInfiniteRoot .pk-global-swap-choice{grid-template-columns:minmax(0,1fr) 50px minmax(0,1fr)!important;gap:5px!important;padding:7px!important}
+  #pkGlobalInfiniteRoot .pk-global-swap-choice img{width:46px!important;height:46px!important}
+  #pkGlobalInfiniteRoot .pk-global-swap-choice b{font-size:7.5px!important}
+
+  /* Logros, historial y paneles auxiliares. */
+  .achievement-summary{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .achievement-grid{grid-template-columns:1fr!important}
+  .patch-history-toggle-row{position:static!important}
+  .ux-context-panel,.info-panel{height:100dvh!important;max-height:100dvh!important}
+
+  /* Dock: no tapar modales ni elementos del sistema. */
+  .pk-mobile-dock{padding-left:max(5px,env(safe-area-inset-left,0px))!important;padding-right:max(5px,env(safe-area-inset-right,0px))!important}
+  body.pk-mobile-modal-open .pk-mobile-dock,body.pk-mobile-modal-open .pk-mobile-more,body.pk-mobile-modal-open .pk-mobile-tip{display:none!important}
+}
+
+@media(max-width:430px){
+  /* Mantener Formación 2x3 incluso en la mayoría de teléfonos; 1 columna era excesivamente larga. */
+  .formation-grid,#pkGlobalInfiniteRoot .formation-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .formation-slot{min-height:132px!important;padding:6px!important}
+  .formation-slot .formation-pokemon img{width:60px!important;height:60px!important}
+  .formation-slot .formation-pokemon b{font-size:9.5px!important}
+  .formation-slot .formation-pokemon small{font-size:7px!important}
+  .pk-public-badges,.profile-badges{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  .pk-public-region-tab{padding:5px 3px!important;min-height:43px!important}
+  .pk-public-region-tab-icon{display:none!important}
+  .pk-public-region-tab-title{font-size:8px!important}
+  .pk-casino-head h2,.pk-cloud-head h2,.save-transfer-head h2{font-size:16px!important}
+  .pk-casino-head small,.pk-cloud-head p,.save-transfer-head p{font-size:8px!important}
+}
+
+@media(max-width:350px){
+  .formation-grid,#pkGlobalInfiniteRoot .formation-grid{grid-template-columns:1fr!important}
+  .pokedex-grid,.pc-box-grid,#pkGlobalDexOverlay .pokedex-grid{grid-template-columns:1fr!important}
+  .pk-public-badges,.profile-badges{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .pk-public-region-tabs,#playerProfileOverlay .pk-self-profile-tabs{grid-template-columns:1fr!important}
+}
+
+@media(max-width:980px) and (orientation:landscape){
+  .overlay>.modal-box,.overlay>.menu-box,.overlay>.center-card,.pk-options-box,.player-profile-box,.pk-players-box,.region-select-box,.pk-casino-box,.pk-cloud-box,.save-transfer-box{max-height:calc(100dvh - 8px)!important}
+  .field{height:calc(100dvh - 112px)!important;min-height:330px!important}
+  .pk-public-region-tabs,#playerProfileOverlay .pk-self-profile-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}

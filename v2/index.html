@@ -2,12 +2,12 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<script src="js/000-pkNuevaAislamiento.js"></script>
+<script src="js/000-pkV2Aislamiento.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="theme-color" content="#07142d" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<title>PokéSenda · Versión nueva</title>
+<title>PokéSenda V2</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2229%22%20fill%3D%22%23fff%22%20stroke%3D%22%23121820%22%20stroke-width%3D%225%22%2F%3E%0A%3Cpath%20d%3D%22M4%2030a28%2028%200%200%201%2056%200H4z%22%20fill%3D%22%23e83f3f%22%2F%3E%0A%3Cpath%20d%3D%22M4%2030h56v6H4z%22%20fill%3D%22%23121820%22%2F%3E%0A%3Ccircle%20cx%3D%2232%22%20cy%3D%2233%22%20r%3D%2210%22%20fill%3D%22%23fff%22%20stroke%3D%22%23121820%22%20stroke-width%3D%225%22%2F%3E%0A%3Ccircle%20cx%3D%2232%22%20cy%3D%2233%22%20r%3D%224%22%20fill%3D%22%23dfe8f2%22%2F%3E%0A%3C%2Fsvg%3E">
 <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2229%22%20fill%3D%22%23fff%22%20stroke%3D%22%23121820%22%20stroke-width%3D%225%22%2F%3E%0A%3Cpath%20d%3D%22M4%2030a28%2028%200%200%201%2056%200H4z%22%20fill%3D%22%23e83f3f%22%2F%3E%0A%3Cpath%20d%3D%22M4%2030h56v6H4z%22%20fill%3D%22%23121820%22%2F%3E%0A%3Ccircle%20cx%3D%2232%22%20cy%3D%2233%22%20r%3D%2210%22%20fill%3D%22%23fff%22%20stroke%3D%22%23121820%22%20stroke-width%3D%225%22%2F%3E%0A%3Ccircle%20cx%3D%2232%22%20cy%3D%2233%22%20r%3D%224%22%20fill%3D%22%23dfe8f2%22%2F%3E%0A%3C%2Fsvg%3E">
 
@@ -157,7 +157,7 @@
 <div id="pkBootLoader" class="pk-boot-loader" role="status" aria-live="polite">
   <div class="pk-boot-card">
     <div class="pk-boot-ball" aria-hidden="true"><span></span></div>
-    <div class="pk-boot-title">POKÉSENDA</div>
+    <div class="pk-boot-title">POKÉSENDA V2</div>
     <div class="pk-boot-beta">BETA 1.0</div>
     <div id="pkBootStatus" class="pk-boot-status">Cargando recursos…</div>
     <div class="pk-boot-progress"><i></i></div>
@@ -199,9 +199,9 @@
 
 <div id="mainMenu" class="overlay">
   <div class="menu-box">
-    <div class="menu-logo">PokéSenda</div>
+    <div class="menu-logo">PokéSenda <span class="pk-v2-mark">V2</span></div>
     <div class="menu-sub">Aventura idle · Explora, entrena y conquista regiones</div>
-    <div class="pk-nueva-tag" title="Esta versión guarda sus partidas aparte: la versión clásica no se toca.">🧭 Versión nueva · Senda Viva (beta)</div>
+    <div class="pk-nueva-tag" title="Esta versión guarda sus partidas aparte: la versión clásica no se toca.">🧭 Senda Viva · beta</div>
     <section class="pk-menu-region-select" aria-label="Selecciona la región que quieres jugar">
       <div class="pk-menu-region-head">
         <div><span>REGIÓN</span><b>Elige tu aventura</b></div>
@@ -282,7 +282,7 @@
 <div id="pkFirstWelcomeOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="pkFirstWelcomeTitle">
   <div class="modal-box pk-first-welcome" onclick="event.stopPropagation()">
     <div class="pk-first-welcome-kicker">🌿 Tu aventura comienza</div>
-    <h2 id="pkFirstWelcomeTitle" class="pk-first-welcome-title">BIENVENIDO A POKÉSENDA</h2>
+    <h2 id="pkFirstWelcomeTitle" class="pk-first-welcome-title">BIENVENIDO A POKÉSENDA V2</h2>
     <p class="pk-first-welcome-lead"><b>PokéSenda</b> es una aventura Pokémon de expediciones y progresión: armas tu equipo, recorres rutas, derrotas enemigos y jefes, capturas nuevos Pokémon, los entrenas, evolucionas y mejoras tu formación mientras desbloqueas sistemas cada vez más profundos.</p>
     <div class="pk-first-welcome-steps">
       <div class="pk-first-welcome-step"><b>1 · Elige compañero</b><span>Ahora escogerás tu Pokémon inicial. Será el primer miembro de tu aventura.</span></div>
@@ -297,7 +297,7 @@
 <div id="patchNotesOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="patchNotesTitle">
   <div class="modal-box patch-notes-modal">
     <div class="patch-notes-head">
-      <div><h2 id="patchNotesTitle">📝 Novedades de PokéSenda</h2><small>Kanto + Johto + Hoenn disponibles · 3 regiones · Infinita Global</small></div>
+      <div><h2 id="patchNotesTitle">📝 Novedades de PokéSenda V2</h2><small>Kanto + Johto + Hoenn disponibles · 3 regiones · Infinita Global</small></div>
       <button id="patchNotesCloseBtn" class="btn" type="button">Cerrar</button>
     </div>
     <div class="patch-notes-body">

@@ -8297,6 +8297,67 @@ Esta compra NO consume ni reinicia tu Gachapon gratuito de 8 horas.`,confirmText
   }
   const sendaBaseRenderEverything=renderEverything;
   renderEverything=function(...a){const r=sendaBaseRenderEverything(...a);sendaRenderHud();return r;};
+  /* =====================================================================
+     V2 · Conexión con el motor de escena (js/200-pk2-stage.js)
+     El motor del juego sigue calculando todo igual; aquí solo se le avisa
+     a la escena de lo que pasa para dibujar terreno, clima y efectos.
+     ===================================================================== */
+  const PK2=()=>window.PK2Stage;
+  function pk2Biome(){
+    if(isInfiniteMode())return "cosmos";
+    const hoenn=!!window.PokeSendaRegionBoot?.isHoennClone,r=state?.currentRoute;
+    if(r==="route2")return hoenn?"volcano":"cave";
+    if(r==="route3")return hoenn?"islands":"coast";
+    return hoenn?"jungle":"forest";
+  }
+  function pk2Sync(){
+    const st=PK2();if(!st)return;const field=$("field");if(!field||!st.mount(field))return;
+    st.setEnabled(state?.options?.animations!==false);
+    st.setScene({biome:pk2Biome(),seed:1+ROUTE_ORDER.indexOf(state?.currentRoute)+(window.PokeSendaRegionBoot?.isHoennClone?10:0),weather:run?.senda?.weather||"clear",active:!!run,distance:run?Number(run.distance||0):0});
+  }
+  const pk2BaseRenderFrame=renderFrame;
+  renderFrame=function(...a){const r=pk2BaseRenderFrame(...a);if(!pkBackgroundCatchingUp)pk2Sync();return r;};
+  const pk2BaseRenderEverything=renderEverything;
+  renderEverything=function(...a){const r=pk2BaseRenderEverything(...a);if(!pkBackgroundCatchingUp)pk2Sync();return r;};
+
+  const pk2BaseAllyAttack=animateAllyAttack;
+  animateAllyAttack=function(id,uid,moveType){
+    const st=PK2();if(!st||pkBackgroundCatchingUp||!state.options.animations)return pk2BaseAllyAttack(id,uid,moveType);
+    const s=$("avatar-"+id),t=$("enemyAvatar-"+uid);if(!t)return;pulseClass(s,"attack-forward",300);
+    st.attack(s,t,moveType||FAMILIES[id]?.attackType||"normal",{silent:true});
+  };
+  const pk2BaseEnemyAttack=animateEnemyAttack;
+  animateEnemyAttack=function(enemy,targetIds,isArea){
+    const st=PK2();if(!st||pkBackgroundCatchingUp||!state.options.animations)return pk2BaseEnemyAttack(enemy,targetIds,isArea);
+    const s=$("enemyAvatar-"+enemy.uid);if(!s)return;const type=enemy.attackType||enemy.types?.[0]||"normal";
+    pulseClass(s,isArea?"area-cast":"enemy-melee-cast",isArea?350:320);if(isArea)st.burstAt(s,type);
+    (isArea?targetIds:targetIds.slice(0,1)).forEach(id=>{const t=$("avatar-"+id);if(t)st.attack(s,t,type,{silent:true});});
+  };
+  // Impactos con la información real del golpe (crítico, supereficaz) sincronizados con la llegada del proyectil.
+  const PK2_IMPACT_DELAY=190;
+  const pk2BaseHitEnemy=pkFxHitEnemy;
+  pkFxHitEnemy=function(e,amount,meta){
+    pk2BaseHitEnemy(e,amount,meta);const st=PK2();if(!st||pkBackgroundCatchingUp||!e||meta?.status)return;
+    const m=meta||{};setTimeout(()=>{const el=$("enemyAvatar-"+e.uid);if(el)st.impactOn(el,m.mtype||"normal",{crit:!!m.crit,eff:m.eff||1});},PK2_IMPACT_DELAY);
+  };
+  const pk2BaseHitAlly=pkFxHitAlly;
+  pkFxHitAlly=function(id,amount,meta){
+    pk2BaseHitAlly(id,amount,meta);const st=PK2();if(!st||pkBackgroundCatchingUp||meta?.status)return;
+    const m=meta||{};setTimeout(()=>{const el=$("avatar-"+id);if(el)st.impactOn(el,m.mtype||"normal",{eff:m.eff||1});},PK2_IMPACT_DELAY);
+  };
+  const pk2BaseHealAlly=pkFxHealAlly;
+  pkFxHealAlly=function(id,amount){pk2BaseHealAlly(id,amount);if(!pkBackgroundCatchingUp&&Number(amount)>0)PK2()?.heal($("avatar-"+id));};
+  const pk2BaseKillEnemy=killEnemy;
+  killEnemy=function(killerId,enemy){
+    let rect=null;if(!pkBackgroundCatchingUp&&enemy?.alive){const el=$("enemyAvatar-"+enemy.uid)?.querySelector("img");if(el)rect=el.getBoundingClientRect();}
+    const r=pk2BaseKillEnemy(killerId,enemy);if(rect)PK2()?.koAt(rect,enemy.types?.[0]||"normal");return r;
+  };
+  const pk2BaseSpawnBoss=spawnBoss;
+  spawnBoss=function(...a){const r=pk2BaseSpawnBoss(...a);if(!pkBackgroundCatchingUp&&run){const b=(run.enemies||[]).find(e=>e.boss&&e.alive);if(b)PK2()?.bossIntro(`${b.name} · Nv.${b.level}`);}return r;};
+  const pk2BaseSendaOpenCross=sendaOpenCross;
+  sendaOpenCross=function(...a){const r=pk2BaseSendaOpenCross(...a);PK2()?.cross();return r;};
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(pk2Sync,0),{once:true});else setTimeout(pk2Sync,0);
+
   // Herramienta de pruebas: solo existe al jugar en local (localhost), nunca en GitHub Pages.
   if(/^(localhost|127\.0\.0\.1)$/.test(location.hostname))window.__sendaDebug={cross(){if(run?.senda)run.senda.pendingCross++;},state:()=>run?.senda,run:()=>run};
 

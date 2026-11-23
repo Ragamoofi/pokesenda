@@ -1,0 +1,25 @@
+/* PokéSenda V2 · escena: capas, impactos y cartel de jefe */
+#field .pk2-bg{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;image-rendering:pixelated;image-rendering:crisp-edges;display:none}
+#field .pk2-fx{position:absolute;inset:0;width:100%;height:100%;z-index:7;pointer-events:none}
+#field.field.pk2-stage-on .pk2-bg{display:block}
+#field.field.pk2-stage-on{background-image:none!important;background-color:#0b1520!important}
+#field.field.pk2-stage-on>.sky,#field.field.pk2-stage-on>.ground,#field.field.pk2-stage-on>.path,#field.field.pk2-stage-on>.scenery{display:none!important}
+
+/* Destello al recibir un golpe */
+img.pk2-hit{animation:pk2Hit .24s ease-out}
+img.pk2-hit-crit{animation:pk2HitCrit .26s ease-out}
+@keyframes pk2Hit{0%{filter:brightness(3) saturate(.2)}100%{filter:none}}
+@keyframes pk2HitCrit{0%{filter:brightness(4) saturate(0) drop-shadow(0 0 8px #ffe14a);transform:scale(1.08)}100%{filter:none;transform:none}}
+
+/* Cartel de jefe */
+.pk2-boss-banner{position:absolute;left:50%;top:34%;z-index:9;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 34px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(120,0,0,.82) 18%,rgba(160,10,10,.9) 50%,rgba(120,0,0,.82) 82%,transparent);color:#fff;text-shadow:0 2px 0 #3a0000;
+  animation:pk2Boss 2.2s cubic-bezier(.2,.9,.2,1) forwards}
+.pk2-boss-banner span{font-size:12px;font-weight:900;letter-spacing:.3em;color:#ffd2d2}
+.pk2-boss-banner b{font-size:24px;font-weight:950;letter-spacing:.04em;white-space:nowrap}
+@keyframes pk2Boss{0%{opacity:0;transform:translate(-50%,-50%) scaleX(.2)}12%{opacity:1;transform:translate(-50%,-50%) scaleX(1.05)}18%{transform:translate(-50%,-50%) scaleX(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-62%)}}
+
+/* Los proyectiles de emoji antiguos ya no se usan con la escena V2 activa */
+#field.pk2-stage-on .fx-projectile,#field.pk2-stage-on .fx-ring{display:none}
+
+@media (prefers-reduced-motion:reduce){.pk2-boss-banner{animation-duration:.01s}img.pk2-hit,img.pk2-hit-crit{animation:none}}
